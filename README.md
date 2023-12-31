@@ -87,7 +87,7 @@ Please refer to the [contribution guidelines](.github/CONTRIBUTING.md) for infor
 
 #### Copyright
 
-Copyright &copy; 2023 [Stichting Scape Agency](https://www.scape.agency/ "Scape Agency website"). All Rights Reserved.
+Copyright &copy; 2023 [Scape Agency BV](https://www.scape.agency/ "Scape Agency website"). All Rights Reserved.
 
 #### License
 
