@@ -36,7 +36,7 @@
 
 </div>
 
-**`pack.gl` is a browser-native blockchain visualization library, designed to make the otherwise complex operations of a blockchain more accessible and comprehensible.**
+**Package Builder for the `.gl`-libraries of Scape Agency and its affiliates.**
 
 ## Introduction
 
