@@ -1,4 +1,4 @@
-// script/config/postcss.config.compressed.ts
+// config/postcss.config.compressed.ts
 
 // Copyright 2023 Scape Agency BV
 
