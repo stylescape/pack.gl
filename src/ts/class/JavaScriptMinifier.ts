@@ -1,4 +1,4 @@
-// script/class/class/JavaScriptMinifier.ts
+// class/JavaScriptMinifier.ts
 
 // Copyright 2023 Scape Agency BV
 
