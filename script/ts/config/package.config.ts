@@ -17,6 +17,7 @@ const packageConfig = {
     // main: 'index.js',
     files: [
         "svg/**/*.svg",
+        "js/**/*.d.ts",
         "js/**/*.{js,map}",
         "ts/**/*.ts",
         "css/**/*.{css,map}",

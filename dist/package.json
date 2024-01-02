@@ -1,6 +1,6 @@
 {
   "name": "pack.gl",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Package Builder.",
   "keywords": [
     "pack.gl",
@@ -15,6 +15,7 @@
   "types": "js/index",
   "files": [
     "svg/**/*.svg",
+    "js/**/*.d.ts",
     "js/**/*.{js,map}",
     "ts/**/*.ts",
     "css/**/*.{css,map}",

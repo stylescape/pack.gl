@@ -11,6 +11,7 @@ var packageConfig = {
     types: "js/index",
     files: [
         "svg/**/*.svg",
+        "js/**/*.d.ts",
         "js/**/*.{js,map}",
         "ts/**/*.ts",
         "css/**/*.{css,map}",
