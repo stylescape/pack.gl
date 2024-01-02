@@ -17,37 +17,56 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
-var fs_1 = require("fs");
+// import { promises as fsPromises } from 'fs';
 var path_1 = __importDefault(require("path"));
+var fs_1 = __importDefault(require("fs"));
 // ============================================================================
 // Classes
 // ============================================================================
 class DirectoryCleaner {
     /**
-     * Recursively deletes all contents of the directory asynchronously.
+     * Recursively deletes all contents of the directory.
      * @param dirPath The path to the directory to clean.
      */
-    async cleanDirectory(dirPath) {
-        try {
-            const files = await fs_1.promises.readdir(dirPath);
-            for (const file of files) {
+    cleanDirectory(dirPath) {
+        if (fs_1.default.existsSync(dirPath)) {
+            fs_1.default.readdirSync(dirPath).forEach(file => {
                 const curPath = path_1.default.join(dirPath, file);
-                const stat = await fs_1.promises.lstat(curPath);
-                if (stat.isDirectory()) {
-                    await this.cleanDirectory(curPath);
+                if (fs_1.default.lstatSync(curPath).isDirectory()) { // Recurse
+                    this.cleanDirectory(curPath);
                 }
-                else {
-                    await fs_1.promises.unlink(curPath);
+                else { // Delete file
+                    fs_1.default.unlinkSync(curPath);
                 }
-            }
-            await fs_1.promises.rmdir(dirPath);
-        }
-        catch (error) {
-            console.error(`Error cleaning directory ${dirPath}: ${error}`);
-            throw error; // Rethrow the error for further handling if necessary
+            });
+            fs_1.default.rmdirSync(dirPath);
         }
     }
 }
+// class DirectoryCleaner {
+//     /**
+//      * Recursively deletes all contents of the directory asynchronously.
+//      * @param dirPath The path to the directory to clean.
+//      */
+//      public async cleanDirectory(dirPath: string): Promise<void> {
+//         try {
+//             const files = await fsPromises.readdir(dirPath);
+//             for (const file of files) {
+//                 const curPath = path.join(dirPath, file);
+//                 const stat = await fsPromises.lstat(curPath);
+//                 if (stat.isDirectory()) {
+//                     await this.cleanDirectory(curPath);
+//                 } else {
+//                     await fsPromises.unlink(curPath);
+//                 }
+//             }
+//             await fsPromises.rmdir(dirPath);
+//         } catch (error) {
+//             console.error(`Error cleaning directory ${dirPath}: ${error}`);
+//             throw error;  // Rethrow the error for further handling if necessary
+//         }
+//     }
+// }
 // ============================================================================
 // Export
 // ============================================================================

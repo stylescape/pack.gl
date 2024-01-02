@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = void 0;
+exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = void 0;
 // Copyright 2023 Scape Agency BV
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,3 +25,7 @@ var DirectoryCopier_1 = __importDefault(require("./class/DirectoryCopier"));
 exports.DirectoryCopier = DirectoryCopier_1.default;
 var DirectoryCreator_1 = __importDefault(require("./class/DirectoryCreator"));
 exports.DirectoryCreator = DirectoryCreator_1.default;
+var FileCopier_1 = __importDefault(require("./class/FileCopier"));
+exports.FileCopier = FileCopier_1.default;
+var FileRenamer_1 = __importDefault(require("./class/FileRenamer"));
+exports.FileRenamer = FileRenamer_1.default;

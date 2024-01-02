@@ -19,9 +19,9 @@
 // Import
 // ============================================================================
 
-import { promises as fsPromises } from 'fs';
+// import { promises as fsPromises } from 'fs';
 import path from 'path';
-
+import fs from 'fs';
 
 // ============================================================================
 // Classes
@@ -30,32 +30,56 @@ import path from 'path';
 class DirectoryCleaner {
 
     /**
-     * Recursively deletes all contents of the directory asynchronously.
+     * Recursively deletes all contents of the directory.
      * @param dirPath The path to the directory to clean.
      */
-     public async cleanDirectory(dirPath: string): Promise<void> {
-        try {
-            const files = await fsPromises.readdir(dirPath);
-
-            for (const file of files) {
+    public cleanDirectory(dirPath: string): void {
+        if (fs.existsSync(dirPath)) {
+            fs.readdirSync(dirPath).forEach(file => {
                 const curPath = path.join(dirPath, file);
-                const stat = await fsPromises.lstat(curPath);
 
-                if (stat.isDirectory()) {
-                    await this.cleanDirectory(curPath);
-                } else {
-                    await fsPromises.unlink(curPath);
+                if (fs.lstatSync(curPath).isDirectory()) { // Recurse
+                    this.cleanDirectory(curPath);
+                } else { // Delete file
+                    fs.unlinkSync(curPath);
                 }
-            }
+            });
 
-            await fsPromises.rmdir(dirPath);
-        } catch (error) {
-            console.error(`Error cleaning directory ${dirPath}: ${error}`);
-            throw error;  // Rethrow the error for further handling if necessary
+            fs.rmdirSync(dirPath);
         }
     }
-
 }
+
+
+// class DirectoryCleaner {
+
+//     /**
+//      * Recursively deletes all contents of the directory asynchronously.
+//      * @param dirPath The path to the directory to clean.
+//      */
+//      public async cleanDirectory(dirPath: string): Promise<void> {
+//         try {
+//             const files = await fsPromises.readdir(dirPath);
+
+//             for (const file of files) {
+//                 const curPath = path.join(dirPath, file);
+//                 const stat = await fsPromises.lstat(curPath);
+
+//                 if (stat.isDirectory()) {
+//                     await this.cleanDirectory(curPath);
+//                 } else {
+//                     await fsPromises.unlink(curPath);
+//                 }
+//             }
+
+//             await fsPromises.rmdir(dirPath);
+//         } catch (error) {
+//             console.error(`Error cleaning directory ${dirPath}: ${error}`);
+//             throw error;  // Rethrow the error for further handling if necessary
+//         }
+//     }
+
+// }
 
 
 // ============================================================================

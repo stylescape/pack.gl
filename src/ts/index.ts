@@ -24,8 +24,8 @@
 import DirectoryCleaner from './class/DirectoryCleaner';
 import DirectoryCopier from './class/DirectoryCopier';
 import DirectoryCreator from './class/DirectoryCreator';
-// import FileCopier from '../../tmp/FileCopier.js';
-// import FileRenamer from './class/FileRenamer.js';
+import FileCopier from './class/FileCopier';
+import FileRenamer from './class/FileRenamer';
 
 // // Import | Internal Classes
 // import FontGenerator from './class/FontGenerator.js';
@@ -55,8 +55,8 @@ export {
     DirectoryCleaner,
     DirectoryCopier,
     DirectoryCreator,
-    // FileCopier,
-    // FileRenamer,
+    FileCopier,
+    FileRenamer,
 
     // // Export | Internal Classes
     // FontGenerator,
