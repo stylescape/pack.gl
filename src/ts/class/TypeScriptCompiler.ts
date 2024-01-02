@@ -1,4 +1,4 @@
-// script/class/TypeScriptCompiler.ts
+// class/TypeScriptCompiler.ts
 
 // Copyright 2023 Scape Agency BV
 
