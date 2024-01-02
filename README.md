@@ -15,7 +15,7 @@
 
 ---
 
-<img align="right" width="75%" src="https://raw.githubusercontent.com/scape-agency/brand/master/src/image/repository_cover/block_foundation-structure-03-accent.jpg"  alt="Scape Agency Brand">
+<img align="right" width="50%" src="/res/pack.gl.png"  alt="pack.gl">
 
 ### Contents
 
@@ -40,7 +40,13 @@
 
 ## Introduction
 
-Package Builder for the `.gl`-libraries of Scape Agency and its affiliates.
+`pack.gl` is an advanced package builder designed to enhance the efficiency and organization of software development projects. It offers an intuitive interface and robust features tailored for managing and building a wide range of software packages.
+
+## Features
+
+- **Streamlined Integration**: Easily integrates with various software development workflows.
+- **Customizable Builds**: Provides a range of build options customizable to different project requirements.
+- **Effective Management**: Organizes and manages package dependencies, streamlining the development process.
 
 ## Installation
 
@@ -54,6 +60,14 @@ Package Builder for the `.gl`-libraries of Scape Agency and its affiliates.
 
 ``` bash
 npm i pack.gl
+```
+
+## Usage
+
+Here's how to get started with `pack.gl`:
+
+``` javascript
+// Sample code to demonstrate basic usage
 ```
 
 ## Links
