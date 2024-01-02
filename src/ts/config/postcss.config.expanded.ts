@@ -1,4 +1,4 @@
-// script/config/postcss.config.expanded.ts
+// config/postcss.config.expanded.ts
 
 // Copyright 2023 Scape Agency BV
 
