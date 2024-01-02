@@ -19,7 +19,6 @@
 // Import
 // ============================================================================
 
-import fs from 'fs';
 import path from 'path';
 import { promises as fsPromises } from 'fs';
 
@@ -56,7 +55,7 @@ class DirectoryCopier {
      * @param srcDir Source directory.
      * @param destDir Destination directory.
      */
-    private async recursiveCopy(srcDir: string, destDir: string): Promise<void> {
+    async recursiveCopy(srcDir: string, destDir: string): Promise<void> {
         await fsPromises.mkdir(destDir, { recursive: true });
         const entries = await fsPromises.readdir(srcDir, { withFileTypes: true });
 

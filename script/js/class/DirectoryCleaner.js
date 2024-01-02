@@ -1,12 +1,15 @@
 import fs from 'fs';
 import path from 'path';
-class DirectoryCleaner {
-    cleanDirectory(dirPath) {
+var DirectoryCleaner = (function () {
+    function DirectoryCleaner() {
+    }
+    DirectoryCleaner.prototype.cleanDirectory = function (dirPath) {
+        var _this = this;
         if (fs.existsSync(dirPath)) {
-            fs.readdirSync(dirPath).forEach(file => {
-                const curPath = path.join(dirPath, file);
+            fs.readdirSync(dirPath).forEach(function (file) {
+                var curPath = path.join(dirPath, file);
                 if (fs.lstatSync(curPath).isDirectory()) {
-                    this.cleanDirectory(curPath);
+                    _this.cleanDirectory(curPath);
                 }
                 else {
                     fs.unlinkSync(curPath);
@@ -14,7 +17,8 @@ class DirectoryCleaner {
             });
             fs.rmdirSync(dirPath);
         }
-    }
-}
+    };
+    return DirectoryCleaner;
+}());
 export default DirectoryCleaner;
 //# sourceMappingURL=DirectoryCleaner.js.map

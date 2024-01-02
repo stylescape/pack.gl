@@ -1,26 +1,28 @@
+import { __assign } from "tslib";
 import ts from 'typescript';
-class TypeScriptCompiler {
-    constructor(config) {
+var TypeScriptCompiler = (function () {
+    function TypeScriptCompiler(config) {
         this.config = config;
     }
-    compile(filePaths, outDir) {
-        return new Promise((resolve, reject) => {
-            const options = Object.assign({ module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2015, outDir }, this.config);
-            const host = ts.createCompilerHost(options);
-            const program = ts.createProgram(filePaths, options, host);
-            const emitResult = program.emit();
-            const allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
-            allDiagnostics.forEach(diagnostic => {
+    TypeScriptCompiler.prototype.compile = function (filePaths, outDir) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var options = __assign({ module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2015, outDir: outDir }, _this.config);
+            var host = ts.createCompilerHost(options);
+            var program = ts.createProgram(filePaths, options, host);
+            var emitResult = program.emit();
+            var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+            allDiagnostics.forEach(function (diagnostic) {
                 if (diagnostic.file) {
-                    const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
-                    const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-                    console.error(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
+                    var _a = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start), line = _a.line, character = _a.character;
+                    var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+                    console.error("".concat(diagnostic.file.fileName, " (").concat(line + 1, ",").concat(character + 1, "): ").concat(message));
                 }
                 else {
                     console.error(ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'));
                 }
             });
-            const exitCode = emitResult.emitSkipped ? 1 : 0;
+            var exitCode = emitResult.emitSkipped ? 1 : 0;
             if (exitCode === 0) {
                 console.log('Compilation completed successfully.');
                 resolve();
@@ -30,7 +32,8 @@ class TypeScriptCompiler {
                 reject(new Error('TypeScript compilation failed'));
             }
         });
-    }
-}
+    };
+    return TypeScriptCompiler;
+}());
 export default TypeScriptCompiler;
 //# sourceMappingURL=TypeScriptCompiler.js.map

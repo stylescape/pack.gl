@@ -1,6 +1,6 @@
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
-const postcssConfigCompressed = {
+var postcssConfigCompressed = {
     plugins: [
         autoprefixer,
         cssnano({

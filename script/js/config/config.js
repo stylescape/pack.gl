@@ -1,4 +1,4 @@
-export const CONFIG = {
+export var CONFIG = {
     path: {
         src: './src',
         dist: './dist',

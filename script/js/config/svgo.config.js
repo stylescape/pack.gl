@@ -1,5 +1,5 @@
 import path from 'node:path';
-const svgoConfig = {
+var svgoConfig = {
     multipass: true,
     js2svg: {
         pretty: true,
@@ -45,19 +45,20 @@ const svgoConfig = {
                     viewBox: '0 0 16 16'
                 }
             },
-            fn(_root, params, info) {
+            fn: function (_root, params, info) {
                 if (!params.attributes) {
                     return null;
                 }
-                const pathname = info.path;
-                const basename = path.basename(pathname, '.svg');
+                var pathname = info.path;
+                var basename = path.basename(pathname, '.svg');
                 return {
                     element: {
-                        enter(node, parentNode) {
+                        enter: function (node, parentNode) {
                             if (node.name === 'svg' && parentNode.type === 'root') {
                                 node.attributes = {};
-                                for (const [key, value] of Object.entries(params.attributes)) {
-                                    node.attributes[key] = key === 'class' ? `igl igl-${basename}` : value;
+                                for (var _i = 0, _a = Object.entries(params.attributes); _i < _a.length; _i++) {
+                                    var _b = _a[_i], key = _b[0], value = _b[1];
+                                    node.attributes[key] = key === 'class' ? "igl igl-".concat(basename) : value;
                                 }
                             }
                         }

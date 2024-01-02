@@ -2,6 +2,11 @@
 
 
 const tsConfig = {
+    allowSyntheticDefaultImports: true,
+    esModuleInterop: true,
+    declaration: true,
+    strict: true,
+
     // allowImportingTsExtensions?: boolean;
     // allowJs?: boolean;
     // allowArbitraryExtensions?: boolean;

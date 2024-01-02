@@ -1,5 +1,5 @@
 import autoprefixer from 'autoprefixer';
-const postcssConfigExpanded = {
+var postcssConfigExpanded = {
     plugins: [
         autoprefixer,
     ]

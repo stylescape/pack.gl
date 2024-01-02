@@ -1,4 +1,4 @@
-const svgspriteConfig = {
+var svgspriteConfig = {
     dest: './dist/sprite',
     shape: {
         id: {

@@ -141,29 +141,29 @@ async function main() {
         }
 
 
-        // Rename Ts
-        // --------------------------------------------------------------------
+        // // Rename Ts
+        // // --------------------------------------------------------------------
 
-        await fileRenamer.renameFile(
-            path.join(CONFIG.path.js_output, 'index.js'),
-            path.join(CONFIG.path.js_output, 'pack.gl.js'),
-        )
+        // await fileRenamer.renameFile(
+        //     path.join(CONFIG.path.js_output, 'index.js'),
+        //     path.join(CONFIG.path.js_output, 'pack.gl.js'),
+        // )
 
-        // Minify JavaScript
-        // --------------------------------------------------------------------
+        // // Minify JavaScript
+        // // --------------------------------------------------------------------
 
 
-        // const inputJsFile = './path/to/your/script.js';
-        // const outputMinJsFile = './path/to/your/script.min.js';
+        // // const inputJsFile = './path/to/your/script.js';
+        // // const outputMinJsFile = './path/to/your/script.min.js';
 
-        await jsMinifier.minifyFile(
-            path.join(CONFIG.path.js_output, 'pack.gl.js'),
-            path.join(CONFIG.path.js_output, 'pack.gl.min.js'),
-            // inputJsFile,
-            // outputMinJsFile
-        )
-        .then(() => console.log('JavaScript minification completed.'))
-        .catch(console.error);
+        // await jsMinifier.minifyFile(
+        //     path.join(CONFIG.path.js_output, 'pack.gl.js'),
+        //     path.join(CONFIG.path.js_output, 'pack.gl.min.js'),
+        //     // inputJsFile,
+        //     // outputMinJsFile
+        // )
+        // .then(() => console.log('JavaScript minification completed.'))
+        // .catch(console.error);
 
 
         
