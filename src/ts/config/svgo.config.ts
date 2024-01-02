@@ -1,4 +1,4 @@
-// script/config/svgo.config.ts
+// config/svgo.config.ts
 
 // Copyright 2023 Scape Agency BV
 
@@ -27,6 +27,7 @@ import path from 'node:path'
 // ============================================================================
 
 const svgoConfig = {
+
     multipass: true,
     js2svg: {
         pretty: true,
