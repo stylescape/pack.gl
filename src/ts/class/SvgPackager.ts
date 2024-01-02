@@ -21,7 +21,7 @@
 
 // import * as fs from 'fs';
 import * as fs_extra from 'fs-extra';
-import { promises as fs } from 'fs'; // Using promisified fs
+import { promises as fs } from 'fs';
 import * as glob from 'glob';
 import * as path from 'path';
 import { fileURLToPath } from "url";

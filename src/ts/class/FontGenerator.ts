@@ -28,7 +28,10 @@ import { generateFonts, FontAssetType, OtherAssetType } from 'fantasticon';
 
 class FontGenerator {
 
-    async generateFonts(sourceDirectory: string, outputDiectory: string) {
+    async generateFonts(
+        sourceDirectory: string,
+        outputDiectory: string,
+    ) {
 
         const config = {
 
