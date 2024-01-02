@@ -1,4 +1,4 @@
-// script/class/SvgSpriteGenerator.ts
+// class/SvgSpriteGenerator.ts
 
 // Copyright 2023 Scape Agency BV
 
@@ -88,6 +88,7 @@ class SvgSpriteGenerator {
             console.error('Error generating SVG sprite:', err);
         }
     }
+
 }
 
 
