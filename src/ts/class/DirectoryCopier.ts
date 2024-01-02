@@ -1,4 +1,4 @@
-// script/class/class/DirectoryCopier.ts
+// class/DirectoryCopier.ts
 
 // Copyright 2023 Scape Agency BV
 
@@ -21,6 +21,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { promises as fsPromises } from 'fs';
 
 
 // ============================================================================
@@ -33,40 +34,42 @@ import path from 'path';
 class DirectoryCopier {
 
     /**
-     * Copies all files from a source directory to a destination directory.
-     * @param {string} srcDir - The source directory path.
-     * @param {string} destDir - The destination directory path.
-     * @description This method iterates over all files in the source directory 
-     *              and copies each file to the destination directory. It resolves 
-     *              the absolute paths of the source and destination directories to 
-     *              handle relative paths correctly. This is useful for duplicating 
-     *              files or setting up similar directory structures in different locations.
-     * @throws Will throw an error if copying fails for any file.
+     * Copies all files and subdirectories from a source directory to a destination directory.
+     * @param srcDir The source directory path.
+     * @param destDir The destination directory path.
+     * @throws Will throw an error if copying fails for any file or directory.
      */
-    async copyFiles(srcDir: string, destDir: string): Promise<void> {
+     async copyFiles(srcDir: string, destDir: string): Promise<void> {
         try {
             const resolvedSrcDir = path.resolve(srcDir);
             const resolvedDestDir = path.resolve(destDir);
-
-            const files = fs.readdirSync(resolvedSrcDir);
-            console.log("FILES:", files);
-
-            files.forEach(file => {
-                const srcFile = path.join(resolvedSrcDir, file);
-                const destFile = path.join(resolvedDestDir, file);
-
-                if (fs.statSync(srcFile).isFile()) {
-                    console.log("Copying file:", srcFile);
-                    fs.copyFileSync(srcFile, destFile);
-                }
-            });
-
+            await this.recursiveCopy(resolvedSrcDir, resolvedDestDir);
             console.log(`Files copied from ${resolvedSrcDir} to ${resolvedDestDir}`);
         } catch (error) {
             console.error('Error copying files:', error);
             throw error;
         }
     }
+
+    /**
+     * Recursively copies files and directories.
+     * @param srcDir Source directory.
+     * @param destDir Destination directory.
+     */
+    private async recursiveCopy(srcDir: string, destDir: string): Promise<void> {
+        await fsPromises.mkdir(destDir, { recursive: true });
+        const entries = await fsPromises.readdir(srcDir, { withFileTypes: true });
+
+        for (let entry of entries) {
+            const srcPath = path.join(srcDir, entry.name);
+            const destPath = path.join(destDir, entry.name);
+
+            entry.isDirectory() ? 
+                await this.recursiveCopy(srcPath, destPath) : 
+                await fsPromises.copyFile(srcPath, destPath);
+        }
+    }
+
 }
 
 
