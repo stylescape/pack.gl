@@ -28,14 +28,14 @@ import FileCopier from './class/FileCopier';
 import FileRenamer from './class/FileRenamer';
 
 // // Import | Internal Classes
-// import FontGenerator from './class/FontGenerator.js';
-// import PackageCreator from './class/PackageCreator.js';
-// import SvgPackager from "./class/SvgPackager.js";
-// import StyleProcessor from "./class/StyleProcessor.js";
-// import SvgSpriteGenerator from "./class/SvgSpriteGenerator.js";
-// import VersionWriter from './class/VersionWriter.js';
-// import TypeScriptCompiler from './class/TypeScriptCompiler.js';
-// import JavaScriptMinifier from './class/JavaScriptMinifier.js';
+import FontGenerator from './class/FontGenerator.js';
+import PackageCreator from './class/PackageCreator.js';
+import SvgPackager from "./class/SvgPackager.js";
+import StyleProcessor from "./class/StyleProcessor.js";
+import SvgSpriteGenerator from "./class/SvgSpriteGenerator.js";
+import VersionWriter from './class/VersionWriter.js';
+import TypeScriptCompiler from './class/TypeScriptCompiler.js';
+import JavaScriptMinifier from './class/JavaScriptMinifier.js';
 
 // // Import | Cconfigurations
 // import { CONFIG } from './config/config.js';
@@ -59,12 +59,12 @@ export {
     FileRenamer,
 
     // // Export | Internal Classes
-    // FontGenerator,
-    // PackageCreator,
-    // SvgPackager,
-    // StyleProcessor,
-    // SvgSpriteGenerator,
-    // VersionWriter,
-    // TypeScriptCompiler,
-    // JavaScriptMinifier,
+    FontGenerator,
+    PackageCreator,
+    SvgPackager,
+    StyleProcessor,
+    SvgSpriteGenerator,
+    VersionWriter,
+    TypeScriptCompiler,
+    JavaScriptMinifier,
 };

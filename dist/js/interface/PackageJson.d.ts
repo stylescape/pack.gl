@@ -1,8 +1,4 @@
-// ============================================================================
-// Interfaces
-// ============================================================================
-
-interface PackageJson {
+export interface PackageJson {
     name: string;
     version: string;
     description?: string;
@@ -51,13 +47,14 @@ interface PackageJson {
     exports?: Record<string, any>;
     module?: string;
     sideEffects?: boolean | string[];
-
     optionalDependencies?: Record<string, string>;
-    bundledDependencies?: string[]; // or bundleDependencies
-    peerDependenciesMeta?: Record<string, { optional?: boolean }>;
+    bundledDependencies?: string[];
+    peerDependenciesMeta?: Record<string, {
+        optional?: boolean;
+    }>;
     resolutions?: Record<string, string>;
     workspaces?: string[] | {
-      packages: string[];
+        packages: string[];
     };
     eslintConfig?: Record<string, any>;
     babel?: Record<string, any>;
