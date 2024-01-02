@@ -20,7 +20,7 @@
 const configParams = {
 
     // Project Name
-    name: "icon.gl",
+    name: "pack.gl",
 
 
 
