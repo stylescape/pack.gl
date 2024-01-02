@@ -1,4 +1,4 @@
-// script/class/class/FileCopier.ts
+// class/FileCopier.ts
 
 // Copyright 2023 Scape Agency BV
 
