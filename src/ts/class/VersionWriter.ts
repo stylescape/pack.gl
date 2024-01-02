@@ -1,4 +1,4 @@
-// script/class/VersionWriter.ts
+// class/VersionWriter.ts
 
 // Copyright 2023 Scape Agency BV
 
