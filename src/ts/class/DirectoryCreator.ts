@@ -1,4 +1,4 @@
-// script/class/DirectoryGenerator.ts
+// class/DirectoryGenerator.ts
 
 // Copyright 2023 Scape Agency BV
 
@@ -19,8 +19,9 @@
 // Import
 // ============================================================================
 
-import fs from 'fs';
+import { promises as fsPromises } from 'fs';
 import path from 'path';
+
 
 
 // ============================================================================
@@ -30,12 +31,12 @@ import path from 'path';
 /**
  * A class for creating directories.
  */
- class DirectoryCreator {
 
+ class DirectoryCreator {
     /**
-     * Creates directories at the specified locations.
-     * @param {string} basePath - The base path where directories will be created.
-     * @param {string[]} directories - An array of directory paths to create.
+     * Creates directories at the specified locations asynchronously.
+     * @param basePath The base path where directories will be created.
+     * @param directories An array of directory paths to create.
      * @description This method iterates over the provided array of directory paths, 
      *              creating each directory at the specified location within the base path. 
      *              If a directory already exists, it skips creation. This is useful for 
@@ -44,15 +45,16 @@ import path from 'path';
      * @throws Will throw an error if directory creation fails.
      */
     async createDirectories(basePath: string, directories: string[]): Promise<void> {
-        directories.forEach(dir => {
-            const dirPath = path.join(basePath, dir);
-            if (!fs.existsSync(dirPath)) {
-                fs.mkdirSync(dirPath, { recursive: true });
-                console.log(`Directory created: ${dirPath}`);
-            } else {
-                console.log(`Directory already exists: ${dirPath}`);
+        try {
+            for (const dir of directories) {
+                const dirPath = path.join(basePath, dir);
+                await fsPromises.mkdir(dirPath, { recursive: true });
+                console.log(`Directory created or already exists: ${dirPath}`);
             }
-        });
+        } catch (error) {
+            console.error(`Error creating directories: ${error}`);
+            throw error;
+        }
     }
 }
 
