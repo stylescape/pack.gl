@@ -1,0 +1,45 @@
+"use strict";
+// script/index.ts
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionWriter = exports.SvgSpriteGenerator = exports.StyleProcessor = exports.SvgPackager = exports.PackageCreator = exports.FontGenerator = exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = void 0;
+// Copyright 2023 Scape Agency BV
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ============================================================================
+// Import
+// ============================================================================
+// Import | Utility Classes
+const DirectoryCleaner_1 = require("./class/DirectoryCleaner");
+exports.DirectoryCleaner = DirectoryCleaner_1.default;
+const DirectoryCopier_1 = require("./class/DirectoryCopier");
+exports.DirectoryCopier = DirectoryCopier_1.default;
+const DirectoryCreator_1 = require("./class/DirectoryCreator");
+exports.DirectoryCreator = DirectoryCreator_1.default;
+const FileCopier_js_1 = require("./class/FileCopier.js");
+exports.FileCopier = FileCopier_js_1.default;
+const FileRenamer_js_1 = require("./class/FileRenamer.js");
+exports.FileRenamer = FileRenamer_js_1.default;
+// Import | Internal Classes
+const FontGenerator_js_1 = require("./class/FontGenerator.js");
+exports.FontGenerator = FontGenerator_js_1.default;
+const PackageCreator_js_1 = require("./class/PackageCreator.js");
+exports.PackageCreator = PackageCreator_js_1.default;
+const SvgPackager_js_1 = require("./class/SvgPackager.js");
+exports.SvgPackager = SvgPackager_js_1.default;
+const StyleProcessor_js_1 = require("./class/StyleProcessor.js");
+exports.StyleProcessor = StyleProcessor_js_1.default;
+const SvgSpriteGenerator_js_1 = require("./class/SvgSpriteGenerator.js");
+exports.SvgSpriteGenerator = SvgSpriteGenerator_js_1.default;
+const VersionWriter_js_1 = require("./class/VersionWriter.js");
+exports.VersionWriter = VersionWriter_js_1.default;
+const TypeScriptCompiler_js_1 = require("./class/TypeScriptCompiler.js");
+exports.TypeScriptCompiler = TypeScriptCompiler_js_1.default;
+const JavaScriptMinifier_js_1 = require("./class/JavaScriptMinifier.js");
+exports.JavaScriptMinifier = JavaScriptMinifier_js_1.default;

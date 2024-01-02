@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "config": {
         "version_short": "0.0"
     },
@@ -31,19 +31,26 @@
             "url": "https://github.com/sponsors/scape-foundation"
         }
     ],
-    "main": "src/scss/index.scss",
+    "main": "src/ts/index.ts",
     "type": "module",
     "module": "dist/js/pack.gl.js",
-    "style": "dist/css/pack.gl.css",
-    "sass": "src/scss/index.scss",
     "scripts": {
         "format": "npx prettier --write .",
         "lint": "eslint 'src/**/*.ts' || true",
         "prettify": "prettier --write 'src/**/*.ts'",
-        "dev": "webpack --mode development --config webpack.config.js",
-        "build": "webpack --mode production --config webpack.config.js",
-        "serve": "webpack serve --mode development --config webpack.config.js",
-        "start": "webpack-dev-server --mode development --config webpack.config.js"
+        "build": "npm run build-compile && npm run icons-process",
+        "build-compile2": "tsc -p tsconfig.build.json",
+        "build-compile": "tsc -p script/tsconfig.json",
+        "webpack-build": "npm run webpack-prod",
+        "webpack-build2": "npm run webpack-prod && npm run webpack-dev",
+        "webpack-dev": "webpack --mode development --config webpack.config.js",
+        "webpack-prod": "webpack --mode production --config webpack.config.js",
+        "webpack-serve": "webpack serve --mode development --config webpack.config.js",
+        "webpack-start": "webpack-dev-server --mode development --config webpack.config.js",
+        "icons-process": "node script/js/index.js",
+        "icons-font-min": "cleancss -O1 --format breakWith=lf --with-rebase --output font/bootstrap-icons.min.css font/bootstrap-icons.css",
+        "icons-compile3": "tsc filename.ts | node filename.js",
+        "icons-zip": "cross-env-shell \"rm -rf bootstrap-icons-$npm_package_version bootstrap-icons-$npm_package_version.zip && cp -r icons/ bootstrap-icons-$npm_package_version && cp bootstrap-icons.svg bootstrap-icons-$npm_package_version && cp -r font/ bootstrap-icons-$npm_package_version && zip -qr9 bootstrap-icons-$npm_package_version.zip bootstrap-icons-$npm_package_version && rm -rf bootstrap-icons-$npm_package_version\""
     },
     "devDependencies": {
         "@babel/core": "^7.23.6",
