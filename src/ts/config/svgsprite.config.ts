@@ -1,4 +1,4 @@
-// script/config/svg-sprite.config.ts
+// config/svg-sprite.config.ts
 
 // Copyright 2023 Scape Agency BV
 
