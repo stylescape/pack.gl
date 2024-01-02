@@ -1,4 +1,4 @@
-// script/class/class/FileRenamer.ts
+// class/FileRenamer.ts
 
 // Copyright 2023 Scape Agency BV
 
