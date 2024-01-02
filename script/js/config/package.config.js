@@ -7,8 +7,8 @@ var packageConfig = {
     keywords: pack.keywords,
     license: pack.license,
     homepage: pack.homepage,
-    main: "js/index.js",
-    types: "js/index.d.ts",
+    main: "js/index",
+    types: "js/index",
     files: [
         "svg/**/*.svg",
         "js/**/*.{js,map}",

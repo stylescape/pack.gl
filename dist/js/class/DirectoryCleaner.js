@@ -1,14 +1,5 @@
 "use strict";
 // class/DirectoryCleaner.ts
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -26,8 +17,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
-const fs_1 = require("fs");
-const path_1 = __importDefault(require("path"));
+var fs_1 = require("fs");
+var path_1 = __importDefault(require("path"));
 // ============================================================================
 // Classes
 // ============================================================================
@@ -36,27 +27,25 @@ class DirectoryCleaner {
      * Recursively deletes all contents of the directory asynchronously.
      * @param dirPath The path to the directory to clean.
      */
-    cleanDirectory(dirPath) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const files = yield fs_1.promises.readdir(dirPath);
-                for (const file of files) {
-                    const curPath = path_1.default.join(dirPath, file);
-                    const stat = yield fs_1.promises.lstat(curPath);
-                    if (stat.isDirectory()) {
-                        yield this.cleanDirectory(curPath);
-                    }
-                    else {
-                        yield fs_1.promises.unlink(curPath);
-                    }
+    async cleanDirectory(dirPath) {
+        try {
+            const files = await fs_1.promises.readdir(dirPath);
+            for (const file of files) {
+                const curPath = path_1.default.join(dirPath, file);
+                const stat = await fs_1.promises.lstat(curPath);
+                if (stat.isDirectory()) {
+                    await this.cleanDirectory(curPath);
                 }
-                yield fs_1.promises.rmdir(dirPath);
+                else {
+                    await fs_1.promises.unlink(curPath);
+                }
             }
-            catch (error) {
-                console.error(`Error cleaning directory ${dirPath}: ${error}`);
-                throw error; // Rethrow the error for further handling if necessary
-            }
-        });
+            await fs_1.promises.rmdir(dirPath);
+        }
+        catch (error) {
+            console.error(`Error cleaning directory ${dirPath}: ${error}`);
+            throw error; // Rethrow the error for further handling if necessary
+        }
     }
 }
 // ============================================================================
