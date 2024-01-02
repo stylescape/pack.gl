@@ -2,11 +2,19 @@
 
 
 const tsConfig = {
+    target: "es6",                     // Specify ECMAScript target version
+    module: "commonjs",                // Specify module code generation
     allowSyntheticDefaultImports: true,
-    esModuleInterop: true,
-    declaration: true,
+    esModuleInterop: true,                  // Enables compatibility with Babel imports
+    declaration: true, // Enables generation of .d.ts files
     strict: true,
+    skipLibCheck: true,                // Skip type checking of declaration files
+    forceConsistentCasingInFileNames: true, // Disallow inconsistently-cased references
+    resolveJsonModule: true,           // Allow importing of .json files
+    lib: ["es2015", "dom"]             // Specify library files to be included in the compilation
 
+
+      
     // allowImportingTsExtensions?: boolean;
     // allowJs?: boolean;
     // allowArbitraryExtensions?: boolean;

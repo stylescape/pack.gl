@@ -10,8 +10,10 @@ const packageConfig = {
     keywords: pack.keywords,
     license: pack.license,
     homepage: pack.homepage,
-    main: "js/index.js",
-    types: "js/index.d.ts",
+    main: "js/index",
+    types: "js/index",
+    // main: "js/index.js",
+    // types: "js/index.d.ts",
     // main: 'index.js',
     files: [
         "svg/**/*.svg",
