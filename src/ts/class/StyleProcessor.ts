@@ -1,4 +1,4 @@
-// script/class/StyleProcessor.ts
+// class/StyleProcessor.ts
 
 // Copyright 2023 Scape Agency BV
 
