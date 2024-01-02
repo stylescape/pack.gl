@@ -1,4 +1,4 @@
-// script/class/PackageCreator.ts
+// class/PackageCreator.ts
 
 // Copyright 2023 Scape Agency BV
 
