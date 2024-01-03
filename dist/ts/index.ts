@@ -43,6 +43,7 @@ import SvgToPngConverter from './class/SvgToPngConverter.js';
 // Import | Internal Functions
 import gl_installer from './function/gl_installer';
 import cleanDirectory from './function/clean_directory';
+import readPackageJson from "./function/readPackageJson.js"
 
 
 // ============================================================================
@@ -75,5 +76,6 @@ export {
     // Export | Internal Functions
     gl_installer,
     cleanDirectory,
+    readPackageJson,
 
 };

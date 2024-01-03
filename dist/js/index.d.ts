@@ -17,4 +17,5 @@ import TemplateWriter from './class/TemplateWriter.js';
 import SvgToPngConverter from './class/SvgToPngConverter.js';
 import gl_installer from './function/gl_installer';
 import cleanDirectory from './function/clean_directory';
-export { DirectoryCleaner, DirectoryCopier, DirectoryCreator, FileCopier, FileRenamer, FontGenerator, PackageCreator, SvgPackager, StyleProcessor, SvgSpriteGenerator, VersionWriter, TypeScriptCompiler, JavaScriptMinifier, NpmCommandRunner, StylizedLogger, TemplateWriter, SvgToPngConverter, gl_installer, cleanDirectory, };
+import readPackageJson from "./function/readPackageJson.js";
+export { DirectoryCleaner, DirectoryCopier, DirectoryCreator, FileCopier, FileRenamer, FontGenerator, PackageCreator, SvgPackager, StyleProcessor, SvgSpriteGenerator, VersionWriter, TypeScriptCompiler, JavaScriptMinifier, NpmCommandRunner, StylizedLogger, TemplateWriter, SvgToPngConverter, gl_installer, cleanDirectory, readPackageJson, };

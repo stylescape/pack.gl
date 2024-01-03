@@ -103,12 +103,8 @@ async function main() {
         console.log(`Directory cleaned: ${CONFIG.path.dist}`);
 
 
-
-
         const localPackageConfig = await readPackageJson('./package.json');
-
         const packageCreator = new PackageCreator(localPackageConfig);
-
         const packageConfig = packageCreator.config
         packageCreator.createPackageJson(CONFIG.path.dist);
 

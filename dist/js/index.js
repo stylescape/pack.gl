@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cleanDirectory = exports.gl_installer = exports.SvgToPngConverter = exports.TemplateWriter = exports.StylizedLogger = exports.NpmCommandRunner = exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionWriter = exports.SvgSpriteGenerator = exports.StyleProcessor = exports.SvgPackager = exports.PackageCreator = exports.FontGenerator = exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = void 0;
+exports.readPackageJson = exports.cleanDirectory = exports.gl_installer = exports.SvgToPngConverter = exports.TemplateWriter = exports.StylizedLogger = exports.NpmCommandRunner = exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionWriter = exports.SvgSpriteGenerator = exports.StyleProcessor = exports.SvgPackager = exports.PackageCreator = exports.FontGenerator = exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = void 0;
 // Copyright 2023 Scape Agency BV
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -59,3 +59,5 @@ var gl_installer_1 = __importDefault(require("./function/gl_installer"));
 exports.gl_installer = gl_installer_1.default;
 var clean_directory_1 = __importDefault(require("./function/clean_directory"));
 exports.cleanDirectory = clean_directory_1.default;
+var readPackageJson_js_1 = __importDefault(require("./function/readPackageJson.js"));
+exports.readPackageJson = readPackageJson_js_1.default;
