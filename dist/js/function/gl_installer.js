@@ -18,10 +18,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Import
 // ============================================================================
 var NpmCommandRunner_js_1 = __importDefault(require("../class/NpmCommandRunner.js"));
+var StylizedLogger_js_1 = __importDefault(require("../class/StylizedLogger.js"));
 // ============================================================================
 // Constants
 // ============================================================================
 const runner = new NpmCommandRunner_js_1.default();
+const logger = new StylizedLogger_js_1.default();
 // ============================================================================
 // Functions
 // ============================================================================
@@ -46,10 +48,11 @@ async function gl_installer() {
         'loop.gl',
     ];
     try {
+        logger.header('Install .gl libraries');
         for (const pkg of packages) {
-            console.log(`Running npm install for ${pkg}...`);
+            logger.body(`Running npm install for ${pkg}...`);
             const output = await runner.runCommand(`install ${pkg}@latest --save-dev`);
-            console.log(output);
+            logger.body(output);
         }
     }
     catch (error) {

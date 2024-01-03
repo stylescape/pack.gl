@@ -38,9 +38,11 @@ import TypeScriptCompiler from './class/TypeScriptCompiler.js';
 import JavaScriptMinifier from './class/JavaScriptMinifier.js';
 import NpmCommandRunner from './class/NpmCommandRunner.js';
 import StylizedLogger from './class/StylizedLogger.js';
+import TemplateWriter from './class/TemplateWriter.js';
 
 
 import gl_installer from './function/gl_installer';
+import cleanDirectory from './function/clean_directory';
 
 
 
@@ -68,6 +70,8 @@ export {
     JavaScriptMinifier,
     NpmCommandRunner,
     StylizedLogger,
+    TemplateWriter,
 
     gl_installer,
+    cleanDirectory,
 };
