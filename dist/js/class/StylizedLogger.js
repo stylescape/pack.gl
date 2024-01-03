@@ -2,17 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class StylizedLogger {
     constructor() {
-        /**
-         * ANSI escape codes for different text styles
-         */
         this.styles = {
             reset: "\x1b[0m",
-            bright: "\x1b[1m",
-            dim: "\x1b[2m",
-            underscore: "\x1b[4m",
-            blink: "\x1b[5m",
-            reverse: "\x1b[7m",
-            hidden: "\x1b[8m",
             fg: {
                 black: "\x1b[30m",
                 red: "\x1b[31m",
@@ -21,8 +12,7 @@ class StylizedLogger {
                 blue: "\x1b[34m",
                 magenta: "\x1b[35m",
                 cyan: "\x1b[36m",
-                white: "\x1b[37m",
-                crimson: "\x1b[38m"
+                white: "\x1b[37m"
             },
             bg: {
                 black: "\x1b[40m",
@@ -32,16 +22,25 @@ class StylizedLogger {
                 blue: "\x1b[44m",
                 magenta: "\x1b[45m",
                 cyan: "\x1b[46m",
-                white: "\x1b[47m",
-                crimson: "\x1b[48m"
+                white: "\x1b[47m"
             }
         };
     }
-    /**
-     * Logs a message with a specific text and background color.
-     */
     log(message, fgColor, bgColor = 'black') {
         console.log(`${this.styles.fg[fgColor]}${this.styles.bg[bgColor]}%s${this.styles.reset}`, message);
     }
+    header(message) {
+        this.log(message, 'white', 'blue');
+    }
+    error(message) {
+        this.log(message, 'white', 'red');
+    }
+    body(message) {
+        this.log(message, 'black', 'white');
+    }
 }
 exports.default = StylizedLogger;
+// import StylizedLogger from './StylizedLogger.js';
+// const logger = new StylizedLogger();
+// logger.log('This is a red message with green background', 'red', 'green');
+// logger.log('This is a bright blue message', 'blue');

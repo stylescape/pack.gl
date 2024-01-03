@@ -29,6 +29,7 @@ import {
     VersionWriter,
     // TypeScriptCompiler,
     // JavaScriptMinifier
+    gl_installer,
 } from 'pack.gl';
 import TypeScriptCompiler from "./class/TypeScriptCompiler.js"
 
@@ -64,6 +65,9 @@ const directoryCreator = new DirectoryCreator();
 async function main() {
 
     try {
+
+        await gl_installer();
+
 
 
         // Dirs Clean
