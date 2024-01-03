@@ -14,6 +14,7 @@ import JavaScriptMinifier from './class/JavaScriptMinifier.js';
 import NpmCommandRunner from './class/NpmCommandRunner.js';
 import StylizedLogger from './class/StylizedLogger.js';
 import TemplateWriter from './class/TemplateWriter.js';
+import SvgToPngConverter from './class/SvgToPngConverter.js';
 import gl_installer from './function/gl_installer';
 import cleanDirectory from './function/clean_directory';
-export { DirectoryCleaner, DirectoryCopier, DirectoryCreator, FileCopier, FileRenamer, FontGenerator, PackageCreator, SvgPackager, StyleProcessor, SvgSpriteGenerator, VersionWriter, TypeScriptCompiler, JavaScriptMinifier, NpmCommandRunner, StylizedLogger, TemplateWriter, gl_installer, cleanDirectory, };
+export { DirectoryCleaner, DirectoryCopier, DirectoryCreator, FileCopier, FileRenamer, FontGenerator, PackageCreator, SvgPackager, StyleProcessor, SvgSpriteGenerator, VersionWriter, TypeScriptCompiler, JavaScriptMinifier, NpmCommandRunner, StylizedLogger, TemplateWriter, SvgToPngConverter, gl_installer, cleanDirectory, };

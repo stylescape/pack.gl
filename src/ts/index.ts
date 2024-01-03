@@ -38,6 +38,7 @@ import JavaScriptMinifier from './class/JavaScriptMinifier.js';
 import NpmCommandRunner from './class/NpmCommandRunner.js';
 import StylizedLogger from './class/StylizedLogger.js';
 import TemplateWriter from './class/TemplateWriter.js';
+import SvgToPngConverter from './class/SvgToPngConverter.js';
 
 // Import | Internal Functions
 import gl_installer from './function/gl_installer';
@@ -69,6 +70,7 @@ export {
     NpmCommandRunner,
     StylizedLogger,
     TemplateWriter,
+    SvgToPngConverter,
 
     // Export | Internal Functions
     gl_installer,
