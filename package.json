@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.0.22",
+    "version": "0.0.23",
     "config": {
         "version_short": "0.0"
     },
@@ -95,7 +95,7 @@
         "icon.gl": "^0.0.1",
         "loop.gl": "^0.0.1",
         "mini-css-extract-plugin": "^2.7.6",
-        "pack.gl": "^0.0.19",
+        "pack.gl": "^0.0.22",
         "page.gl": "^0.0.1",
         "postcss-loader": "^7.3.3",
         "postcss-preset-env": "^9.1.2",

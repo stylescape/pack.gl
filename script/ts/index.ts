@@ -24,57 +24,24 @@ import path from 'path';
 import {
     DirectoryCleaner,
     DirectoryCopier,
-    DirectoryCreator,
-    // PackageCreator,
+    PackageCreator,
     VersionWriter,
-    // TypeScriptCompiler,
-    // JavaScriptMinifier,
     TypeScriptCompiler,
+    // JavaScriptMinifier,
+    StylizedLogger,
     gl_installer,
+    readPackageJson,
 } from 'pack.gl';
-import PackageCreator from "./class/PackageCreator.js"
-import readPackageJson from "./function/readPackageJson.js"
-
-
-
-// import TypeScriptCompiler from "./class/TypeScriptCompiler.js"
-
-// Import necessary configurations
-// import { CONFIG } from './config/config.js';
-// import packageConfig from "./config/package.config.js"
-// import tsConfig from "./config/ts.config.js"
 
 
 // ============================================================================
 // Constants
 // ============================================================================
 
-// Initialize instances of necessary classes
-// const directories = Object.values(CONFIG.path);
-const tsCompiler = new TypeScriptCompiler();
-
-
-
-
-
-// const packageCreator = PackageCreator.init('../../package.json')
-
-//     .then(packageCreator => packageCreator.createPackageJson(CONFIG.path.dist))
-//     .catch(error => console.error('Error:', error));
-
-// const packageConfig = packageCreator.packageConfig
-    // await packageCreator.createPackageJson(CONFIG.path.dist);
-
-
-const versionWriter = new VersionWriter();
-const directoryCopier = new DirectoryCopier();
-const directoryCleaner = new DirectoryCleaner();
-const directoryCreator = new DirectoryCreator();
-
 const CONFIG = {
     path: {
-        src:      './src',
-        dist:      './dist',
+        src:                './src',
+        dist:               './dist',
         json_output:        './dist',
         ts_input:           './src/ts',
         ts_output:          './dist/ts',
@@ -83,6 +50,7 @@ const CONFIG = {
     },
 
 };
+
 
 // ============================================================================
 // Functions
@@ -97,78 +65,69 @@ async function main() {
 
     try {
 
+
+
+        // Init Logger
+        // --------------------------------------------------------------------
+
+        const logger = new StylizedLogger();
+
+
+        // Install .gl libraries
+        // --------------------------------------------------------------------
+
+        logger.header('Install .gl libraries');
+        await gl_installer();
+
+
         // Dirs Clean
         // --------------------------------------------------------------------
-        directoryCleaner.cleanDirectory(CONFIG.path.dist);
-        console.log(`Directory cleaned: ${CONFIG.path.dist}`);
 
+        const directoryCleaner = new DirectoryCleaner();
+        logger.header('Clean Directories');
+        directoryCleaner.cleanDirectory(CONFIG.path.dist);
+        logger.body(`Directory cleaned: ${CONFIG.path.dist}`);
+
+
+        // Package JSON
+        // --------------------------------------------------------------------
 
         const localPackageConfig = await readPackageJson('./package.json');
         const packageCreator = new PackageCreator(localPackageConfig);
         const packageConfig = packageCreator.config
         packageCreator.createPackageJson(CONFIG.path.dist);
 
-        // await gl_installer();
-
-
-
-
-
-        // Dirs Create
-        // --------------------------------------------------------------------
-        // console.log('Starting Directory creation...');
-        // // Assuming the base path is the current directory
-        // await directoryCreator.createDirectories('.', directories);
-
-
 
         // Copy Dirs
         // --------------------------------------------------------------------
-        try {
-            await directoryCopier.recursiveCopy(
-                CONFIG.path.ts_input,
-                CONFIG.path.ts_output,
-            );
-            console.log('Files copied successfully.');
-        } catch (error) {
-            console.error('Error while copying files:', error);
-        }
+        
+        const directoryCopier = new DirectoryCopier();
+        await directoryCopier.recursiveCopy(
+            CONFIG.path.ts_input,
+            CONFIG.path.ts_output,
+        );
+        console.log('Files copied successfully.');
 
 
         // Version
         // --------------------------------------------------------------------
+
+        const versionWriter = new VersionWriter();
         await versionWriter.writeVersionToFile('VERSION', packageConfig.version);
-
-
-        // Package JSON
-        // --------------------------------------------------------------------
-
 
 
         // Compile TypeScript to JavaScript
         // --------------------------------------------------------------------
 
+        const tsCompiler = new TypeScriptCompiler();
+        const tsFiles = [
+            path.join(CONFIG.path.ts_input, 'index.ts'),
+        ];
+        const outputDir = './dist/js';
+        // console.log('Starting TypeScript compilation...');
+        await tsCompiler.compile(tsFiles, outputDir);
+        // console.log('TypeScript compilation completed.');
 
-        try {
-            // Other code...
-    
-            // TypeScript compilation
-            const tsFiles = [
-                path.join(CONFIG.path.ts_input, 'index.ts'),
-                // './src/ts/index.ts',
-                // './src/ts/file1.ts',
-                // './src/ts/file2.ts'
-            ]; // Replace with actual file paths
-            const outputDir = './dist/js';
-            
-            console.log('Starting TypeScript compilation...');
-            tsCompiler.compile(tsFiles, outputDir);
-            console.log('TypeScript compilation completed.');
-    
-            // Other code...
-        } catch (error) {
-            console.error('An error occurred:', error);
-        }
 
 
     } catch (error) {
