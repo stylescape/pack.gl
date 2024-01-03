@@ -1,15 +1,11 @@
-import * as pack_object from '../../../package.json' assert { type: 'json' };
-
-const pack = JSON.parse(JSON.stringify(pack_object)).default; // req.body = [Object: null prototype] { title: 'product' }
-
 
 const packageConfig = {
-    name: pack.name,
-    version: pack.version,
-    description: pack.description,
-    keywords: pack.keywords,
-    license: pack.license,
-    homepage: pack.homepage,
+    name: "",
+    version: "",
+    description: "",
+    keywords: "",
+    license: "Apache-2.0",
+    homepage: "https://www.scape.agency",
     main: "js/index",
     types: "js/index",
     // main: "js/index.js",

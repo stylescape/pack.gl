@@ -1,29 +1,38 @@
 import { __awaiter, __generator } from "tslib";
 import path from 'path';
-import { DirectoryCleaner, DirectoryCopier, DirectoryCreator, PackageCreator, VersionWriter, } from 'pack.gl';
-import TypeScriptCompiler from "./class/TypeScriptCompiler.js";
-import { CONFIG } from './config/config.js';
-import packageConfig from "./config/package.config.js";
-var directories = Object.values(CONFIG.path);
+import { DirectoryCleaner, DirectoryCopier, DirectoryCreator, VersionWriter, TypeScriptCompiler, } from 'pack.gl';
+import PackageCreator from "./class/PackageCreator.js";
+import readPackageJson from "./function/readPackageJson.js";
 var tsCompiler = new TypeScriptCompiler();
-var packageCreator = new PackageCreator(packageConfig);
 var versionWriter = new VersionWriter();
 var directoryCopier = new DirectoryCopier();
 var directoryCleaner = new DirectoryCleaner();
 var directoryCreator = new DirectoryCreator();
+var CONFIG = {
+    path: {
+        src: './src',
+        dist: './dist',
+        json_output: './dist',
+        ts_input: './src/ts',
+        ts_output: './dist/ts',
+        js_output: './dist/js',
+    },
+};
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var error_1, tsFiles, outputDir, error_2;
+        var localPackageConfig, packageCreator, packageConfig, error_1, tsFiles, outputDir, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 8, , 9]);
+                    _a.trys.push([0, 7, , 8]);
                     directoryCleaner.cleanDirectory(CONFIG.path.dist);
                     console.log("Directory cleaned: ".concat(CONFIG.path.dist));
-                    console.log('Starting Directory creation...');
-                    return [4, directoryCreator.createDirectories('.', directories)];
+                    return [4, readPackageJson('./package.json')];
                 case 1:
-                    _a.sent();
+                    localPackageConfig = _a.sent();
+                    packageCreator = new PackageCreator(localPackageConfig);
+                    packageConfig = packageCreator.config;
+                    packageCreator.createPackageJson(CONFIG.path.dist);
                     _a.label = 2;
                 case 2:
                     _a.trys.push([2, 4, , 5]);
@@ -39,9 +48,6 @@ function main() {
                 case 5: return [4, versionWriter.writeVersionToFile('VERSION', packageConfig.version)];
                 case 6:
                     _a.sent();
-                    return [4, packageCreator.createPackageJson(CONFIG.path.dist)];
-                case 7:
-                    _a.sent();
                     try {
                         tsFiles = [
                             path.join(CONFIG.path.ts_input, 'index.ts'),
@@ -54,12 +60,12 @@ function main() {
                     catch (error) {
                         console.error('An error occurred:', error);
                     }
-                    return [3, 9];
-                case 8:
+                    return [3, 8];
+                case 7:
                     error_2 = _a.sent();
                     console.error('An error occurred:', error_2);
-                    return [3, 9];
-                case 9: return [2];
+                    return [3, 8];
+                case 8: return [2];
             }
         });
     });

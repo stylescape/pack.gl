@@ -22,5 +22,24 @@
     "scss/**/*.scss",
     "font/**/*.{eot,otf,ttf,woff,woff2}",
     "!.DS_Store"
-  ]
+  ],
+  "dependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/glob": "^8.1.0",
+    "@types/nunjucks": "^3.2.6",
+    "@types/svg-sprite": "^0.0.38",
+    "autoprefixer": "^10.4.15",
+    "del": "^7.1.0",
+    "fantasticon": "^2.0.0",
+    "fs-extra": "^11.2.0",
+    "glob": "^10.3.10",
+    "jsdom": "^23.0.1",
+    "lodash": "^4.17.21",
+    "nunjucks": "^3.2.4",
+    "sass": "^1.69.7",
+    "sharp": "^0.33.1",
+    "svg-sprite": "^2.0.2",
+    "svgo": "^3.1.0",
+    "terser": "^5.26.0"
+  }
 }

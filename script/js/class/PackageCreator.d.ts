@@ -1,6 +1,8 @@
 declare class PackageCreator {
-    private packageJson;
-    constructor(packageJson: PackageJson);
+    config: any;
+    private static defaultConfig;
+    constructor(customConfig?: any);
     createPackageJson(outputDir: string): Promise<void>;
+    private ensureDirectoryExists;
 }
 export default PackageCreator;

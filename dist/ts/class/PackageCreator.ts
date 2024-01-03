@@ -19,10 +19,10 @@
 // Import
 // ============================================================================
 
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
-// import * as pack from '../../package.json' assert { type: 'json' };
-import { PackageJson } from '../interface/PackageJson.js'
+import { PackageJson } from '../interface/PackageJson.js';
+import packageConfig from "../config/package.config.js"
 
 // ============================================================================
 // Classes
@@ -34,28 +34,95 @@ import { PackageJson } from '../interface/PackageJson.js'
  class PackageCreator {
 
 
-    private packageJson: PackageJson;
 
+    /**
+     *  Configuration for the Package.json.
+     */
+     public config: any;
+     // private config: ts.CompilerOptions;
+     // private config: { [key: symbol]: any};
+ 
+     /**
+      * Default configuration for Package.json.
+      */
+      private static defaultConfig: any = packageConfig;
+ 
     /**
      * Initializes a new instance of the PackageCreator class.
-     * @param {PackageJson} packageJson - The content to be written into package.json.
+     * @param {PackageJson} customConfig - The content to be written into package.json.
      */
-    constructor(packageJson: PackageJson) {
-        this.packageJson = packageJson;
+     constructor(
+        customConfig: any = {},
+        //  customConfig: any = {},
+         // customConfig: ts.CompilerOptions = {},
+     ) {
+        let newConfig = {
+            // Populate with necessary fields from packageData
+            name: customConfig.name,
+            version: customConfig.version,
+            description: customConfig.description,
+            keywords: customConfig.keywords,
+            license: customConfig.license,
+            homepage: customConfig.homepage,
+            // main: 'index.js',
+            dependencies: customConfig.dependencies,
+            // files: [
+            //     "svg/**/*.{svg}",
+            //     "js/**/*.{js,map}",
+            //     "ts/**/*.ts",
+            //     "css/**/*.{css,map}",
+            //     "scss/**/*.{scss}",
+            //     "font/**/*.{eot,otf,ttf,woff,woff2}",
+            //     "!.DS_Store"
+            // ],
+        }
+
+         this.config = {
+             ...PackageCreator.defaultConfig,
+             ...newConfig
+         };
+     }
+
+
+
+    
+    /**
+     * Creates a package.json file in the specified directory.
+     * Creates the directory if it does not exist.
+     * @param outputDir - The directory where package.json will be created.
+     */
+     async createPackageJson(outputDir: string): Promise<void> {
+        const filePath = path.join(outputDir, 'package.json');
+        const data = JSON.stringify(this.config, null, 2);
+
+        try {
+            // Ensure the output directory exists
+            await this.ensureDirectoryExists(outputDir);
+
+            // Write the package.json file
+            await fs.writeFile(filePath, data, 'utf-8');
+            console.log(`package.json created at ${filePath}`);
+        } catch (error) {
+            console.error(`Error creating package.json: ${error}`);
+            throw error;
+        }
     }
 
     /**
-     * Creates a package.json file in the specified directory.
-     * @param {string} outputDir - The directory where package.json will be created.
+     * Ensures that the given directory exists. Creates it if it does not exist.
+     * @param dirPath - The path of the directory to check and create.
      */
-    async createPackageJson(outputDir: string): Promise<void> {
-        const filePath = path.join(outputDir, 'package.json');
-        const data = JSON.stringify(this.packageJson, null, 2);
-
-        fs.writeFileSync(filePath, data, 'utf-8');
-        console.log(`package.json created at ${filePath}`);
+     private async ensureDirectoryExists(dirPath: string): Promise<void> {
+        try {
+            await fs.mkdir(dirPath, { recursive: true });
+        } catch (error) {
+            // Check if error is an instance of NodeJS.ErrnoException
+            if (error instanceof Error && (error as NodeJS.ErrnoException).code !== 'EEXIST') {
+                throw error; // Rethrow if it's not a 'directory exists' error
+            }
+        }
     }
-
+    
 }
 
 

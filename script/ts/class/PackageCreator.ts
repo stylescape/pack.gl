@@ -21,9 +21,8 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-// import { PackageJson } from '../interface/PackageJson.js';
+import { PackageJson } from '../interface/PackageJson.js';
 import packageConfig from "../config/package.config.js"
-
 
 // ============================================================================
 // Classes
@@ -37,20 +36,21 @@ import packageConfig from "../config/package.config.js"
 
 
     /**
-     *  Configuration for the Package.json.
+     *  Configuration for the TypeScript compiler.
      */
      public config: any;
      // private config: ts.CompilerOptions;
      // private config: { [key: symbol]: any};
  
      /**
-      * Default configuration for Package.json.
+      * Default configuration for the packageConfig compiler.
       */
       private static defaultConfig: any = packageConfig;
+      // private static defaultConfig: ts.CompilerOptions = tsConfig;
  
     /**
      * Initializes a new instance of the PackageCreator class.
-     * @param {PackageJson} customConfig - The content to be written into package.json.
+     * @param {PackageJson} packageJson - The content to be written into package.json.
      */
      constructor(
         customConfig: any = {},
@@ -83,6 +83,39 @@ import packageConfig from "../config/package.config.js"
              ...newConfig
          };
      }
+
+
+
+
+
+    // packageJson: PackageJson;
+
+    // /**
+    //  * Initializes a new instance of the PackageCreator class.
+    //  * @param {PackageJson} packageJson - The content to be written into package.json.
+    //  */
+    // constructor(packageJson: PackageJson) {
+    //     this.packageJson = {
+    //         // Populate with necessary fields from packageData
+    //         name: packageJson.name,
+    //         version: packageJson.version,
+    //         description: packageJson.description,
+    //         keywords: packageJson.keywords,
+    //         license: packageJson.license,
+    //         homepage: packageJson.homepage,
+    //         main: 'index.js',
+    //         dependencies: packageJson.dependencies,
+    //         files: [
+    //             "svg/**/*.{svg}",
+    //             "js/**/*.{js,map}",
+    //             "ts/**/*.ts",
+    //             "css/**/*.{css,map}",
+    //             "scss/**/*.{scss}",
+    //             "font/**/*.{eot,otf,ttf,woff,woff2}",
+    //             "!.DS_Store"
+    //         ],
+    //     }
+    // }
 
 
 

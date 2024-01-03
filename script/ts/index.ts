@@ -25,17 +25,23 @@ import {
     DirectoryCleaner,
     DirectoryCopier,
     DirectoryCreator,
-    PackageCreator,
+    // PackageCreator,
     VersionWriter,
     // TypeScriptCompiler,
-    // JavaScriptMinifier
+    // JavaScriptMinifier,
+    TypeScriptCompiler,
     gl_installer,
 } from 'pack.gl';
-import TypeScriptCompiler from "./class/TypeScriptCompiler.js"
+import PackageCreator from "./class/PackageCreator.js"
+import readPackageJson from "./function/readPackageJson.js"
+
+
+
+// import TypeScriptCompiler from "./class/TypeScriptCompiler.js"
 
 // Import necessary configurations
-import { CONFIG } from './config/config.js';
-import packageConfig from "./config/package.config.js"
+// import { CONFIG } from './config/config.js';
+// import packageConfig from "./config/package.config.js"
 // import tsConfig from "./config/ts.config.js"
 
 
@@ -44,14 +50,39 @@ import packageConfig from "./config/package.config.js"
 // ============================================================================
 
 // Initialize instances of necessary classes
-const directories = Object.values(CONFIG.path);
+// const directories = Object.values(CONFIG.path);
 const tsCompiler = new TypeScriptCompiler();
-const packageCreator = new PackageCreator(packageConfig);
+
+
+
+
+
+// const packageCreator = PackageCreator.init('../../package.json')
+
+//     .then(packageCreator => packageCreator.createPackageJson(CONFIG.path.dist))
+//     .catch(error => console.error('Error:', error));
+
+// const packageConfig = packageCreator.packageConfig
+    // await packageCreator.createPackageJson(CONFIG.path.dist);
+
+
 const versionWriter = new VersionWriter();
 const directoryCopier = new DirectoryCopier();
 const directoryCleaner = new DirectoryCleaner();
 const directoryCreator = new DirectoryCreator();
 
+const CONFIG = {
+    path: {
+        src:      './src',
+        dist:      './dist',
+        json_output:        './dist',
+        ts_input:           './src/ts',
+        ts_output:          './dist/ts',
+        js_output:          './dist/js',
+
+    },
+
+};
 
 // ============================================================================
 // Functions
@@ -66,20 +97,32 @@ async function main() {
 
     try {
 
-        // await gl_installer();
-
-
-
         // Dirs Clean
         // --------------------------------------------------------------------
         directoryCleaner.cleanDirectory(CONFIG.path.dist);
         console.log(`Directory cleaned: ${CONFIG.path.dist}`);
 
+
+
+
+        const localPackageConfig = await readPackageJson('./package.json');
+
+        const packageCreator = new PackageCreator(localPackageConfig);
+
+        const packageConfig = packageCreator.config
+        packageCreator.createPackageJson(CONFIG.path.dist);
+
+        // await gl_installer();
+
+
+
+
+
         // Dirs Create
         // --------------------------------------------------------------------
-        console.log('Starting Directory creation...');
-        // Assuming the base path is the current directory
-        await directoryCreator.createDirectories('.', directories);
+        // console.log('Starting Directory creation...');
+        // // Assuming the base path is the current directory
+        // await directoryCreator.createDirectories('.', directories);
 
 
 
@@ -104,7 +147,6 @@ async function main() {
         // Package JSON
         // --------------------------------------------------------------------
 
-        await packageCreator.createPackageJson(CONFIG.path.dist);
 
 
         // Compile TypeScript to JavaScript

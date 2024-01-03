@@ -33,7 +33,7 @@ import svgspriteConfig from "../config/svgsprite.config.js"
  * A class for generating SVG sprites from individual SVG files.
  */
 class SvgSpriteGenerator {
- 
+
 
     /**
      * Constructs an instance of SvgSpriteGenerator with the provided configuration.
