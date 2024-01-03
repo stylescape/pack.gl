@@ -20,6 +20,7 @@
 // ============================================================================
 
 import NpmCommandRunner from '../class/NpmCommandRunner.js';
+import StylizedLogger from '../class/StylizedLogger.js';
 
 
 // ============================================================================
@@ -27,6 +28,7 @@ import NpmCommandRunner from '../class/NpmCommandRunner.js';
 // ============================================================================
 
 const runner = new NpmCommandRunner();
+const logger = new StylizedLogger();
 
 
 // ============================================================================
@@ -56,12 +58,13 @@ async function gl_installer() {
     ];
     
     try {
+        logger.header('Install .gl libraries');
         for (const pkg of packages) {
-            console.log(`Running npm install for ${pkg}...`);
+            logger.body(`Running npm install for ${pkg}...`);
             const output = await runner.runCommand(
                 `install ${pkg}@latest --save-dev`
             );
-            console.log(output);
+            logger.body(output);
         }
     } catch (error) {
         console.error('An error occurred:', error);
