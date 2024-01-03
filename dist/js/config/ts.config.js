@@ -1,53 +1,40 @@
+"use strict";
 // config/ts.config.ts
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // Copyright 2023 Scape Agency BV
-
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-
 // http://www.apache.org/licenses/LICENSE-2.0
-
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-
 // ============================================================================
 // Import
 // ============================================================================
-
-import ts from 'typescript';
-
-
+var typescript_1 = __importDefault(require("typescript"));
 // ============================================================================
 // Constants
 // ============================================================================
-
-const tsConfig: ts.CompilerOptions = {
-// const tsConfig = {
-
-
+const tsConfig = {
+    // const tsConfig = {
     // Visit https://aka.ms/tsconfig.json to read more about this file
-
-
     // Projects
     // ========================================================================
-
     // incremental: true,                                   // boolean      // Enable incremental compilation
     // composite: true,                                     // boolean      // Enable constraints that allow a TypeScript project to be used with project references.
     // tsBuildInfoFile: "./",                             // Specify the folder for .tsbuildinfo incremental compilation files.
     // disableSourceOfProjectReferenceRedirect: true,       // boolean      // Disable preferring source files instead of declaration files when referencing composite projects
     // disableSolutionSearching: true,                      // boolean      // Opt a project out of multi-project reference checking when editing.
     // disableReferencedProjectLoad: true,                  // boolean      // Reduce the number of projects loaded automatically by TypeScript.
-  
-
     // Language and Environment
     // ========================================================================
-
-    target: ts.ScriptTarget.ES2015,
+    target: typescript_1.default.ScriptTarget.ES2015,
     // target: "es6",                     // Specify ECMAScript target version
     // ES3 = 0,
     // ES5 = 1,
@@ -62,10 +49,9 @@ const tsConfig: ts.CompilerOptions = {
     // ESNext = 99,
     // JSON = 100,
     // Latest = 99,
-
     // target: "es2015",                                     // Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
     // lib: ["esnext", "es2017", "ES2015", "dom"],           // Specify a set of bundled library declaration files that describe the target runtime environment.
-    lib: ["es2015", "dom"],             // Specify library files to be included in the compilation
+    lib: ["es2015", "dom"], // Specify library files to be included in the compilation
     // lib: ["es2015"]             // Specify library files to be included in the compilation
     // jsx: "preserve",                                   // Specify what JSX code is generated.
     // experimentalDecorators: true,                         // Enable experimental support for TC39 stage 2 draft decorators.
@@ -76,17 +62,13 @@ const tsConfig: ts.CompilerOptions = {
     // reactNamespace: "",                                // Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.
     // noLib: true,                                       // Disable including any library files, including the default lib.d.ts.
     // useDefineForClassFields: true,                      // Emit ECMAScript-standard-compliant class fields.
-  
-
     // Modules
     // ========================================================================
-
-        // module?: ModuleKind;
+    // module?: ModuleKind;
     // moduleResolution?: ModuleResolutionKind;
     // moduleSuffixes?: string[];
     // moduleDetection?: ModuleDetectionKind;
-
-    module: ts.ModuleKind.CommonJS,
+    module: typescript_1.default.ModuleKind.CommonJS,
     // module: "commonjs",                // Specify module code generation
     // module: "CommonJS",
     // module: "esnext",                                      // Specify what module code is generated.
@@ -103,25 +85,18 @@ const tsConfig: ts.CompilerOptions = {
     // ],
     // types: [],                                         // Specify type package names to be included without being referenced in a source file.
     // allowUmdGlobalAccess: true,                        // Allow accessing UMD globals from modules.
-    resolveJsonModule: true,                           // Enable importing .json files
+    resolveJsonModule: true, // Enable importing .json files
     // noResolve: true,                                   // Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project.
-
-
     // JavaScript Support
     // ========================================================================
-
     // allowJs: true                    boolean                     // Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.,
     // checkJs: false                                        // Enable error reporting in type-checked JavaScript files.,
     // maxNodeModuleJsDepth: 1,                           // Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.
-
-
     // Emit
     // ========================================================================
-
     declaration: true, // Enables generation of .d.ts files
-
     //   "declaration: true,                                 // Generate .d.ts files from TypeScript and JavaScript files in your project.
-//   "declarationMap: true,                              // Create sourcemaps for d.ts files.
+    //   "declarationMap: true,                              // Create sourcemaps for d.ts files.
     // emitDeclarationOnly: true,                         // Only output d.ts files and not JavaScript files.
     // sourceMap: true,                                      // Create source map files for emitted JavaScript files.
     // outFile: "./",                                     // Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.
@@ -145,24 +120,18 @@ const tsConfig: ts.CompilerOptions = {
     // preserveConstEnums: true,                          // Disable erasing `const enum` declarations in generated code.
     // declarationDir: "./",                              // Specify the output directory for generated declaration files.
     // preserveValueImports: true,                        // Preserve unused imported values in the JavaScript output that would otherwise be removed.
-
-
     // Interop Constraints
     // ========================================================================
-
     // isolatedModules: true,                             // Ensure that each file can be safely transpiled without relying on other imports.
-    allowSyntheticDefaultImports: true,                   // Allow 'import x from y' when a module doesn't have a default export.
+    allowSyntheticDefaultImports: true, // Allow 'import x from y' when a module doesn't have a default export.
     // Enables compatibility with Babel imports
-    esModuleInterop: true,                                // Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.
+    esModuleInterop: true, // Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.
     // preserveSymlinks: true,                            // Disable resolving symlinks to their realpath. This correlates to the same flag in node.
     // forceConsistentCasingInFileNames: true,            // Ensure that casing is correct in imports.
     forceConsistentCasingInFileNames: true, // Disallow inconsistently-cased references
-
-
     // Type Checking
     // ========================================================================
-
-    strict: true,                                          // Enable all strict type-checking options.,
+    strict: true, // Enable all strict type-checking options.,
     // noImplicitAny: true,                                  // Enable error reporting for expressions and declarations with an implied `any` type..
     // strictNullChecks: true,                               // When type checking, take into account `null` and `undefined`.
     // strictFunctionTypes: true,                            // When assigning functions, check to ensure parameters and the return values are subtype-compatible.
@@ -181,125 +150,13 @@ const tsConfig: ts.CompilerOptions = {
     // noPropertyAccessFromIndexSignature: true,          // Enforces using indexed accessors for keys declared using an indexed type
     // allowUnusedLabels: true,                           // Disable error reporting for unused labels.
     // allowUnreachableCode: true,                        // Disable error reporting for unreachable code.
-
-
     // Completeness
     // ========================================================================
-
     // skipDefaultLibCheck: true,                         // Skip type checking .d.ts files that are included with TypeScript.
     // Skip type checking of declaration files
-    skipLibCheck: true,                                    // Skip type checking all .d.ts files.
-  
-    
-    // Other
-    // ========================================================================
-    // allowImportingTsExtensions?: boolean;
-
-    // allowJs?: boolean;
-    // allowArbitraryExtensions?: boolean;
-    // allowSyntheticDefaultImports?: boolean;
-    // allowUmdGlobalAccess?: boolean;
-    // allowUnreachableCode?: boolean;
-    // allowUnusedLabels?: boolean;
-    // alwaysStrict?: boolean;
-    // baseUrl?: string;
-    // charset?: string;
-    // checkJs?: boolean;
-    // customConditions?: string[];
-    // declaration?: boolean;
-    // declarationMap?: boolean;
-    // emitDeclarationOnly?: boolean;
-    // declarationDir?: string;
-    // disableSizeLimit?: boolean;
-    // disableSourceOfProjectReferenceRedirect?: boolean;
-    // disableSolutionSearching?: boolean;
-    // disableReferencedProjectLoad?: boolean;
-    // downlevelIteration?: boolean;
-    // emitBOM?: boolean;
-    // emitDecoratorMetadata?: boolean;
-    // exactOptionalPropertyTypes?: boolean;
-    // experimentalDecorators?: boolean;
-    // forceConsistentCasingInFileNames?: boolean;
-    // ignoreDeprecations?: string;
-    // importHelpers?: boolean;
-    // importsNotUsedAsValues?: ImportsNotUsedAsValues;
-    // inlineSourceMap?: boolean;
-    // inlineSources?: boolean;
-    // isolatedModules?: boolean;
-    // jsx?: JsxEmit;
-    // keyofStringsOnly?: boolean;
-    // lib?: string[];
-    // locale?: string;
-    // mapRoot?: string;
-    // maxNodeModuleJsDepth?: number;
-
-    // newLine?: NewLineKind;
-    // noEmit?: boolean;
-    // noEmitHelpers?: boolean;
-    // noEmitOnError?: boolean;
-    // noErrorTruncation?: boolean;
-    // noFallthroughCasesInSwitch?: boolean;
-    // noImplicitAny?: boolean;
-    // noImplicitReturns?: boolean;
-    // noImplicitThis?: boolean;
-    // noStrictGenericChecks?: boolean;
-    // noUnusedLocals?: boolean;
-    // noUnusedParameters?: boolean;
-    // noImplicitUseStrict?: boolean;
-    // noPropertyAccessFromIndexSignature?: boolean;
-    // assumeChangesOnlyAffectDirectDependencies?: boolean;
-    // noLib?: boolean;
-    // noResolve?: boolean;
-    // noUncheckedIndexedAccess?: boolean;
-    // out?: string;
-    // outDir?: string;
-    // outFile: 'icon.gl.js' // string;
-    // paths?: MapLike<string[]>;
-    // preserveConstEnums?: boolean;
-    // noImplicitOverride?: boolean;
-    // preserveSymlinks?: boolean;
-    // preserveValueImports?: boolean;
-    // project?: string;
-    // reactNamespace?: string;
-    // jsxFactory?: string;
-    // jsxFragmentFactory?: string;
-    // jsxImportSource?: string;
-    // composite?: boolean;
-    // incremental?: boolean;
-    // tsBuildInfoFile?: string;
-    // removeComments?: boolean;
-    // resolvePackageJsonExports?: boolean;
-    // resolvePackageJsonImports?: boolean;
-    // rootDir?: string;
-    // rootDirs?: string[];
-    // skipLibCheck?: boolean;
-    // skipDefaultLibCheck?: boolean;
-    // sourceMap?: boolean;
-    // sourceRoot?: string;
-    // strict?: boolean;
-    // strictFunctionTypes?: boolean;
-    // strictBindCallApply?: boolean;
-    // strictNullChecks?: boolean;
-    // strictPropertyInitialization?: boolean;
-    // stripInternal?: boolean;
-    // suppressExcessPropertyErrors?: boolean;
-    // suppressImplicitAnyIndexErrors?: boolean;
-    // target?: ScriptTarget;
-    // traceResolution?: boolean;
-    // useUnknownInCatchVariables?: boolean;
-    // resolveJsonModule?: boolean;
-    // types?: string[];
-    // /** Paths used to compute primary types search locations
-    // typeRoots?: string[];
-    // verbatimModuleSyntax?: boolean;
-    // esModuleInterop?: boolean;
-    // useDefineForClassFields?: boolean;
-    // [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
+    skipLibCheck: true
 };
-
-
 // ============================================================================
 // Export
 // ============================================================================
-
-export default tsConfig;
+exports.default = tsConfig;

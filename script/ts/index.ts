@@ -21,26 +21,20 @@
 
 // Import necessary modules and classes
 import path from 'path';
-import FontGenerator from './class/FontGenerator.js';
-import SvgPackager from "./class/SvgPackager.js";
-import StyleProcessor from "./class/StyleProcessor.js";
-import SvgSpriteGenerator from "./class/SvgSpriteGenerator.js";
-import PackageCreator from './class/PackageCreator.js';
-import VersionWriter from './class/VersionWriter.js';
-import FileCopier from './class/FileCopier.js'; 
-import FileRenamer from './class/FileRenamer.js'; 
-import DirectoryCreator from './class/DirectoryCreator.js';
-import DirectoryCopier from './class/DirectoryCopier.js';
-import DirectoryCleaner from './class/DirectoryCleaner.js'; // Adjust the path as needed
-import TypeScriptCompiler from './class/TypeScriptCompiler.js';
-import JavaScriptMinifier from './class/JavaScriptMinifier.js';
+import {
+    DirectoryCleaner,
+    DirectoryCopier,
+    DirectoryCreator,
+    PackageCreator,
+    VersionWriter,
+    TypeScriptCompiler,
+    // JavaScriptMinifier
+} from 'pack.gl';
 
 // Import necessary configurations
 import { CONFIG } from './config/config.js';
-import svgspriteConfig from "./config/svgsprite.config.js";
 import packageConfig from "./config/package.config.js"
 import tsConfig from "./config/ts.config.js"
-import tensorConfig from "./config/terser.config.js"
 
 
 // ============================================================================
@@ -49,16 +43,9 @@ import tensorConfig from "./config/terser.config.js"
 
 // Initialize instances of necessary classes
 const directories = Object.values(CONFIG.path);
-const spriteGenerator = new SvgSpriteGenerator(svgspriteConfig);
 const tsCompiler = new TypeScriptCompiler(tsConfig);
-const jsMinifier = new JavaScriptMinifier(tensorConfig);
 const packageCreator = new PackageCreator(packageConfig);
-const svgPackager = new SvgPackager();
-const fontGenerator = new FontGenerator();
-const styleProcessor = new StyleProcessor();
 const versionWriter = new VersionWriter();
-const fileCopier = new FileCopier();
-const fileRenamer = new FileRenamer();
 const directoryCopier = new DirectoryCopier();
 const directoryCleaner = new DirectoryCleaner();
 const directoryCreator = new DirectoryCreator();
@@ -140,33 +127,6 @@ async function main() {
             console.error('An error occurred:', error);
         }
 
-
-        // // Rename Ts
-        // // --------------------------------------------------------------------
-
-        // await fileRenamer.renameFile(
-        //     path.join(CONFIG.path.js_output, 'index.js'),
-        //     path.join(CONFIG.path.js_output, 'pack.gl.js'),
-        // )
-
-        // // Minify JavaScript
-        // // --------------------------------------------------------------------
-
-
-        // // const inputJsFile = './path/to/your/script.js';
-        // // const outputMinJsFile = './path/to/your/script.min.js';
-
-        // await jsMinifier.minifyFile(
-        //     path.join(CONFIG.path.js_output, 'pack.gl.js'),
-        //     path.join(CONFIG.path.js_output, 'pack.gl.min.js'),
-        //     // inputJsFile,
-        //     // outputMinJsFile
-        // )
-        // .then(() => console.log('JavaScript minification completed.'))
-        // .catch(console.error);
-
-
-        
 
     } catch (error) {
         console.error('An error occurred:', error);
