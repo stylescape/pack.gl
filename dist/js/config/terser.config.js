@@ -37,14 +37,7 @@ const terserConfig = {
     mangle: {
         // mangle options
         // Mangle names for obfuscation and size reduction
-        // properties: true, // Mangle property names
-        properties: {
-            // mangle property options
-            bare_returns: false, //support top level return statements
-            html5_comments: true, // (default true)
-            shebang: true, //(default true) -- support #!command as the first line
-            spidermonkey: false
-        }
+        properties: true
     },
     format: {
         // format options (can also use `output` for backwards compatibility)

@@ -7,12 +7,7 @@ declare const terserConfig: {
         arrows: boolean;
     };
     mangle: {
-        properties: {
-            bare_returns: boolean;
-            html5_comments: boolean;
-            shebang: boolean;
-            spidermonkey: boolean;
-        };
+        properties: boolean;
     };
     format: {
         comments: boolean;
