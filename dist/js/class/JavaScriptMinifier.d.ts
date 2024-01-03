@@ -2,12 +2,19 @@
  * Class to minify JavaScript files using Terser.
  */
 declare class JavaScriptMinifier {
+    /**
+     *  Configuration for the JavaScript compiler.
+     */
     private config;
     /**
-     * Constructs an instance with the provided configuration.
-     * @param {any} config - Configuration object - minification options for Terser.
+     * Default configuration for the JavaScript compiler.
      */
-    constructor(config: any);
+    private static defaultConfig;
+    /**
+     * Constructs an instance with merged configuration of default and custom options.
+     * @param {any} customConfig - OptionalConfiguration object - minification options for Terser.
+     */
+    constructor(customConfig?: any);
     /**
      * Minifies a JavaScript file.
      * @param {string} inputPath - Path to the input JavaScript file.

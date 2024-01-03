@@ -39,16 +39,15 @@ import tsConfig from "../config/ts.config.js"
     /**
      *  Configuration for the TypeScript compiler.
      */
-    //  private config: ts.CompilerOptions;
     private config: any;
+    // private config: ts.CompilerOptions;
     // private config: { [key: symbol]: any};
 
     /**
      * Default configuration for the TypeScript compiler.
      */
      private static defaultConfig: any = tsConfig;
-    //  private static defaultConfig: ts.CompilerOptions = tsConfig;
-     // private static defaultConfig: CompilerOptions = tsConfig;
+     // private static defaultConfig: ts.CompilerOptions = tsConfig;
 
     /**
      * Constructs an instance with merged configuration of default and custom options.

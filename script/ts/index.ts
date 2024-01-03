@@ -66,7 +66,7 @@ async function main() {
 
     try {
 
-        await gl_installer();
+        // await gl_installer();
 
 
 

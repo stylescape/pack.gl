@@ -1,6 +1,6 @@
 import DirectoryCleaner from '../class/DirectoryCleaner.js';
 import StylizedLogger from '../class/StylizedLogger.js';
-import CONFIG from '../path/to/config.js'; // Assuming CONFIG is imported from a config file
+// import CONFIG from '../path/to/config.js'; // Assuming CONFIG is imported from a config file
 
 const directoryCleaner = new DirectoryCleaner();
 const logger = new StylizedLogger();

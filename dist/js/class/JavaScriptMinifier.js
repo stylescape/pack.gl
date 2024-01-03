@@ -1,5 +1,8 @@
 "use strict";
 // class/JavaScriptMinifier.ts
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // Copyright 2023 Scape Agency BV
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 var terser_1 = require("terser");
 var fs_1 = require("fs");
+var terser_config_js_1 = __importDefault(require("../config/terser.config.js"));
 // ============================================================================
 // Classes
 // ============================================================================
@@ -24,11 +28,18 @@ var fs_1 = require("fs");
  */
 class JavaScriptMinifier {
     /**
-     * Constructs an instance with the provided configuration.
-     * @param {any} config - Configuration object - minification options for Terser.
+     * Default configuration for the JavaScript compiler.
      */
-    constructor(config) {
-        this.config = config;
+    static { this.defaultConfig = terser_config_js_1.default; }
+    /**
+     * Constructs an instance with merged configuration of default and custom options.
+     * @param {any} customConfig - OptionalConfiguration object - minification options for Terser.
+     */
+    constructor(customConfig = {}) {
+        this.config = {
+            ...JavaScriptMinifier.defaultConfig,
+            ...customConfig
+        };
     }
     /**
      * Minifies a JavaScript file.

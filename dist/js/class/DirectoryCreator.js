@@ -42,7 +42,7 @@ class DirectoryCreator {
             for (const dir of directories) {
                 const dirPath = path_1.default.join(basePath, dir);
                 await fs_1.promises.mkdir(dirPath, { recursive: true });
-                console.log(`Directory created or already exists: ${dirPath}`);
+                // console.log(`Directory created or already exists: ${dirPath}`);
             }
         }
         catch (error) {

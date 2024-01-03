@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var DirectoryCleaner_js_1 = __importDefault(require("../class/DirectoryCleaner.js"));
 var StylizedLogger_js_1 = __importDefault(require("../class/StylizedLogger.js"));
+// import CONFIG from '../path/to/config.js'; // Assuming CONFIG is imported from a config file
 const directoryCleaner = new DirectoryCleaner_js_1.default();
 const logger = new StylizedLogger_js_1.default();
 /**

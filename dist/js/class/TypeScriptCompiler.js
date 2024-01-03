@@ -28,13 +28,13 @@ var ts_config_js_1 = __importDefault(require("../config/ts.config.js"));
  * TypeScriptCompiler class for compiling TypeScript files to JavaScript.
  */
 class TypeScriptCompiler {
+    // private config: ts.CompilerOptions;
     // private config: { [key: symbol]: any};
     /**
      * Default configuration for the TypeScript compiler.
      */
     static { this.defaultConfig = ts_config_js_1.default; }
-    //  private static defaultConfig: ts.CompilerOptions = tsConfig;
-    // private static defaultConfig: CompilerOptions = tsConfig;
+    // private static defaultConfig: ts.CompilerOptions = tsConfig;
     /**
      * Constructs an instance with merged configuration of default and custom options.
      * @param {any} customConfig - Optional custom configuration object for TypeScript compiler

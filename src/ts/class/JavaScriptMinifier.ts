@@ -21,6 +21,7 @@
 
 import { minify } from 'terser';
 import { promises as fs } from 'fs';
+import terserConfig from "../config/terser.config.js"
 
 
 // ============================================================================
@@ -32,15 +33,28 @@ import { promises as fs } from 'fs';
  */
  class JavaScriptMinifier {
 
-    private config: any;
-
     /**
-     * Constructs an instance with the provided configuration.
-     * @param {any} config - Configuration object - minification options for Terser.
+     *  Configuration for the JavaScript compiler.
      */
-    constructor(config: any) {
-        this.config = config;
-    }
+     private config: any;
+ 
+     /**
+      * Default configuration for the JavaScript compiler.
+      */
+      private static defaultConfig: any = terserConfig;
+ 
+     /**
+      * Constructs an instance with merged configuration of default and custom options.
+      * @param {any} customConfig - OptionalConfiguration object - minification options for Terser.
+      */
+     constructor(
+         customConfig: any = {},
+     ) {
+         this.config = {
+             ...JavaScriptMinifier.defaultConfig,
+             ...customConfig
+         };
+     }
 
     /**
      * Minifies a JavaScript file.

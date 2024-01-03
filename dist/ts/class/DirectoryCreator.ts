@@ -49,7 +49,7 @@ import path from 'path';
             for (const dir of directories) {
                 const dirPath = path.join(basePath, dir);
                 await fsPromises.mkdir(dirPath, { recursive: true });
-                console.log(`Directory created or already exists: ${dirPath}`);
+                // console.log(`Directory created or already exists: ${dirPath}`);
             }
         } catch (error) {
             console.error(`Error creating directories: ${error}`);
