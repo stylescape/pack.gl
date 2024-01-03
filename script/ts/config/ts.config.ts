@@ -12,6 +12,7 @@ const tsConfig = {
     forceConsistentCasingInFileNames: true, // Disallow inconsistently-cased references
     resolveJsonModule: true,           // Allow importing of .json files
     lib: ["es2015", "dom"]             // Specify library files to be included in the compilation
+    // lib: ["es2015"]             // Specify library files to be included in the compilation
 
 
       

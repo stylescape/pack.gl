@@ -4,12 +4,18 @@
  * and creates corresponding TypeScript files.
  */
 declare class SvgPackager {
+    private svgoConfigPath;
+    /**
+     * Constructor for SvgPackager class.
+     * Optionally accepts configurations or dependencies.
+     */
+    constructor(svgoConfigPath: string);
     /**
      * Processes all SVG files in a given directory.
-     * @param directory The directory containing SVG files to process.
+     * @param inputDirectory The directory containing SVG files to process.
      * @param outputDirectory The directory where optimized SVGs will be output as TypeScript files.
      */
-    processSvgFiles(directory: string, outputDirectory: string, ts_output_directory: string, json_output_directory: string): Promise<void>;
+    processSvgFiles(inputDirectory: string, outputDirectory: string, ts_output_directory: string, json_output_directory: string): Promise<void>;
     /**
      * Reads the content of an SVG file.
      * @param filePath The path to the SVG file.
@@ -22,6 +28,7 @@ declare class SvgPackager {
      * @returns A sanitized version of the file name.
      */
     private sanitizeFileName;
+    private writeFiles;
     /**
      * Optimizes SVG content using SVGO.
      * @param svgContent The raw SVG content.
