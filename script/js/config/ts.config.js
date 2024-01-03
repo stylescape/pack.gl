@@ -1,14 +1,14 @@
 var tsConfig = {
     target: "es6",
+    lib: ["es2015", "dom"],
     module: "commonjs",
+    resolveJsonModule: true,
+    declaration: true,
     allowSyntheticDefaultImports: true,
     esModuleInterop: true,
-    declaration: true,
+    forceConsistentCasingInFileNames: true,
     strict: true,
     skipLibCheck: true,
-    forceConsistentCasingInFileNames: true,
-    resolveJsonModule: true,
-    lib: ["es2015", "dom"]
 };
 export default tsConfig;
 //# sourceMappingURL=ts.config.js.map

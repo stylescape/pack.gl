@@ -18,16 +18,13 @@ const svgspriteConfig = {
             maxWidth: 2000, // Max. shape width
             maxHeight: 2000, // Max. shape height
             precision: 2, // Floating point precision
-            attributes: false, // Width and height attributes on embedded shapes
+            attributes: false
         },
         spacing: {
             padding: 0, // Padding around all shapes
             box: 'content' // Padding strategy (similar to CSS `box-sizing`)
         },
-        transform: ['svgo'], // List of transformations / optimizations
-        // meta: null, // Path to YAML file with meta / accessibility data
-        // align: null, // Path to YAML file with extended alignment data
-        // dest: null // Output directory for optimized intermediate SVG shapes
+        transform: ['svgo']
     },
     svg: {
         xmlDeclaration: false, // Add XML declaration to SVG sprite
@@ -54,8 +51,7 @@ const svgspriteConfig = {
             // inline: true, // Prepare for inline embedding
             sprite: "icon.gl.svg"
         },
-        stack: true, // Create a «stack» sprite
-        // symbol: true // Symbol sprite mode
+        stack: true
     }
 };
 // ============================================================================

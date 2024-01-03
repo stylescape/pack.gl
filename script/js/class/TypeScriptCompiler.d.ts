@@ -1,6 +1,7 @@
 declare class TypeScriptCompiler {
     private config;
-    constructor(config: any);
+    private static defaultConfig;
+    constructor(customConfig?: any);
     compile(filePaths: string[], outDir: string): Promise<void>;
 }
 export default TypeScriptCompiler;

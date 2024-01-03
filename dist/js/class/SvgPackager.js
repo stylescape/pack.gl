@@ -23,15 +23,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -49,11 +40,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
-const fs = __importStar(require("fs/promises"));
-const path = __importStar(require("path"));
-const glob = __importStar(require("glob"));
-const svgo_1 = __importDefault(require("svgo"));
-const svgo_2 = require("svgo");
+var fs = __importStar(require("fs/promises"));
+var path = __importStar(require("path"));
+var glob = __importStar(require("glob"));
+var svgo_1 = __importDefault(require("svgo"));
+var svgo_2 = require("svgo");
 // ============================================================================
 // Classes
 // ============================================================================
@@ -75,39 +66,37 @@ class SvgPackager {
      * @param inputDirectory The directory containing SVG files to process.
      * @param outputDirectory The directory where optimized SVGs will be output as TypeScript files.
      */
-    processSvgFiles(inputDirectory, outputDirectory, ts_output_directory, json_output_directory) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const iconNames = [];
-            try {
-                console.log(`Processing directory: ${inputDirectory}`);
-                const svgFiles = glob.sync(`${inputDirectory}/**/*.svg`);
-                for (const file of svgFiles) {
-                    console.log(`Processing file: ${file}`);
-                    const iconName = this.sanitizeFileName(path.basename(file, '.svg'));
-                    iconNames.push(iconName);
-                    console.log(`Processing icon: ${iconName}`);
-                    const svgContent = yield this.readSvgFile(file);
-                    const optimizedSvg = yield this.optimizeSvg(svgContent);
-                    // const optimizedSvg = await this.optimizeSvg(file, svgContent);
-                    // svgo will always add a final newline when in pretty mode
-                    const resultSvg = optimizedSvg.trim();
-                    // Write the optimized SVG file
-                    yield this.writeSvgFile(
-                    // file,
-                    iconName, resultSvg, outputDirectory);
-                    // Write the optimized TypeScript file
-                    yield this.writeTypeScriptFile(
-                    // file,
-                    iconName, resultSvg, ts_output_directory);
-                }
-                yield this.writeIconsJson(iconNames, json_output_directory);
-                console.log(`Successfully processed ${svgFiles.length} SVG files.`);
+    async processSvgFiles(inputDirectory, outputDirectory, ts_output_directory, json_output_directory) {
+        const iconNames = [];
+        try {
+            console.log(`Processing directory: ${inputDirectory}`);
+            const svgFiles = glob.sync(`${inputDirectory}/**/*.svg`);
+            for (const file of svgFiles) {
+                console.log(`Processing file: ${file}`);
+                const iconName = this.sanitizeFileName(path.basename(file, '.svg'));
+                iconNames.push(iconName);
+                console.log(`Processing icon: ${iconName}`);
+                const svgContent = await this.readSvgFile(file);
+                const optimizedSvg = await this.optimizeSvg(svgContent);
+                // const optimizedSvg = await this.optimizeSvg(file, svgContent);
+                // svgo will always add a final newline when in pretty mode
+                const resultSvg = optimizedSvg.trim();
+                // Write the optimized SVG file
+                await this.writeSvgFile(
+                // file,
+                iconName, resultSvg, outputDirectory);
+                // Write the optimized TypeScript file
+                await this.writeTypeScriptFile(
+                // file,
+                iconName, resultSvg, ts_output_directory);
             }
-            catch (error) {
-                console.error('Error processing SVG files:', error);
-                throw error;
-            }
-        });
+            await this.writeIconsJson(iconNames, json_output_directory);
+            console.log(`Successfully processed ${svgFiles.length} SVG files.`);
+        }
+        catch (error) {
+            console.error('Error processing SVG files:', error);
+            throw error;
+        }
     }
     // public async processSvgFiles(directory: string, outputDirectory: string): Promise<void> {
     //     try {
@@ -149,10 +138,8 @@ class SvgPackager {
     //         throw error;
     //     }
     // }
-    readSvgFile(filePath) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return fs.readFile(filePath, 'utf8');
-        });
+    async readSvgFile(filePath) {
+        return fs.readFile(filePath, 'utf8');
     }
     /**
      * Sanitizes a file name to be a valid TypeScript identifier.
@@ -166,11 +153,9 @@ class SvgPackager {
     sanitizeFileName(fileName) {
         return fileName.replace(/[^a-zA-Z0-9_]/g, '_');
     }
-    writeFiles(iconName, svgContent, outputDirectory) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.writeSvgFile(iconName, svgContent, outputDirectory);
-            yield this.writeTypeScriptFile(iconName, svgContent, outputDirectory);
-        });
+    async writeFiles(iconName, svgContent, outputDirectory) {
+        await this.writeSvgFile(iconName, svgContent, outputDirectory);
+        await this.writeTypeScriptFile(iconName, svgContent, outputDirectory);
     }
     /**
      * Optimizes SVG content using SVGO.
@@ -195,12 +180,10 @@ class SvgPackager {
     //         throw error;
     //     }
     // }
-    optimizeSvg(svgContent) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const config = yield (0, svgo_2.loadConfig)(this.svgoConfigPath);
-            const result = yield svgo_1.default.optimize(svgContent, Object.assign({}, config));
-            return result.data.trim();
-        });
+    async optimizeSvg(svgContent) {
+        const config = await (0, svgo_2.loadConfig)(this.svgoConfigPath);
+        const result = await svgo_1.default.optimize(svgContent, { ...config });
+        return result.data.trim();
     }
     /**
      * Creates a TypeScript file from SVG content.
@@ -223,12 +206,10 @@ class SvgPackager {
     //         throw error;
     //     }
     // }
-    writeTypeScriptFile(iconName, svgContent, outputDirectory) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const tsContent = `export const icon_${iconName} = \`${svgContent}\`;\n`;
-            const outputPath = path.join(outputDirectory, `${iconName}.ts`);
-            yield fs.writeFile(outputPath, tsContent);
-        });
+    async writeTypeScriptFile(iconName, svgContent, outputDirectory) {
+        const tsContent = `export const icon_${iconName} = \`${svgContent}\`;\n`;
+        const outputPath = path.join(outputDirectory, `${iconName}.ts`);
+        await fs.writeFile(outputPath, tsContent);
     }
     /**
      * Writes the SVG content to a file.
@@ -251,11 +232,9 @@ class SvgPackager {
     //         throw error;
     //     }
     // }
-    writeSvgFile(iconName, svgContent, outputDirectory) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const outputPath = path.join(outputDirectory, `${iconName}.svg`);
-            yield fs.writeFile(outputPath, svgContent);
-        });
+    async writeSvgFile(iconName, svgContent, outputDirectory) {
+        const outputPath = path.join(outputDirectory, `${iconName}.svg`);
+        await fs.writeFile(outputPath, svgContent);
     }
     /**
      * Writes a JSON file containing the names of processed icons.
@@ -266,20 +245,18 @@ class SvgPackager {
      * @param iconNames An array of strings containing the names of the icons.
      * @param outputDirectory The directory where the JSON file will be saved.
      */
-    writeIconsJson(iconNames, outputDirectory) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const jsonContent = JSON.stringify(iconNames, null, 2);
-                const outputPath = path.join(outputDirectory, 'icons.json');
-                // await fs_extra.outputFile(outputPath, jsonContent);
-                yield fs.writeFile(outputPath, jsonContent);
-                console.log('Icons JSON file created successfully');
-            }
-            catch (error) {
-                console.error('Error writing icons JSON file:', error);
-                throw error;
-            }
-        });
+    async writeIconsJson(iconNames, outputDirectory) {
+        try {
+            const jsonContent = JSON.stringify(iconNames, null, 2);
+            const outputPath = path.join(outputDirectory, 'icons.json');
+            // await fs_extra.outputFile(outputPath, jsonContent);
+            await fs.writeFile(outputPath, jsonContent);
+            console.log('Icons JSON file created successfully');
+        }
+        catch (error) {
+            console.error('Error writing icons JSON file:', error);
+            throw error;
+        }
     }
 }
 // ============================================================================

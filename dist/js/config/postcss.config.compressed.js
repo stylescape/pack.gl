@@ -17,8 +17,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
-const autoprefixer_1 = __importDefault(require("autoprefixer"));
-const cssnano_1 = __importDefault(require("cssnano"));
+var autoprefixer_1 = __importDefault(require("autoprefixer"));
+var cssnano_1 = __importDefault(require("cssnano"));
 // ============================================================================
 // Constants
 // ============================================================================

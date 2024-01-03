@@ -19,34 +19,34 @@ exports.gl_installer = exports.NpmCommandRunner = exports.JavaScriptMinifier = e
 // Import
 // ============================================================================
 // Import | Utility Classes
-const DirectoryCleaner_1 = __importDefault(require("./class/DirectoryCleaner"));
+var DirectoryCleaner_1 = __importDefault(require("./class/DirectoryCleaner"));
 exports.DirectoryCleaner = DirectoryCleaner_1.default;
-const DirectoryCopier_1 = __importDefault(require("./class/DirectoryCopier"));
+var DirectoryCopier_1 = __importDefault(require("./class/DirectoryCopier"));
 exports.DirectoryCopier = DirectoryCopier_1.default;
-const DirectoryCreator_1 = __importDefault(require("./class/DirectoryCreator"));
+var DirectoryCreator_1 = __importDefault(require("./class/DirectoryCreator"));
 exports.DirectoryCreator = DirectoryCreator_1.default;
-const FileCopier_1 = __importDefault(require("./class/FileCopier"));
+var FileCopier_1 = __importDefault(require("./class/FileCopier"));
 exports.FileCopier = FileCopier_1.default;
-const FileRenamer_1 = __importDefault(require("./class/FileRenamer"));
+var FileRenamer_1 = __importDefault(require("./class/FileRenamer"));
 exports.FileRenamer = FileRenamer_1.default;
 // // Import | Internal Classes
-const FontGenerator_js_1 = __importDefault(require("./class/FontGenerator.js"));
+var FontGenerator_js_1 = __importDefault(require("./class/FontGenerator.js"));
 exports.FontGenerator = FontGenerator_js_1.default;
-const PackageCreator_js_1 = __importDefault(require("./class/PackageCreator.js"));
+var PackageCreator_js_1 = __importDefault(require("./class/PackageCreator.js"));
 exports.PackageCreator = PackageCreator_js_1.default;
-const SvgPackager_js_1 = __importDefault(require("./class/SvgPackager.js"));
+var SvgPackager_js_1 = __importDefault(require("./class/SvgPackager.js"));
 exports.SvgPackager = SvgPackager_js_1.default;
-const StyleProcessor_js_1 = __importDefault(require("./class/StyleProcessor.js"));
+var StyleProcessor_js_1 = __importDefault(require("./class/StyleProcessor.js"));
 exports.StyleProcessor = StyleProcessor_js_1.default;
-const SvgSpriteGenerator_js_1 = __importDefault(require("./class/SvgSpriteGenerator.js"));
+var SvgSpriteGenerator_js_1 = __importDefault(require("./class/SvgSpriteGenerator.js"));
 exports.SvgSpriteGenerator = SvgSpriteGenerator_js_1.default;
-const VersionWriter_js_1 = __importDefault(require("./class/VersionWriter.js"));
+var VersionWriter_js_1 = __importDefault(require("./class/VersionWriter.js"));
 exports.VersionWriter = VersionWriter_js_1.default;
-const TypeScriptCompiler_js_1 = __importDefault(require("./class/TypeScriptCompiler.js"));
+var TypeScriptCompiler_js_1 = __importDefault(require("./class/TypeScriptCompiler.js"));
 exports.TypeScriptCompiler = TypeScriptCompiler_js_1.default;
-const JavaScriptMinifier_js_1 = __importDefault(require("./class/JavaScriptMinifier.js"));
+var JavaScriptMinifier_js_1 = __importDefault(require("./class/JavaScriptMinifier.js"));
 exports.JavaScriptMinifier = JavaScriptMinifier_js_1.default;
-const NpmCommandRunner_js_1 = __importDefault(require("./class/NpmCommandRunner.js"));
+var NpmCommandRunner_js_1 = __importDefault(require("./class/NpmCommandRunner.js"));
 exports.NpmCommandRunner = NpmCommandRunner_js_1.default;
-const gl_installer_1 = __importDefault(require("./functions/gl_installer"));
+var gl_installer_1 = __importDefault(require("./functions/gl_installer"));
 exports.gl_installer = gl_installer_1.default;

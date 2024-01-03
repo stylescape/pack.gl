@@ -18,8 +18,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Import
 // ============================================================================
 // import { promises as fsPromises } from 'fs';
-const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
+var path_1 = __importDefault(require("path"));
+var fs_1 = __importDefault(require("fs"));
 // ============================================================================
 // Classes
 // ============================================================================

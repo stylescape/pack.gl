@@ -26,8 +26,8 @@ import ts from 'typescript';
 // Constants
 // ============================================================================
 
-const tsConfig: ts.CompilerOptions = {
-// const tsConfig = {
+// const tsConfig: ts.CompilerOptions = {
+const tsConfig = {
 
 
     // Visit https://aka.ms/tsconfig.json to read more about this file
@@ -47,8 +47,8 @@ const tsConfig: ts.CompilerOptions = {
     // Language and Environment
     // ========================================================================
 
-    target: ts.ScriptTarget.ES2015,
-    // target: "es6",                     // Specify ECMAScript target version
+    // target: ts.ScriptTarget.ES2015,
+    target: "es6",                     // Specify ECMAScript target version
     // ES3 = 0,
     // ES5 = 1,
     // ES2015 = 2,
@@ -86,8 +86,8 @@ const tsConfig: ts.CompilerOptions = {
     // moduleSuffixes?: string[];
     // moduleDetection?: ModuleDetectionKind;
 
-    module: ts.ModuleKind.CommonJS,
-    // module: "commonjs",                // Specify module code generation
+    // module: ts.ModuleKind.CommonJS,
+    module: "commonjs",                // Specify module code generation
     // module: "CommonJS",
     // module: "esnext",                                      // Specify what module code is generated.
     // rootDir: ".",                                       // Specify the root folder within your source files.

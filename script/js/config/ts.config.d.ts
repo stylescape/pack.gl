@@ -1,13 +1,13 @@
 declare const tsConfig: {
     target: string;
+    lib: string[];
     module: string;
+    resolveJsonModule: boolean;
+    declaration: boolean;
     allowSyntheticDefaultImports: boolean;
     esModuleInterop: boolean;
-    declaration: boolean;
+    forceConsistentCasingInFileNames: boolean;
     strict: boolean;
     skipLibCheck: boolean;
-    forceConsistentCasingInFileNames: boolean;
-    resolveJsonModule: boolean;
-    lib: string[];
 };
 export default tsConfig;

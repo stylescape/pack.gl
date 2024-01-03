@@ -1,8 +1,10 @@
 import { __assign } from "tslib";
 import ts from 'typescript';
+import tsConfig from "../config/ts.config.js";
 var TypeScriptCompiler = (function () {
-    function TypeScriptCompiler(config) {
-        this.config = config;
+    function TypeScriptCompiler(customConfig) {
+        if (customConfig === void 0) { customConfig = {}; }
+        this.config = __assign(__assign({}, TypeScriptCompiler.defaultConfig), customConfig);
     }
     TypeScriptCompiler.prototype.compile = function (filePaths, outDir) {
         var _this = this;
@@ -33,6 +35,7 @@ var TypeScriptCompiler = (function () {
             }
         });
     };
+    TypeScriptCompiler.defaultConfig = tsConfig;
     return TypeScriptCompiler;
 }());
 export default TypeScriptCompiler;

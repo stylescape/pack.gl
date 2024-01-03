@@ -1,7 +1,7 @@
 "use strict";
 // TypeScript Class to Run NPM Commands
 Object.defineProperty(exports, "__esModule", { value: true });
-const child_process_1 = require("child_process");
+var child_process_1 = require("child_process");
 class NpmCommandRunner {
     /**
      * Executes an npm command.

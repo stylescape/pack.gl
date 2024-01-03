@@ -1,6 +1,7 @@
 import { __awaiter, __generator } from "tslib";
 import path from 'path';
-import { DirectoryCleaner, DirectoryCopier, DirectoryCreator, PackageCreator, VersionWriter, TypeScriptCompiler, } from 'pack.gl';
+import { DirectoryCleaner, DirectoryCopier, DirectoryCreator, PackageCreator, VersionWriter, } from 'pack.gl';
+import TypeScriptCompiler from "./class/TypeScriptCompiler.js";
 import { CONFIG } from './config/config.js';
 import packageConfig from "./config/package.config.js";
 var directories = Object.values(CONFIG.path);

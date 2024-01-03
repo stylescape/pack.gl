@@ -27,9 +27,10 @@ import {
     DirectoryCreator,
     PackageCreator,
     VersionWriter,
-    TypeScriptCompiler,
+    // TypeScriptCompiler,
     // JavaScriptMinifier
 } from 'pack.gl';
+import TypeScriptCompiler from "./class/TypeScriptCompiler.js"
 
 // Import necessary configurations
 import { CONFIG } from './config/config.js';
