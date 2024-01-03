@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "config": {
         "version_short": "0.0"
     },

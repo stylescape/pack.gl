@@ -1,4 +1,4 @@
-// script/class/SvgPackager.ts
+// class/SvgPackager.ts
 
 // Copyright 2023 Scape Agency BV
 

@@ -39,9 +39,6 @@ class SvgSpriteGenerator {
      * Constructs an instance of SvgSpriteGenerator with the provided configuration.
      * @param {svgSprite.Config} config - Configuration object for svg-sprite.
      */
-    // constructor(config: any) {
-    //     this.config = config;
-    // }
 
     /**
      *  Configuration for the TypeScript compiler.

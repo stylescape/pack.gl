@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.gl_installer = exports.NpmCommandRunner = exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionWriter = exports.SvgSpriteGenerator = exports.StyleProcessor = exports.SvgPackager = exports.PackageCreator = exports.FontGenerator = exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = void 0;
+exports.gl_installer = exports.StylizedLogger = exports.NpmCommandRunner = exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionWriter = exports.SvgSpriteGenerator = exports.StyleProcessor = exports.SvgPackager = exports.PackageCreator = exports.FontGenerator = exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = void 0;
 // Copyright 2023 Scape Agency BV
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ var FileCopier_1 = __importDefault(require("./class/FileCopier"));
 exports.FileCopier = FileCopier_1.default;
 var FileRenamer_1 = __importDefault(require("./class/FileRenamer"));
 exports.FileRenamer = FileRenamer_1.default;
-// // Import | Internal Classes
+// Import | Internal Classes
 var FontGenerator_js_1 = __importDefault(require("./class/FontGenerator.js"));
 exports.FontGenerator = FontGenerator_js_1.default;
 var PackageCreator_js_1 = __importDefault(require("./class/PackageCreator.js"));
@@ -48,5 +48,7 @@ var JavaScriptMinifier_js_1 = __importDefault(require("./class/JavaScriptMinifie
 exports.JavaScriptMinifier = JavaScriptMinifier_js_1.default;
 var NpmCommandRunner_js_1 = __importDefault(require("./class/NpmCommandRunner.js"));
 exports.NpmCommandRunner = NpmCommandRunner_js_1.default;
-var gl_installer_1 = __importDefault(require("./functions/gl_installer"));
+var StylizedLogger_js_1 = __importDefault(require("./class/StylizedLogger.js"));
+exports.StylizedLogger = StylizedLogger_js_1.default;
+var gl_installer_1 = __importDefault(require("./function/gl_installer"));
 exports.gl_installer = gl_installer_1.default;

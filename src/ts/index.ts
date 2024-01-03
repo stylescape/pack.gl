@@ -27,7 +27,7 @@ import DirectoryCreator from './class/DirectoryCreator';
 import FileCopier from './class/FileCopier';
 import FileRenamer from './class/FileRenamer';
 
-// // Import | Internal Classes
+// Import | Internal Classes
 import FontGenerator from './class/FontGenerator.js';
 import PackageCreator from './class/PackageCreator.js';
 import SvgPackager from "./class/SvgPackager.js";
@@ -37,16 +37,11 @@ import VersionWriter from './class/VersionWriter.js';
 import TypeScriptCompiler from './class/TypeScriptCompiler.js';
 import JavaScriptMinifier from './class/JavaScriptMinifier.js';
 import NpmCommandRunner from './class/NpmCommandRunner.js';
+import StylizedLogger from './class/StylizedLogger.js';
 
 
-import gl_installer from './functions/gl_installer';
+import gl_installer from './function/gl_installer';
 
-// // Import | Cconfigurations
-// import { CONFIG } from './config/config.js';
-// import svgspriteConfig from "./config/svgsprite.config.js";
-// import packageConfig from "./config/package.config.js"
-// import tsConfig from "./config/ts.config.js"
-// import tensorConfig from "./config/terser.config.js"
 
 
 // ============================================================================
@@ -72,6 +67,7 @@ export {
     TypeScriptCompiler,
     JavaScriptMinifier,
     NpmCommandRunner,
+    StylizedLogger,
 
     gl_installer,
 };
