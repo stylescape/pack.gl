@@ -1,5 +1,14 @@
 "use strict";
 // class/FileCopier.ts
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -17,8 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
-var fs_1 = __importDefault(require("fs"));
-var path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 // ============================================================================
 // Classes
 // ============================================================================
@@ -32,17 +41,19 @@ class FileCopier {
      * @param {string} destDir - The destination directory where the file should be copied.
      * @throws Will throw an error if the file copy operation fails.
      */
-    async copyFileToDirectory(srcFile, destDir) {
-        try {
-            const fileName = path_1.default.basename(srcFile);
-            const destFilePath = path_1.default.join(destDir, fileName);
-            await fs_1.default.promises.copyFile(srcFile, destFilePath);
-            console.log(`File copied from ${srcFile} to ${destFilePath}`);
-        }
-        catch (error) {
-            console.error('Error copying file:', error);
-            throw error;
-        }
+    copyFileToDirectory(srcFile, destDir) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const fileName = path_1.default.basename(srcFile);
+                const destFilePath = path_1.default.join(destDir, fileName);
+                yield fs_1.default.promises.copyFile(srcFile, destFilePath);
+                console.log(`File copied from ${srcFile} to ${destFilePath}`);
+            }
+            catch (error) {
+                console.error('Error copying file:', error);
+                throw error;
+            }
+        });
     }
 }
 // ============================================================================

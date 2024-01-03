@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "config": {
         "version_short": "0.0"
     },
@@ -89,9 +89,10 @@
         "eslint-import-resolver-webpack": "^0.13.2",
         "eslint-plugin-prettier": "^5.0.1",
         "html-webpack-plugin": "^5.5.3",
+        "i": "^0.3.7",
         "lodash": "^4.17.21",
         "mini-css-extract-plugin": "^2.7.6",
-        "pack.gl": "^0.0.9",
+        "pack.gl": "^0.0.10",
         "postcss-loader": "^7.3.3",
         "postcss-preset-env": "^9.1.2",
         "prettier": "^3.0.3",

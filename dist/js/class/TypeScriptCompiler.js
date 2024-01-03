@@ -18,8 +18,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Import
 // ============================================================================
 // import * as ts from 'typescript';
-var typescript_1 = __importDefault(require("typescript"));
-var ts_config_js_1 = __importDefault(require("../config/ts.config.js"));
+const typescript_1 = __importDefault(require("typescript"));
+const ts_config_js_1 = __importDefault(require("../config/ts.config.js"));
 // ============================================================================
 // Classes
 // ============================================================================
@@ -28,20 +28,13 @@ var ts_config_js_1 = __importDefault(require("../config/ts.config.js"));
  * TypeScriptCompiler class for compiling TypeScript files to JavaScript.
  */
 class TypeScriptCompiler {
-    /**
-     * Default configuration for the TypeScript compiler.
-     */
-    static { this.defaultConfig = ts_config_js_1.default; }
     // private static defaultConfig: CompilerOptions = tsConfig;
     /**
      * Constructs an instance with merged configuration of default and custom options.
      * @param {ts.CompilerOptions} customConfig - Optional custom configuration object for TypeScript compiler
      */
     constructor(customConfig = {}) {
-        this.config = {
-            ...TypeScriptCompiler.defaultConfig,
-            ...customConfig
-        };
+        this.config = Object.assign(Object.assign({}, TypeScriptCompiler.defaultConfig), customConfig);
     }
     /**
      * Compiles TypeScript files to JavaScript.
@@ -55,7 +48,7 @@ class TypeScriptCompiler {
     compile(filePaths, outDir) {
         return new Promise((resolve, reject) => {
             // Use outDir if provided, else fall back to this.config.outDir or a default
-            const options = { ...this.config, outDir: outDir || this.config.outDir || 'dist' };
+            const options = Object.assign(Object.assign({}, this.config), { outDir: outDir || this.config.outDir || 'dist' });
             // Create a TypeScript compiler host
             const host = typescript_1.default.createCompilerHost(options);
             // Create a program with the specified files and options
@@ -89,6 +82,10 @@ class TypeScriptCompiler {
         }).join('\n');
     }
 }
+/**
+ * Default configuration for the TypeScript compiler.
+ */
+TypeScriptCompiler.defaultConfig = ts_config_js_1.default;
 // ============================================================================
 // Export
 // ============================================================================

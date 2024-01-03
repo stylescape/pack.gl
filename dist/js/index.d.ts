@@ -11,4 +11,6 @@ import SvgSpriteGenerator from "./class/SvgSpriteGenerator.js";
 import VersionWriter from './class/VersionWriter.js';
 import TypeScriptCompiler from './class/TypeScriptCompiler.js';
 import JavaScriptMinifier from './class/JavaScriptMinifier.js';
-export { DirectoryCleaner, DirectoryCopier, DirectoryCreator, FileCopier, FileRenamer, FontGenerator, PackageCreator, SvgPackager, StyleProcessor, SvgSpriteGenerator, VersionWriter, TypeScriptCompiler, JavaScriptMinifier, };
+import NpmCommandRunner from './class/NpmCommandRunner.js';
+import gl_installer from './functions/gl_installer';
+export { DirectoryCleaner, DirectoryCopier, DirectoryCreator, FileCopier, FileRenamer, FontGenerator, PackageCreator, SvgPackager, StyleProcessor, SvgSpriteGenerator, VersionWriter, TypeScriptCompiler, JavaScriptMinifier, NpmCommandRunner, gl_installer, };

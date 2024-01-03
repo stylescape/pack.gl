@@ -1,5 +1,14 @@
 "use strict";
 // class/PackageCreator.ts
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -17,8 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
-var fs_1 = __importDefault(require("fs"));
-var path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 // ============================================================================
 // Classes
 // ============================================================================
@@ -37,11 +46,13 @@ class PackageCreator {
      * Creates a package.json file in the specified directory.
      * @param {string} outputDir - The directory where package.json will be created.
      */
-    async createPackageJson(outputDir) {
-        const filePath = path_1.default.join(outputDir, 'package.json');
-        const data = JSON.stringify(this.packageJson, null, 2);
-        fs_1.default.writeFileSync(filePath, data, 'utf-8');
-        console.log(`package.json created at ${filePath}`);
+    createPackageJson(outputDir) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const filePath = path_1.default.join(outputDir, 'package.json');
+            const data = JSON.stringify(this.packageJson, null, 2);
+            fs_1.default.writeFileSync(filePath, data, 'utf-8');
+            console.log(`package.json created at ${filePath}`);
+        });
     }
 }
 // ============================================================================

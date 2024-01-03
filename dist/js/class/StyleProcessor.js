@@ -23,6 +23,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -40,11 +49,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
-var sass = __importStar(require("sass"));
-var postcss_1 = __importDefault(require("postcss"));
-var fs_1 = __importDefault(require("fs"));
-var postcss_config_expanded_js_1 = __importDefault(require("../config/postcss.config.expanded.js"));
-var postcss_config_compressed_js_1 = __importDefault(require("../config/postcss.config.compressed.js"));
+const sass = __importStar(require("sass"));
+const postcss_1 = __importDefault(require("postcss"));
+const fs_1 = __importDefault(require("fs"));
+const postcss_config_expanded_js_1 = __importDefault(require("../config/postcss.config.expanded.js"));
+const postcss_config_compressed_js_1 = __importDefault(require("../config/postcss.config.compressed.js"));
 // ============================================================================
 // Classes
 // ============================================================================
@@ -59,9 +68,11 @@ class StyleProcessor {
      * @param styleOption The style option, either 'expanded' or 'compressed'.
      * @returns Processed CSS string.
      */
-    async processPostCSS(css, styleOption) {
-        const config = styleOption === 'expanded' ? postcss_config_expanded_js_1.default : postcss_config_compressed_js_1.default;
-        return (0, postcss_1.default)(config.plugins).process(css, { from: undefined, map: { inline: false } });
+    processPostCSS(css, styleOption) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const config = styleOption === 'expanded' ? postcss_config_expanded_js_1.default : postcss_config_compressed_js_1.default;
+            return (0, postcss_1.default)(config.plugins).process(css, { from: undefined, map: { inline: false } });
+        });
     }
     /**
      * Compiles SCSS to CSS and processes it using PostCSS.
@@ -69,23 +80,25 @@ class StyleProcessor {
      * @param outputFile Path to the output CSS file.
      * @param styleOption Style option for the output.
      */
-    async processStyles(inputFile, outputFile, styleOption) {
-        try {
-            // Compile SCSS to CSS
-            const result = await sass.compileAsync(inputFile, { style: styleOption });
-            // Process the compiled CSS with PostCSS and Autoprefixer
-            const processed = await this.processPostCSS(result.css, styleOption);
-            // Write the processed CSS to a file
-            fs_1.default.writeFileSync(outputFile, processed.css);
-            // Write the source map file
-            if (processed.map) {
-                fs_1.default.writeFileSync(`${outputFile}.map`, processed.map.toString());
+    processStyles(inputFile, outputFile, styleOption) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Compile SCSS to CSS
+                const result = yield sass.compileAsync(inputFile, { style: styleOption });
+                // Process the compiled CSS with PostCSS and Autoprefixer
+                const processed = yield this.processPostCSS(result.css, styleOption);
+                // Write the processed CSS to a file
+                fs_1.default.writeFileSync(outputFile, processed.css);
+                // Write the source map file
+                if (processed.map) {
+                    fs_1.default.writeFileSync(`${outputFile}.map`, processed.map.toString());
+                }
             }
-        }
-        catch (err) {
-            // Handle errors in the compilation or processing
-            console.error(`Error processing styles from ${inputFile}:`, err);
-        }
+            catch (err) {
+                // Handle errors in the compilation or processing
+                console.error(`Error processing styles from ${inputFile}:`, err);
+            }
+        });
     }
 }
 // ============================================================================

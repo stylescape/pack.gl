@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionWriter = exports.SvgSpriteGenerator = exports.StyleProcessor = exports.SvgPackager = exports.PackageCreator = exports.FontGenerator = exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = void 0;
+exports.gl_installer = exports.NpmCommandRunner = exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionWriter = exports.SvgSpriteGenerator = exports.StyleProcessor = exports.SvgPackager = exports.PackageCreator = exports.FontGenerator = exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = void 0;
 // Copyright 2023 Scape Agency BV
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,30 +19,34 @@ exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionWriter 
 // Import
 // ============================================================================
 // Import | Utility Classes
-var DirectoryCleaner_1 = __importDefault(require("./class/DirectoryCleaner"));
+const DirectoryCleaner_1 = __importDefault(require("./class/DirectoryCleaner"));
 exports.DirectoryCleaner = DirectoryCleaner_1.default;
-var DirectoryCopier_1 = __importDefault(require("./class/DirectoryCopier"));
+const DirectoryCopier_1 = __importDefault(require("./class/DirectoryCopier"));
 exports.DirectoryCopier = DirectoryCopier_1.default;
-var DirectoryCreator_1 = __importDefault(require("./class/DirectoryCreator"));
+const DirectoryCreator_1 = __importDefault(require("./class/DirectoryCreator"));
 exports.DirectoryCreator = DirectoryCreator_1.default;
-var FileCopier_1 = __importDefault(require("./class/FileCopier"));
+const FileCopier_1 = __importDefault(require("./class/FileCopier"));
 exports.FileCopier = FileCopier_1.default;
-var FileRenamer_1 = __importDefault(require("./class/FileRenamer"));
+const FileRenamer_1 = __importDefault(require("./class/FileRenamer"));
 exports.FileRenamer = FileRenamer_1.default;
 // // Import | Internal Classes
-var FontGenerator_js_1 = __importDefault(require("./class/FontGenerator.js"));
+const FontGenerator_js_1 = __importDefault(require("./class/FontGenerator.js"));
 exports.FontGenerator = FontGenerator_js_1.default;
-var PackageCreator_js_1 = __importDefault(require("./class/PackageCreator.js"));
+const PackageCreator_js_1 = __importDefault(require("./class/PackageCreator.js"));
 exports.PackageCreator = PackageCreator_js_1.default;
-var SvgPackager_js_1 = __importDefault(require("./class/SvgPackager.js"));
+const SvgPackager_js_1 = __importDefault(require("./class/SvgPackager.js"));
 exports.SvgPackager = SvgPackager_js_1.default;
-var StyleProcessor_js_1 = __importDefault(require("./class/StyleProcessor.js"));
+const StyleProcessor_js_1 = __importDefault(require("./class/StyleProcessor.js"));
 exports.StyleProcessor = StyleProcessor_js_1.default;
-var SvgSpriteGenerator_js_1 = __importDefault(require("./class/SvgSpriteGenerator.js"));
+const SvgSpriteGenerator_js_1 = __importDefault(require("./class/SvgSpriteGenerator.js"));
 exports.SvgSpriteGenerator = SvgSpriteGenerator_js_1.default;
-var VersionWriter_js_1 = __importDefault(require("./class/VersionWriter.js"));
+const VersionWriter_js_1 = __importDefault(require("./class/VersionWriter.js"));
 exports.VersionWriter = VersionWriter_js_1.default;
-var TypeScriptCompiler_js_1 = __importDefault(require("./class/TypeScriptCompiler.js"));
+const TypeScriptCompiler_js_1 = __importDefault(require("./class/TypeScriptCompiler.js"));
 exports.TypeScriptCompiler = TypeScriptCompiler_js_1.default;
-var JavaScriptMinifier_js_1 = __importDefault(require("./class/JavaScriptMinifier.js"));
+const JavaScriptMinifier_js_1 = __importDefault(require("./class/JavaScriptMinifier.js"));
 exports.JavaScriptMinifier = JavaScriptMinifier_js_1.default;
+const NpmCommandRunner_js_1 = __importDefault(require("./class/NpmCommandRunner.js"));
+exports.NpmCommandRunner = NpmCommandRunner_js_1.default;
+const gl_installer_1 = __importDefault(require("./functions/gl_installer"));
+exports.gl_installer = gl_installer_1.default;

@@ -22,6 +22,7 @@
 import svgSprite from 'svg-sprite';
 import fs from 'fs';
 import path from 'path';
+import svgspriteConfig from "../config/svgsprite.config.js"
 
 
 // ============================================================================
@@ -33,15 +34,39 @@ import path from 'path';
  */
 class SvgSpriteGenerator {
  
-    private config: any;
 
     /**
      * Constructs an instance of SvgSpriteGenerator with the provided configuration.
-     * @param {any} config - Configuration object for svg-sprite.
+     * @param {svgSprite.Config} config - Configuration object for svg-sprite.
      */
-    constructor(config: any) {
-        this.config = config;
-    }
+    // constructor(config: any) {
+    //     this.config = config;
+    // }
+
+    /**
+     *  Configuration for the TypeScript compiler.
+     */
+     private config: svgSprite.Config;
+
+     /**
+      * Default configuration for the TypeScript compiler.
+      */
+     private static defaultConfig: svgSprite.Config = svgspriteConfig;
+     // private static defaultConfig: CompilerOptions = tsConfig;
+ 
+     /**
+      * Constructs an instance with merged configuration of default and custom options.
+      * @param {svgSprite.Config} customConfig - Optional custom configuration object for svg-sprite.
+      */
+     constructor(
+         customConfig: svgSprite.Config = {},
+     ) {
+         this.config = {
+             ...SvgSpriteGenerator.defaultConfig,
+             ...customConfig
+         };
+     }
+
 
     /**
      * Generates an SVG sprite from SVG files in a specified directory.

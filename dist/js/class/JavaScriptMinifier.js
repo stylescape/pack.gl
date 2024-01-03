@@ -1,5 +1,14 @@
 "use strict";
 // class/JavaScriptMinifier.ts
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // Copyright 2023 Scape Agency BV
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +23,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
-var terser_1 = require("terser");
-var fs_1 = require("fs");
+const terser_1 = require("terser");
+const fs_1 = require("fs");
 // ============================================================================
 // Classes
 // ============================================================================
@@ -36,25 +45,27 @@ class JavaScriptMinifier {
      * @param {string} outputPath - Path to save the minified output file.
      * @returns {Promise<void>} - A promise that resolves when minification is complete.
      */
-    async minifyFile(inputPath, outputPath) {
-        try {
-            // Read the input file
-            const inputCode = await fs_1.promises.readFile(inputPath, 'utf8');
-            // Minify the file using Terser
-            // const result = await minify(inputCode, options);
-            const result = await (0, terser_1.minify)(inputCode, this.config);
-            // If minification is successful, write the output
-            if (result.code) {
-                await fs_1.promises.writeFile(outputPath, result.code);
+    minifyFile(inputPath, outputPath) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Read the input file
+                const inputCode = yield fs_1.promises.readFile(inputPath, 'utf8');
+                // Minify the file using Terser
+                // const result = await minify(inputCode, options);
+                const result = yield (0, terser_1.minify)(inputCode, this.config);
+                // If minification is successful, write the output
+                if (result.code) {
+                    yield fs_1.promises.writeFile(outputPath, result.code);
+                }
+                else {
+                    throw new Error('Minification resulted in empty output.');
+                }
             }
-            else {
-                throw new Error('Minification resulted in empty output.');
+            catch (error) {
+                console.error(`Error minifying JavaScript file ${inputPath}:`, error);
+                throw error;
             }
-        }
-        catch (error) {
-            console.error(`Error minifying JavaScript file ${inputPath}:`, error);
-            throw error;
-        }
+        });
     }
 }
 // ============================================================================

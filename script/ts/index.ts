@@ -34,7 +34,7 @@ import {
 // Import necessary configurations
 import { CONFIG } from './config/config.js';
 import packageConfig from "./config/package.config.js"
-import tsConfig from "./config/ts.config.js"
+// import tsConfig from "./config/ts.config.js"
 
 
 // ============================================================================
@@ -43,7 +43,7 @@ import tsConfig from "./config/ts.config.js"
 
 // Initialize instances of necessary classes
 const directories = Object.values(CONFIG.path);
-const tsCompiler = new TypeScriptCompiler(tsConfig);
+const tsCompiler = new TypeScriptCompiler();
 const packageCreator = new PackageCreator(packageConfig);
 const versionWriter = new VersionWriter();
 const directoryCopier = new DirectoryCopier();

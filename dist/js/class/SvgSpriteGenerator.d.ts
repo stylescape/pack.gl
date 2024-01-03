@@ -1,13 +1,25 @@
+import svgSprite from 'svg-sprite';
 /**
  * A class for generating SVG sprites from individual SVG files.
  */
 declare class SvgSpriteGenerator {
-    private config;
     /**
      * Constructs an instance of SvgSpriteGenerator with the provided configuration.
-     * @param {any} config - Configuration object for svg-sprite.
+     * @param {svgSprite.Config} config - Configuration object for svg-sprite.
      */
-    constructor(config: any);
+    /**
+     *  Configuration for the TypeScript compiler.
+     */
+    private config;
+    /**
+     * Default configuration for the TypeScript compiler.
+     */
+    private static defaultConfig;
+    /**
+     * Constructs an instance with merged configuration of default and custom options.
+     * @param {svgSprite.Config} customConfig - Optional custom configuration object for svg-sprite.
+     */
+    constructor(customConfig?: svgSprite.Config);
     /**
      * Generates an SVG sprite from SVG files in a specified directory.
      * @param {string} sourceDir - Directory containing source SVG files.
