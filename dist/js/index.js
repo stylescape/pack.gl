@@ -1,5 +1,5 @@
 "use strict";
-// script/index.ts
+// index.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -52,6 +52,7 @@ var StylizedLogger_js_1 = __importDefault(require("./class/StylizedLogger.js"));
 exports.StylizedLogger = StylizedLogger_js_1.default;
 var TemplateWriter_js_1 = __importDefault(require("./class/TemplateWriter.js"));
 exports.TemplateWriter = TemplateWriter_js_1.default;
+// Import | Internal Functions
 var gl_installer_1 = __importDefault(require("./function/gl_installer"));
 exports.gl_installer = gl_installer_1.default;
 var clean_directory_1 = __importDefault(require("./function/clean_directory"));

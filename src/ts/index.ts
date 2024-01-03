@@ -1,4 +1,4 @@
-// script/index.ts
+// index.ts
 
 // Copyright 2023 Scape Agency BV
 
@@ -18,7 +18,6 @@
 // ============================================================================
 // Import
 // ============================================================================
-
 
 // Import | Utility Classes
 import DirectoryCleaner from './class/DirectoryCleaner';
@@ -40,10 +39,9 @@ import NpmCommandRunner from './class/NpmCommandRunner.js';
 import StylizedLogger from './class/StylizedLogger.js';
 import TemplateWriter from './class/TemplateWriter.js';
 
-
+// Import | Internal Functions
 import gl_installer from './function/gl_installer';
 import cleanDirectory from './function/clean_directory';
-
 
 
 // ============================================================================
@@ -72,6 +70,8 @@ export {
     StylizedLogger,
     TemplateWriter,
 
+    // Export | Internal Functions
     gl_installer,
     cleanDirectory,
+
 };

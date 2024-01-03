@@ -32,7 +32,7 @@ const nunjucksConfig = {
     throwOnUndefined: false, // Throw errors when outputting a null/undefined value
     trimBlocks: true, // Automatically remove trailing newlines from a block/tag
     lstripBlocks: true, // Automatically remove leading whitespace from a block/tag
-    // noCache: !enableCache
+    noCache: true,
 
 };
 

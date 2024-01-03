@@ -22,6 +22,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import nunjucks from 'nunjucks';
+import nunjucksConfig from "../config/nunjucks.config.js"
 
 
 // ============================================================================
@@ -30,6 +31,19 @@ import nunjucks from 'nunjucks';
 
 class TemplateWriter {
 
+    context: {};
+
+
+    /**
+     *  Configuration for the Nunjucks writer compiler.
+     */
+    private config: {};
+
+    /**
+     * Default configuration for the TypeScript compiler.
+     */
+    private static defaultConfig: any = nunjucksConfig;
+
     /**
      * Constructs a TemplateWriter instance.
      * @param templatesDir - Directory for Nunjucks templates.
@@ -37,12 +51,25 @@ class TemplateWriter {
      */
      constructor(
         templatesDir: string,
-        enableCache: boolean = false
+        context: {},
+
+        // enableCache: boolean = false,
+        customConfig: any = {},
+
     ) {
-        nunjucks.configure(templatesDir, { 
-            autoescape: true,
-            noCache: !enableCache
-        });
+        this.context = context;
+        this.config = {
+            ...TemplateWriter.defaultConfig,
+            ...customConfig
+        };
+        nunjucks.configure(
+            templatesDir,
+            this.config,
+            // { 
+            //     autoescape: true,
+            //     // noCache: !enableCache
+            // }
+        );
     }
 
     /**
@@ -51,13 +78,13 @@ class TemplateWriter {
      * @param context - Context data to render the template with.
      * @returns The rendered template as a string.
      */
-    async generateTemplate(template: string, context: {}): Promise<string> {
+    async generateTemplate(template: string): Promise<string> {
         try {
             // const formattedColors = this.formatColorsForTemplate();
             // return nunjucks.render(template, { colors: formattedColors });
             return nunjucks.render(
                 template,
-                context,
+                this.context,
             );
         } catch (error) {
             console.error(`Error generating template: ${error}`);
@@ -73,9 +100,9 @@ class TemplateWriter {
      * @param outputFile - The output file path.
      * @param context - Context data to render the template with.
      */
-     async generateToFile(template: string, outputFile: string, context: {}): Promise<void> {
+     async generateToFile(template: string, outputFile: string): Promise<void> {
         try {
-            const content = await this.generateTemplate(template, context);
+            const content = await this.generateTemplate(template);
             const dir = path.dirname(outputFile);
     
             // Ensure the directory exists
