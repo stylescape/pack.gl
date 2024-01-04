@@ -48,7 +48,21 @@ class FontGenerator {
                 // },
                 // ttf?: TtfOptions; // type TtfOptions = svg2ttf.FontOptions;
                 // svg?: SvgOptions;  // type SvgOptions = Omit<SvgIcons2FontOptions, 'fontName' | 'fontHeight' | 'descent' | 'normalize'>;
-                json: { indent: 4 }
+                json: {
+                    indent: 4
+                },
+                ts: {
+                    // select what kind of types you want to generate
+                    // (default `['enum', 'constant', 'literalId', 'literalKey']`)
+                    types: ['enum', 'constant', 'literalId', 'literalKey'],
+                    // render the types with `'` instead of `"` (default is `"`)
+                    singleQuotes: false,
+                    // customise names used for the generated types and constants
+                    enumName: 'icon_gl',
+                    constantName: 'MY_CODEPOINTS'
+                    // literalIdName: 'IconId',
+                    // literalKeyName: 'IconKey'
+                }
             },
             pathOptions: {
                 json: './dist/font/icon.gl.json',

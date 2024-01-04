@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readPackageJson = exports.cleanDirectory = exports.gl_installer = exports.SvgToPngConverter = exports.TemplateWriter = exports.StylizedLogger = exports.NpmCommandRunner = exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionWriter = exports.SvgSpriteGenerator = exports.StyleProcessor = exports.SvgPackager = exports.PackageCreator = exports.FontGenerator = exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = void 0;
+exports.readPackageJson = exports.cleanDirectory = exports.gl_installer = exports.SvgPackager = exports.SvgSpriteGenerator = exports.SvgToPngConverter = exports.SvgReader = exports.TemplateWriter = exports.StylizedLogger = exports.NpmCommandRunner = exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionWriter = exports.StyleProcessor = exports.PackageCreator = exports.FontGenerator = exports.FilenameExtractor = exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = exports.DirectoryScanner = void 0;
 // Copyright 2023 Scape Agency BV
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ exports.readPackageJson = exports.cleanDirectory = exports.gl_installer = export
 // Import
 // ============================================================================
 // Import | Utility Classes
+var DirectoryScanner_1 = __importDefault(require("./class/DirectoryScanner"));
+exports.DirectoryScanner = DirectoryScanner_1.default;
 var DirectoryCleaner_1 = __importDefault(require("./class/DirectoryCleaner"));
 exports.DirectoryCleaner = DirectoryCleaner_1.default;
 var DirectoryCopier_1 = __importDefault(require("./class/DirectoryCopier"));
@@ -29,17 +31,15 @@ var FileCopier_1 = __importDefault(require("./class/FileCopier"));
 exports.FileCopier = FileCopier_1.default;
 var FileRenamer_1 = __importDefault(require("./class/FileRenamer"));
 exports.FileRenamer = FileRenamer_1.default;
+var FilenameExtractor_1 = __importDefault(require("./class/FilenameExtractor"));
+exports.FilenameExtractor = FilenameExtractor_1.default;
 // Import | Internal Classes
 var FontGenerator_js_1 = __importDefault(require("./class/FontGenerator.js"));
 exports.FontGenerator = FontGenerator_js_1.default;
 var PackageCreator_js_1 = __importDefault(require("./class/PackageCreator.js"));
 exports.PackageCreator = PackageCreator_js_1.default;
-var SvgPackager_js_1 = __importDefault(require("./class/SvgPackager.js"));
-exports.SvgPackager = SvgPackager_js_1.default;
 var StyleProcessor_js_1 = __importDefault(require("./class/StyleProcessor.js"));
 exports.StyleProcessor = StyleProcessor_js_1.default;
-var SvgSpriteGenerator_js_1 = __importDefault(require("./class/SvgSpriteGenerator.js"));
-exports.SvgSpriteGenerator = SvgSpriteGenerator_js_1.default;
 var VersionWriter_js_1 = __importDefault(require("./class/VersionWriter.js"));
 exports.VersionWriter = VersionWriter_js_1.default;
 var TypeScriptCompiler_js_1 = __importDefault(require("./class/TypeScriptCompiler.js"));
@@ -52,8 +52,14 @@ var StylizedLogger_js_1 = __importDefault(require("./class/StylizedLogger.js"));
 exports.StylizedLogger = StylizedLogger_js_1.default;
 var TemplateWriter_js_1 = __importDefault(require("./class/TemplateWriter.js"));
 exports.TemplateWriter = TemplateWriter_js_1.default;
+var SvgReader_js_1 = __importDefault(require("./class/SvgReader.js"));
+exports.SvgReader = SvgReader_js_1.default;
 var SvgToPngConverter_js_1 = __importDefault(require("./class/SvgToPngConverter.js"));
 exports.SvgToPngConverter = SvgToPngConverter_js_1.default;
+var SvgSpriteGenerator_js_1 = __importDefault(require("./class/SvgSpriteGenerator.js"));
+exports.SvgSpriteGenerator = SvgSpriteGenerator_js_1.default;
+var SvgPackager_js_1 = __importDefault(require("./class/SvgPackager.js"));
+exports.SvgPackager = SvgPackager_js_1.default;
 // Import | Internal Functions
 var gl_installer_1 = __importDefault(require("./function/gl_installer"));
 exports.gl_installer = gl_installer_1.default;

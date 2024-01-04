@@ -20,25 +20,31 @@
 // ============================================================================
 
 // Import | Utility Classes
+import DirectoryScanner from './class/DirectoryScanner';
 import DirectoryCleaner from './class/DirectoryCleaner';
 import DirectoryCopier from './class/DirectoryCopier';
 import DirectoryCreator from './class/DirectoryCreator';
 import FileCopier from './class/FileCopier';
 import FileRenamer from './class/FileRenamer';
+import FilenameExtractor from './class/FilenameExtractor';
 
 // Import | Internal Classes
 import FontGenerator from './class/FontGenerator.js';
 import PackageCreator from './class/PackageCreator.js';
-import SvgPackager from "./class/SvgPackager.js";
 import StyleProcessor from "./class/StyleProcessor.js";
-import SvgSpriteGenerator from "./class/SvgSpriteGenerator.js";
 import VersionWriter from './class/VersionWriter.js';
 import TypeScriptCompiler from './class/TypeScriptCompiler.js';
 import JavaScriptMinifier from './class/JavaScriptMinifier.js';
 import NpmCommandRunner from './class/NpmCommandRunner.js';
 import StylizedLogger from './class/StylizedLogger.js';
 import TemplateWriter from './class/TemplateWriter.js';
+
+import SvgReader from './class/SvgReader.js';
 import SvgToPngConverter from './class/SvgToPngConverter.js';
+import SvgSpriteGenerator from "./class/SvgSpriteGenerator.js";
+import SvgPackager from "./class/SvgPackager.js";
+
+
 
 // Import | Internal Functions
 import gl_installer from './function/gl_installer';
@@ -53,25 +59,29 @@ import readPackageJson from "./function/readPackageJson.js"
 export {
 
     // Export | Utility Classes
+    DirectoryScanner,
     DirectoryCleaner,
     DirectoryCopier,
     DirectoryCreator,
     FileCopier,
     FileRenamer,
+    FilenameExtractor,
 
     // // Export | Internal Classes
     FontGenerator,
     PackageCreator,
-    SvgPackager,
     StyleProcessor,
-    SvgSpriteGenerator,
     VersionWriter,
     TypeScriptCompiler,
     JavaScriptMinifier,
     NpmCommandRunner,
     StylizedLogger,
     TemplateWriter,
+
+    SvgReader,
     SvgToPngConverter,
+    SvgSpriteGenerator,
+    SvgPackager,
 
     // Export | Internal Functions
     gl_installer,
