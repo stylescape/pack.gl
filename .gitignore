@@ -492,7 +492,7 @@ OpenCover/
 ASALocalRun/
 
 # MSBuild Binary and Structured Log
-*.binlog
+# *.binlog
 
 # NVidia Nsight GPU debugger configuration file
 *.nvuser
@@ -557,7 +557,7 @@ xcuserdata/
 # =============================================================================
 
 .metadata
-bin/
+# bin/
 tmp/
 *.tmp
 *.bak
@@ -727,8 +727,6 @@ tags
 # =============================================================================
 # Python
 # =============================================================================
-
-
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -1310,7 +1308,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 # Packed Addressables
-/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+# /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
@@ -1398,6 +1396,4 @@ _book
 # Ignore redis binary dump (dump.rdb) files
 
 *.rdb
-
-
 

@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.0.28",
+    "version": "0.0.30",
     "config": {
         "version_short": "0.0"
     },
@@ -44,8 +44,8 @@
         "lint": "eslint 'src/**/*.ts' || true",
         "prettify": "prettier --write 'src/**/*.ts'",
         "build": "npm run build-compile && npm run build-process",
-        "build-compile": "tsc -p script/tsconfig.json",
-        "build-process": "node script/js/index.js"
+        "build-compile": "tsc -p bin/tsconfig.json",
+        "build-process": "node bin/js/index.js"
     },
     "dependencies": {
         "@types/fs-extra": "^11.0.4",
@@ -81,7 +81,7 @@
         "hue.gl": "^0.0.7",
         "icon.gl": "^0.0.4",
         "loop.gl": "^0.0.1",
-        "pack.gl": "^0.0.24",
+        "pack.gl": "^0.0.28",
         "page.gl": "^0.0.3",
         "postcss-preset-env": "^9.1.2",
         "prettier": "^3.0.3",

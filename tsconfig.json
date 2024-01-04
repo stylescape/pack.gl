@@ -125,11 +125,11 @@
     "include": [
         "src/**/*",
         "src/**/*.ts",
-        "script/**/*",
+        "bin/**/*",
         "src/index.ts.xxx",
         "src/index.ts.xxx",
         // "script/release.ts",
-        "./script/**/*.ts", "tmp/SvgOptimizer.ts", "tmp/ModulePackager.ts", "tmp/FileCopier.ts",
+        "bin/**/*.ts", "tmp/SvgOptimizer.ts", "tmp/ModulePackager.ts", "tmp/FileCopier.ts",
 
     ],
 
