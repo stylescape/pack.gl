@@ -1,6 +1,6 @@
 import { __awaiter, __generator } from "tslib";
 import path from 'path';
-import { DirectoryCleaner, DirectoryCopier, PackageCreator, VersionWriter, TypeScriptCompiler, StylizedLogger, gl_installer, readPackageJson, } from 'pack.gl';
+import { DirectoryCleaner, DirectoryCopier, FileCopier, PackageCreator, VersionWriter, TypeScriptCompiler, JavaScriptMinifier, StylizedLogger, gl_installer, readPackageJson, } from 'pack.gl';
 var CONFIG = {
     path: {
         src: './src',
@@ -13,11 +13,11 @@ var CONFIG = {
 };
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var logger, directoryCleaner, localPackageConfig, packageCreator, packageConfig, directoryCopier, versionWriter, tsCompiler, tsFiles, outputDir, error_1;
+        var logger, directoryCleaner, localPackageConfig, packageCreator, packageConfig, fileCopier, directoryCopier, versionWriter, tsCompiler, tsFiles, outputDir, jsMinifier, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 6, , 7]);
+                    _a.trys.push([0, 7, , 8]);
                     logger = new StylizedLogger();
                     logger.header('Install .gl libraries');
                     return [4, gl_installer()];
@@ -33,6 +33,9 @@ function main() {
                     packageCreator = new PackageCreator(localPackageConfig);
                     packageConfig = packageCreator.config;
                     packageCreator.createPackageJson(CONFIG.path.dist);
+                    fileCopier = new FileCopier();
+                    fileCopier.copyFileToDirectory(path.join('.', 'README.md'), CONFIG.path.dist);
+                    fileCopier.copyFileToDirectory(path.join('.', 'LICENSE'), CONFIG.path.dist);
                     directoryCopier = new DirectoryCopier();
                     return [4, directoryCopier.recursiveCopy(CONFIG.path.ts_input, CONFIG.path.ts_output)];
                 case 3:
@@ -50,12 +53,18 @@ function main() {
                     return [4, tsCompiler.compile(tsFiles, outputDir)];
                 case 5:
                     _a.sent();
-                    return [3, 7];
+                    jsMinifier = new JavaScriptMinifier();
+                    return [4, jsMinifier.minifyFile(path.join(CONFIG.path.js_output, 'index.js'), path.join(CONFIG.path.js_output, "".concat(packageConfig.name, ".min.js")))
+                            .then(function () { return console.log('JavaScript minification completed.'); })
+                            .catch(console.error)];
                 case 6:
+                    _a.sent();
+                    return [3, 8];
+                case 7:
                     error_1 = _a.sent();
                     console.error('An error occurred:', error_1);
-                    return [3, 7];
-                case 7: return [2];
+                    return [3, 8];
+                case 8: return [2];
             }
         });
     });

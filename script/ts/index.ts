@@ -24,6 +24,7 @@ import path from 'path';
 import {
     DirectoryCleaner,
     DirectoryCopier,
+    FileCopier,
     PackageCreator,
     VersionWriter,
     TypeScriptCompiler,
@@ -66,7 +67,6 @@ async function main() {
     try {
 
 
-
         // Init Logger
         // --------------------------------------------------------------------
 
@@ -96,6 +96,20 @@ async function main() {
         const packageCreator = new PackageCreator(localPackageConfig);
         const packageConfig = packageCreator.config
         packageCreator.createPackageJson(CONFIG.path.dist);
+
+
+        // Copy files
+        // --------------------------------------------------------------------
+
+        const fileCopier = new FileCopier();
+        fileCopier.copyFileToDirectory(
+            path.join('.', 'README.md'),
+            CONFIG.path.dist,
+        )
+        fileCopier.copyFileToDirectory(
+            path.join('.', 'LICENSE'),
+            CONFIG.path.dist,
+        )
 
 
         // Copy Dirs
@@ -128,6 +142,7 @@ async function main() {
         await tsCompiler.compile(tsFiles, outputDir);
         // console.log('TypeScript compilation completed.');
 
+
         // Rename Ts
         // --------------------------------------------------------------------
 
@@ -139,13 +154,13 @@ async function main() {
 
         // Minify JavaScript
         // --------------------------------------------------------------------
-        // const jsMinifier = new JavaScriptMinifier();
-        // await jsMinifier.minifyFile(
-        //     path.join(CONFIG.path.js_output, 'index.js'),
-        //     path.join(CONFIG.path.js_output, `${packageConfig.name}.min.js`),
-        // )
-        // .then(() => console.log('JavaScript minification completed.'))
-        // .catch(console.error);
+        const jsMinifier = new JavaScriptMinifier();
+        await jsMinifier.minifyFile(
+            path.join(CONFIG.path.js_output, 'index.js'),
+            path.join(CONFIG.path.js_output, `${packageConfig.name}.min.js`),
+        )
+        .then(() => console.log('JavaScript minification completed.'))
+        .catch(console.error);
 
 
 
