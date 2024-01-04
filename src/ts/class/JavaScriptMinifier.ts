@@ -72,7 +72,6 @@ import terserConfig from "../config/terser.config.js"
             // Read the input file
             const inputCode = await fs.readFile(inputPath, 'utf8');
             // Minify the file using Terser
-            // const result = await minify(inputCode, options);
             const result = await minify(inputCode, this.config);
             // If minification is successful, write the output
             if (result.code) {

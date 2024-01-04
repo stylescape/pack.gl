@@ -35,7 +35,6 @@ class FontGenerator {
 
         const config = {
 
-
             // RunnerMandatoryOptions
             inputDir: sourceDirectory, // (required)
             outputDir: outputDiectory, // (required)
@@ -57,7 +56,6 @@ class FontGenerator {
                 OtherAssetType.JSON,    // JSON = "json",
                 OtherAssetType.TS,      // TS = "ts"    
             ],
-
 
 
             formatOptions: {

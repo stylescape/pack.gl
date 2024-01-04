@@ -94,36 +94,6 @@ class SvgPackager {
             throw error;
         }
     }
-    // public async processSvgFiles(directory: string, outputDirectory: string): Promise<void> {
-    //     try {
-    //         console.log(`Processing directory: ${directory}`);
-    //         const svgFiles = await this.findSvgFiles(directory);
-
-    //         for (const file of svgFiles) {
-    //             const iconName = this.sanitizeFileName(path.basename(file, '.svg'));
-    //             console.log(`Processing file: ${file}`);
-
-    //             const svgContent = await this.readSvgFile(file);
-    //             const optimizedSvg = await this.optimizeSvg(svgContent);
-    //             await this.writeFiles(iconName, optimizedSvg, outputDirectory);
-    //         }
-
-    //         console.log(`Successfully processed ${svgFiles.length} SVG files.`);
-    //     } catch (error) {
-    //         console.error('Error processing SVG files:', error);
-    //         throw error;
-    //     }
-    // }
-
-
-    // private async findSvgFiles(directory: string): Promise<string[]> {
-    //     return new Promise((resolve, reject) => {
-    //         glob(`${directory}/**/*.svg`, (err, files) => {
-    //             if (err) reject(err);
-    //             else resolve(files);
-    //         });
-    //     });
-    // }
 
     /**
      * Reads the content of an SVG file.
@@ -143,6 +113,7 @@ class SvgPackager {
     private async readSvgFile(filePath: string): Promise<string> {
         return fs.readFile(filePath, 'utf8');
     }
+
     /**
      * Sanitizes a file name to be a valid TypeScript identifier.
      * @param fileName The original file name.
@@ -193,6 +164,7 @@ class SvgPackager {
         const result = await SVGO.optimize(svgContent, { ...config });
         return result.data.trim();
     }
+
     /**
      * Creates a TypeScript file from SVG content.
      * @param filePath The path of the SVG file.
@@ -272,8 +244,6 @@ class SvgPackager {
             throw error;
         }
     }
-
-
     
 }
 

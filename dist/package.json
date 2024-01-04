@@ -1,11 +1,16 @@
 {
   "name": "pack.gl",
-  "version": "0.0.26",
+  "version": "0.0.28",
   "description": "Package Builder.",
   "keywords": [
     "pack.gl",
     "pack",
+    "package",
     "packager",
+    "build",
+    "builder",
+    "compile",
+    "compiler",
     "framework",
     "web"
   ],
@@ -26,9 +31,11 @@
   "dependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/glob": "^8.1.0",
+    "@types/jsdom": "^21.1.6",
     "@types/nunjucks": "^3.2.6",
     "@types/svg-sprite": "^0.0.38",
     "autoprefixer": "^10.4.15",
+    "cssnano": "^6.0.3",
     "del": "^7.1.0",
     "fantasticon": "^2.0.0",
     "fs-extra": "^11.2.0",

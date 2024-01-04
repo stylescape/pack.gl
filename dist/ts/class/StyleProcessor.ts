@@ -58,14 +58,14 @@ class StyleProcessor {
      * @param dirPath - The path of the directory to check and create.
      */
     private async ensureDirectoryExists(dirPath: string): Promise<void> {
-    try {
-        await fsPromises.mkdir(dirPath, { recursive: true });
-    } catch (error) {
-        if (error.code !== 'EEXIST') {
-            throw error;
+        try {
+            await fsPromises.mkdir(dirPath, { recursive: true });
+        } catch (error) {
+            if (error.code !== 'EEXIST') {
+                throw error;
+            }
         }
     }
-}
     
     /**
      * Compiles SCSS to CSS and processes it using PostCSS.

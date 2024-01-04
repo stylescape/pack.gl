@@ -52,7 +52,6 @@ class JavaScriptMinifier {
             // Read the input file
             const inputCode = await fs_1.promises.readFile(inputPath, 'utf8');
             // Minify the file using Terser
-            // const result = await minify(inputCode, options);
             const result = await (0, terser_1.minify)(inputCode, this.config);
             // If minification is successful, write the output
             if (result.code) {

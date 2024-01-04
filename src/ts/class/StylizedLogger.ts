@@ -72,5 +72,4 @@ class StylizedLogger {
 // Export
 // ============================================================================
 
-
 export default StylizedLogger;

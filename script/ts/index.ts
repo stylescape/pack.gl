@@ -47,9 +47,7 @@ const CONFIG = {
         ts_input:           './src/ts',
         ts_output:          './dist/ts',
         js_output:          './dist/js',
-
     },
-
 };
 
 
@@ -76,8 +74,8 @@ async function main() {
         // Install .gl libraries
         // --------------------------------------------------------------------
 
-        logger.header('Install .gl libraries');
-        await gl_installer();
+        // logger.header('Install .gl libraries');
+        // await gl_installer();
 
 
         // Dirs Clean
