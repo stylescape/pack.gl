@@ -1,10 +1,3 @@
-/// <reference types="node" />
-import postcss from 'postcss';
-import fs from 'fs';
-/**
- * Class responsible for processing styles, including compiling SCSS and
- * applying PostCSS transformations.
- */
 declare class StyleProcessor {
     /**
      * Processes the given CSS with PostCSS based on the provided style option.
@@ -12,7 +5,7 @@ declare class StyleProcessor {
      * @param styleOption The style option, either 'expanded' or 'compressed'.
      * @returns Processed CSS string.
      */
-    processPostCSS(css: string, styleOption: 'expanded' | 'compressed'): Promise<postcss.Result<postcss.Root>>;
+    processPostCSS(css: string, styleOption: 'expanded' | 'compressed'): Promise<string>;
     /**
      * Ensures that the given directory exists. Creates it if it does not exist.
      * @param dirPath - The path of the directory to check and create.
@@ -24,6 +17,6 @@ declare class StyleProcessor {
      * @param outputFile Path to the output CSS file.
      * @param styleOption Style option for the output.
      */
-    processStyles(inputFile: string, outputFile: fs.PathOrFileDescriptor, styleOption: 'expanded' | 'compressed'): Promise<void>;
+    processStyles(inputFile: string, outputFile: string, styleOption: 'expanded' | 'compressed'): Promise<void>;
 }
 export default StyleProcessor;

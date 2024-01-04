@@ -27,7 +27,7 @@ const packageConfig = {
             "url": "https://github.com/sponsors/scape-foundation"
         }
     ],
-    // type: "module",
+    type: "module",
     main: "js/index",
     // main: "js/index.js",
     types: "js/index",
@@ -56,7 +56,7 @@ const packageConfig = {
         "svg/**/*.svg",
         "tex/**/*.tex",
         "ts/**/*.ts",
-        "!.DS_Store",
+        "!.DS_Store"
     ]
 };
 // ============================================================================

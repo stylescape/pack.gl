@@ -150,16 +150,13 @@ async function main() {
 
         // Minify JavaScript
         // --------------------------------------------------------------------
-        const jsMinifier = new JavaScriptMinifier();
-        await jsMinifier.minifyFile(
-            path.join(CONFIG.path.js_output, 'index.js'),
-            path.join(CONFIG.path.js_output, `${packageConfig.name}.min.js`),
-        )
-        .then(() => console.log('JavaScript minification completed.'))
-        .catch(console.error);
-
-
-
+        // const jsMinifier = new JavaScriptMinifier();
+        // await jsMinifier.minifyFile(
+        //     path.join(CONFIG.path.js_output, 'index.js'),
+        //     path.join(CONFIG.path.js_output, `${packageConfig.name}.min.js`),
+        // )
+        // .then(() => console.log('JavaScript minification completed.'))
+        // .catch(console.error);
 
 
     } catch (error) {

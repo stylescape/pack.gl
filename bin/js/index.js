@@ -1,6 +1,6 @@
 import { __awaiter, __generator } from "tslib";
 import path from 'path';
-import { DirectoryCleaner, DirectoryCopier, FileCopier, PackageCreator, VersionWriter, TypeScriptCompiler, JavaScriptMinifier, StylizedLogger, readPackageJson, } from 'pack.gl';
+import { DirectoryCleaner, DirectoryCopier, FileCopier, PackageCreator, VersionWriter, TypeScriptCompiler, StylizedLogger, readPackageJson, } from 'pack.gl';
 var CONFIG = {
     path: {
         src: './src',
@@ -13,11 +13,11 @@ var CONFIG = {
 };
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var logger, directoryCleaner, localPackageConfig, packageCreator, packageConfig, fileCopier, directoryCopier, versionWriter, tsCompiler, tsFiles, outputDir, jsMinifier, error_1;
+        var logger, directoryCleaner, localPackageConfig, packageCreator, packageConfig, fileCopier, directoryCopier, versionWriter, tsCompiler, tsFiles, outputDir, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 6, , 7]);
+                    _a.trys.push([0, 5, , 6]);
                     logger = new StylizedLogger();
                     directoryCleaner = new DirectoryCleaner();
                     logger.header('Clean Directories');
@@ -49,18 +49,12 @@ function main() {
                     return [4, tsCompiler.compile(tsFiles, outputDir)];
                 case 4:
                     _a.sent();
-                    jsMinifier = new JavaScriptMinifier();
-                    return [4, jsMinifier.minifyFile(path.join(CONFIG.path.js_output, 'index.js'), path.join(CONFIG.path.js_output, "".concat(packageConfig.name, ".min.js")))
-                            .then(function () { return console.log('JavaScript minification completed.'); })
-                            .catch(console.error)];
+                    return [3, 6];
                 case 5:
-                    _a.sent();
-                    return [3, 7];
-                case 6:
                     error_1 = _a.sent();
                     console.error('An error occurred:', error_1);
-                    return [3, 7];
-                case 7: return [2];
+                    return [3, 6];
+                case 6: return [2];
             }
         });
     });

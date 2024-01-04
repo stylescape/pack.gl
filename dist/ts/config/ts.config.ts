@@ -61,12 +61,14 @@ const tsConfig = {
     // ES2022 = 9,
     // ESNext = 99,
     // JSON = 100,
-    // Latest = 99,
+    // Latest = 99,\
+    lib: ["es2015", "dom"],
+
 
     // target: "es2015",                                     // Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
-    // lib: ["esnext", "es2017", "ES2015", "dom"],           // Specify a set of bundled library declaration files that describe the target runtime environment.
-    lib: ["es2015", "dom"],             // Specify library files to be included in the compilation
-    // lib: ["es2015"]             // Specify library files to be included in the compilation
+    // lib: ["esnext", "es2017`", "ES2015", "dom"],           // Specify a set of bundled library declaration files that describe the target runtime environment.
+    // lib: ["es2015", "dom"],             // Specify library files to be included in the compilation
+    // lib: ["es2015"],             // Specify library files to be included in the compilation
     // jsx: "preserve",                                   // Specify what JSX code is generated.
     // experimentalDecorators: true,                         // Enable experimental support for TC39 stage 2 draft decorators.
     // emitDecoratorMetadata: true,                          // Emit design-type metadata for decorated declarations in source files.
