@@ -14,6 +14,11 @@ declare class StyleProcessor {
      */
     processPostCSS(css: string, styleOption: 'expanded' | 'compressed'): Promise<postcss.Result<postcss.Root>>;
     /**
+     * Ensures that the given directory exists. Creates it if it does not exist.
+     * @param dirPath - The path of the directory to check and create.
+     */
+    private ensureDirectoryExists;
+    /**
      * Compiles SCSS to CSS and processes it using PostCSS.
      * @param inputFile Path to the input SCSS file.
      * @param outputFile Path to the output CSS file.

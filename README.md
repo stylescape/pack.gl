@@ -8,14 +8,14 @@
 ---
 
 <div>
-    <img align="right" src="https://raw.githubusercontent.com/scape-agency/brand/master/src/logo/pack.gl.png" width="96" alt="Scape Agency Logo">
+    <img align="right" src="https://raw.githubusercontent.com/scape-agency/brand/master/src/logo/pack.gl.png" width="96" alt="pack.gl logo">
     <h1 align="left">pack.gl</h1>
     <h3 align="left">Package Builder</h3>
 </div>
 
 ---
 
-<img align="right" width="50%" src="/res/pack.gl.png"  alt="pack.gl">
+<img align="right" width="50%" src="https://raw.githubusercontent.com/scape-agency/pack.gl/main/res/pack.gl.png" alt="pack.gl cover">
 
 ### Contents
 

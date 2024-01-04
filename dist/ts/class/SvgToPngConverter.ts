@@ -30,7 +30,12 @@ import path from 'path';
 // ============================================================================
 
 class SvgToPngConverter {
-    async convert(svgContent: string, outputPath: string, width?: number, height?: number): Promise<void> {
+    async convert(
+        svgContent: string,
+        outputPath: string,
+        width?: number,
+        height?: number
+    ): Promise<void> {
         try {
 
             // Ensure the output directory exists
@@ -64,6 +69,7 @@ class SvgToPngConverter {
             throw error;
         }
     }
+
 }
 
 

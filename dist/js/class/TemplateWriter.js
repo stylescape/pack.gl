@@ -32,11 +32,8 @@ class TemplateWriter {
     /**
      * Constructs a TemplateWriter instance.
      * @param templatesDir - Directory for Nunjucks templates.
-     * @param enableCache - Enable or disable caching for Nunjucks.
      */
-    constructor(templatesDir, context, 
-    // enableCache: boolean = false,
-    customConfig = {}) {
+    constructor(templatesDir, context, customConfig = {}) {
         this.context = context;
         this.config = {
             ...TemplateWriter.defaultConfig,
@@ -47,13 +44,10 @@ class TemplateWriter {
     /**
      * Generates a template using the provided template file and context.
      * @param template - The template file name.
-     * @param context - Context data to render the template with.
      * @returns The rendered template as a string.
      */
     async generateTemplate(template) {
         try {
-            // const formattedColors = this.formatColorsForTemplate();
-            // return nunjucks.render(template, { colors: formattedColors });
             return nunjucks_1.default.render(template, this.context);
         }
         catch (error) {
@@ -66,7 +60,6 @@ class TemplateWriter {
      * Writes the rendered template content to a file.
      * @param template - The template file name.
      * @param outputFile - The output file path.
-     * @param context - Context data to render the template with.
      */
     async generateToFile(template, outputFile) {
         try {

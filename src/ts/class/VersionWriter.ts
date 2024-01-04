@@ -47,6 +47,7 @@ import { promises as fs } from 'fs';
             console.error(`Error writing version to file: ${error}`);
         }
     }
+
 }
 
 

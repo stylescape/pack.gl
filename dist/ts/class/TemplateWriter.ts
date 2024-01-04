@@ -33,7 +33,6 @@ class TemplateWriter {
 
     context: {};
 
-
     /**
      *  Configuration for the Nunjucks writer compiler.
      */
@@ -47,15 +46,11 @@ class TemplateWriter {
     /**
      * Constructs a TemplateWriter instance.
      * @param templatesDir - Directory for Nunjucks templates.
-     * @param enableCache - Enable or disable caching for Nunjucks.
      */
      constructor(
         templatesDir: string,
         context: {},
-
-        // enableCache: boolean = false,
         customConfig: any = {},
-
     ) {
         this.context = context;
         this.config = {
@@ -65,23 +60,16 @@ class TemplateWriter {
         nunjucks.configure(
             templatesDir,
             this.config,
-            // { 
-            //     autoescape: true,
-            //     // noCache: !enableCache
-            // }
         );
     }
 
     /**
      * Generates a template using the provided template file and context.
      * @param template - The template file name.
-     * @param context - Context data to render the template with.
      * @returns The rendered template as a string.
      */
     async generateTemplate(template: string): Promise<string> {
         try {
-            // const formattedColors = this.formatColorsForTemplate();
-            // return nunjucks.render(template, { colors: formattedColors });
             return nunjucks.render(
                 template,
                 this.context,
@@ -90,7 +78,6 @@ class TemplateWriter {
             console.error(`Error generating template: ${error}`);
             // throw error;
             throw new Error('Template generation failed');
-
         }
     }
 
@@ -98,16 +85,13 @@ class TemplateWriter {
      * Writes the rendered template content to a file.
      * @param template - The template file name.
      * @param outputFile - The output file path.
-     * @param context - Context data to render the template with.
      */
      async generateToFile(template: string, outputFile: string): Promise<void> {
         try {
             const content = await this.generateTemplate(template);
             const dir = path.dirname(outputFile);
-    
             // Ensure the directory exists
             await fs.mkdir(dir, { recursive: true });
-    
             // Write the file
             await fs.writeFile(outputFile, content, 'utf-8');
         } catch (error) {

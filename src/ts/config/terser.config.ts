@@ -165,7 +165,7 @@ const terserConfig = {
         // Mangle names for obfuscation and size reduction
         properties: true, // Mangle property names
         // properties: {
-        //     // mangle property options
+        //     // mangle property options // gives error messages
         //     // bare_returns: false, //support top level return statements
         //     html5_comments: true, // (default true)
         //     shebang: true, //(default true) -- support #!command as the first line

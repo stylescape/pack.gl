@@ -43,6 +43,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var sass = __importStar(require("sass"));
 var postcss_1 = __importDefault(require("postcss"));
 var fs_1 = __importDefault(require("fs"));
+var fs_2 = require("fs");
+var path_1 = __importDefault(require("path"));
 var postcss_config_expanded_js_1 = __importDefault(require("../config/postcss.config.expanded.js"));
 var postcss_config_compressed_js_1 = __importDefault(require("../config/postcss.config.compressed.js"));
 // ============================================================================
@@ -64,6 +66,20 @@ class StyleProcessor {
         return (0, postcss_1.default)(config.plugins).process(css, { from: undefined, map: { inline: false } });
     }
     /**
+     * Ensures that the given directory exists. Creates it if it does not exist.
+     * @param dirPath - The path of the directory to check and create.
+     */
+    async ensureDirectoryExists(dirPath) {
+        try {
+            await fs_2.promises.mkdir(dirPath, { recursive: true });
+        }
+        catch (error) {
+            if (error.code !== 'EEXIST') {
+                throw error;
+            }
+        }
+    }
+    /**
      * Compiles SCSS to CSS and processes it using PostCSS.
      * @param inputFile Path to the input SCSS file.
      * @param outputFile Path to the output CSS file.
@@ -71,6 +87,9 @@ class StyleProcessor {
      */
     async processStyles(inputFile, outputFile, styleOption) {
         try {
+            // Ensure the output directory exists
+            const outputDir = path_1.default.dirname(outputFile);
+            await this.ensureDirectoryExists(outputDir);
             // Compile SCSS to CSS
             const result = await sass.compileAsync(inputFile, { style: styleOption });
             // Process the compiled CSS with PostCSS and Autoprefixer

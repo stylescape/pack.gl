@@ -21,7 +21,6 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-// import { PackageJson } from '../interface/PackageJson.js';
 import packageConfig from "../config/package.config.js"
 
 
@@ -33,8 +32,6 @@ import packageConfig from "../config/package.config.js"
  * A class for creating a package.json file for a project.
  */
  class PackageCreator {
-
-
 
     /**
      *  Configuration for the Package.json.
@@ -54,8 +51,7 @@ import packageConfig from "../config/package.config.js"
      */
      constructor(
         customConfig: any = {},
-        //  customConfig: any = {},
-         // customConfig: ts.CompilerOptions = {},
+        // customConfig: ts.CompilerOptions = {},
      ) {
         let newConfig = {
             // Populate with necessary fields from packageData
@@ -63,29 +59,19 @@ import packageConfig from "../config/package.config.js"
             version: customConfig.version,
             description: customConfig.description,
             keywords: customConfig.keywords,
+            author: customConfig.author,
+            contributors: customConfig.contributors,
             license: customConfig.license,
             homepage: customConfig.homepage,
-            // main: 'index.js',
+            repository: customConfig.repository,
+            funding: customConfig.funding,
             dependencies: customConfig.dependencies,
-            // files: [
-            //     "svg/**/*.{svg}",
-            //     "js/**/*.{js,map}",
-            //     "ts/**/*.ts",
-            //     "css/**/*.{css,map}",
-            //     "scss/**/*.{scss}",
-            //     "font/**/*.{eot,otf,ttf,woff,woff2}",
-            //     "!.DS_Store"
-            // ],
         }
-
          this.config = {
              ...PackageCreator.defaultConfig,
              ...newConfig
          };
      }
-
-
-
     
     /**
      * Creates a package.json file in the specified directory.
@@ -95,11 +81,9 @@ import packageConfig from "../config/package.config.js"
      async createPackageJson(outputDir: string): Promise<void> {
         const filePath = path.join(outputDir, 'package.json');
         const data = JSON.stringify(this.config, null, 2);
-
         try {
             // Ensure the output directory exists
             await this.ensureDirectoryExists(outputDir);
-
             // Write the package.json file
             await fs.writeFile(filePath, data, 'utf-8');
             console.log(`package.json created at ${filePath}`);

@@ -1,6 +1,6 @@
 # Contributors
 
-This project exists thanks to all the people who contribute. 
+This project exists thanks to all the people who contribute.
 
 ## Core Contributors
 

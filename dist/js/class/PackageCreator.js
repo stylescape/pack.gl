@@ -19,7 +19,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 var promises_1 = __importDefault(require("fs/promises"));
 var path_1 = __importDefault(require("path"));
-// import { PackageJson } from '../interface/PackageJson.js';
 var package_config_js_1 = __importDefault(require("../config/package.config.js"));
 // ============================================================================
 // Classes
@@ -45,9 +44,12 @@ class PackageCreator {
             version: customConfig.version,
             description: customConfig.description,
             keywords: customConfig.keywords,
+            author: customConfig.author,
+            contributors: customConfig.contributors,
             license: customConfig.license,
             homepage: customConfig.homepage,
-            // main: 'index.js',
+            repository: customConfig.repository,
+            funding: customConfig.funding,
             dependencies: customConfig.dependencies
         };
         this.config = {

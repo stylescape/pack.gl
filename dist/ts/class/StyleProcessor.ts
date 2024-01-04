@@ -19,10 +19,11 @@
 // Import
 // ============================================================================
 
-import * as sass from 'sass'
+import * as sass from 'sass';
 import postcss from 'postcss';
 import fs from 'fs';
 import { promises as fsPromises } from 'fs';
+import path from 'path';
 
 import postcssConfigExpanded from '../config/postcss.config.expanded.js';
 import postcssConfigCompressed from '../config/postcss.config.compressed.js';
@@ -53,6 +54,20 @@ class StyleProcessor {
     }
 
     /**
+     * Ensures that the given directory exists. Creates it if it does not exist.
+     * @param dirPath - The path of the directory to check and create.
+     */
+    private async ensureDirectoryExists(dirPath: string): Promise<void> {
+    try {
+        await fsPromises.mkdir(dirPath, { recursive: true });
+    } catch (error) {
+        if (error.code !== 'EEXIST') {
+            throw error;
+        }
+    }
+}
+    
+    /**
      * Compiles SCSS to CSS and processes it using PostCSS.
      * @param inputFile Path to the input SCSS file.
      * @param outputFile Path to the output CSS file.
@@ -64,6 +79,10 @@ class StyleProcessor {
         styleOption: 'expanded' | 'compressed'
     ) {
         try {
+
+            // Ensure the output directory exists
+            const outputDir = path.dirname(outputFile as string);
+            await this.ensureDirectoryExists(outputDir);
 
             // Compile SCSS to CSS
             const result = await sass.compileAsync(

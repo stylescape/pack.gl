@@ -5,6 +5,7 @@ declare const packageConfig: {
     keywords: string;
     license: string;
     homepage: string;
+    type: string;
     main: string;
     types: string;
     files: string[];
