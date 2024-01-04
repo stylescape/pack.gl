@@ -73,7 +73,7 @@ async function main() {
 
         // Install .gl libraries
         // --------------------------------------------------------------------
-        await gl_installer();
+        // await gl_installer();
 
 
         // Dirs Clean

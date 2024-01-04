@@ -1,6 +1,6 @@
 import { __awaiter, __generator } from "tslib";
 import path from 'path';
-import { DirectoryCleaner, DirectoryCopier, FileCopier, PackageCreator, VersionWriter, TypeScriptCompiler, JavaScriptMinifier, StylizedLogger, gl_installer, readPackageJson, } from 'pack.gl';
+import { DirectoryCleaner, DirectoryCopier, FileCopier, PackageCreator, VersionWriter, TypeScriptCompiler, JavaScriptMinifier, StylizedLogger, readPackageJson, } from 'pack.gl';
 var CONFIG = {
     path: {
         src: './src',
@@ -17,18 +17,14 @@ function main() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 7, , 8]);
+                    _a.trys.push([0, 6, , 7]);
                     logger = new StylizedLogger();
-                    logger.header('Install .gl libraries');
-                    return [4, gl_installer()];
-                case 1:
-                    _a.sent();
                     directoryCleaner = new DirectoryCleaner();
                     logger.header('Clean Directories');
                     directoryCleaner.cleanDirectory(CONFIG.path.dist);
                     logger.body("Directory cleaned: ".concat(CONFIG.path.dist));
                     return [4, readPackageJson('./package.json')];
-                case 2:
+                case 1:
                     localPackageConfig = _a.sent();
                     packageCreator = new PackageCreator(localPackageConfig);
                     packageConfig = packageCreator.config;
@@ -38,12 +34,12 @@ function main() {
                     fileCopier.copyFileToDirectory(path.join('.', 'LICENSE'), CONFIG.path.dist);
                     directoryCopier = new DirectoryCopier();
                     return [4, directoryCopier.recursiveCopy(CONFIG.path.ts_input, CONFIG.path.ts_output)];
-                case 3:
+                case 2:
                     _a.sent();
                     console.log('Files copied successfully.');
                     versionWriter = new VersionWriter();
                     return [4, versionWriter.writeVersionToFile('VERSION', packageConfig.version)];
-                case 4:
+                case 3:
                     _a.sent();
                     tsCompiler = new TypeScriptCompiler();
                     tsFiles = [
@@ -51,20 +47,20 @@ function main() {
                     ];
                     outputDir = './dist/js';
                     return [4, tsCompiler.compile(tsFiles, outputDir)];
-                case 5:
+                case 4:
                     _a.sent();
                     jsMinifier = new JavaScriptMinifier();
                     return [4, jsMinifier.minifyFile(path.join(CONFIG.path.js_output, 'index.js'), path.join(CONFIG.path.js_output, "".concat(packageConfig.name, ".min.js")))
                             .then(function () { return console.log('JavaScript minification completed.'); })
                             .catch(console.error)];
-                case 6:
+                case 5:
                     _a.sent();
-                    return [3, 8];
-                case 7:
+                    return [3, 7];
+                case 6:
                     error_1 = _a.sent();
                     console.error('An error occurred:', error_1);
-                    return [3, 8];
-                case 8: return [2];
+                    return [3, 7];
+                case 7: return [2];
             }
         });
     });

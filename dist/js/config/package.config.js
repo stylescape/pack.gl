@@ -21,7 +21,13 @@ const packageConfig = {
     keywords: "",
     license: "Apache-2.0",
     homepage: "https://www.scape.agency",
-    type: "module",
+    funding: [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/scape-foundation"
+        }
+    ],
+    // type: "module",
     // main: "js/index",
     main: "js/index.js",
     // types: "js/index",

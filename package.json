@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.0.30",
+    "version": "0.0.31",
     "config": {
         "version_short": "0.0"
     },
@@ -81,7 +81,7 @@
         "hue.gl": "^0.0.7",
         "icon.gl": "^0.0.4",
         "loop.gl": "^0.0.1",
-        "pack.gl": "^0.0.28",
+        "pack.gl": "^0.0.25",
         "page.gl": "^0.0.3",
         "postcss-preset-env": "^9.1.2",
         "prettier": "^3.0.3",

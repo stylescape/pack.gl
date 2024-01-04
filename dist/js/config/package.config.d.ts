@@ -5,7 +5,10 @@ declare const packageConfig: {
     keywords: string;
     license: string;
     homepage: string;
-    type: string;
+    funding: {
+        type: string;
+        url: string;
+    }[];
     main: string;
     types: string;
     files: string[];
