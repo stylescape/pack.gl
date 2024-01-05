@@ -45,7 +45,6 @@ import SvgSpriteGenerator from "./class/SvgSpriteGenerator.js";
 import SvgPackager from "./class/SvgPackager.js";
 
 
-
 // Import | Internal Functions
 import gl_installer from './function/gl_installer';
 import cleanDirectory from './function/clean_directory';

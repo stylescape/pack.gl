@@ -1,5 +1,8 @@
 "use strict";
 // class/FontGenerator.ts
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // Copyright 2023 Scape Agency BV
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,81 +18,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Import
 // ============================================================================
 var fantasticon_1 = require("fantasticon");
+var fantasticon_config_js_1 = __importDefault(require("../config/fantasticon.config.js"));
 // ============================================================================
 // Classes
 // ============================================================================
 class FontGenerator {
+    /**
+     * Default configuration for the TypeScript compiler.
+     */
+    static { this.defaultConfig = fantasticon_config_js_1.default; }
+    // private static defaultConfig: CompilerOptions = tsConfig;
+    /**
+     * Constructs an instance with merged configuration of default and custom options.
+     * @param {svgSprite.Config} customConfig - Optional custom configuration object for svg-sprite.
+     */
+    constructor(customConfig = {}) {
+        this.config = {
+            ...FontGenerator.defaultConfig,
+            ...customConfig
+        };
+    }
     async generateFonts(sourceDirectory, outputDiectory) {
         const config = {
+            ...this.config,
             // RunnerMandatoryOptions
             inputDir: sourceDirectory, // (required)
-            outputDir: outputDiectory, // (required)
-            // RunnerOptionalOptions
-            name: 'icon.gl',
-            fontTypes: [
-                fantasticon_1.FontAssetType.TTF, // TTF = "ttf"
-                fantasticon_1.FontAssetType.WOFF, // WOFF = "woff"
-                fantasticon_1.FontAssetType.WOFF2, // WOFF2 = "woff2"
-                fantasticon_1.FontAssetType.EOT, // EOT = "eot"
-                fantasticon_1.FontAssetType.SVG, // SVG = "svg"
-            ],
-            assetTypes: [
-                fantasticon_1.OtherAssetType.CSS, // CSS = "css",
-                fantasticon_1.OtherAssetType.SCSS, // SCSS = "scss",
-                fantasticon_1.OtherAssetType.SASS, // SASS = "sass",
-                fantasticon_1.OtherAssetType.HTML, // HTML = "html",
-                fantasticon_1.OtherAssetType.JSON, // JSON = "json",
-                fantasticon_1.OtherAssetType.TS, // TS = "ts"    
-            ],
-            formatOptions: {
-                // woff: {
-                //   // Woff Extended Metadata Block - see https://www.w3.org/TR/WOFF/#Metadata
-                //   metadata: '...'
-                // },
-                // ttf?: TtfOptions; // type TtfOptions = svg2ttf.FontOptions;
-                // svg?: SvgOptions;  // type SvgOptions = Omit<SvgIcons2FontOptions, 'fontName' | 'fontHeight' | 'descent' | 'normalize'>;
-                json: {
-                    indent: 4
-                },
-                ts: {
-                    // select what kind of types you want to generate
-                    // (default `['enum', 'constant', 'literalId', 'literalKey']`)
-                    types: ['enum', 'constant', 'literalId', 'literalKey'],
-                    // render the types with `'` instead of `"` (default is `"`)
-                    singleQuotes: false,
-                    // customise names used for the generated types and constants
-                    enumName: 'icon_gl',
-                    constantName: 'MY_CODEPOINTS'
-                    // literalIdName: 'IconId',
-                    // literalKeyName: 'IconKey'
-                }
-            },
-            pathOptions: {
-                json: './dist/font/icon.gl.json',
-                css: './dist/font/icon.gl.css',
-                scss: './dist/font/icon.gl.scss',
-                woff: './dist/font/icon.gl.woff',
-                woff2: './dist/font/icon.gl.woff2'
-            },
-            // codepoints: {
-            //     'chevron-left':     57344, // decimal representation of 0xe000
-            //     'chevron-right':    57345,
-            //     'thumbs-up':        57358,
-            //     'thumbs-down':      57359,
-            // },
-            // fontHeight: number;
-            // descent: number;
-            // normalize: boolean;
-            // round: number;
-            selector: '.igl',
-            // tag: string;
-            // Use our custom Handlebars templates
-            // templates: {
-            //     css: './build/font/icon.gl.css.hbs',
-            //     scss: './build/font/icon.gl.scss.hbs'
-            // }, 
-            prefix: 'igl',
-            fontsUrl: './fonts'
+            outputDir: outputDiectory
         };
         try {
             await (0, fantasticon_1.generateFonts)(config);
