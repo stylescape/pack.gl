@@ -12,6 +12,6 @@ declare class FontGenerator {
      * @param {svgSprite.Config} customConfig - Optional custom configuration object for svg-sprite.
      */
     constructor(customConfig?: any);
-    generateFonts(sourceDirectory: string, outputDiectory: string): Promise<void>;
+    generateFonts(sourceDirectory: string, outputDiectory: string, options?: {}): Promise<void>;
 }
 export default FontGenerator;

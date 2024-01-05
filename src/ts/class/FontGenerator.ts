@@ -54,27 +54,20 @@ class FontGenerator {
          };
      }
 
-
-
-
-
     async generateFonts(
         sourceDirectory: string,
         outputDiectory: string,
+        options?: {},
     ) {
 
         const config: RunnerOptions = {
-
             ...this.config,
-
             // RunnerMandatoryOptions
             inputDir: sourceDirectory, // (required)
             outputDir: outputDiectory, // (required)
 
-
+            ...options
         };
-
-
 
         try {
             await generateFonts(config);

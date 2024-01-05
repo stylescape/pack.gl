@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.0.36",
+    "version": "0.0.38",
     "config": {
         "version_short": "0.0"
     },
@@ -60,7 +60,7 @@
         "autoprefixer": "^10.4.16",
         "cssnano": "^6.0.3",
         "del": "^7.1.0",
-        "eslint": "^8.41.0",
+        "eslint": "^8.56.0",
         "eslint-config-prettier": "^9.0.0",
         "fantasticon": "^2.0.0",
         "fs-extra": "^11.2.0",
@@ -72,12 +72,15 @@
         "postcss-preset-env": "^9.3.0",
         "prettier": "^3.0.3",
         "sass": "^1.69.7",
+        "semver": "^7.5.4",
         "sharp": "^0.33.1",
         "svg-sprite": "^2.0.2",
         "svgo": "^3.1.0",
         "terser": "^5.26.0"
     },
     "devDependencies": {
+        "@types/eslint": "^8.56.1",
+        "@types/semver": "^7.5.6",
         "block.gl": "^0.0.1",
         "deep.gl": "^0.0.1",
         "grid.gl": "^0.0.1",

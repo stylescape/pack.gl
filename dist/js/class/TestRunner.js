@@ -1,5 +1,5 @@
 "use strict";
-// class/FontGenerator.ts
+// class/TestRunner.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -17,45 +17,46 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
-var fantasticon_1 = require("fantasticon");
-var fantasticon_config_js_1 = __importDefault(require("../config/fantasticon.config.js"));
+var child_process_1 = require("child_process");
+var util_1 = __importDefault(require("util"));
+const execAsync = util_1.default.promisify(child_process_1.exec);
 // ============================================================================
 // Classes
 // ============================================================================
-class FontGenerator {
-    /**
-     * Default configuration for the TypeScript compiler.
-     */
-    static { this.defaultConfig = fantasticon_config_js_1.default; }
-    // private static defaultConfig: CompilerOptions = tsConfig;
-    /**
-     * Constructs an instance with merged configuration of default and custom options.
-     * @param {svgSprite.Config} customConfig - Optional custom configuration object for svg-sprite.
-     */
-    constructor(customConfig = {}) {
-        this.config = {
-            ...FontGenerator.defaultConfig,
-            ...customConfig
-        };
+class TestRunner {
+    constructor(testCommand) {
+        this.testCommand = testCommand;
     }
-    async generateFonts(sourceDirectory, outputDiectory, options) {
-        const config = {
-            ...this.config,
-            // RunnerMandatoryOptions
-            inputDir: sourceDirectory, // (required)
-            outputDir: outputDiectory, // (required)
-            ...options
-        };
+    /**
+     * Runs the tests using the specified test command.
+     * @returns A promise that resolves with the test results.
+     */
+    async runTests() {
         try {
-            await (0, fantasticon_1.generateFonts)(config);
-            console.log('Fonts generated successfully.');
+            const { stdout, stderr } = await execAsync(this.testCommand);
+            if (stderr) {
+                throw new Error(stderr);
+            }
+            return stdout;
         }
         catch (error) {
-            console.error('Error generating fonts:', error);
+            console.error('Error occurred while running tests:', error);
+            throw error;
         }
     }
 }
 // ============================================================================
 // Export
 // ============================================================================
-exports.default = FontGenerator;
+exports.default = TestRunner;
+// Usage Example
+// Here's an example of how you might use the TestRunner class in a project:
+// import TestRunner from './TestRunner';
+// const runner = new TestRunner('npm test'); // Replace 'npm test' with your actual test command
+// runner.runTests()
+//     .then(results => {
+//         console.log('Test Results:', results);
+//     })
+//     .catch(error => {
+//         console.error('Test Runner Error:', error);
+//     });

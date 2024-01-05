@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readPackageJson = exports.cleanDirectory = exports.gl_installer = exports.SvgPackager = exports.SvgSpriteGenerator = exports.SvgToPngConverter = exports.SvgReader = exports.TemplateWriter = exports.StylizedLogger = exports.NpmCommandRunner = exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionWriter = exports.StyleProcessor = exports.PackageCreator = exports.FontGenerator = exports.FilenameExtractor = exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = exports.DirectoryScanner = void 0;
+exports.readPackageJson = exports.cleanDirectory = exports.gl_installer = exports.SvgPackager = exports.SvgSpriteGenerator = exports.SvgToPngConverter = exports.SvgReader = exports.CodeLinter = exports.DocumentationGenerator = exports.TestRunner = exports.TemplateWriter = exports.StylizedLogger = exports.NpmCommandRunner = exports.JavaScriptMinifier = exports.TypeScriptCompiler = exports.VersionManager = exports.VersionWriter = exports.StyleProcessor = exports.PackageCreator = exports.FontGenerator = exports.FilenameExtractor = exports.FileRenamer = exports.FileCopier = exports.DirectoryCreator = exports.DirectoryCopier = exports.DirectoryCleaner = exports.DirectoryScanner = void 0;
 // Copyright 2023 Scape Agency BV
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -40,6 +40,8 @@ var PackageCreator_js_1 = __importDefault(require("./class/PackageCreator.js"));
 exports.PackageCreator = PackageCreator_js_1.default;
 var StyleProcessor_js_1 = __importDefault(require("./class/StyleProcessor.js"));
 exports.StyleProcessor = StyleProcessor_js_1.default;
+var VersionManager_js_1 = __importDefault(require("./class/VersionManager.js"));
+exports.VersionManager = VersionManager_js_1.default;
 var VersionWriter_js_1 = __importDefault(require("./class/VersionWriter.js"));
 exports.VersionWriter = VersionWriter_js_1.default;
 var TypeScriptCompiler_js_1 = __importDefault(require("./class/TypeScriptCompiler.js"));
@@ -60,6 +62,12 @@ var SvgSpriteGenerator_js_1 = __importDefault(require("./class/SvgSpriteGenerato
 exports.SvgSpriteGenerator = SvgSpriteGenerator_js_1.default;
 var SvgPackager_js_1 = __importDefault(require("./class/SvgPackager.js"));
 exports.SvgPackager = SvgPackager_js_1.default;
+var TestRunner_js_1 = __importDefault(require("./class/TestRunner.js"));
+exports.TestRunner = TestRunner_js_1.default;
+var DocumentationGenerator_js_1 = __importDefault(require("./class/DocumentationGenerator.js"));
+exports.DocumentationGenerator = DocumentationGenerator_js_1.default;
+var CodeLinter_js_1 = __importDefault(require("./class/CodeLinter.js"));
+exports.CodeLinter = CodeLinter_js_1.default;
 // Import | Internal Functions
 var gl_installer_1 = __importDefault(require("./function/gl_installer"));
 exports.gl_installer = gl_installer_1.default;
