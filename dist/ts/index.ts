@@ -50,6 +50,7 @@ import SvgPackager from "./class/SvgPackager.js";
 import TestRunner from './class/TestRunner.js';
 import DocumentationGenerator from './class/DocumentationGenerator.js';
 import CodeLinter from './class/CodeLinter.js';
+import JSONLoader from './class/JSONLoader.js';
 
 
 // Import | Internal Functions
@@ -87,6 +88,7 @@ export {
     TestRunner,
     DocumentationGenerator,
     CodeLinter,
+    JSONLoader,
 
     SvgReader,
     SvgToPngConverter,

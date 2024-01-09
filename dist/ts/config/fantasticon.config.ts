@@ -27,7 +27,7 @@ import RunnerOptionalOptions from 'fantasticon';
 const fantasticonConfig: any = {
 
     // RunnerOptionalOptions
-    name: 'icon.gl',
+    name: 'icon',
     fontTypes: [
         FontAssetType.TTF,      // TTF = "ttf"
         FontAssetType.WOFF,     // WOFF = "woff"
@@ -72,17 +72,18 @@ const fantasticonConfig: any = {
         woff:   './dist/font/icon.gl.woff',
         woff2:  './dist/font/icon.gl.woff2',
     },
-    // codepoints: {
-    //     'chevron-left':     57344, // decimal representation of 0xe000
-    //     'chevron-right':    57345,
-    //     'thumbs-up':        57358,
-    //     'thumbs-down':      57359,
-    // },
+
+    codepoints: {
+        'chevron-left':     57344, // decimal representation of 0xe000
+        'chevron-right':    57345,
+        'thumbs-up':        57358,
+        'thumbs-down':      57359,
+    },
     // fontHeight: number;
     // descent: number;
     // normalize: boolean;
     // round: number;
-    selector: '.igl',
+    selector: '.i',
     // tag: string;
     // Use our custom Handlebars templates
     // templates: {
