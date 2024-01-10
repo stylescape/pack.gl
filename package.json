@@ -94,20 +94,7 @@
         "unit.gl": "^0.0.26"
     },
     "files": [
-        "dist/js/**/*.{js,map}",
-        "src/ts/**/*.ts"
-    ],
-    "hugo-bin": {
-        "buildTags": "extended"
-    },
-    "jspm": {
-        "registry": "npm",
-        "main": "dist/js/pack.gl.js",
-        "directories": {
-            "lib": "src"
-        },
-        "shim": {},
-        "dependencies": {},
-        "peerDependencies": {}
-    }
+        "src/**",
+        "dist/**"
+    ]
 }
