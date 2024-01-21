@@ -58,15 +58,15 @@ class SvgPackager {
         const iconNames: string[] = [];
 
         try {
-            console.log(`Processing directory: ${inputDirectory}`);
+            // console.log(`Processing directory: ${inputDirectory}`);
 
             const svgFiles = glob.sync(`${inputDirectory}/**/*.svg`);
 
             for (const file of svgFiles) {
-                console.log(`Processing file: ${file}`);
+                // console.log(`Processing file: ${file}`);
                 const iconName = this.sanitizeFileName(path.basename(file, '.svg'));
                 iconNames.push(iconName);
-                console.log(`Processing icon: ${iconName}`);
+                // console.log(`Processing icon: ${iconName}`);
                 const svgContent = await this.readSvgFile(file);
                 const optimizedSvg = await this.optimizeSvg(svgContent);
                 // const optimizedSvg = await this.optimizeSvg(file, svgContent);
