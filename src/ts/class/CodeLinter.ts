@@ -1,6 +1,6 @@
 // class/CodeLinter.ts
 
-// Copyright 2023 Scape Agency BV
+// Copyright 2024 Scape Agency BV
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -64,9 +64,6 @@ class CodeLinter {
 // ============================================================================
 
 export default CodeLinter;
-
-
-
 
 // import CodeLinter from './CodeLinter';
 
