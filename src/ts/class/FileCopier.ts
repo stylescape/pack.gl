@@ -28,15 +28,20 @@ import path from 'path';
 // ============================================================================
 
 /**
- * A class for copying files from one location to another.
+ * Handles the copying of files from one location to another, ensuring that the operation
+ * is both safe and efficient. This class is particularly useful for applications requiring
+ * file management capabilities, such as backup systems or content management systems.
  */
  class FileCopier {
 
     /**
-     * Copies a single file to a specified destination directory.
-     * @param {string} srcFile - The path of the source file to copy.
-     * @param {string} destDir - The destination directory where the file should be copied.
-     * @throws Will throw an error if the file copy operation fails.
+     * Copies a file from a specified source to a destination directory. This method takes care of
+     * file path resolution and checks for existing files in the destination, replacing them if necessary.
+     *
+     * @param {string} srcFile - The path of the source file to be copied.
+     * @param {string} destDir - The destination directory where the file should be placed.
+     * @returns {Promise<void>} A promise that resolves when the file has been successfully copied.
+     * @throws {Error} If the file cannot be copied, including due to permission errors or the source file not existing.
      */
     async copyFileToDirectory(
         srcFile: string,
@@ -61,3 +66,18 @@ import path from 'path';
 // ============================================================================
 
 export default FileCopier;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+// import FileCopier from './FileCopier';
+
+// const copier = new FileCopier();
+// const sourceFile = './path/to/source/file.txt';
+// const destinationDir = './path/to/destination';
+
+// copier.copyFileToDirectory(sourceFile, destinationDir)
+//     .then(() => console.log('File copying completed successfully.'))
+//     .catch(error => console.error('Failed to copy file:', error));
