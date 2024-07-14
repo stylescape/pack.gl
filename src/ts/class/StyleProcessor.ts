@@ -19,17 +19,10 @@
 // Import
 // ============================================================================
 
-// import * as sass from 'sass';
-// import postcss from 'postcss';
-// import fs from 'fs';
-// import { promises as fsPromises } from 'fs';
-// import path from 'path';
-
 import * as sass from 'sass';
 import postcss from 'postcss';
 import { promises as fs } from 'fs';
 import path from 'path';
-
 
 import postcssConfigExpanded from '../config/postcss.config.expanded.js';
 import postcssConfigCompressed from '../config/postcss.config.compressed.js';
@@ -39,8 +32,13 @@ import postcssConfigCompressed from '../config/postcss.config.compressed.js';
 // Classes
 // ============================================================================
 
-
+/**
+ * Class responsible for processing styles, including compiling SCSS and
+ * applying PostCSS transformations. It can be configured to output either
+ * expanded or compressed CSS, making it flexible for different environments.
+ */
 class StyleProcessor {
+
     /**
      * Processes the given CSS with PostCSS based on the provided style option.
      * @param css The CSS string to process.
@@ -55,9 +53,9 @@ class StyleProcessor {
 
     /**
      * Ensures that the given directory exists. Creates it if it does not exist.
-     * @param dirPath - The path of the directory to check and create.
+     * @param dirPath The path of the directory to check and create.
      */
-     private async ensureDirectoryExists(dirPath: string): Promise<void> {
+    private async ensureDirectoryExists(dirPath: string): Promise<void> {
         try {
             await fs.mkdir(dirPath, { recursive: true });
         } catch (error) {
@@ -76,7 +74,7 @@ class StyleProcessor {
      * Compiles SCSS to CSS and processes it using PostCSS.
      * @param inputFile Path to the input SCSS file.
      * @param outputFile Path to the output CSS file.
-     * @param styleOption Style option for the output.
+     * @param styleOption Style option for the output, either 'expanded' or 'compressed'.
      */
     async processStyles(inputFile: string, outputFile: string, styleOption: 'expanded' | 'compressed') {
         try {
@@ -186,3 +184,18 @@ class StyleProcessor {
 // ============================================================================
 
 export default StyleProcessor;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+// import StyleProcessor from './StyleProcessor';
+
+// const styleProcessor = new StyleProcessor();
+// const inputFile = './src/styles/main.scss';
+// const outputFile = './dist/styles/main.css';
+
+// styleProcessor.processStyles(inputFile, outputFile, 'compressed')
+//     .then(() => console.log('Styles processed successfully.'))
+//     .catch(error => console.error('Failed to process styles:', error));
