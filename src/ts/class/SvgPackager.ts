@@ -31,9 +31,9 @@ import { loadConfig } from 'svgo';
 // ============================================================================
 
 /**
- * Class for packaging SVG files.
- * This class reads SVG files from a specified directory, optimizes them,
- * and creates corresponding TypeScript files.
+ * Provides functionality to optimize and package SVG files into various formats.
+ * It reads SVG files from a specified directory, optimizes them using SVGO,
+ * and then outputs them as TypeScript files and JSON indexes.
  */
 class SvgPackager {
 
@@ -46,7 +46,9 @@ class SvgPackager {
     /**
      * Processes all SVG files in a given directory.
      * @param inputDirectory The directory containing SVG files to process.
-     * @param outputDirectory The directory where optimized SVGs will be output as TypeScript files.
+     * @param outputDirectory The directory where optimized SVGs will be output.
+     * @param tsOutputDirectory The directory where TypeScript files will be saved.
+     * @param jsonOutputDirectory The directory where a JSON index of icons will be saved.
      */
     public async processSvgFiles(
         inputDirectory: string,
@@ -253,3 +255,15 @@ class SvgPackager {
 // ============================================================================
 
 export default SvgPackager;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+// import SvgPackager from './SvgPackager';
+
+// const packager = new SvgPackager('./config/svgo.config.js');
+// packager.processSvgFiles('./src/icons', './dist/icons', './dist/ts', './dist')
+//     .then(() => console.log('SVG packaging completed.'))
+//     .catch(error => console.error('Error packaging SVGs:', error));
