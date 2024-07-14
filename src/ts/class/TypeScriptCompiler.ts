@@ -31,7 +31,9 @@ import tsConfig from "../config/ts.config.js"
 // ============================================================================
 
 /**
- * TypeScriptCompiler class for compiling TypeScript files to JavaScript.
+ * A utility class to compile TypeScript files into JavaScript based on configurable options.
+ * It leverages the TypeScript compiler API to perform the compilation, providing a flexible
+ * integration point for projects needing to automate their TypeScript to JavaScript builds.
  */
  class TypeScriptCompiler {
 
@@ -49,9 +51,8 @@ import tsConfig from "../config/ts.config.js"
      // private static defaultConfig: ts.CompilerOptions = tsConfig;
 
     /**
-     * Constructs an instance with merged configuration of default and custom options.
-     * @param {any} customConfig - Optional custom configuration object for TypeScript compiler
-    //  * @param {ts.CompilerOptions} customConfig - Optional custom configuration object for TypeScript compiler
+     * Initializes a new instance of the TypeScriptCompiler with optional custom configuration.
+     * @param customConfig Custom configuration settings for the TypeScript compiler.
      */
     constructor(
         customConfig: any = {},
@@ -63,6 +64,13 @@ import tsConfig from "../config/ts.config.js"
         };
     }
 
+    /**
+     * Compiles an array of TypeScript files into JavaScript.
+     * @param filePaths An array of paths to TypeScript files to be compiled.
+     * @param outDir The directory to output the compiled JavaScript files.
+     * @returns A promise that resolves if the compilation is successful, or rejects if it fails.
+     */
+    // async compile(
     compile(
         filePaths: string[],
         outDir: string,
@@ -89,7 +97,10 @@ import tsConfig from "../config/ts.config.js"
             const emitResult = program.emit();
 
             // Check for compilation errors
-            const allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+            const allDiagnostics = ts.getPreEmitDiagnostics(
+                program
+            ).concat(emitResult.diagnostics);
+
             allDiagnostics.forEach(diagnostic => {
                 // Handle and print diagnostics
                 if (diagnostic.file) {
@@ -120,3 +131,18 @@ import tsConfig from "../config/ts.config.js"
 // ============================================================================
 
 export default TypeScriptCompiler;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+// import TypeScriptCompiler from './TypeScriptCompiler';
+
+// const compiler = new TypeScriptCompiler({ noImplicitAny: true });
+// const filePaths = ['./src/index.ts', './src/app.ts'];
+// const outputDirectory = './dist';
+
+// compiler.compile(filePaths, outputDirectory)
+//     .then(() => console.log('Compilation successful'))
+//     .catch(error => console.error('Compilation errors:', error));
