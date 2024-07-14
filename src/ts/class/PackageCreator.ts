@@ -29,30 +29,32 @@ import packageConfig from "../config/package.config.js"
 // ============================================================================
 
 /**
- * A class for creating a package.json file for a project.
+ * Provides functionality to programmatically create and write package.json files using a flexible configuration.
+ * This class is ideal for automating the setup of Node.js projects or managing configurations dynamically.
  */
  class PackageCreator {
 
     /**
      *  Configuration for the Package.json.
      */
-     public config: any;
+    public config: any;
      // private config: ts.CompilerOptions;
      // private config: { [key: symbol]: any};
  
-     /**
-      * Default configuration for Package.json.
-      */
-      private static defaultConfig: any = packageConfig;
+    /**
+     * Default configuration sourced from an external configuration file.
+     */
+    private static defaultConfig: any = packageConfig;
  
     /**
-     * Initializes a new instance of the PackageCreator class.
-     * @param {PackageJson} customConfig - The content to be written into package.json.
+     * Constructs an instance with merged default and custom configuration settings for package.json.
+     * 
+     * @param customConfig Custom settings to override or augment the default package configuration.
      */
-     constructor(
+    constructor(
         customConfig: any = {},
         // customConfig: ts.CompilerOptions = {},
-     ) {
+    ) {
         let newConfig = {
             // Populate with necessary fields from packageData
             name: customConfig.name,
@@ -74,11 +76,13 @@ import packageConfig from "../config/package.config.js"
      }
     
     /**
-     * Creates a package.json file in the specified directory.
-     * Creates the directory if it does not exist.
-     * @param outputDir - The directory where package.json will be created.
+     * Creates a package.json file with the stored configuration in the specified directory.
+     * If the directory does not exist, it will be created.
+     * 
+     * @param outputDir The directory where the package.json will be created.
+     * @returns A promise that resolves when the file has been successfully written.
      */
-     async createPackageJson(outputDir: string): Promise<void> {
+    async createPackageJson(outputDir: string): Promise<void> {
         const filePath = path.join(outputDir, 'package.json');
         const data = JSON.stringify(this.config, null, 2);
         try {
@@ -94,10 +98,11 @@ import packageConfig from "../config/package.config.js"
     }
 
     /**
-     * Ensures that the given directory exists. Creates it if it does not exist.
-     * @param dirPath - The path of the directory to check and create.
+     * Ensures the specified directory exists. If it does not, it will be created.
+     * 
+     * @param dirPath The path of the directory to verify or create.
      */
-     private async ensureDirectoryExists(dirPath: string): Promise<void> {
+    private async ensureDirectoryExists(dirPath: string): Promise<void> {
         try {
             await fs.mkdir(dirPath, { recursive: true });
         } catch (error) {
@@ -116,3 +121,24 @@ import packageConfig from "../config/package.config.js"
 // ============================================================================
 
 export default PackageCreator;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+// import PackageCreator from './PackageCreator';
+
+// const customConfig = {
+//     name: "my-new-project",
+//     version: "1.0.0",
+//     description: "A new Node.js project",
+//     author: "Developer Name"
+// };
+
+// const packageCreator = new PackageCreator(customConfig);
+// const outputDirectory = "./path/to/project";
+
+// packageCreator.createPackageJson(outputDirectory)
+//     .then(() => console.log("Package.json has been successfully created."))
+//     .catch(error => console.error("Error creating package.json:", error));
