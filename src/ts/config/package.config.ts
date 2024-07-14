@@ -19,6 +19,10 @@
 // Constants
 // ============================================================================
 
+/**
+ * Configuration object for package.json properties, used to define metadata,
+ * file inclusions, and other necessary project configurations.
+ */
 const packageConfig = {
     name: "",
     version: "",
