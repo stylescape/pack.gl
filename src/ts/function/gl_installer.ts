@@ -1,4 +1,4 @@
-// function/SvgPackager.ts
+// function/gl_installer.ts
 
 // Copyright 2023 Scape Agency BV
 
@@ -78,3 +78,10 @@ async function gl_installer() {
 // ============================================================================
 
 export default gl_installer;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+// gl_installer().catch(error => console.error('Installation process encountered an error:', error));
