@@ -30,7 +30,9 @@ import svgspriteConfig from "../config/svgsprite.config.js"
 // ============================================================================
 
 /**
- * A class for generating SVG sprites from individual SVG files.
+ * Facilitates the generation of SVG sprites from individual SVG files.
+ * This class uses svg-sprite to compile multiple SVG files into a single sprite sheet,
+ * which is useful for efficiently managing and using graphics in web projects.
  */
 class SvgSpriteGenerator {
 
@@ -43,19 +45,19 @@ class SvgSpriteGenerator {
     /**
      *  Configuration for the TypeScript compiler.
      */
-     private config: svgSprite.Config;
+    private config: svgSprite.Config;
 
-     /**
-      * Default configuration for the TypeScript compiler.
-      */
-     private static defaultConfig: svgSprite.Config = svgspriteConfig;
+    /**
+     * Default configuration for the TypeScript compiler.
+     */
+    private static defaultConfig: svgSprite.Config = svgspriteConfig;
      // private static defaultConfig: CompilerOptions = tsConfig;
  
-     /**
-      * Constructs an instance with merged configuration of default and custom options.
-      * @param {svgSprite.Config} customConfig - Optional custom configuration object for svg-sprite.
-      */
-     constructor(
+    /**
+     * Constructs an instance with a merged configuration of default settings and optional customizations.
+     * @param {svgSprite.Config} customConfig - Optional custom configuration object for svg-sprite.
+     */
+    constructor(
          customConfig: svgSprite.Config = {},
      ) {
          this.config = {
@@ -119,3 +121,19 @@ class SvgSpriteGenerator {
 // ============================================================================
 
 export default SvgSpriteGenerator;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+
+// import SvgSpriteGenerator from './SvgSpriteGenerator';
+
+// const spriteGenerator = new SvgSpriteGenerator();
+// const sourceDirectory = 'path/to/source/svg/files';
+// const outputDirectory = 'path/to/output/sprites';
+
+// spriteGenerator.generateSprite(sourceDirectory, outputDirectory)
+//     .then(() => console.log('SVG sprite has been successfully generated.'))
+//     .catch(error => console.error('Failed to generate SVG sprite:', error));
