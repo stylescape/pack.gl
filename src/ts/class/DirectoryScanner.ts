@@ -27,14 +27,25 @@ import path from 'path';
 // Classes
 // ============================================================================
 
+/**
+ * Provides methods to scan directories and list contents, with the option to include 
+ * subdirectories recursively. Useful for applications that need to process files dynamically 
+ * or monitor directory changes.
+ */
 class DirectoryScanner {
 
     /**
-     * Scans a directory and returns a list of file paths.
-     * Can optionally scan directories recursively.
-     * @param dirPath The directory to scan.
-     * @param recursive Whether to scan directories recursively.
-     * @returns A promise that resolves to an array of file paths.
+     * Scans the specified directory and returns an array of file paths. It can scan 
+     * directories recursively to retrieve paths of all files within the directory tree.
+     *
+     * @param dirPath The path to the directory to be scanned.
+     * @param recursive Optional. If set to true, the method scans all subdirectories recursively.
+     *                  Defaults to false.
+     * @returns A promise that resolves with an array of file paths (strings), representing
+     *          all files within the directory, or within the entire directory tree if recursive
+     *          scanning is enabled.
+     * @throws An error if the directory cannot be read, including permissions errors or if the 
+     *         directory does not exist.
      */
     async scanDirectory(
         dirPath: string,
@@ -58,8 +69,25 @@ class DirectoryScanner {
 
 }
 
+
 // ============================================================================
 // Export
 // ============================================================================
 
 export default DirectoryScanner;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+// import DirectoryScanner from './DirectoryScanner';
+
+// const scanner = new DirectoryScanner();
+// scanner.scanDirectory('./path/to/directory', true)
+//     .then(files => {
+//         console.log('Scanned files:', files);
+//     })
+//     .catch(error => {
+//         console.error('Failed to scan directory:', error);
+//     });
