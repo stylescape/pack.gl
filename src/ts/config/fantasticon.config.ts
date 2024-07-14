@@ -19,14 +19,24 @@
 // Import
 // ============================================================================
 
+import {
+    // generateFonts,
+    FontAssetType,
+    OtherAssetType,
+    // RunnerOptions,
+    // RunnerOptionalOptions,
+} from 'fantasticon';
 
-import { generateFonts, FontAssetType, OtherAssetType, RunnerOptions,  } from 'fantasticon';
-import RunnerOptionalOptions from 'fantasticon';
 
+// ============================================================================
+// Constants
+// ============================================================================
 
+// Configuration for the Fantasticon tool to generate icon fonts from SVG files.
 const fantasticonConfig: any = {
 
     // RunnerOptionalOptions
+    // Basic naming and type setup for font generation
     name: 'icon',
     fontTypes: [
         FontAssetType.TTF,      // TTF = "ttf"
@@ -105,6 +115,9 @@ const fantasticonConfig: any = {
 };
 
 
+// ============================================================================
+// Export
+// ============================================================================
 
 export default fantasticonConfig;
 
