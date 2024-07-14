@@ -28,15 +28,20 @@ import { promises as fsPromises } from 'fs';
 // ============================================================================
 
 /**
- * A class for copying files from one directory to another.
+ * Provides functionality to copy all files and subdirectories from one
+ * directory to another, including handling of nested directories. This class
+ * uses asynchronous operations to handle file operations efficiently.
  */
 class DirectoryCopier {
 
     /**
-     * Copies all files and subdirectories from a source directory to a destination directory.
-     * @param srcDir The source directory path.
-     * @param destDir The destination directory path.
-     * @throws Will throw an error if copying fails for any file or directory.
+     * Asynchronously copies all files and subdirectories from the source
+     * directory to the destination directory. If the destination directory
+     * does not exist, it will be created.
+     *
+     * @param srcDir The path of the source directory.
+     * @param destDir The path of the destination directory.
+     * @throws {Error} If any file or directory could not be copied.
      */
      async copyFiles(srcDir: string, destDir: string): Promise<void> {
         try {
@@ -51,7 +56,11 @@ class DirectoryCopier {
     }
 
     /**
-     * Recursively copies files and directories.
+     * Recursively copies files and directories from the source to the
+     * destination directory.
+     * This method creates the destination directory if it does not exist and
+     * recursively copies all nested files and directories.
+     *
      * @param srcDir Source directory.
      * @param destDir Destination directory.
      */
@@ -77,3 +86,16 @@ class DirectoryCopier {
 // ============================================================================
 
 export default DirectoryCopier;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+// import DirectoryCopier from './DirectoryCopier';
+
+// const copier = new DirectoryCopier();
+
+// copier.copyFiles('./path/to/source', './path/to/destination')
+//     .then(() => console.log('Copying completed successfully.'))
+//     .catch(error => console.error('Copying failed:', error));
