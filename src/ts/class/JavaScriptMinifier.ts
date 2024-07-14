@@ -29,38 +29,43 @@ import terserConfig from "../config/terser.config.js"
 // ============================================================================
 
 /**
- * Class to minify JavaScript files using Terser.
+ * Facilitates the minification of JavaScript files using the Terser library.
+ * This class allows for flexible configuration of minification settings and aims
+ * to produce optimized output files that are significantly reduced in size.
  */
- class JavaScriptMinifier {
+class JavaScriptMinifier {
 
     /**
-     *  Configuration for the JavaScript compiler.
+     * Configuration for the Terser minification process.
      */
-     private config: any;
+    private config: any;
  
-     /**
-      * Default configuration for the JavaScript compiler.
-      */
-      private static defaultConfig: any = terserConfig;
+    /**
+     * Default configuration for the Terser minification, loaded from an external configuration file.
+     */
+    private static defaultConfig: any = terserConfig;
  
-     /**
-      * Constructs an instance with merged configuration of default and custom options.
-      * @param {any} customConfig - OptionalConfiguration object - minification options for Terser.
-      */
-     constructor(
-         customConfig: any = {},
-     ) {
-         this.config = {
-             ...JavaScriptMinifier.defaultConfig,
-             ...customConfig
-         };
-     }
+    /**
+     * Constructs an instance with merged configuration of default and optionally provided custom settings.
+     * 
+     * @param {any} customConfig Optional. Custom configuration object to override or extend the default Terser options.
+     */
+    constructor(
+        customConfig: any = {},
+    ) {
+        this.config = {
+            ...JavaScriptMinifier.defaultConfig,
+            ...customConfig
+        };
+    }
 
     /**
-     * Minifies a JavaScript file.
-     * @param {string} inputPath - Path to the input JavaScript file.
-     * @param {string} outputPath - Path to save the minified output file.
-     * @returns {Promise<void>} - A promise that resolves when minification is complete.
+     * Minifies a JavaScript file using the configured Terser settings.
+     * 
+     * @param {string} inputPath Path to the input JavaScript file.
+     * @param {string} outputPath Path where the minified file will be saved.
+     * @returns {Promise<void>} A promise that resolves when the minification process is complete, or rejects with an error.
+     * @throws {Error} An error is thrown if there are issues reading the input file, the minification fails, or the output file cannot be written.
      */
     async minifyFile(
         inputPath: string,
@@ -93,3 +98,19 @@ import terserConfig from "../config/terser.config.js"
 // ============================================================================
 
 export default JavaScriptMinifier;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+
+// import JavaScriptMinifier from './JavaScriptMinifier';
+
+// const minifier = new JavaScriptMinifier();
+// const inputPath = './path/to/source/file.js';
+// const outputPath = './path/to/minified/file.min.js';
+
+// minifier.minifyFile(inputPath, outputPath)
+//     .then(() => console.log('JavaScript file has been minified successfully.'))
+//     .catch(error => console.error('Failed to minify JavaScript file:', error));
