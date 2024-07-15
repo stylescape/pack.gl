@@ -81,11 +81,6 @@ Here's how to get started with `pack.gl`:
 // Sample code to demonstrate basic usage
 ```
 
-## Links
-
-- [Website](https://www.pack.gl)
-- [NPM](https://www.npmjs.com/package/pack.gl)
-
 ---
 
 ## Colophon
@@ -101,6 +96,12 @@ Scape Agency is a spatial innovation collective that dreams, discovers and desig
 - website: [scape.agency](https://www.scape.agency "Scape Agency website")
 - github: [github.com/scape-agency](https://github.com/scape-agency "Scape Agency GitHub")
 
+### Links
+
+- [Website](https://www.pack.gl)
+- [NPM](https://www.npmjs.com/package/pack.gl)
+
+
 ### Development Resources
 
 #### Contributing
@@ -112,7 +113,7 @@ Please refer to the [contribution guidelines](.github/CONTRIBUTING.md) for infor
 
 #### Copyright
 
-Copyright &copy; 2023 [Scape Agency BV](https://www.scape.agency/ "Scape Agency website"). All Rights Reserved.
+Copyright &copy; 2024 [Scape Agency BV](https://www.scape.agency/ "Scape Agency website"). All Rights Reserved.
 
 #### License
 
