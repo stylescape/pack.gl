@@ -58,7 +58,7 @@
         "@types/nunjucks": "^3.2.6",
         "@types/svg-sprite": "^0.0.38",
         "autoprefixer": "^10.4.16",
-        "cssnano": "^6.0.3",
+        "cssnano": "^7.0.4",
         "del": "^7.1.0",
         "eslint": "^8.56.0",
         "eslint-config-prettier": "^9.0.0",
