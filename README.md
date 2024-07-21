@@ -53,12 +53,6 @@ Key to its design philosophy is the adaptability to various development workflow
 
 In essence, `pack.gl` is more than a package builder; it's a catalyst for innovation and efficiency, empowering developers to focus on what they do best — creating remarkable software solutions.
 
-## Features
-
-- **Streamlined Integration**: Easily integrates with various software development workflows.
-- **Customizable Builds**: Provides a range of build options customizable to different project requirements.
-- **Effective Management**: Organizes and manages package dependencies, streamlining the development process.
-
 ## Installation
 
 ### HTML Script Tag
