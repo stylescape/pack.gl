@@ -60,7 +60,7 @@
         "autoprefixer": "^10.4.16",
         "cssnano": "^7.0.4",
         "del": "^7.1.0",
-        "eslint": "^8.56.0",
+        "eslint": "^9.9.0",
         "eslint-config-prettier": "^9.0.0",
         "fantasticon": "^2.0.0",
         "fs-extra": "^11.2.0",
@@ -79,7 +79,7 @@
         "terser": "^5.26.0"
     },
     "devDependencies": {
-        "@types/eslint": "^8.56.1",
+        "@types/eslint": "^9.6.0",
         "@types/semver": "^7.5.6",
         "block.gl": "^0.0.1",
         "deep.gl": "^0.0.1",
