@@ -69,7 +69,7 @@
         "lodash": "^4.17.21",
         "nunjucks": "^3.2.4",
         "postcss": "^8.4.32",
-        "postcss-preset-env": "^9.3.0",
+        "postcss-preset-env": "^10.0.0",
         "prettier": "^3.0.3",
         "sass": "^1.69.7",
         "semver": "^7.5.4",
