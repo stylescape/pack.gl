@@ -62,7 +62,7 @@
         "del": "^7.1.0",
         "eslint": "^9.9.0",
         "eslint-config-prettier": "^9.0.0",
-        "fantasticon": "^2.0.0",
+        "fantasticon": "^3.0.0",
         "fs-extra": "^11.2.0",
         "glob": "^10.3.10",
         "jsdom": "^24.0.0",
