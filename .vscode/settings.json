@@ -24,7 +24,7 @@
     "files.exclude": {
         "**/.git": true,                                  // Hide .git folder in file explorer
         "**/.DS_Store": true,                             // Hide .DS_Store files (macOS specific)
-        "**/node_modules": true,                          // Hide node_modules folder in file explorer
+        // "**/node_modules": true,                          // Hide node_modules folder in file explorer
         "**/dist": true                                   // Hide dist folder in file explorer
     },
     "eslint.validate": [
