@@ -20,7 +20,6 @@
 // ============================================================================
 
 import { ESLint } from 'eslint';
-import path from 'path';
 
 
 // ============================================================================
@@ -60,11 +59,13 @@ class CodeLinter {
         try {
             const results = await this.eslint.lintFiles(targetFiles);
             await ESLint.outputFixes(results);
+
             const formatter = await this.eslint.loadFormatter('stylish');
             const resultText = formatter.format(results);
-
             console.log(resultText);
+
             return results;
+
         } catch (error) {
             console.error('Error occurred while linting:', error);
             throw error;
