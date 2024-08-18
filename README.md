@@ -6,13 +6,11 @@
 
 </div>
 
-<div>
-    <img align="right" src="https://raw.githubusercontent.com/stylescape/brand/master/src/logo/pack.gl.png" width="96" alt="pack.gl logo">
-    <h1 align="left">pack.gl</h1>
-    <h3 align="left">Package Pipeline Manager</h3>
-</div>
-
-<br clear="both"/>
+<p align="center">
+    <img src="https://raw.githubusercontent.com/stylescape/brand/master/src/logo/logo-transparant.png" width="20%" height="20%" alt="Stylescape Logo">
+</p>
+<h1 align="center" style='border-bottom: none;'>pack.gl</h1>
+<h3 align="center">Package Pipeline Manager</h3>
 
 ---
 
