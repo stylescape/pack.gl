@@ -5,12 +5,11 @@
 [![StackBlitz](https://img.shields.io/badge/StackBlitz-23041B26?style=flat-square&logo=StackBlitz&logoColor=%23FFFFFF&labelColor=%23041B26&color=%23041B26)](https://stackblitz.com/github/stylescape/pack.gl/tree/main?file=src%2Findex.html)
 
 </div>
----
 
 <div>
     <img align="right" src="https://raw.githubusercontent.com/stylescape/brand/master/src/logo/pack.gl.png" width="96" alt="pack.gl logo">
     <h1 align="left">pack.gl</h1>
-    <h3 align="left">Package Builder</h3>
+    <h3 align="left">Package Pipeline Manager</h3>
 </div>
 
 ---
