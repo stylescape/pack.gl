@@ -12,18 +12,6 @@
     <h3 align="left">Package Pipeline Manager</h3>
 </div>
 
----
-
-<img align="right" width="50%" src="https://raw.githubusercontent.com/stylescape/pack.gl/main/res/pack.gl.png" alt="pack.gl cover">
-
-### Contents
-
-- [Introduction](#introduction)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Colophon](#colophon)
-
 <br clear="both"/>
 
 ---
