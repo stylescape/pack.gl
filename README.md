@@ -1,10 +1,10 @@
 <div align="right">
 
 [![GitHub License](https://img.shields.io/github/license/stylescape/pack.gl?style=flat-square&logo=readthedocs&logoColor=FFFFFF&label=&labelColor=%23041B26&color=%23041B26&link=LICENSE)](https://github.com/stylescape/pack.gl/blob/main/LICENSE)
-[![devContainer](https://img.shields.io/badge/Container-Remote?style=flat-square&logo=visualstudiocode&logoColor=%23FFFFFF&label=Remote&labelColor=%23041B26&color=%23041B26)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/stylescape/pack.gl)
+[![devContainer](https://img.shields.io/badge/devContainer-23041B26?style=flat-square&logo=Docker&logoColor=%23FFFFFF&labelColor=%23041B26&color=%23041B26)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/stylescape/pack.gl)
+[![StackBlitz](https://img.shields.io/badge/StackBlitz-23041B26?style=flat-square&logo=StackBlitz&logoColor=%23FFFFFF&labelColor=%23041B26&color=%23041B26)](https://stackblitz.com/github/stylescape/pack.gl/tree/main?file=src%2Findex.html)
 
 </div>
-
 ---
 
 <div>
