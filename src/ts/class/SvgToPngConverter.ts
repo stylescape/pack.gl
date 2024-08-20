@@ -1,28 +1,14 @@
 // class/SvgToPngConverter.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
 // ============================================================================
 
-import sharp from 'sharp';
-import { JSDOM } from 'jsdom';
-import fs from 'fs';
-import path from 'path';
+import sharp from "sharp";
+import { JSDOM } from "jsdom";
+import fs from "fs";
+import path from "path";
 
 
 // ============================================================================
@@ -61,18 +47,18 @@ class SvgToPngConverter {
 
             // Create a JSDOM instance to parse the SVG
             const dom = new JSDOM(svgContent);
-            const svgElement = dom.window.document.querySelector('svg');
+            const svgElement = dom.window.document.querySelector("svg");
 
             if (!svgElement) {
-                throw new Error('Invalid SVG content');
+                throw new Error("Invalid SVG content");
             }
 
             if (width) {
-                svgElement.setAttribute('width', width.toString());
+                svgElement.setAttribute("width", width.toString());
             }
 
             if (height) {
-                svgElement.setAttribute('height', height.toString());
+                svgElement.setAttribute("height", height.toString());
             }
 
             // Serialize the updated SVG content
@@ -106,12 +92,12 @@ export default SvgToPngConverter;
 // Example
 // ============================================================================
 
-// import SvgToPngConverter from './SvgToPngConverter';
+// import SvgToPngConverter from "./SvgToPngConverter";
 
 // const converter = new SvgToPngConverter();
-// const svgContent = '<svg height="100" width="100">...</svg>';
-// const outputPath = './output/image.png';
+// const svgContent = "<svg height="100" width="100">...</svg>";
+// const outputPath = "./output/image.png";
 
 // converter.convert(svgContent, outputPath, 100, 100)
-//     .then(() => console.log('SVG has been successfully converted to PNG.'))
-//     .catch(error => console.error('Failed to convert SVG to PNG:', error));
+//     .then(() => console.log("SVG has been successfully converted to PNG."))
+//     .catch(error => console.error("Failed to convert SVG to PNG:", error));
