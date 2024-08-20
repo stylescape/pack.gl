@@ -1,27 +1,13 @@
 // class/SvgSpriteGenerator.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
 // ============================================================================
 
-import svgSprite from 'svg-sprite';
-import fs from 'fs';
-import path from 'path';
+import svgSprite from "svg-sprite";
+import fs from "fs";
+import path from "path";
 import svgspriteConfig from "../config/svgsprite.config.js"
 
 
@@ -78,9 +64,9 @@ class SvgSpriteGenerator {
             const sprite = new svgSprite(this.config);
 
             files.forEach(file => {
-                if (path.extname(file) === '.svg') {
+                if (path.extname(file) === ".svg") {
                     const svgPath = path.resolve(sourceDir, file);
-                    const content = fs.readFileSync(svgPath, 'utf8');
+                    const content = fs.readFileSync(svgPath, "utf8");
                     sprite.add(svgPath, null, content);
                 }
             });
@@ -109,7 +95,7 @@ class SvgSpriteGenerator {
             });
 
         } catch (err) {
-            console.error('Error generating SVG sprite:', err);
+            console.error("Error generating SVG sprite:", err);
         }
     }
 
@@ -128,12 +114,12 @@ export default SvgSpriteGenerator;
 // ============================================================================
 
 
-// import SvgSpriteGenerator from './SvgSpriteGenerator';
+// import SvgSpriteGenerator from "./SvgSpriteGenerator";
 
 // const spriteGenerator = new SvgSpriteGenerator();
-// const sourceDirectory = 'path/to/source/svg/files';
-// const outputDirectory = 'path/to/output/sprites';
+// const sourceDirectory = "path/to/source/svg/files";
+// const outputDirectory = "path/to/output/sprites";
 
 // spriteGenerator.generateSprite(sourceDirectory, outputDirectory)
-//     .then(() => console.log('SVG sprite has been successfully generated.'))
-//     .catch(error => console.error('Failed to generate SVG sprite:', error));
+//     .then(() => console.log("SVG sprite has been successfully generated."))
+//     .catch(error => console.error("Failed to generate SVG sprite:", error));
