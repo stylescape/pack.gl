@@ -1,25 +1,11 @@
 // class/SvgReader.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
 // ============================================================================
 
-import { promises as fs } from 'fs';
+import { promises as fs } from "fs";
 
 
 // ============================================================================
@@ -45,7 +31,7 @@ class SvgReader {
      */
     async readSVG(filePath: string): Promise<string> {
         try {
-            const data = await fs.readFile(filePath, 'utf-8');
+            const data = await fs.readFile(filePath, "utf-8");
             return data;
         } catch (error) {
             console.error(`Error reading SVG file: ${filePath}`, error);
@@ -67,13 +53,13 @@ export default SvgReader;
 // Example
 // ============================================================================
 
-// import SvgReader from './SvgReader';
+// import SvgReader from "./SvgReader";
 
 // const reader = new SvgReader();
-// reader.readSVG('path/to/your/svg/file.svg')
+// reader.readSVG("path/to/your/svg/file.svg")
 //     .then(content => {
-//         console.log('SVG Content:', content);
+//         console.log("SVG Content:", content);
 //     })
 //     .catch(error => {
-//         console.error('Failed to read SVG:', error);
+//         console.error("Failed to read SVG:", error);
 //     });
