@@ -1,19 +1,5 @@
 // class/JSONLoader.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
@@ -28,15 +14,16 @@ import path from 'path';
 // ============================================================================
 
 /**
- * Provides functionality to load and manipulate JSON data from files and directories.
- * This class can be used in scenarios where configurations, data storage, or inter-process
- * communication involves JSON files.
+ * Provides functionality to load and manipulate JSON data from files and
+ * directories. This class can be used in scenarios where configurations,
+ * data storage, or inter-process communication involves JSON files.
  */
 class JSONLoader {
 
     /**
-     * Asynchronously loads JSON data from a file and returns it as a typed object.
-     * This method parses the JSON file content into a TypeScript type or interface.
+     * Asynchronously loads JSON data from a file and returns it as a typed
+     * object. This method parses the JSON file content into a TypeScript
+     * type or interface.
      *
      * @param filePath The path to the JSON file.
      * @returns A promise that resolves to an object containing the parsed JSON data.
@@ -53,8 +40,9 @@ class JSONLoader {
     }
 
     /**
-     * Asynchronously loads all JSON files from a specified directory and returns an array of typed objects.
-     * Useful for loading batches of configuration files or similar datasets.
+     * Asynchronously loads all JSON files from a specified directory and
+     * returns an array of typed objects. Useful for loading batches of
+     * configuration files or similar datasets.
      *
      * @param dirPath The path to the directory containing JSON files.
      * @returns A promise that resolves to an array of objects containing the parsed JSON data.
@@ -79,8 +67,9 @@ class JSONLoader {
     }
 
     /**
-     * Merges an array of objects into a single object. This method is particularly useful when combining
-     * settings or configurations from multiple JSON files into a single configuration object.
+     * Merges an array of objects into a single object. This method is
+     * particularly useful when combining settings or configurations from
+     * multiple JSON files into a single configuration object.
      *
      * @param objects An array of objects to merge.
      * @returns A single object containing all properties from the input objects.
