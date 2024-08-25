@@ -1,26 +1,12 @@
 // class/DirectoryScanner.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
 // ============================================================================
 
-import fs from 'fs/promises';
-import path from 'path';
+import fs from "fs/promises";
+import path from "path";
 
 
 // ============================================================================
@@ -28,15 +14,16 @@ import path from 'path';
 // ============================================================================
 
 /**
- * Provides methods to scan directories and list contents, with the option to include 
- * subdirectories recursively. Useful for applications that need to process files dynamically 
- * or monitor directory changes.
+ * Provides methods to scan directories and list contents, with the option to
+ * include subdirectories recursively. Useful for applications that need to
+ * process files dynamically or monitor directory changes.
  */
 class DirectoryScanner {
 
     /**
-     * Scans the specified directory and returns an array of file paths. It can scan 
-     * directories recursively to retrieve paths of all files within the directory tree.
+     * Scans the specified directory and returns an array of file paths. It
+     * can scan directories recursively to retrieve paths of all files within
+     * the directory tree.
      *
      * @param dirPath The path to the directory to be scanned.
      * @param recursive Optional. If set to true, the method scans all subdirectories recursively.
@@ -81,13 +68,13 @@ export default DirectoryScanner;
 // Example
 // ============================================================================
 
-// import DirectoryScanner from './DirectoryScanner';
+// import DirectoryScanner from "./DirectoryScanner";
 
 // const scanner = new DirectoryScanner();
-// scanner.scanDirectory('./path/to/directory', true)
+// scanner.scanDirectory("./path/to/directory", true)
 //     .then(files => {
-//         console.log('Scanned files:', files);
+//         console.log("Scanned files:", files);
 //     })
 //     .catch(error => {
-//         console.error('Failed to scan directory:', error);
+//         console.error("Failed to scan directory:", error);
 //     });
