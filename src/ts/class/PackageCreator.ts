@@ -1,19 +1,5 @@
 // class/PackageCreator.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
@@ -29,8 +15,9 @@ import packageConfig from "../config/package.config.js"
 // ============================================================================
 
 /**
- * Provides functionality to programmatically create and write package.json files using a flexible configuration.
- * This class is ideal for automating the setup of Node.js projects or managing configurations dynamically.
+ * Provides functionality to programmatically create and write package.json
+ * files using a flexible configuration. This class is ideal for automating
+ * the setup of Node.js projects or managing configurations dynamically.
  */
  class PackageCreator {
 
@@ -47,7 +34,8 @@ import packageConfig from "../config/package.config.js"
     private static defaultConfig: any = packageConfig;
  
     /**
-     * Constructs an instance with merged default and custom configuration settings for package.json.
+     * Constructs an instance with merged default and custom configuration
+     * settings for package.json.
      * 
      * @param customConfig Custom settings to override or augment the default package configuration.
      */
@@ -76,8 +64,9 @@ import packageConfig from "../config/package.config.js"
      }
     
     /**
-     * Creates a package.json file with the stored configuration in the specified directory.
-     * If the directory does not exist, it will be created.
+     * Creates a package.json file with the stored configuration in the
+     * specified directory. If the directory does not exist, it will be
+     * created.
      * 
      * @param outputDir The directory where the package.json will be created.
      * @returns A promise that resolves when the file has been successfully written.
