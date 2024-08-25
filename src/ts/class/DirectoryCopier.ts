@@ -1,26 +1,12 @@
 // class/DirectoryCopier.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
 // ============================================================================
 
-import path from 'path';
-import { promises as fsPromises } from 'fs';
+import path from "path";
+import { promises as fsPromises } from "fs";
 
 
 // ============================================================================
@@ -48,9 +34,11 @@ class DirectoryCopier {
             const resolvedSrcDir = path.resolve(srcDir);
             const resolvedDestDir = path.resolve(destDir);
             await this.recursiveCopy(resolvedSrcDir, resolvedDestDir);
-            console.log(`Files copied from ${resolvedSrcDir} to ${resolvedDestDir}`);
+            console.log(
+                `Files copied from ${resolvedSrcDir} to ${resolvedDestDir}`
+            );
         } catch (error) {
-            console.error('Error copying files:', error);
+            console.error("Error copying files:", error);
             throw error;
         }
     }
@@ -66,7 +54,10 @@ class DirectoryCopier {
      */
     async recursiveCopy(srcDir: string, destDir: string): Promise<void> {
         await fsPromises.mkdir(destDir, { recursive: true });
-        const entries = await fsPromises.readdir(srcDir, { withFileTypes: true });
+        const entries = await fsPromises.readdir(
+            srcDir,
+            { withFileTypes: true }
+        );
 
         for (let entry of entries) {
             const srcPath = path.join(srcDir, entry.name);
@@ -92,10 +83,10 @@ export default DirectoryCopier;
 // Example
 // ============================================================================
 
-// import DirectoryCopier from './DirectoryCopier';
+// import DirectoryCopier from "./DirectoryCopier";
 
 // const copier = new DirectoryCopier();
 
-// copier.copyFiles('./path/to/source', './path/to/destination')
-//     .then(() => console.log('Copying completed successfully.'))
-//     .catch(error => console.error('Copying failed:', error));
+// copier.copyFiles("./path/to/source", "./path/to/destination")
+//     .then(() => console.log("Copying completed successfully."))
+//     .catch(error => console.error("Copying failed:", error));
