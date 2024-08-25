@@ -1,26 +1,12 @@
 // class/SassDocGenerator.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Imports
 // ============================================================================
 
-import * as sassdoc from 'sassdoc';
-import path from 'path';
+import * as sassdoc from "sassdoc";
+import path from "path";
 
 
 // ============================================================================
@@ -59,7 +45,7 @@ class SassDocGenerator {
             console.log(`SASS documentation successfully generated at: ${config.dest}`);
         } catch (error) {
             console.error(
-                'An error occurred while generating SASS documentation:',
+                "An error occurred while generating SASS documentation:",
                 error
         );
             throw error;
@@ -79,14 +65,14 @@ export default SassDocGenerator;
 // Example Usage
 // ============================================================================
 
-// import SassDocGenerator from './SassDocGenerator';
+// import SassDocGenerator from "./SassDocGenerator";
 
 // const sassDocGenerator = new SassDocGenerator();
 
-// sassDocGenerator.generateDocumentation(['src/styles'], 'docs/sass')
+// sassDocGenerator.generateDocumentation(["src/styles"], "docs/sass")
 //     .then(() => {
-//         console.log('Documentation generation complete.');
+//         console.log("Documentation generation complete.");
 //     })
 //     .catch(error => {
-//         console.error('Error generating documentation:', error);
+//         console.error("Error generating documentation:", error);
 //     });
