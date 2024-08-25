@@ -1,18 +1,5 @@
 // class/StylizedLogger.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
 
 // ============================================================================
@@ -27,8 +14,9 @@
 class StylizedLogger {
 
     /**
-     * A utility class for stylized console logging with foreground and background colors.
-     * This class utilizes ANSI escape codes to provide colored logging functionality.
+     * A utility class for stylized console logging with foreground and
+     * background colors. This class utilizes ANSI escape codes to provide
+     * colored logging functionality.
      */
     private styles = {
         reset: "\x1b[0m",
@@ -58,12 +46,12 @@ class StylizedLogger {
      * Logs a message with specified foreground and background colors.
      * @param message The message to log.
      * @param fgColor The foreground color, selected from predefined colors.
-     * @param bgColor The background color, selected from predefined colors. Defaults to 'black'.
+     * @param bgColor The background color, selected from predefined colors. Defaults to "black".
      */
     log(
         message: string,
         fgColor: keyof typeof this.styles.fg,
-        bgColor: keyof typeof this.styles.bg = 'black'
+        bgColor: keyof typeof this.styles.bg = "black"
     ): void {
         console.log(
             `${this.styles.fg[fgColor]}${this.styles.bg[bgColor]}%s${this.styles.reset}`,
@@ -76,7 +64,7 @@ class StylizedLogger {
      * @param message The message to log.
      */
     header(message: string): void {
-        this.log(message, 'white', 'blue');
+        this.log(message, "white", "blue");
     }
 
     /**
@@ -84,7 +72,7 @@ class StylizedLogger {
      * @param message The message to log.
      */
     error(message: string): void {
-        this.log(message, 'white', 'red');
+        this.log(message, "white", "red");
     }
 
     /**
@@ -92,7 +80,7 @@ class StylizedLogger {
      * @param message The message to log.
      */
     body(message: string): void {
-        this.log(message, 'black', 'white');
+        this.log(message, "black", "white");
     }
 }
 
@@ -108,9 +96,9 @@ export default StylizedLogger;
 // Example
 // ============================================================================
 
-// import StylizedLogger from './StylizedLogger';
+// import StylizedLogger from "./StylizedLogger";
 
 // const logger = new StylizedLogger();
-// logger.header('Header: This is a header');
-// logger.error('Error: Something went wrong');
-// logger.body('Body: Here is some detailed information');
+// logger.header("Header: This is a header");
+// logger.error("Error: Something went wrong");
+// logger.body("Body: Here is some detailed information");
