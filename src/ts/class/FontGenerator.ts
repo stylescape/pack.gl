@@ -1,19 +1,5 @@
 // class/FontGenerator.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
@@ -25,7 +11,7 @@ import {
     // OtherAssetType,
     RunnerOptions,
     // RunnerOptionalOptions,
-} from 'fantasticon';
+} from "fantasticon";
 import fantasticonConfig from "../config/fantasticon.config.js"
 
 
@@ -34,9 +20,10 @@ import fantasticonConfig from "../config/fantasticon.config.js"
 // ============================================================================
 
 /**
- * Handles the generation of font files from SVG icons or other vector graphic formats.
- * This class utilizes the 'fantasticon' library to convert a directory of SVG files into various font formats.
- * Users can customize the font generation process via configuration options.
+ * Handles the generation of font files from SVG icons or other vector graphic
+ * formats. This class utilizes the "fantasticon" library to convert a
+ * directory of SVG files into various font formats. Users can customize the
+ * font generation process via configuration options.
  */
 class FontGenerator {
 
@@ -97,9 +84,9 @@ class FontGenerator {
 
         try {
             await generateFonts(config);
-            console.log('Fonts generated successfully.');
+            console.log("Fonts generated successfully.");
         } catch (error) {
-            console.error('Error generating fonts:', error);
+            console.error("Error generating fonts:", error);
         }
 
     }
@@ -117,12 +104,12 @@ export default FontGenerator;
 // Example
 // ============================================================================
 
-// import FontGenerator from './FontGenerator';
+// import FontGenerator from "./FontGenerator";
 
 // const fontGenerator = new FontGenerator();
-// const sourceDirectory = './path/to/svg/icons';
-// const outputDirectory = './path/to/output/fonts';
+// const sourceDirectory = "./path/to/svg/icons";
+// const outputDirectory = "./path/to/output/fonts";
 
 // fontGenerator.generateFonts(sourceDirectory, outputDirectory)
-//     .then(() => console.log('Font generation completed successfully.'))
-//     .catch(error => console.error('Failed to generate fonts:', error));
+//     .then(() => console.log("Font generation completed successfully."))
+//     .catch(error => console.error("Failed to generate fonts:", error));
