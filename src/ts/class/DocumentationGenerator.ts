@@ -1,26 +1,12 @@
 // class/DocumentationGenerator.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
 // ============================================================================
 
-import { exec } from 'child_process';
-import util from 'util';
+import { exec } from "child_process";
+import util from "util";
 
 const execAsync = util.promisify(exec);
 
@@ -40,12 +26,12 @@ class DocumentationGenerator {
     private outputPath: string;
     private generatorCommand: string;
 
-        /**
+    /**
      * Initializes a new instance of the DocumentationGenerator.
      * 
      * @param sourcePath Path to the source files for which documentation should be generated.
      * @param outputPath Path where the generated documentation will be placed.
-     * @param generatorCommand The command-line tool used for generating documentation (e.g., 'jsdoc').
+     * @param generatorCommand The command-line tool used for generating documentation (e.g., "jsdoc").
      */
     constructor(sourcePath: string, outputPath: string, generatorCommand: string) {
         this.sourcePath = sourcePath;
@@ -73,11 +59,11 @@ class DocumentationGenerator {
             }
 
             console.log(stdout);
-            console.log('Documentation generated successfully.');
+            console.log("Documentation generated successfully.");
 
             // Here, you can add any post-generation logic if necessary
         } catch (error) {
-            console.error('Error occurred while generating documentation:', error);
+            console.error("Error occurred while generating documentation:", error);
             throw error;
         }
     }
@@ -95,14 +81,14 @@ export default DocumentationGenerator;
 // Example
 // ============================================================================
 
-// import DocumentationGenerator from './DocumentationGenerator';
+// import DocumentationGenerator from "./DocumentationGenerator";
 
-// const sourcePath = './src';
-// const outputPath = './docs';
-// const generatorCommand = 'jsdoc'; // Ensure JSDoc is installed and available in your environment
+// const sourcePath = "./src";
+// const outputPath = "./docs";
+// const generatorCommand = "jsdoc"; // Ensure JSDoc is installed and available in your environment
 
 // const docGenerator = new DocumentationGenerator(sourcePath, outputPath, generatorCommand);
 
 // docGenerator.generate()
-//     .then(() => console.log('Documentation generation completed.'))
+//     .then(() => console.log("Documentation generation completed."))
 //     .catch(error => console.error(error));
