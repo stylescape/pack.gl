@@ -1,27 +1,13 @@
 // class/TemplateWriter.ts
 
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
 // ============================================================================
 
-import fs from 'fs/promises';
-import path from 'path';
-import nunjucks from 'nunjucks';
+import fs from "fs/promises";
+import path from "path";
+import nunjucks from "nunjucks";
 import nunjucksConfig from "../config/nunjucks.config.js"
 
 
@@ -85,7 +71,7 @@ class TemplateWriter {
         } catch (error) {
             console.error(`Error generating template: ${error}`);
             // throw error;
-            throw new Error('Template generation failed');
+            throw new Error("Template generation failed");
         }
     }
 
@@ -102,10 +88,10 @@ class TemplateWriter {
             // Ensure the directory exists
             await fs.mkdir(dir, { recursive: true });
             // Write the file
-            await fs.writeFile(outputFile, content, 'utf-8');
+            await fs.writeFile(outputFile, content, "utf-8");
         } catch (error) {
             console.error(`Error writing to file: ${error}`);
-            throw new Error('File writing failed');
+            throw new Error("File writing failed");
         }
     }
 
@@ -124,9 +110,9 @@ export default TemplateWriter;
 // ============================================================================
 
 
-// import TemplateWriter from './TemplateWriter';
+// import TemplateWriter from "./TemplateWriter";
 
-// const writer = new TemplateWriter('./path/to/templates', { name: 'John Doe' });
-// writer.generateToFile('emailTemplate.njk', './output/email.html')
-//     .then(() => console.log('Email template has been successfully generated and saved.'))
-//     .catch(error => console.error('Failed to generate email template:', error));
+// const writer = new TemplateWriter("./path/to/templates", { name: "John Doe" });
+// writer.generateToFile("emailTemplate.njk", "./output/email.html")
+//     .then(() => console.log("Email template has been successfully generated and saved."))
+//     .catch(error => console.error("Failed to generate email template:", error));
