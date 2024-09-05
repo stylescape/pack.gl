@@ -67,6 +67,13 @@ const packageConfig = {
         "ts/**/*.ts",
         "!.DS_Store"
     ],
+    exports: {
+        ".": {
+            "sass": "./src/scss/index.scss",
+            "import": "./dist/js/index.mjs",
+            "default": "./dist/js/index.js"
+        }
+    }
     // repository: {
     //     type: pack.repository.type,
     //     url: pack.repository.url,
