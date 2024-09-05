@@ -56,6 +56,7 @@ import packageConfig from "../config/package.config.js"
             repository: customConfig.repository,
             funding: customConfig.funding,
             dependencies: customConfig.dependencies,
+            exports: customConfig.exports,
         }
          this.config = {
              ...PackageCreator.defaultConfig,
