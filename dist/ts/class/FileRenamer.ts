@@ -1,26 +1,12 @@
 // class/FileRenamer.ts
 
-// Copyright 2023 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
 // ============================================================================
 
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 
 // ============================================================================
@@ -28,22 +14,29 @@ import path from 'path';
 // ============================================================================
 
 /**
- * A class for renaming files.
+ * Provides functionality for renaming files within the file system. This
+ * class ensures that file renaming operations are handled smoothly and
+ * includes comprehensive error management to address
+ * potential issues such as file accessibility or conflicts.
  */
  class FileRenamer {
 
     /**
-     * Renames a file from the source path to the target path.
-     * @param srcPath The current path of the file.
-     * @param targetPath The new path of the file after renaming.
-     * @returns Promise<void>
+     * Renames a file from its current path to a new path. This operation is
+     * atomic on most file systems, which means it is either completed fully
+     * or not done at all, preventing partial updates.
+     * 
+     * @param srcPath The current path of the file to be renamed.
+     * @param targetPath The new path where the file will be renamed.
+     * @returns A Promise that resolves when the file has been successfully renamed, or rejects if an error occurs.
+     * @throws {Error} Errors could include "ENOENT" if the source file does not exist, or "EACCES" if permission is denied.
      */
-     async renameFile(srcPath: string, targetPath: string): Promise<void> {
+    async renameFile(srcPath: string, targetPath: string): Promise<void> {
         try {
             await fs.promises.rename(srcPath, targetPath);
             console.log(`File renamed from ${srcPath} to ${targetPath}`);
         } catch (error) {
-            console.error('Error renaming file:', error);
+            console.error("Error renaming file:", error);
             throw error;
         }
     }
@@ -56,3 +49,19 @@ import path from 'path';
 // ============================================================================
 
 export default FileRenamer;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+// import FileRenamer from "./FileRenamer";
+
+// const renamer = new FileRenamer();
+// const srcPath = "./path/to/original/file.txt";
+// const targetPath = "./path/to/new/file.txt";
+
+// renamer.renameFile(srcPath, targetPath)
+//     .then(() => console.log("File successfully renamed."))
+//     .catch(error => console.error("Failed to rename file:", error));
+

@@ -1,73 +1,57 @@
 // class/StyleProcessor.ts
 
-// Copyright 2023 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
 // ============================================================================
 
-// import * as sass from 'sass';
-// import postcss from 'postcss';
-// import fs from 'fs';
-// import { promises as fsPromises } from 'fs';
-// import path from 'path';
+import * as sass from "sass";
+import postcss from "postcss";
+import { promises as fs } from "fs";
+import path from "path";
 
-import * as sass from 'sass';
-import postcss from 'postcss';
-import { promises as fs } from 'fs';
-import path from 'path';
-
-
-import postcssConfigExpanded from '../config/postcss.config.expanded.js';
-import postcssConfigCompressed from '../config/postcss.config.compressed.js';
+import postcssConfigExpanded from "../config/postcss.config.expanded.js";
+import postcssConfigCompressed from "../config/postcss.config.compressed.js";
 
 
 // ============================================================================
 // Classes
 // ============================================================================
 
-
+/**
+ * Class responsible for processing styles, including compiling SCSS and
+ * applying PostCSS transformations. It can be configured to output either
+ * expanded or compressed CSS, making it flexible for different environments.
+ */
 class StyleProcessor {
+
     /**
      * Processes the given CSS with PostCSS based on the provided style option.
      * @param css The CSS string to process.
-     * @param styleOption The style option, either 'expanded' or 'compressed'.
+     * @param styleOption The style option, either "expanded" or "compressed".
      * @returns Processed CSS string.
      */
-    async processPostCSS(css: string, styleOption: 'expanded' | 'compressed') {
-        const config = styleOption === 'expanded' ? postcssConfigExpanded : postcssConfigCompressed;
+    async processPostCSS(css: string, styleOption: "expanded" | "compressed") {
+        const config = styleOption === "expanded" ? postcssConfigExpanded : postcssConfigCompressed;
         const result = await postcss(config.plugins).process(css, { from: undefined, map: { inline: false } });
         return result.css;
     }
 
     /**
      * Ensures that the given directory exists. Creates it if it does not exist.
-     * @param dirPath - The path of the directory to check and create.
+     * @param dirPath The path of the directory to check and create.
      */
-     private async ensureDirectoryExists(dirPath: string): Promise<void> {
+    private async ensureDirectoryExists(dirPath: string): Promise<void> {
         try {
             await fs.mkdir(dirPath, { recursive: true });
         } catch (error) {
             if (error instanceof Error) {
                 const nodeError = error as NodeJS.ErrnoException;
-                if (nodeError.code !== 'EEXIST') {
-                    throw nodeError; // Rethrow if it's not a 'directory exists' error
+                if (nodeError.code !== "EEXIST") {
+                    throw nodeError; // Rethrow if it"s not a "directory exists" error
                 }
             } else {
-                throw error; // Rethrow if it's not an Error instance
+                throw error; // Rethrow if it"s not an Error instance
             }
         }
     }
@@ -76,9 +60,9 @@ class StyleProcessor {
      * Compiles SCSS to CSS and processes it using PostCSS.
      * @param inputFile Path to the input SCSS file.
      * @param outputFile Path to the output CSS file.
-     * @param styleOption Style option for the output.
+     * @param styleOption Style option for the output, either "expanded" or "compressed".
      */
-    async processStyles(inputFile: string, outputFile: string, styleOption: 'expanded' | 'compressed') {
+    async processStyles(inputFile: string, outputFile: string, styleOption: "expanded" | "compressed") {
         try {
             // Ensure the output directory exists
             const outputDir = path.dirname(outputFile);
@@ -91,7 +75,7 @@ class StyleProcessor {
             const processedCss = await this.processPostCSS(result.css, styleOption);
 
             // Write the processed CSS to a file
-            await fs.writeFile(outputFile, processedCss, 'utf-8');
+            await fs.writeFile(outputFile, processedCss, "utf-8");
 
             // Optionally handle source maps
             // ...
@@ -113,14 +97,14 @@ class StyleProcessor {
 //     /**
 //      * Processes the given CSS with PostCSS based on the provided style option.
 //      * @param css The CSS string to process.
-//      * @param styleOption The style option, either 'expanded' or 'compressed'.
+//      * @param styleOption The style option, either "expanded" or "compressed".
 //      * @returns Processed CSS string.
 //      */
 //     async processPostCSS(
 //         css: string,
-//         styleOption: 'expanded' | 'compressed'
+//         styleOption: "expanded" | "compressed"
 //     ) {
-//         const config = styleOption === 'expanded' ? postcssConfigExpanded : postcssConfigCompressed;
+//         const config = styleOption === "expanded" ? postcssConfigExpanded : postcssConfigCompressed;
 //         return postcss(config.plugins).process(css, { from: undefined, map: { inline: false } });
 //     }
 
@@ -132,7 +116,7 @@ class StyleProcessor {
 //         try {
 //             await fsPromises.mkdir(dirPath, { recursive: true });
 //         } catch (error) {
-//             if (error.code !== 'EEXIST') {
+//             if (error.code !== "EEXIST") {
 //                 throw error;
 //             }
 //         }
@@ -147,7 +131,7 @@ class StyleProcessor {
 //     async processStyles(
 //         inputFile: string,
 //         outputFile: fs.PathOrFileDescriptor,
-//         styleOption: 'expanded' | 'compressed'
+//         styleOption: "expanded" | "compressed"
 //     ) {
 //         try {
 
@@ -186,3 +170,18 @@ class StyleProcessor {
 // ============================================================================
 
 export default StyleProcessor;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+// import StyleProcessor from "./StyleProcessor";
+
+// const styleProcessor = new StyleProcessor();
+// const inputFile = "./src/styles/main.scss";
+// const outputFile = "./dist/styles/main.css";
+
+// styleProcessor.processStyles(inputFile, outputFile, "compressed")
+//     .then(() => console.log("Styles processed successfully."))
+//     .catch(error => console.error("Failed to process styles:", error));

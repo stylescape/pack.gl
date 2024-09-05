@@ -1,6 +1,6 @@
 // config/fantasticon.config.ts
 
-// Copyright 2023 Scape Agency BV
+// Copyright 2024 Scape Agency BV
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,14 +19,24 @@
 // Import
 // ============================================================================
 
+import {
+    // generateFonts,
+    FontAssetType,
+    OtherAssetType,
+    // RunnerOptions,
+    // RunnerOptionalOptions,
+} from 'fantasticon';
 
-import { generateFonts, FontAssetType, OtherAssetType, RunnerOptions,  } from 'fantasticon';
-import RunnerOptionalOptions from 'fantasticon';
 
+// ============================================================================
+// Constants
+// ============================================================================
 
+// Configuration for the Fantasticon tool to generate icon fonts from SVG files.
 const fantasticonConfig: any = {
 
     // RunnerOptionalOptions
+    // Basic naming and type setup for font generation
     name: 'icon',
     fontTypes: [
         FontAssetType.TTF,      // TTF = "ttf"
@@ -105,6 +115,9 @@ const fantasticonConfig: any = {
 };
 
 
+// ============================================================================
+// Export
+// ============================================================================
 
 export default fantasticonConfig;
 

@@ -1,6 +1,6 @@
 // config/package.config.ts
 
-// Copyright 2023 Scape Agency BV
+// Copyright 2024 Scape Agency BV
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,10 @@
 // Constants
 // ============================================================================
 
+/**
+ * Configuration object for package.json properties, used to define metadata,
+ * file inclusions, and other necessary project configurations.
+ */
 const packageConfig = {
     name: "",
     version: "",
@@ -63,6 +67,13 @@ const packageConfig = {
         "ts/**/*.ts",
         "!.DS_Store"
     ],
+    exports: {
+        ".": {
+            "sass": "./src/scss/index.scss",
+            "import": "./dist/js/index.mjs",
+            "default": "./dist/js/index.js"
+        }
+    }
     // repository: {
     //     type: pack.repository.type,
     //     url: pack.repository.url,

@@ -1,19 +1,5 @@
 // class/SvgPackager.ts
 
-// Copyright 2023 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
@@ -31,9 +17,9 @@ import { loadConfig } from 'svgo';
 // ============================================================================
 
 /**
- * Class for packaging SVG files.
- * This class reads SVG files from a specified directory, optimizes them,
- * and creates corresponding TypeScript files.
+ * Provides functionality to optimize and package SVG files into various formats.
+ * It reads SVG files from a specified directory, optimizes them using SVGO,
+ * and then outputs them as TypeScript files and JSON indexes.
  */
 class SvgPackager {
 
@@ -46,7 +32,9 @@ class SvgPackager {
     /**
      * Processes all SVG files in a given directory.
      * @param inputDirectory The directory containing SVG files to process.
-     * @param outputDirectory The directory where optimized SVGs will be output as TypeScript files.
+     * @param outputDirectory The directory where optimized SVGs will be output.
+     * @param tsOutputDirectory The directory where TypeScript files will be saved.
+     * @param jsonOutputDirectory The directory where a JSON index of icons will be saved.
      */
     public async processSvgFiles(
         inputDirectory: string,
@@ -58,15 +46,15 @@ class SvgPackager {
         const iconNames: string[] = [];
 
         try {
-            console.log(`Processing directory: ${inputDirectory}`);
+            // console.log(`Processing directory: ${inputDirectory}`);
 
             const svgFiles = glob.sync(`${inputDirectory}/**/*.svg`);
 
             for (const file of svgFiles) {
-                console.log(`Processing file: ${file}`);
+                // console.log(`Processing file: ${file}`);
                 const iconName = this.sanitizeFileName(path.basename(file, '.svg'));
                 iconNames.push(iconName);
-                console.log(`Processing icon: ${iconName}`);
+                // console.log(`Processing icon: ${iconName}`);
                 const svgContent = await this.readSvgFile(file);
                 const optimizedSvg = await this.optimizeSvg(svgContent);
                 // const optimizedSvg = await this.optimizeSvg(file, svgContent);
@@ -253,3 +241,15 @@ class SvgPackager {
 // ============================================================================
 
 export default SvgPackager;
+
+
+// ============================================================================
+// Example
+// ============================================================================
+
+// import SvgPackager from './SvgPackager';
+
+// const packager = new SvgPackager('./config/svgo.config.js');
+// packager.processSvgFiles('./src/icons', './dist/icons', './dist/ts', './dist')
+//     .then(() => console.log('SVG packaging completed.'))
+//     .catch(error => console.error('Error packaging SVGs:', error));

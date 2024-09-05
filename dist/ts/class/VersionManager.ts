@@ -1,27 +1,13 @@
 // class/VersionManager.ts
 
-// Copyright 2023 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 
 // ============================================================================
 // Import
 // ============================================================================
 
-import semver from 'semver';
-import { exec } from 'child_process';
-import util from 'util';
+import semver from "semver";
+import { exec } from "child_process";
+import util from "util";
 
 const execAsync = util.promisify(exec);
 
@@ -30,38 +16,62 @@ const execAsync = util.promisify(exec);
 // Classes
 // ============================================================================
 
+/**
+ * Manages software versioning using semantic versioning principles. Provides methods
+ * to update the version, generate changelogs, and manage version tags in source control.
+ */
 class VersionManager {
+
     private currentVersion: string;
 
+    /**
+     * Initializes the version manager with a valid semantic version.
+     * @param {string} currentVersion - The current semantic version.
+     * @throws {Error} If the initial version is not a valid semantic version.
+     */
     constructor(currentVersion: string) {
         if (!semver.valid(currentVersion)) {
-            throw new Error('Invalid initial version');
+            throw new Error("Invalid initial version");
         }
         this.currentVersion = currentVersion;
     }
 
+    /**
+     * Updates the current version based on the specified release type.
+     * @param {semver.ReleaseType} releaseType - The type of version update (major, minor, patch).
+     * @returns {Promise<string>} The new version.
+     * @throws {Error} If the version increment fails.
+     */
     async updateVersion(releaseType: semver.ReleaseType): Promise<string> {
         const newVersion = semver.inc(this.currentVersion, releaseType);
         if (!newVersion) {
-            throw new Error('Version increment failed');
+            throw new Error("Version increment failed");
         }
         this.currentVersion = newVersion;
         return newVersion;
     }
 
+    /**
+     * Generates a changelog based on commits since the last version.
+     * Placeholder function to be implemented with actual logic.
+     */
     async generateChangelog() {
         // Implement changelog generation logic
-        // This could be as simple as running a script or using a tool like 'conventional-changelog'
-        console.log('Changelog generation logic goes here');
+        // This could be as simple as running a script or using a tool like "conventional-changelog"
+        console.log("Changelog generation logic goes here");
     }
 
+    /**
+     * Creates a new Git tag for the current version and pushes it to the remote repository.
+     * @throws {Error} If creating or pushing the tag fails.
+     */
     async createGitTag() {
         try {
             await execAsync(`git tag v${this.currentVersion}`);
-            await execAsync('git push --tags');
+            await execAsync("git push --tags");
             console.log(`Tag v${this.currentVersion} created and pushed`);
         } catch (error) {
-            console.error('Error creating Git tag:', error);
+            console.error("Error creating Git tag:", error);
             throw error;
         }
     }
@@ -70,17 +80,19 @@ class VersionManager {
 export default VersionManager;
 
 
+// ============================================================================
+// Example
+// ============================================================================
 
+// Here is an example of how you might use the VersionManager class in a project:
 
+// import VersionManager from "./VersionManager";
 
-// import VersionManager from './VersionManager';
-
-// const versionManager = new VersionManager('1.0.0'); // Replace '1.0.0' with the current version of your package
-
-// versionManager.updateVersion('minor') // 'major', 'minor', or 'patch'
+// const versionManager = new VersionManager("1.0.0");
+// versionManager.updateVersion("patch")
 //     .then(newVersion => {
 //         console.log(`Version updated to: ${newVersion}`);
-//         return versionManager.generateChangelog();
+//         return versionManager.createGitTag();
 //     })
-//     .then(() => versionManager.createGitTag())
-//     .catch(error => console.error(error));
+//     .then(() => versionManager.generateChangelog())
+//     .catch(error => console.error("Version management error:", error));

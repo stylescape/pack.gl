@@ -1,6 +1,6 @@
 // config/nunjucks.config.ts
 
-// Copyright 2023 Scape Agency BV
+// Copyright 2024 Scape Agency BV
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 // Import
 // ============================================================================
 
+// Importing path for potential future use in specifying template directories or other file paths
 import path from 'node:path'
 
 
@@ -26,6 +27,11 @@ import path from 'node:path'
 // Constants
 // ============================================================================
 
+/**
+ * Configuration options for Nunjucks to ensure safe and efficient template rendering.
+ * This setup is ideal for both development and production environments, providing a balance
+ * between performance optimizations and security best practices.
+ */
 const nunjucksConfig = {
 
     autoescape: true, // Controls if output with dangerous characters are escaped automatically
@@ -42,3 +48,11 @@ const nunjucksConfig = {
 // ============================================================================
 
 export default nunjucksConfig;
+
+
+// ============================================================================
+// Notes
+// ============================================================================
+
+// This configuration is tailored to a typical web application setup. Adjust the `noCache` option
+// according to your caching strategy for production environments to optimize performance.
