@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 title: pack.gl
-version: 0.0.41
-date-released: 2024-07-01
+version: 0.0.42
+date-released: 2024-09-01
 url: "https://github.com/stylescape/pack.gl"
 message: >-
   If you use pack.gl, please cite it using
