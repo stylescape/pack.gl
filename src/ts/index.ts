@@ -13,7 +13,7 @@ import FilenameExtractor from './file/FilenameExtractor';
 
 // Import | Internal Classes
 import FontGenerator from './class/FontGenerator.js';
-import PackageCreator from './class/PackageCreator.js';
+import PackageCreator from './package/PackageCreator.js';
 import StyleProcessor from "./sass/StyleProcessor.js";
 import VersionManager from './class/VersionManager.js';
 import VersionWriter from './class/VersionWriter.js';
