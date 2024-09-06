@@ -19,7 +19,7 @@
 // Import
 // ============================================================================
 
-import DirectoryCreator from '../ts/class/DirectoryCreator';
+import DirectoryCreator from '../ts/directory/DirectoryCreator';
 import fs from 'fs';
 import path from 'path';
 

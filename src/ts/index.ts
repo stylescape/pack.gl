@@ -3,18 +3,18 @@
 // ============================================================================
 
 // Import | Utility Classes
-import DirectoryScanner from './class/DirectoryScanner';
-import DirectoryCleaner from './class/DirectoryCleaner';
-import DirectoryCopier from './class/DirectoryCopier';
-import DirectoryCreator from './class/DirectoryCreator';
-import FileCopier from './class/FileCopier';
-import FileRenamer from './class/FileRenamer';
-import FilenameExtractor from './class/FilenameExtractor';
+import DirectoryScanner from './directory/DirectoryScanner';
+import DirectoryCleaner from './directory/DirectoryCleaner';
+import DirectoryCopier from './directory/DirectoryCopier';
+import DirectoryCreator from './directory/DirectoryCreator';
+import FileCopier from './file/FileCopier';
+import FileRenamer from './file/FileRenamer';
+import FilenameExtractor from './file/FilenameExtractor';
 
 // Import | Internal Classes
 import FontGenerator from './class/FontGenerator.js';
 import PackageCreator from './class/PackageCreator.js';
-import StyleProcessor from "./class/StyleProcessor.js";
+import StyleProcessor from "./sass/StyleProcessor.js";
 import VersionManager from './class/VersionManager.js';
 import VersionWriter from './class/VersionWriter.js';
 
@@ -25,10 +25,10 @@ import NpmCommandRunner from './class/NpmCommandRunner.js';
 import StylizedLogger from './class/StylizedLogger.js';
 import TemplateWriter from './class/TemplateWriter.js';
 
-import SvgReader from './class/SVGReader.js';
-import SvgToPngConverter from './class/SvgToPngConverter.js';
-import SvgSpriteGenerator from "./class/SvgSpriteGenerator.js";
-import SvgPackager from "./class/SvgPackager.js";
+import SvgReader from './svg/SvgReader.js';
+import SvgToPngConverter from './svg/SvgToPngConverter.js';
+import SvgSpriteGenerator from "./svg/SvgSpriteGenerator.js";
+import SvgPackager from "./svg/SvgPackager.js";
 
 import TestRunner from './class/TestRunner.js';
 import DocumentationGenerator from './class/DocumentationGenerator.js';
@@ -37,9 +37,9 @@ import JSONLoader from './class/JSONLoader.js';
 
 
 // Import | Internal Functions
-import gl_installer from './function/gl_installer';
-import cleanDirectory from './function/clean_directory';
-import readPackageJson from "./function/readPackageJson.js"
+import gl_installer from './utils/gl_installer';
+import cleanDirectory from './utils/clean_directory';
+import readPackageJson from "./utils/readPackageJson.js"
 
 
 // ============================================================================
