@@ -11,7 +11,8 @@ import path from 'node:path'
 
 /**
  * Configuration for optimizing SVG files using SVGO.
- * It includes multiple passes to ensure thorough optimization and custom plugins for specific attribute management.
+ * It includes multiple passes to ensure thorough optimization and custom
+ * plugins for specific attribute management.
  */
 const svgoConfig = {
 
