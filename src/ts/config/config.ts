@@ -8,8 +8,9 @@
 // ============================================================================
 
 /**
- * Central configuration object for managing paths used across various build and development processes.
- * This object helps in routing inputs and outputs to correct locations, ensuring a seamless build experience.
+ * Central configuration object for managing paths used across various build 
+ * and development processes. This object helps in routing inputs and outputs
+ * to correct locations, ensuring a seamless build experience.
  */
 const CONFIG = {
     path: {
