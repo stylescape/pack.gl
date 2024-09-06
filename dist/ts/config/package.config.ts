@@ -1,20 +1,3 @@
-// config/package.config.ts
-
-// Copyright 2024 Scape Agency BV
-
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-// http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-
 // ============================================================================
 // Constants
 // ============================================================================
@@ -67,13 +50,17 @@ const packageConfig = {
         "ts/**/*.ts",
         "!.DS_Store"
     ],
-    exports: {
-        ".": {
-            "sass": "./src/scss/index.scss",
-            "import": "./dist/js/index.mjs",
-            "default": "./dist/js/index.js"
-        }
-    }
+    // exports: {
+    //     ".": {
+    //         // "sass": "./src/scss/index.scss",
+    //         // "import": "./dist/js/index.mjs",
+    //         // "default": "./dist/js/index.js"
+    //         "sass": "./scss/index.scss",
+    //         "scss": "./scss/index.scss",
+    //         "typescript": "./ts/index.ts",
+    //         "default": "./js/index.js"
+    //     }
+    // }
     // repository: {
     //     type: pack.repository.type,
     //     url: pack.repository.url,
