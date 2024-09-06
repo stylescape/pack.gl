@@ -1,12 +1,10 @@
-// class/SassDocGenerator.ts
-
-
 // ============================================================================
 // Imports
 // ============================================================================
 
-import * as sassdoc from "sassdoc";
-import path from "path";
+// @ts-ignore: Implicit any type for sassdoc module
+import sassdoc from 'sassdoc';
+import path from 'path';
 
 
 // ============================================================================
@@ -38,6 +36,7 @@ class SassDocGenerator {
                 verbose: true,
                 ...options
             };
+            console.log(`SASS`);
 
             // Run SassDoc to generate the documentation
             await sassdoc(sourcePaths, config);
@@ -45,9 +44,9 @@ class SassDocGenerator {
             console.log(`SASS documentation successfully generated at: ${config.dest}`);
         } catch (error) {
             console.error(
-                "An error occurred while generating SASS documentation:",
+                'An error occurred while generating SASS documentation:',
                 error
-        );
+            );
             throw error;
         }
     }
@@ -65,14 +64,14 @@ export default SassDocGenerator;
 // Example Usage
 // ============================================================================
 
-// import SassDocGenerator from "./SassDocGenerator";
+// import SassDocGenerator from './SassDocGenerator';
 
 // const sassDocGenerator = new SassDocGenerator();
 
-// sassDocGenerator.generateDocumentation(["src/styles"], "docs/sass")
+// sassDocGenerator.generateDocumentation(['src/styles'], 'docs/sass')
 //     .then(() => {
-//         console.log("Documentation generation complete.");
+//         console.log('Documentation generation complete.');
 //     })
 //     .catch(error => {
-//         console.error("Error generating documentation:", error);
+//         console.error('Error generating documentation:', error);
 //     });
