@@ -2,9 +2,9 @@ name: Deploy Docs
 
 on:
   push:
-    branches:
-      - master 
-      - main
+    # branches:
+    #   - master 
+    #   - main
     tags:
       - 'docs'
 
