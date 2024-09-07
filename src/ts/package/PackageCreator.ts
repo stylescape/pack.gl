@@ -54,7 +54,7 @@ class PackageCreator {
             repository: customConfig.repository,
             funding: customConfig.funding,
             dependencies: customConfig.dependencies,
-            // exports: customConfig.exports,
+            exports: customConfig.exports,
         }
          this.config = {
              ...PackageCreator.defaultConfig,
