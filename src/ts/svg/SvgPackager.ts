@@ -14,9 +14,9 @@ import { loadConfig } from 'svgo';
 // ============================================================================
 
 /**
- * Provides functionality to optimize and package SVG files into various formats.
- * It reads SVG files from a specified directory, optimizes them using SVGO,
- * and then outputs them as TypeScript files and JSON indexes.
+ * Provides functionality to optimize and package SVG files into various
+ * formats. It reads SVG files from a specified directory, optimizes them
+ * using SVGO, and then outputs them as TypeScript files and JSON indexes.
  */
 class SvgPackager {
 
@@ -110,7 +110,9 @@ class SvgPackager {
     //         throw error;
     //     }
     // }
-    private async readSvgFile(filePath: string): Promise<string> {
+    private async readSvgFile(
+        filePath: string
+    ): Promise<string> {
         return fs.readFile(filePath, "utf8");
     }
 
@@ -132,8 +134,16 @@ class SvgPackager {
         svgContent: string,
         outputDirectory: string
     ): Promise<void> {
-        await this.writeSvgFile(iconName, svgContent, outputDirectory);
-        await this.writeTypeScriptFile(iconName, svgContent, outputDirectory);
+        await this.writeSvgFile(
+            iconName,
+            svgContent,
+            outputDirectory
+        );
+        await this.writeTypeScriptFile(
+            iconName,
+            svgContent,
+            outputDirectory
+        );
     }
 
     /**
