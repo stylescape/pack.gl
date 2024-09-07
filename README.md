@@ -1,9 +1,9 @@
 <div align="right">
 
-[![GitHub License](https://img.shields.io/github/license/stylescape/pack.gl?style=flat-square&logo=readthedocs&logoColor=FFFFFF&label=&labelColor=%23#505F6E&color=%23#505F6E&link=LICENSE)](https://github.com/stylescape/pack.gl/blob/main/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/stylescape/pack.gl?style=flat-square&logo=readthedocs&logoColor=FFFFFF&label=&labelColor=%23505F6E&color=%23505F6E&link=LICENSE)](https://github.com/stylescape/pack.gl/blob/main/LICENSE)
 [![NPM Version](https://img.shields.io/npm/v/pack.gl?style=flat-square&logo=npm&logoColor=FFFFFF&label=NPM&labelColor=505f6e&color=505f6e&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fpack.gl)](https://www.npmjs.com/package/pack.gl)
-[![devContainer](https://img.shields.io/badge/devContainer-23#505F6E?style=flat-square&logo=Docker&logoColor=%23FFFFFF&labelColor=%23#505F6E&color=%23#505F6E)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/stylescape/pack.gl)
-[![StackBlitz](https://img.shields.io/badge/StackBlitz-23#505F6E?style=flat-square&logo=StackBlitz&logoColor=%23FFFFFF&labelColor=%23#505F6E&color=%23#505F6E)](https://stackblitz.com/github/stylescape/pack.gl/tree/main?file=src%2Findex.html)
+[![devContainer](https://img.shields.io/badge/devContainer-23505F6E?style=flat-square&logo=Docker&logoColor=%23FFFFFF&labelColor=%23505F6E&color=%23505F6E)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/stylescape/pack.gl)
+[![StackBlitz](https://img.shields.io/badge/StackBlitz-23505F6E?style=flat-square&logo=StackBlitz&logoColor=%23FFFFFF&labelColor=%23505F6E&color=%23505F6E)](https://stackblitz.com/github/stylescape/pack.gl/tree/main?file=src%2Findex.html)
 
 
 </div>
