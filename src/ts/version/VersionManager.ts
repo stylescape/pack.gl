@@ -1,6 +1,3 @@
-// class/VersionManager.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -8,6 +5,11 @@
 import semver from "semver";
 import { exec } from "child_process";
 import util from "util";
+
+
+// ============================================================================
+// Constants
+// ============================================================================
 
 const execAsync = util.promisify(exec);
 
@@ -27,6 +29,7 @@ class VersionManager {
 
     /**
      * Initializes the version manager with a valid semantic version.
+     * 
      * @param {string} currentVersion - The current semantic version.
      * @throws {Error} If the initial version is not a valid semantic version.
      */
@@ -39,7 +42,9 @@ class VersionManager {
 
     /**
      * Updates the current version based on the specified release type.
-     * @param {semver.ReleaseType} releaseType - The type of version update (major, minor, patch).
+     * 
+     * @param {semver.ReleaseType} releaseType - The type of version update
+     *  (major, minor, patch).
      * @returns {Promise<string>} The new version.
      * @throws {Error} If the version increment fails.
      */
@@ -68,6 +73,7 @@ class VersionManager {
     /**
      * Creates a new Git tag for the current version and pushes it to the
      * remote repository.
+     * 
      * @throws {Error} If creating or pushing the tag fails.
      */
     async createGitTag() {
@@ -81,6 +87,11 @@ class VersionManager {
         }
     }
 }
+
+
+// ============================================================================
+// Exports
+// ============================================================================
 
 export default VersionManager;
 
