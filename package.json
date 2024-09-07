@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.0.47",
+    "version": "0.0.48",
     "config": {
         "version_short": "0.0"
     },
@@ -83,7 +83,7 @@
         "@types/semver": "^7.5.6",
         "ts-node": "^10.9.1",
         "typescript": "^5.3.3",
-        "pack.gl": "^0.0.22"
+        "pack.gl": "^0.0.23"
     },
     "files": [
         "src/**",
