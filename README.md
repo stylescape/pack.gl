@@ -5,7 +5,6 @@
 [![devContainer](https://img.shields.io/badge/devContainer-23505F6E?style=flat-square&logo=Docker&logoColor=%23FFFFFF&labelColor=%23505F6E&color=%23505F6E)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/stylescape/pack.gl)
 [![StackBlitz](https://img.shields.io/badge/StackBlitz-23505F6E?style=flat-square&logo=StackBlitz&logoColor=%23FFFFFF&labelColor=%23505F6E&color=%23505F6E)](https://stackblitz.com/github/stylescape/pack.gl/tree/main?file=src%2Findex.html)
 
-
 </div>
 
 <p align="center">
