@@ -17,8 +17,9 @@ const execAsync = util.promisify(exec);
 // ============================================================================
 
 /**
- * Manages software versioning using semantic versioning principles. Provides methods
- * to update the version, generate changelogs, and manage version tags in source control.
+ * Manages software versioning using semantic versioning principles. Provides
+ * methods to update the version, generate changelogs, and manage version tags
+ * in source control.
  */
 class VersionManager {
 
@@ -45,7 +46,9 @@ class VersionManager {
     async updateVersion(releaseType: semver.ReleaseType): Promise<string> {
         const newVersion = semver.inc(this.currentVersion, releaseType);
         if (!newVersion) {
-            throw new Error("Version increment failed");
+            throw new Error(
+                "Version increment failed"
+            );
         }
         this.currentVersion = newVersion;
         return newVersion;
@@ -57,12 +60,14 @@ class VersionManager {
      */
     async generateChangelog() {
         // Implement changelog generation logic
-        // This could be as simple as running a script or using a tool like "conventional-changelog"
+        // This could be as simple as running a script or using a tool like
+        // "conventional-changelog"
         console.log("Changelog generation logic goes here");
     }
 
     /**
-     * Creates a new Git tag for the current version and pushes it to the remote repository.
+     * Creates a new Git tag for the current version and pushes it to the
+     * remote repository.
      * @throws {Error} If creating or pushing the tag fails.
      */
     async createGitTag() {

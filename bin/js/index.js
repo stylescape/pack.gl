@@ -49,6 +49,7 @@ function main() {
                     return [4, tsCompiler.compile(tsFiles, outputDir)];
                 case 4:
                     _a.sent();
+                    console.log('TypeScript compilation completed.');
                     return [3, 6];
                 case 5:
                     error_1 = _a.sent();

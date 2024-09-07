@@ -21,7 +21,7 @@ import tsConfig from "../config/ts.config.js"
  * It leverages the TypeScript compiler API to perform the compilation, providing a flexible
  * integration point for projects needing to automate their TypeScript to JavaScript builds.
  */
- class TypeScriptCompiler {
+class TypeScriptCompiler {
 
     /**
      *  Configuration for the TypeScript compiler.
@@ -70,7 +70,7 @@ import tsConfig from "../config/ts.config.js"
                 target: ts.ScriptTarget.ES2015,
                 outDir,
                 // ...customOptions, // Merges custom compiler options
-                ...this.config, // Merges custom compiler options
+                // ...this.config, // Merges custom compiler options
             };
 
             // Create a TypeScript compiler host
