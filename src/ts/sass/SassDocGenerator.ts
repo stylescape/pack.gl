@@ -41,7 +41,9 @@ class SassDocGenerator {
             // Run SassDoc to generate the documentation
             await sassdoc(sourcePaths, config);
 
-            console.log(`SASS documentation successfully generated at: ${config.dest}`);
+            console.log(
+                `SASS documentation successfully generated at: ${config.dest}`
+            );
         } catch (error) {
             console.error(
                 'An error occurred while generating SASS documentation:',
