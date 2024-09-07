@@ -1,5 +1,7 @@
 "use strict";
-// class/VersionWriter.ts
+// ============================================================================
+// Import
+// ============================================================================
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,9 +12,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// ============================================================================
-// Import
-// ============================================================================
 const fs_1 = require("fs");
 // ============================================================================
 // Classes
@@ -24,12 +23,15 @@ const fs_1 = require("fs");
  */
 class VersionWriter {
     /**
-     * Writes a version string to a specified file path. This method is asynchronous
-     * and uses Node.js"s filesystem promises to handle the file writing operation.
+     * Writes a version string to a specified file path. This method is
+     * asynchronous and uses Node.js"s filesystem promises to handle the
+     * file writing operation.
      *
-     * @param {string} filePath The file path where the version information should be written.
+     * @param {string} filePath The file path where the version information
+     * should be written.
      * @param {string} version The version string to be written to the file.
-     * @returns {Promise<void>} A promise that resolves when the version has been successfully written.
+     * @returns {Promise<void>} A promise that resolves when the version has
+     * been successfully written.
      * @throws {Error} Throws an error if the file writing operation fails.
      */
     writeVersionToFile(filePath, version) {

@@ -1,12 +1,14 @@
-// class/DocumentationGenerator.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
 
 import { exec } from "child_process";
 import util from "util";
+
+
+// ============================================================================
+// Constants
+// ============================================================================
 
 const execAsync = util.promisify(exec);
 
@@ -40,9 +42,9 @@ class DocumentationGenerator {
     }
 
     /**
-     * Executes the documentation generation process using the specified command-line tool.
-     * Handles both the execution of the command and the management of output, including logging
-     * and error reporting.
+     * Executes the documentation generation process using the specified
+     * command-line tool. Handles both the execution of the command and the
+     * management of output, including logging and error reporting.
      * 
      * @returns A promise that resolves when documentation generation is successfully completed,
      *          or rejects with an error if the process fails.
@@ -52,7 +54,9 @@ class DocumentationGenerator {
             // Here, you can add any pre-generation logic if necessary
 
             // Execute the documentation generation command
-            const { stdout, stderr } = await execAsync(`${this.generatorCommand} -c ${this.sourcePath} -o ${this.outputPath}`);
+            const { stdout, stderr } = await execAsync(
+                `${this.generatorCommand} -c ${this.sourcePath} -o ${this.outputPath}`
+            );
 
             if (stderr) {
                 throw new Error(`Documentation generation failed: ${stderr}`);
@@ -63,7 +67,10 @@ class DocumentationGenerator {
 
             // Here, you can add any post-generation logic if necessary
         } catch (error) {
-            console.error("Error occurred while generating documentation:", error);
+            console.error(
+                "Error occurred while generating documentation:",
+                error
+            );
             throw error;
         }
     }

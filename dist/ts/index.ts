@@ -15,12 +15,12 @@ import FilenameExtractor from './file/FilenameExtractor';
 import FontGenerator from './class/FontGenerator.js';
 import PackageCreator from './package/PackageCreator.js';
 import StyleProcessor from "./sass/StyleProcessor.js";
-import VersionManager from './class/VersionManager.js';
-import VersionWriter from './class/VersionWriter.js';
+import VersionManager from './version/VersionManager.js';
+import VersionWriter from './version/VersionWriter.js';
 
 
-import TypeScriptCompiler from './class/TypeScriptCompiler.js';
-import JavaScriptMinifier from './class/JavaScriptMinifier.js';
+import TypeScriptCompiler from './javascript/TypeScriptCompiler.js';
+import JavaScriptMinifier from './javascript/JavaScriptMinifier.js';
 import NpmCommandRunner from './class/NpmCommandRunner.js';
 import StylizedLogger from './class/StylizedLogger.js';
 import TemplateWriter from './class/TemplateWriter.js';
@@ -31,8 +31,8 @@ import SvgSpriteGenerator from "./svg/SvgSpriteGenerator.js";
 import SvgPackager from "./svg/SvgPackager.js";
 
 import TestRunner from './class/TestRunner.js';
-import DocumentationGenerator from './class/DocumentationGenerator.js';
-import CodeLinter from './class/CodeLinter.js';
+import DocumentationGenerator from './javascript/DocumentationGenerator.js';
+import CodeLinter from './javascript/CodeLinter.js';
 import JSONLoader from './class/JSONLoader.js';
 
 

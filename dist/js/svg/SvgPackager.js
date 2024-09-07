@@ -1,5 +1,7 @@
 "use strict";
-// class/SvgPackager.ts
+// ============================================================================
+// Import
+// ============================================================================
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,9 +12,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// ============================================================================
-// Import
-// ============================================================================
 const fs = require("fs/promises");
 const path = require("path");
 const glob = require("glob");
@@ -22,9 +21,9 @@ const svgo_2 = require("svgo");
 // Classes
 // ============================================================================
 /**
- * Provides functionality to optimize and package SVG files into various formats.
- * It reads SVG files from a specified directory, optimizes them using SVGO,
- * and then outputs them as TypeScript files and JSON indexes.
+ * Provides functionality to optimize and package SVG files into various
+ * formats. It reads SVG files from a specified directory, optimizes them
+ * using SVGO, and then outputs them as TypeScript files and JSON indexes.
  */
 class SvgPackager {
     /**
@@ -70,7 +69,7 @@ class SvgPackager {
                 console.log(`Successfully processed ${svgFiles.length} SVG files.`);
             }
             catch (error) {
-                console.error('Error processing SVG files:', error);
+                console.error("Error processing SVG files:", error);
                 throw error;
             }
         });
@@ -92,7 +91,7 @@ class SvgPackager {
     // }
     readSvgFile(filePath) {
         return __awaiter(this, void 0, void 0, function* () {
-            return fs.readFile(filePath, 'utf8');
+            return fs.readFile(filePath, "utf8");
         });
     }
     /**
@@ -173,6 +172,7 @@ class SvgPackager {
     }
     /**
      * Writes the SVG content to a file.
+     *
      * @param filePath The original file path of the SVG.
      * @param svgContent The SVG content to be written.
      * @param outputDirectory The directory to output the SVG file.
@@ -211,13 +211,13 @@ class SvgPackager {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const jsonContent = JSON.stringify(iconNames, null, 2);
-                const outputPath = path.join(outputDirectory, 'icons.json');
+                const outputPath = path.join(outputDirectory, "icons.json");
                 // await fs_extra.outputFile(outputPath, jsonContent);
                 yield fs.writeFile(outputPath, jsonContent);
-                console.log('Icons JSON file created successfully');
+                console.log("Icons JSON file created successfully");
             }
             catch (error) {
-                console.error('Error writing icons JSON file:', error);
+                console.error("Error writing icons JSON file:", error);
                 throw error;
             }
         });

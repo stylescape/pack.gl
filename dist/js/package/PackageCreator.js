@@ -1,5 +1,7 @@
 "use strict";
-// class/PackageCreator.ts
+// ============================================================================
+// Import
+// ============================================================================
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,9 +12,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// ============================================================================
-// Import
-// ============================================================================
 const promises_1 = require("fs/promises");
 const path_1 = require("path");
 const package_config_js_1 = require("../config/package.config.js");
@@ -29,7 +28,8 @@ class PackageCreator {
      * Constructs an instance with merged default and custom configuration
      * settings for package.json.
      *
-     * @param customConfig Custom settings to override or augment the default package configuration.
+     * @param customConfig Custom settings to override or augment the default
+     * package configuration.
      */
     constructor(customConfig = {}) {
         let newConfig = {
@@ -45,7 +45,7 @@ class PackageCreator {
             repository: customConfig.repository,
             funding: customConfig.funding,
             dependencies: customConfig.dependencies,
-            // exports: customConfig.exports,
+            exports: customConfig.exports,
         };
         this.config = Object.assign(Object.assign({}, PackageCreator.defaultConfig), newConfig);
     }
@@ -55,7 +55,8 @@ class PackageCreator {
      * created.
      *
      * @param outputDir The directory where the package.json will be created.
-     * @returns A promise that resolves when the file has been successfully written.
+     * @returns A promise that resolves when the file has been successfully
+     *  written.
      */
     createPackageJson(outputDir) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -75,7 +76,8 @@ class PackageCreator {
         });
     }
     /**
-     * Ensures the specified directory exists. If it does not, it will be created.
+     * Ensures the specified directory exists. If it does not, it will be
+     * created.
      *
      * @param dirPath The path of the directory to verify or create.
      */
@@ -87,7 +89,8 @@ class PackageCreator {
             catch (error) {
                 // Check if error is an instance of NodeJS.ErrnoException
                 if (error instanceof Error && error.code !== 'EEXIST') {
-                    throw error; // Rethrow if it's not a 'directory exists' error
+                    // Rethrow if it's not a 'directory exists' error
+                    throw error;
                 }
             }
         });

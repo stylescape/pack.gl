@@ -1,6 +1,3 @@
-// class/SvgPackager.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -17,9 +14,9 @@ import { loadConfig } from 'svgo';
 // ============================================================================
 
 /**
- * Provides functionality to optimize and package SVG files into various formats.
- * It reads SVG files from a specified directory, optimizes them using SVGO,
- * and then outputs them as TypeScript files and JSON indexes.
+ * Provides functionality to optimize and package SVG files into various
+ * formats. It reads SVG files from a specified directory, optimizes them
+ * using SVGO, and then outputs them as TypeScript files and JSON indexes.
  */
 class SvgPackager {
 
@@ -51,15 +48,21 @@ class SvgPackager {
             const svgFiles = glob.sync(`${inputDirectory}/**/*.svg`);
 
             for (const file of svgFiles) {
+
                 // console.log(`Processing file: ${file}`);
-                const iconName = this.sanitizeFileName(path.basename(file, '.svg'));
+                const iconName = this.sanitizeFileName(
+                    path.basename(file, '.svg')
+                );
                 iconNames.push(iconName);
+
                 // console.log(`Processing icon: ${iconName}`);
                 const svgContent = await this.readSvgFile(file);
                 const optimizedSvg = await this.optimizeSvg(svgContent);
                 // const optimizedSvg = await this.optimizeSvg(file, svgContent);
+
                 // svgo will always add a final newline when in pretty mode
                 const resultSvg = optimizedSvg.trim()
+
                 // Write the optimized SVG file
                 await this.writeSvgFile(
                     // file,
@@ -67,6 +70,7 @@ class SvgPackager {
                     resultSvg,
                     outputDirectory
                 );
+
                 // Write the optimized TypeScript file
                 await this.writeTypeScriptFile(
                     // file,
@@ -74,11 +78,19 @@ class SvgPackager {
                     resultSvg,
                     ts_output_directory
                 );
+
             }
-            await this.writeIconsJson(iconNames, json_output_directory);
-            console.log(`Successfully processed ${svgFiles.length} SVG files.`);
+
+            await this.writeIconsJson(
+                iconNames,
+                json_output_directory
+            );
+            console.log(
+                `Successfully processed ${svgFiles.length} SVG files.`
+            );
+
         } catch (error) {
-            console.error('Error processing SVG files:', error);
+            console.error("Error processing SVG files:", error);
             throw error;
         }
     }
@@ -98,8 +110,10 @@ class SvgPackager {
     //         throw error;
     //     }
     // }
-    private async readSvgFile(filePath: string): Promise<string> {
-        return fs.readFile(filePath, 'utf8');
+    private async readSvgFile(
+        filePath: string
+    ): Promise<string> {
+        return fs.readFile(filePath, "utf8");
     }
 
     /**
@@ -115,9 +129,21 @@ class SvgPackager {
         return fileName.replace(/[^a-zA-Z0-9_]/g, '_');
     }
 
-    private async writeFiles(iconName: string, svgContent: string, outputDirectory: string): Promise<void> {
-        await this.writeSvgFile(iconName, svgContent, outputDirectory);
-        await this.writeTypeScriptFile(iconName, svgContent, outputDirectory);
+    private async writeFiles(
+        iconName: string,
+        svgContent: string,
+        outputDirectory: string
+    ): Promise<void> {
+        await this.writeSvgFile(
+            iconName,
+            svgContent,
+            outputDirectory
+        );
+        await this.writeTypeScriptFile(
+            iconName,
+            svgContent,
+            outputDirectory
+        );
     }
 
     /**
@@ -175,7 +201,11 @@ class SvgPackager {
     //     }
     // }
 
-    private async writeTypeScriptFile(iconName: string, svgContent: string, outputDirectory: string): Promise<void> {
+    private async writeTypeScriptFile(
+        iconName: string,
+        svgContent: string,
+        outputDirectory: string
+    ): Promise<void> {
         const tsContent = `export const icon_${iconName} = \`${svgContent}\`;\n`;
         const outputPath = path.join(outputDirectory, `${iconName}.ts`);
         await fs.writeFile(outputPath, tsContent);
@@ -183,6 +213,7 @@ class SvgPackager {
 
     /**
      * Writes the SVG content to a file.
+     * 
      * @param filePath The original file path of the SVG.
      * @param svgContent The SVG content to be written.
      * @param outputDirectory The directory to output the SVG file.
@@ -202,7 +233,11 @@ class SvgPackager {
     //         throw error;
     //     }
     // }
-    private async writeSvgFile(iconName: string, svgContent: string, outputDirectory: string): Promise<void> {
+    private async writeSvgFile(
+        iconName: string,
+        svgContent: string,
+        outputDirectory: string
+    ): Promise<void> {
         const outputPath = path.join(outputDirectory, `${iconName}.svg`);
         await fs.writeFile(outputPath, svgContent);
     }
@@ -223,12 +258,17 @@ class SvgPackager {
 
         try {
             const jsonContent = JSON.stringify(iconNames, null, 2);
-            const outputPath = path.join(outputDirectory, 'icons.json');
+            const outputPath = path.join(outputDirectory, "icons.json");
             // await fs_extra.outputFile(outputPath, jsonContent);
             await fs.writeFile(outputPath, jsonContent);
-            console.log('Icons JSON file created successfully');
+            console.log(
+                "Icons JSON file created successfully"
+            );
         } catch (error) {
-            console.error('Error writing icons JSON file:', error);
+            console.error(
+                "Error writing icons JSON file:",
+                error
+            );
             throw error;
         }
     }

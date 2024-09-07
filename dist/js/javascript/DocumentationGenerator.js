@@ -1,5 +1,7 @@
 "use strict";
-// class/DocumentationGenerator.ts
+// ============================================================================
+// Import
+// ============================================================================
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,11 +12,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// ============================================================================
-// Import
-// ============================================================================
 const child_process_1 = require("child_process");
 const util_1 = require("util");
+// ============================================================================
+// Constants
+// ============================================================================
 const execAsync = util_1.default.promisify(child_process_1.exec);
 // ============================================================================
 // Classes
@@ -38,9 +40,9 @@ class DocumentationGenerator {
         this.generatorCommand = generatorCommand;
     }
     /**
-     * Executes the documentation generation process using the specified command-line tool.
-     * Handles both the execution of the command and the management of output, including logging
-     * and error reporting.
+     * Executes the documentation generation process using the specified
+     * command-line tool. Handles both the execution of the command and the
+     * management of output, including logging and error reporting.
      *
      * @returns A promise that resolves when documentation generation is successfully completed,
      *          or rejects with an error if the process fails.
