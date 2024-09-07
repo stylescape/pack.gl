@@ -1,12 +1,9 @@
-// class/PackageCreator.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
 
-import fs from 'fs/promises';
-import path from 'path';
+import fs from "fs/promises";
+import path from "path";
 import packageConfig from "../config/package.config.js"
 
 
@@ -19,14 +16,14 @@ import packageConfig from "../config/package.config.js"
  * files using a flexible configuration. This class is ideal for automating
  * the setup of Node.js projects or managing configurations dynamically.
  */
- class PackageCreator {
+class PackageCreator {
 
     /**
      *  Configuration for the Package.json.
      */
     public config: any;
-     // private config: ts.CompilerOptions;
-     // private config: { [key: symbol]: any};
+    // private config: ts.CompilerOptions;
+    // private config: { [key: symbol]: any};
  
     /**
      * Default configuration sourced from an external configuration file.
@@ -37,7 +34,8 @@ import packageConfig from "../config/package.config.js"
      * Constructs an instance with merged default and custom configuration
      * settings for package.json.
      * 
-     * @param customConfig Custom settings to override or augment the default package configuration.
+     * @param customConfig Custom settings to override or augment the default
+     * package configuration.
      */
     constructor(
         customConfig: any = {},
@@ -70,7 +68,8 @@ import packageConfig from "../config/package.config.js"
      * created.
      * 
      * @param outputDir The directory where the package.json will be created.
-     * @returns A promise that resolves when the file has been successfully written.
+     * @returns A promise that resolves when the file has been successfully
+     *  written.
      */
     async createPackageJson(outputDir: string): Promise<void> {
         const filePath = path.join(outputDir, 'package.json');
@@ -88,7 +87,8 @@ import packageConfig from "../config/package.config.js"
     }
 
     /**
-     * Ensures the specified directory exists. If it does not, it will be created.
+     * Ensures the specified directory exists. If it does not, it will be
+     * created.
      * 
      * @param dirPath The path of the directory to verify or create.
      */
@@ -97,8 +97,13 @@ import packageConfig from "../config/package.config.js"
             await fs.mkdir(dirPath, { recursive: true });
         } catch (error) {
             // Check if error is an instance of NodeJS.ErrnoException
-            if (error instanceof Error && (error as NodeJS.ErrnoException).code !== 'EEXIST') {
-                throw error; // Rethrow if it's not a 'directory exists' error
+            if (
+                error instanceof Error && (
+                    error as NodeJS.ErrnoException
+                ).code !== 'EEXIST'
+            ) {
+                // Rethrow if it's not a 'directory exists' error
+                throw error;
             }
         }
     }
