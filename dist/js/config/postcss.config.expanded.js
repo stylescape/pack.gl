@@ -2,8 +2,11 @@
 // ============================================================================
 // Import
 // ============================================================================
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const autoprefixer_1 = require("autoprefixer"); // Automatically adds vendor prefixes to CSS rules
+const autoprefixer_1 = __importDefault(require("autoprefixer")); // Automatically adds vendor prefixes to CSS rules
 // import postcssSimpleVars from 'postcss-simple-vars'; // Plugin to handle CSS variables
 // import postcssNested from 'postcss-nested'; // Plugin to allow nesting of CSS rules
 // import postcssImport from 'postcss-import'; // Plugin to inline import CSS files into a single CSS

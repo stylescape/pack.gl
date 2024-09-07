@@ -2,7 +2,11 @@
 // ============================================================================
 // Import
 // ============================================================================
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const typescript_1 = __importDefault(require("typescript"));
 // ============================================================================
 // Constants
 // ============================================================================
@@ -20,7 +24,9 @@ const tsConfig = {
     // Language and Environment
     // ========================================================================
     // target: ts.ScriptTarget.ES2015,
-    target: "es6", // Specify ECMAScript target version
+    target: typescript_1.default.ScriptTarget.ES2015, // ES6 equivalent
+    // target: "es2015",                                     // Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
+    // target: "es6",                     // Specify ECMAScript target version
     // ES3 = 0,
     // ES5 = 1,
     // ES2015 = 2,
@@ -34,8 +40,8 @@ const tsConfig = {
     // ESNext = 99,
     // JSON = 100,
     // Latest = 99,\
-    lib: ["es2015", "dom"],
-    // target: "es2015",                                     // Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
+    lib: ["lib.es2015.d.ts", "lib.dom.d.ts"],
+    // lib: ['ES2015', 'DOM'], // Use correct enum values for lib options
     // lib: ["esnext", "es2017`", "ES2015", "dom"],           // Specify a set of bundled library declaration files that describe the target runtime environment.
     // lib: ["es2015", "dom"],             // Specify library files to be included in the compilation
     // lib: ["es2015"],             // Specify library files to be included in the compilation
@@ -54,11 +60,13 @@ const tsConfig = {
     // moduleResolution?: ModuleResolutionKind;
     // moduleSuffixes?: string[];
     // moduleDetection?: ModuleDetectionKind;
-    // module: ts.ModuleKind.CommonJS,
-    module: "commonjs", // Specify module code generation
+    module: typescript_1.default.ModuleKind.CommonJS,
+    // module: "commonjs",                // Specify module code generation
     // module: "CommonJS",
     // module: "esnext",                                      // Specify what module code is generated.
     // rootDir: ".",                                       // Specify the root folder within your source files.
+    // moduleResolution: ts.ModuleResolutionKind.NodeJs, // Ensure module resolution is set correctly
+    // moduleResolution: ts.ModuleResolutionKind.Node16, // Ensure module resolution is set correctly
     // moduleResolution: "node",                             // Specify how TypeScript looks up a file from a given module specifier.
     // baseUrl: "src"                                      // Specify the base directory to resolve non-relative module names.,
     // paths: {

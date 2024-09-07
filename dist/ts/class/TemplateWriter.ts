@@ -5,7 +5,8 @@
 // Import
 // ============================================================================
 
-import fs from "fs/promises";
+// import fs from "fs/promises";
+import { mkdir, writeFile } from 'fs/promises'; // Correct way to import from 'fs/promises'
 import path from "path";
 import nunjucks from "nunjucks";
 import nunjucksConfig from "../config/nunjucks.config.js"
@@ -16,23 +17,27 @@ import nunjucksConfig from "../config/nunjucks.config.js"
 // ============================================================================
 
 /**
- * Class designed for rendering and writing HTML or text files from Nunjucks templates.
- * It encapsulates configuration and rendering logic, making it simple to produce files
- * from templates for various uses such as email templates, web pages, or configuration files.
+ * Class designed for rendering and writing HTML or text files from Nunjucks
+ * templates. It encapsulates configuration and rendering logic, making it
+ * simple to produce files from templates for various uses such as email
+ * templates, web pages, or configuration files.
  */
 class TemplateWriter {
 
-    context: {};
+    // context: {};
+    context: Record<string, any>;
 
     /**
      *  Configuration for the Nunjucks writer compiler.
      */
-    private config: {};
+    // private config: {};
+    private config: Record<string, any>;
 
     /**
      * Default configuration for the TypeScript compiler.
      */
-    private static defaultConfig: any = nunjucksConfig;
+    // private static defaultConfig: any = nunjucksConfig;
+    private static defaultConfig: Record<string, any> = nunjucksConfig;
 
     /**
      * Constructs a TemplateWriter instance with specified settings.
@@ -41,9 +46,12 @@ class TemplateWriter {
      * @param {object} customConfig Custom configuration settings for Nunjucks.
      */
      constructor(
+        // templatesDir: string,
+        // context: {},
+        // customConfig: any = {},
         templatesDir: string,
-        context: {},
-        customConfig: any = {},
+        context: Record<string, any> = {},
+        customConfig: Record<string, any> = {}
     ) {
         this.context = context;
         this.config = {
@@ -74,6 +82,18 @@ class TemplateWriter {
             throw new Error("Template generation failed");
         }
     }
+    // async generateTemplate(template: string): Promise<string> {
+    //     return new Promise((resolve, reject) => {
+    //         nunjucks.render(template, this.context, (err, result) => {
+    //             if (err) {
+    //                 console.error(`Error generating template: ${err}`);
+    //                 reject(new Error('Template generation failed'));
+    //             } else {
+    //                 resolve(result);
+    //             }
+    //         });
+    //     });
+    // }
 
     /**
      * Writes the rendered template content to a specified file path.
@@ -85,10 +105,17 @@ class TemplateWriter {
         try {
             const content = await this.generateTemplate(template);
             const dir = path.dirname(outputFile);
+
             // Ensure the directory exists
-            await fs.mkdir(dir, { recursive: true });
+            // await fs.mkdir(dir, { recursive: true });
+            await mkdir(dir, { recursive: true });
+
             // Write the file
-            await fs.writeFile(outputFile, content, "utf-8");
+            // await fs.writeFile(outputFile, content, "utf-8");
+            await writeFile(outputFile, content, 'utf-8');
+
+            console.log(`File written to ${outputFile}`);
+
         } catch (error) {
             console.error(`Error writing to file: ${error}`);
             throw new Error("File writing failed");

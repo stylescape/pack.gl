@@ -11,9 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const NpmCommandRunner_js_1 = require("../class/NpmCommandRunner.js");
-const StylizedLogger_js_1 = require("../class/StylizedLogger.js");
+const NpmCommandRunner_js_1 = __importDefault(require("../class/NpmCommandRunner.js"));
+const StylizedLogger_js_1 = __importDefault(require("../class/StylizedLogger.js"));
 // ============================================================================
 // Constants
 // ============================================================================

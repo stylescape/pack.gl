@@ -9,21 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
-const promises_1 = require("fs/promises");
-const path_1 = require("path");
-const nunjucks_1 = require("nunjucks");
-const nunjucks_config_js_1 = require("../config/nunjucks.config.js");
+// import fs from "fs/promises";
+const promises_1 = require("fs/promises"); // Correct way to import from 'fs/promises'
+const path_1 = __importDefault(require("path"));
+const nunjucks_1 = __importDefault(require("nunjucks"));
+const nunjucks_config_js_1 = __importDefault(require("../config/nunjucks.config.js"));
 // ============================================================================
 // Classes
 // ============================================================================
 /**
- * Class designed for rendering and writing HTML or text files from Nunjucks templates.
- * It encapsulates configuration and rendering logic, making it simple to produce files
- * from templates for various uses such as email templates, web pages, or configuration files.
+ * Class designed for rendering and writing HTML or text files from Nunjucks
+ * templates. It encapsulates configuration and rendering logic, making it
+ * simple to produce files from templates for various uses such as email
+ * templates, web pages, or configuration files.
  */
 class TemplateWriter {
     /**
@@ -32,7 +37,11 @@ class TemplateWriter {
      * @param {object} context Global data object that will be available to all templates.
      * @param {object} customConfig Custom configuration settings for Nunjucks.
      */
-    constructor(templatesDir, context, customConfig = {}) {
+    constructor(
+    // templatesDir: string,
+    // context: {},
+    // customConfig: any = {},
+    templatesDir, context = {}, customConfig = {}) {
         this.context = context;
         this.config = Object.assign(Object.assign({}, TemplateWriter.defaultConfig), customConfig);
         nunjucks_1.default.configure(templatesDir, this.config);
@@ -55,6 +64,18 @@ class TemplateWriter {
             }
         });
     }
+    // async generateTemplate(template: string): Promise<string> {
+    //     return new Promise((resolve, reject) => {
+    //         nunjucks.render(template, this.context, (err, result) => {
+    //             if (err) {
+    //                 console.error(`Error generating template: ${err}`);
+    //                 reject(new Error('Template generation failed'));
+    //             } else {
+    //                 resolve(result);
+    //             }
+    //         });
+    //     });
+    // }
     /**
      * Writes the rendered template content to a specified file path.
      * @param {string} template The template file name.
@@ -67,9 +88,12 @@ class TemplateWriter {
                 const content = yield this.generateTemplate(template);
                 const dir = path_1.default.dirname(outputFile);
                 // Ensure the directory exists
-                yield promises_1.default.mkdir(dir, { recursive: true });
+                // await fs.mkdir(dir, { recursive: true });
+                yield (0, promises_1.mkdir)(dir, { recursive: true });
                 // Write the file
-                yield promises_1.default.writeFile(outputFile, content, "utf-8");
+                // await fs.writeFile(outputFile, content, "utf-8");
+                yield (0, promises_1.writeFile)(outputFile, content, 'utf-8');
+                console.log(`File written to ${outputFile}`);
             }
             catch (error) {
                 console.error(`Error writing to file: ${error}`);
@@ -81,6 +105,7 @@ class TemplateWriter {
 /**
  * Default configuration for the TypeScript compiler.
  */
+// private static defaultConfig: any = nunjucksConfig;
 TemplateWriter.defaultConfig = nunjucks_config_js_1.default;
 // ============================================================================
 // Export

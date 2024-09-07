@@ -10,13 +10,13 @@ import {
     FileCopier,
     PackageCreator,
     VersionWriter,
-    TypeScriptCompiler,
+    // TypeScriptCompiler,
     JavaScriptMinifier,
     StylizedLogger,
     gl_installer,
     readPackageJson,
 } from 'pack.gl';
-
+import TypeScriptCompiler from "./javascript/TypeScriptCompiler.js";
 
 // ============================================================================
 // Constants

@@ -9,12 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
 const fantasticon_1 = require("fantasticon");
-const fantasticon_config_js_1 = require("../config/fantasticon.config.js");
+const fantasticon_config_js_1 = __importDefault(require("../config/fantasticon.config.js"));
 // ============================================================================
 // Classes
 // ============================================================================

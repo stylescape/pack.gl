@@ -11,10 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const semver_1 = require("semver");
+const semver_1 = __importDefault(require("semver"));
 const child_process_1 = require("child_process");
-const util_1 = require("util");
+const util_1 = __importDefault(require("util"));
 // ============================================================================
 // Constants
 // ============================================================================
@@ -60,14 +63,22 @@ class VersionManager {
     }
     /**
      * Generates a changelog based on commits since the last version.
-     * Placeholder function to be implemented with actual logic.
+     * This is a placeholder function to be implemented with actual logic,
+     * potentially using tools like "conventional-changelog".
      */
     generateChangelog() {
         return __awaiter(this, void 0, void 0, function* () {
-            // Implement changelog generation logic
-            // This could be as simple as running a script or using a tool like
-            // "conventional-changelog"
-            console.log("Changelog generation logic goes here");
+            try {
+                // Placeholder for actual changelog generation logic.
+                console.log('Generating changelog...');
+                // Example: Using conventional-changelog-cli
+                // await execAsync('npx conventional-changelog -p angular -i CHANGELOG.md -s');
+                console.log('Changelog generation logic goes here');
+            }
+            catch (error) {
+                console.error('Error generating changelog:', error);
+                throw error;
+            }
         });
     }
     /**

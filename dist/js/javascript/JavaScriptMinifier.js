@@ -9,13 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Import
 // ============================================================================
 const terser_1 = require("terser");
 const fs_1 = require("fs");
-const terser_config_js_1 = require("../config/terser.config.js");
+const terser_config_js_1 = __importDefault(require("../config/terser.config.js"));
 // ============================================================================
 // Classes
 // ============================================================================
@@ -41,8 +44,10 @@ class JavaScriptMinifier {
      *
      * @param {string} inputPath Path to the input JavaScript file.
      * @param {string} outputPath Path where the minified file will be saved.
-     * @returns {Promise<void>} A promise that resolves when the minification process is complete, or rejects with an error.
-     * @throws {Error} An error is thrown if there are issues reading the input file, the minification fails, or the output file cannot be written.
+     * @returns {Promise<void>} A promise that resolves when the minification
+     * process is complete, or rejects with an error.
+     * @throws {Error} An error is thrown if there are issues reading the
+     * input file, the minification fails, or the output file cannot be written.
      */
     minifyFile(inputPath, outputPath) {
         return __awaiter(this, void 0, void 0, function* () {

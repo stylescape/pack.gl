@@ -11,10 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const promises_1 = require("fs/promises");
-const path_1 = require("path");
-const package_config_js_1 = require("../config/package.config.js");
+const promises_1 = __importDefault(require("fs/promises"));
+const path_1 = __importDefault(require("path"));
+const package_config_js_1 = __importDefault(require("../config/package.config.js"));
 // ============================================================================
 // Classes
 // ============================================================================
@@ -60,13 +63,13 @@ class PackageCreator {
      */
     createPackageJson(outputDir) {
         return __awaiter(this, void 0, void 0, function* () {
-            const filePath = path_1.default.join(outputDir, 'package.json');
+            const filePath = path_1.default.join(outputDir, "package.json");
             const data = JSON.stringify(this.config, null, 2);
             try {
                 // Ensure the output directory exists
                 yield this.ensureDirectoryExists(outputDir);
                 // Write the package.json file
-                yield promises_1.default.writeFile(filePath, data, 'utf-8');
+                yield promises_1.default.writeFile(filePath, data, "utf-8");
                 console.log(`package.json created at ${filePath}`);
             }
             catch (error) {
@@ -101,6 +104,7 @@ class PackageCreator {
 /**
  * Default configuration sourced from an external configuration file.
  */
+// private static defaultConfig: any = packageConfig;
 PackageCreator.defaultConfig = package_config_js_1.default;
 // ============================================================================
 // Export

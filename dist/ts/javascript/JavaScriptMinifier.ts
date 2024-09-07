@@ -54,8 +54,10 @@ class JavaScriptMinifier {
      * 
      * @param {string} inputPath Path to the input JavaScript file.
      * @param {string} outputPath Path where the minified file will be saved.
-     * @returns {Promise<void>} A promise that resolves when the minification process is complete, or rejects with an error.
-     * @throws {Error} An error is thrown if there are issues reading the input file, the minification fails, or the output file cannot be written.
+     * @returns {Promise<void>} A promise that resolves when the minification
+     * process is complete, or rejects with an error.
+     * @throws {Error} An error is thrown if there are issues reading the
+     * input file, the minification fails, or the output file cannot be written.
      */
     async minifyFile(
         inputPath: string,
@@ -64,18 +66,24 @@ class JavaScriptMinifier {
     ): Promise<void> {
 
         try {
+
             // Read the input file
             const inputCode = await fs.readFile(inputPath, "utf8");
+
             // Minify the file using Terser
             const result = await minify(inputCode, this.config);
+
             // If minification is successful, write the output
             if (result.code) {
                 await fs.writeFile(outputPath, result.code);
             } else {
                 throw new Error("Minification resulted in empty output.");
             }
+
         } catch (error) {
-            console.error(`Error minifying JavaScript file ${inputPath}:`, error);
+            console.error(
+                `Error minifying JavaScript file ${inputPath}:`, error
+            );
             throw error;
         }
     }
