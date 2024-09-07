@@ -195,7 +195,7 @@ jobs:
 
       - 
         name: Unzip build.zip
-        run: unzip -q build.zip
+        run: unzip -q -o build.zip
 
       - 
         run: npm publish
