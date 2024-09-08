@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.0.51",
+    "version": "0.0.52",
     "config": {
         "version_short": "0.0"
     },
@@ -38,7 +38,7 @@
     ],
     "main": "src/ts/index.ts",
     "type": "module",
-    "module": "dist/js/pack.gl.js",
+    "module": "dist/js/index.js",
     "scripts": {
         "format": "npx prettier --write .",
         "lint": "eslint 'src/**/*.ts' || true",
@@ -76,15 +76,15 @@
         "sharp": "^0.33.1",
         "svg-sprite": "^2.0.2",
         "svgo": "^3.1.0",
-        "terser": "^5.26.0",
-        "tslib": "^2.7.0"
+        "terser": "^5.26.0"
     },
     "devDependencies": {
         "@types/eslint": "^9.6.0",
         "@types/semver": "^7.5.6",
         "pack.gl": "^0.0.49",
         "ts-node": "^10.9.1",
-        "typescript": "^5.5.4"
+        "typescript": "^5.5.4",
+        "tslib": "^2.7.0"
     },
     "files": [
         "src/**",
