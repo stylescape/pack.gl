@@ -9,8 +9,6 @@
 
 <br/>
 
----
-
 <div align="center">
 
 [![GitHub License](https://img.shields.io/github/license/stylescape/pack.gl?style=flat-square&logo=readthedocs&logoColor=FFFFFF&label=&labelColor=%23354351&color=%23354351&link=LICENSE)](https://github.com/stylescape/pack.gl/blob/main/LICENSE)
