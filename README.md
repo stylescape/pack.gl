@@ -1,3 +1,14 @@
+
+
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/stylescape/brand/master/src/logo/logo-transparant.png" width="20%" height="20%" alt="Stylescape Logo">
+</p>
+<h1 align="center" style='border-bottom: none;'>pack.gl</h1>
+<h3 align="center">Package Pipeline Manager</h3>
+
+<br/>
+
 <div align="right">
 
 [![GitHub License](https://img.shields.io/github/license/stylescape/pack.gl?style=flat-square&logo=readthedocs&logoColor=FFFFFF&label=&labelColor=%23354351&color=%23354351&link=LICENSE)](https://github.com/stylescape/pack.gl/blob/main/LICENSE)
@@ -6,14 +17,6 @@
 [![StackBlitz](https://img.shields.io/badge/StackBlitz-23354351?style=flat-square&logo=StackBlitz&logoColor=%23FFFFFF&labelColor=%23354351&color=%23354351)](https://stackblitz.com/github/stylescape/pack.gl/tree/main?file=src%2Findex.html)
 
 </div>
-
-<br/>
-
-<p align="center">
-    <img src="https://raw.githubusercontent.com/stylescape/brand/master/src/logo/logo-transparant.png" width="20%" height="20%" alt="Stylescape Logo">
-</p>
-<h1 align="center" style='border-bottom: none;'>pack.gl</h1>
-<h3 align="center">Package Pipeline Manager</h3>
 
 ---
 
