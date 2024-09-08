@@ -11,7 +11,7 @@ const packageConfig = {
     version: "",
     description: "",
     keywords: "",
-    license: "Apache-2.0",
+    license: "MIT",
     homepage: "https://www.scape.agency",
     funding: [
         {
@@ -20,10 +20,10 @@ const packageConfig = {
         }
     ],
     type: "module",
-    main: "js/index",
-    // main: "js/index.js",
-    types: "js/index",
-    // types: "js/index.d.ts",
+    // main: "js/index",
+    main: "js/index.js",
+    // types: "js/index",
+    types: "js/index.d.ts",
     // "module": "dist/js/unit.gl.js",
     // "style": "dist/css/unit.gl.css",
     // "sass": "src/scss/index.scss",
