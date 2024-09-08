@@ -13,7 +13,6 @@ declare const packageConfig: {
         type: string;
         url: string;
     }[];
-    type: string;
     main: string;
     types: string;
     files: string[];
