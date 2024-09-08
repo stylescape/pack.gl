@@ -16,45 +16,18 @@
   ],
   "license": "MIT",
   "homepage": "https://www.pack.gl/",
-  "funding": [
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/scape-foundation"
-    }
-  ],
-  "type": "module",
   "main": "js/index",
   "types": "js/index",
   "files": [
-    "code-snippets/**/*.code-snippets",
-    "css/**/*.{css,map}",
-    "font/**/*.{eot,otf,ttf,woff,woff2}",
-    "inkscape/**/*.inkscape",
-    "jinja/**/*.jinja",
+    "svg/**/*.svg",
     "js/**/*.d.ts",
     "js/**/*.{js,map}",
-    "less/**/*.less",
-    "md/**/*.md",
-    "oco/**/*.oco",
-    "png/**/*.png",
-    "py/**/*.py",
-    "rcpx/**/*.rcpx",
-    "scss/**/*.scss",
-    "sketchpalette/**/*.sketchpalette",
-    "styl/**/*.styl",
-    "svg/**/*.svg",
-    "tex/**/*.tex",
     "ts/**/*.ts",
+    "css/**/*.{css,map}",
+    "scss/**/*.scss",
+    "font/**/*.{eot,otf,ttf,woff,woff2}",
     "!.DS_Store"
   ],
-  "author": "Lars van Vianen <lars@vianen.com> (https://vianen.com)",
-  "contributors": [
-    "Scape Agency <info@scape.agency>"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stylescape/pack.gl.git"
-  },
   "dependencies": {
     "@babel/core": "^7.23.6",
     "@babel/preset-env": "^7.23.6",

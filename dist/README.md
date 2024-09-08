@@ -34,28 +34,24 @@
 
 **Package Builder for the `.gl`-libraries of Scape Agency and its affiliates.**
 
-`pack.gl` is an advanced package builder designed to enhance the efficiency and organization of software development projects. It offers an intuitive interface and robust features tailored for managing and building a wide range of software packages.
-
-`pack.gl` stands as a cutting-edge package builder, meticulously crafted to revolutionize the efficiency and organization of software development projects. It emerges as a powerful tool in the realm of package management, offering a seamless and user-friendly interface coupled with a suite of robust features. Designed to cater to the diverse needs of modern software development, `pack.gl` simplifies and streamlines the process of managing and constructing various types of software packages.
-
-At its core, `pack.gl` is engineered to address the complexities and challenges faced in the contemporary software development landscape. Whether it's handling dependencies, optimizing package size, or ensuring compatibility across different environments, `pack.gl` offers a comprehensive solution. Its intuitive design makes it accessible for beginners, yet its powerful and flexible feature set meets the demands of even the most experienced developers.
-
-Key to its design philosophy is the adaptability to various development workflows, making it an ideal companion for a range of projects from small-scale personal endeavors to large, complex enterprise applications. `pack.gl` stands not just as a tool but as a partner in the software development journey, enhancing productivity, reducing overhead, and bringing clarity and ease to the package management process.
+`pack.gl` is a package builder designed to enhance the efficiency and organization of software development projects. Key to its design philosophy is the adaptability to various development workflows, making it an ideal companion for a range of projects from small-scale personal endeavors to large, complex enterprise applications. `pack.gl` stands not just as a tool but as a partner in the software development journey, enhancing productivity, reducing overhead, and bringing clarity and ease to the package management process.
 
 ---
 
-## Installation
+## Quickstart
 
-### HTML Script Tag
+To install `pack.gl`, use npm or yarn:
 
-``` html
-<script src="https://unpkg.com/pack.gl@latest/dist.min.js"></script>
-```
-
-### NPM Module
+### NPM
 
 ``` bash
-npm i pack.gl
+npm install pack.gl --save-dev
+```
+
+### Yarn
+
+``` bash
+yarn add pack.gl --dev
 ```
 
 ---
@@ -66,18 +62,12 @@ npm i pack.gl
 
 **pack.gl** is an open-source project by **[Scape Agency](https://www.scape.agency "Scape Agency website")**.
 
-##### Scape Agency
+#### Scape Agency
 
 Scape Agency is a spatial innovation collective that dreams, discovers and designs the everyday of tomorrow. We blend design thinking with emerging technologies to create a brighter perspective for people and planet. Our products and services naturalise technology in liveable and sustainable –scapes that spark the imagination and inspire future generations.
 
 - website: [scape.agency](https://www.scape.agency "Scape Agency website")
 - github: [github.com/stylescape](https://github.com/stylescape "Scape Agency GitHub")
-
-### Links
-
-- [Website](https://www.pack.gl)
-- [NPM](https://www.npmjs.com/package/pack.gl)
-
 
 ### Development Resources
 
@@ -94,11 +84,7 @@ Copyright &copy; 2024 [Scape Agency BV](https://www.scape.agency/ "Scape Agency 
 
 #### License
 
-Except as otherwise noted, the content in this repository is licensed under the
-[Creative Commons Attribution 4.0 International (CC BY 4.0) License](https://creativecommons.org/licenses/by/4.0/), and
-code samples are licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0).
-
-Also see [LICENSE](https://github.com/stylescape/community/blob/master/src/LICENSE) and [LICENSE-CODE](https://github.com/stylescape/community/blob/master/src/LICENSE-CODE).
+Except as otherwise noted, the code in this repository is licensed under the MIT License. Also see [LICENSE](https://github.com/stylescape/community/blob/master/src/LICENSE). The documentation is licensed under the [Creative Commons Attribution 4.0 International (CC BY 4.0) License](https://creativecommons.org/licenses/by/4.0/).
 
 #### Disclaimer
 
