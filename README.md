@@ -7,7 +7,10 @@
 <h1 align="center" style='border-bottom: none;'>pack.gl</h1>
 <h3 align="center">Package Pipeline Manager</h3>
 
+---
+
 <br/>
+
 
 <div align="right">
 
@@ -17,8 +20,6 @@
 [![StackBlitz](https://img.shields.io/badge/StackBlitz-23354351?style=flat-square&logo=StackBlitz&logoColor=%23FFFFFF&labelColor=%23354351&color=%23354351)](https://stackblitz.com/github/stylescape/pack.gl/tree/main?file=src%2Findex.html)
 
 </div>
-
----
 
 <div align="right">
 
