@@ -38,18 +38,20 @@
 
 ---
 
-## Installation
+## Quickstart
 
-### HTML Script Tag
+To install `pack.gl`, use npm or yarn:
 
-``` html
-<script src="https://unpkg.com/pack.gl@latest/dist.min.js"></script>
-```
-
-### NPM Module
+### NPM
 
 ``` bash
 npm install pack.gl --save-dev
+```
+
+### Yarn
+
+``` bash
+yarn add pack.gl --dev
 ```
 
 ---
