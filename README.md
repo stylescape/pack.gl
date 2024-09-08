@@ -11,7 +11,7 @@
 
 ---
 
-<div align="right">
+<div align="center">
 
 [![GitHub License](https://img.shields.io/github/license/stylescape/pack.gl?style=flat-square&logo=readthedocs&logoColor=FFFFFF&label=&labelColor=%23354351&color=%23354351&link=LICENSE)](https://github.com/stylescape/pack.gl/blob/main/LICENSE)
 [![NPM Version](https://img.shields.io/npm/v/pack.gl?style=flat-square&logo=npm&logoColor=FFFFFF&label=NPM&labelColor=354351&color=354351&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fpack.gl)](https://www.npmjs.com/package/pack.gl)
@@ -20,7 +20,7 @@
 
 </div>
 
-<div align="right">
+<div align="center">
 
 [![Report a Bug](https://img.shields.io/badge/Report%20a%20Bug-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/stylescape/pack.gl/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=bug_report.yml)
 [![Request a Feature](https://img.shields.io/badge/Request%20a%20Feature-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/stylescape/pack.gl/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=feature_request.yml)
