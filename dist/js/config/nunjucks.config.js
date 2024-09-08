@@ -1,7 +1,6 @@
 "use strict";
-// ============================================================================
-// Import
-// ============================================================================
+// This configuration is tailored to a typical web application setup. Adjust the `noCache` option
+// according to your caching strategy for production environments to optimize performance.
 Object.defineProperty(exports, "__esModule", { value: true });
 // ============================================================================
 // Constants
@@ -22,8 +21,3 @@ const nunjucksConfig = {
 // Export
 // ============================================================================
 exports.default = nunjucksConfig;
-// ============================================================================
-// Notes
-// ============================================================================
-// This configuration is tailored to a typical web application setup. Adjust the `noCache` option
-// according to your caching strategy for production environments to optimize performance.
