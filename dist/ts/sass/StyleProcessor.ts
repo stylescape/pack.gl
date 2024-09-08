@@ -6,6 +6,7 @@ import * as sass from "sass";
 import postcss from "postcss";
 import { promises as fs } from "fs";
 import path from "path";
+import { NodePackageImporter } from "sass"; // Update this path based on the actual source of NodePackageImporter
 
 import postcssConfigExpanded from "../config/postcss.config.expanded.js";
 import postcssConfigCompressed from "../config/postcss.config.compressed.js";
@@ -28,7 +29,10 @@ class StyleProcessor {
      * @param styleOption The style option, either "expanded" or "compressed".
      * @returns Processed CSS string.
      */
-    async processPostCSS(css: string, styleOption: "expanded" | "compressed") {
+    async processPostCSS(
+        css: string,
+        styleOption: "expanded" | "compressed"
+    ) {
         const config = styleOption === "expanded" ? postcssConfigExpanded : postcssConfigCompressed;
         const result = await postcss(config.plugins).process(
             css,
@@ -79,7 +83,10 @@ class StyleProcessor {
             // Compile SCSS to CSS
             const result = await sass.compileAsync(
                 inputFile,
-                { style: styleOption }
+                { 
+                    style: styleOption,
+                    importers: [new NodePackageImporter()],
+                }
             );
 
             // Process the compiled CSS with PostCSS
