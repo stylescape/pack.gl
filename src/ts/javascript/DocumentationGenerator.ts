@@ -1,17 +1,17 @@
+// class/DocumentationGenerator.ts
+
 // ============================================================================
-// Import
+// Imports
 // ============================================================================
 
-import { exec } from "child_process";
+import { execFile } from "child_process";
 import util from "util";
-
 
 // ============================================================================
 // Constants
 // ============================================================================
 
-const execAsync = util.promisify(exec);
-
+const execFileAsync = util.promisify(execFile);
 
 // ============================================================================
 // Classes
@@ -23,7 +23,6 @@ const execAsync = util.promisify(exec);
  * and the specific documentation generation command to be used.
  */
 class DocumentationGenerator {
-
     private sourcePath: string;
     private outputPath: string;
     private generatorCommand: string;
@@ -31,9 +30,9 @@ class DocumentationGenerator {
     /**
      * Initializes a new instance of the DocumentationGenerator.
      * 
-     * @param sourcePath Path to the source files for which documentation should be generated.
-     * @param outputPath Path where the generated documentation will be placed.
-     * @param generatorCommand The command-line tool used for generating documentation (e.g., "jsdoc").
+     * @param sourcePath - Path to the source files for which documentation should be generated.
+     * @param outputPath - Path where the generated documentation will be placed.
+     * @param generatorCommand - The command-line tool used for generating documentation (e.g., "jsdoc").
      */
     constructor(sourcePath: string, outputPath: string, generatorCommand: string) {
         this.sourcePath = sourcePath;
@@ -51,12 +50,11 @@ class DocumentationGenerator {
      */
     async generate(): Promise<void> {
         try {
-            // Here, you can add any pre-generation logic if necessary
+            // Prepare command arguments safely
+            const args = ['-c', this.sourcePath, '-o', this.outputPath];
 
-            // Execute the documentation generation command
-            const { stdout, stderr } = await execAsync(
-                `${this.generatorCommand} -c ${this.sourcePath} -o ${this.outputPath}`
-            );
+            // Execute the documentation generation command safely without shell interpolation
+            const { stdout, stderr } = await execFileAsync(this.generatorCommand, args);
 
             if (stderr) {
                 throw new Error(`Documentation generation failed: ${stderr}`);
@@ -64,18 +62,12 @@ class DocumentationGenerator {
 
             console.log(stdout);
             console.log("Documentation generated successfully.");
-
-            // Here, you can add any post-generation logic if necessary
         } catch (error) {
-            console.error(
-                "Error occurred while generating documentation:",
-                error
-            );
+            console.error("Error occurred while generating documentation:", error);
             throw error;
         }
     }
 }
-
 
 // ============================================================================
 // Export
@@ -83,9 +75,8 @@ class DocumentationGenerator {
 
 export default DocumentationGenerator;
 
-
 // ============================================================================
-// Example
+// Example Usage
 // ============================================================================
 
 // import DocumentationGenerator from "./DocumentationGenerator";
