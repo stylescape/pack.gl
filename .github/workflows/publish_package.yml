@@ -137,7 +137,8 @@ jobs:
         name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: '20.x'
+          # node-version: 18.x
           registry-url: https://registry.npmjs.org/
 
       - 
@@ -183,7 +184,8 @@ jobs:
       - 
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '20.x'
+          # node-version: 18
           registry-url: https://npm.pkg.github.com/
           scope: '@stylescape'
 
@@ -200,4 +202,5 @@ jobs:
       - 
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_GPR_TOKEN}}
+          # NODE_AUTH_TOKEN: ${{secrets.PUBLISH_GPR_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
