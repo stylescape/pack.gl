@@ -27,6 +27,8 @@
 
 </div>
 
+<br/>
+
 **Package Builder for the `.gl`-libraries of Scape Agency and its affiliates.**
 
 `pack.gl` is an advanced package builder designed to enhance the efficiency and organization of software development projects. It offers an intuitive interface and robust features tailored for managing and building a wide range of software packages.
@@ -36,6 +38,8 @@
 At its core, `pack.gl` is engineered to address the complexities and challenges faced in the contemporary software development landscape. Whether it's handling dependencies, optimizing package size, or ensuring compatibility across different environments, `pack.gl` offers a comprehensive solution. Its intuitive design makes it accessible for beginners, yet its powerful and flexible feature set meets the demands of even the most experienced developers.
 
 Key to its design philosophy is the adaptability to various development workflows, making it an ideal companion for a range of projects from small-scale personal endeavors to large, complex enterprise applications. `pack.gl` stands not just as a tool but as a partner in the software development journey, enhancing productivity, reducing overhead, and bringing clarity and ease to the package management process.
+
+---
 
 ## Installation
 
@@ -49,14 +53,6 @@ Key to its design philosophy is the adaptability to various development workflow
 
 ``` bash
 npm i pack.gl
-```
-
-## Usage
-
-Here's how to get started with `pack.gl`:
-
-``` javascript
-// Sample code to demonstrate basic usage
 ```
 
 ---
@@ -104,3 +100,9 @@ Also see [LICENSE](https://github.com/stylescape/community/blob/master/src/LICEN
 #### Disclaimer
 
 **THIS SOFTWARE IS PROVIDED AS IS WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
+
+---
+
+<p align="center">
+    <b>Made with ❤️ by <a href="https://www.scape.agency" target="_blank">Scape Agency</a></b>
+</p>
