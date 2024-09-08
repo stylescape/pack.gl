@@ -1,6 +1,6 @@
 {
   "name": "pack.gl",
-  "version": "0.0.61",
+  "version": "0.0.62",
   "description": "Package Builder.",
   "keywords": [
     "pack.gl",
@@ -16,18 +16,44 @@
   ],
   "license": "MIT",
   "homepage": "https://www.pack.gl/",
-  "main": "js/index",
-  "types": "js/index",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/scape-foundation"
+    }
+  ],
+  "main": "js/index.js",
+  "types": "js/index.d.ts",
   "files": [
-    "svg/**/*.svg",
+    "code-snippets/**/*.code-snippets",
+    "css/**/*.{css,map}",
+    "font/**/*.{eot,otf,ttf,woff,woff2}",
+    "inkscape/**/*.inkscape",
+    "jinja/**/*.jinja",
     "js/**/*.d.ts",
     "js/**/*.{js,map}",
-    "ts/**/*.ts",
-    "css/**/*.{css,map}",
+    "less/**/*.less",
+    "md/**/*.md",
+    "oco/**/*.oco",
+    "png/**/*.png",
+    "py/**/*.py",
+    "rcpx/**/*.rcpx",
     "scss/**/*.scss",
-    "font/**/*.{eot,otf,ttf,woff,woff2}",
+    "sketchpalette/**/*.sketchpalette",
+    "styl/**/*.styl",
+    "svg/**/*.svg",
+    "tex/**/*.tex",
+    "ts/**/*.ts",
     "!.DS_Store"
   ],
+  "author": "Lars van Vianen <lars@vianen.com> (https://vianen.com)",
+  "contributors": [
+    "Scape Agency <info@scape.agency>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stylescape/pack.gl.git"
+  },
   "dependencies": {
     "@babel/core": "^7.23.6",
     "@babel/preset-env": "^7.23.6",
