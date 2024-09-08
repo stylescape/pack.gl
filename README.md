@@ -7,10 +7,9 @@
 <h1 align="center" style='border-bottom: none;'>pack.gl</h1>
 <h3 align="center">Package Pipeline Manager</h3>
 
----
-
 <br/>
 
+---
 
 <div align="right">
 
@@ -30,6 +29,8 @@
 [![Start a Discussion](https://img.shields.io/badge/Start%20a%20Discussion-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/stylescape/pack.gl/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=discussion.yml)
 
 </div>
+
+---
 
 <br/>
 
