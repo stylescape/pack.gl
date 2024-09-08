@@ -1,7 +1,5 @@
 "use strict";
-// ============================================================================
-// Import
-// ============================================================================
+// class/DocumentationGenerator.ts
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,12 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// ============================================================================
+// Imports
+// ============================================================================
 const child_process_1 = require("child_process");
 const util_1 = __importDefault(require("util"));
 // ============================================================================
 // Constants
 // ============================================================================
-const execAsync = util_1.default.promisify(child_process_1.exec);
+const execFileAsync = util_1.default.promisify(child_process_1.execFile);
 // ============================================================================
 // Classes
 // ============================================================================
@@ -33,9 +34,9 @@ class DocumentationGenerator {
     /**
      * Initializes a new instance of the DocumentationGenerator.
      *
-     * @param sourcePath Path to the source files for which documentation should be generated.
-     * @param outputPath Path where the generated documentation will be placed.
-     * @param generatorCommand The command-line tool used for generating documentation (e.g., "jsdoc").
+     * @param sourcePath - Path to the source files for which documentation should be generated.
+     * @param outputPath - Path where the generated documentation will be placed.
+     * @param generatorCommand - The command-line tool used for generating documentation (e.g., "jsdoc").
      */
     constructor(sourcePath, outputPath, generatorCommand) {
         this.sourcePath = sourcePath;
@@ -53,15 +54,15 @@ class DocumentationGenerator {
     generate() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // Here, you can add any pre-generation logic if necessary
-                // Execute the documentation generation command
-                const { stdout, stderr } = yield execAsync(`${this.generatorCommand} -c ${this.sourcePath} -o ${this.outputPath}`);
+                // Prepare command arguments safely
+                const args = ['-c', this.sourcePath, '-o', this.outputPath];
+                // Execute the documentation generation command safely without shell interpolation
+                const { stdout, stderr } = yield execFileAsync(this.generatorCommand, args);
                 if (stderr) {
                     throw new Error(`Documentation generation failed: ${stderr}`);
                 }
                 console.log(stdout);
                 console.log("Documentation generated successfully.");
-                // Here, you can add any post-generation logic if necessary
             }
             catch (error) {
                 console.error("Error occurred while generating documentation:", error);
@@ -75,7 +76,7 @@ class DocumentationGenerator {
 // ============================================================================
 exports.default = DocumentationGenerator;
 // ============================================================================
-// Example
+// Example Usage
 // ============================================================================
 // import DocumentationGenerator from "./DocumentationGenerator";
 // const sourcePath = "./src";

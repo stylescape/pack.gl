@@ -10,9 +10,9 @@ declare class DocumentationGenerator {
     /**
      * Initializes a new instance of the DocumentationGenerator.
      *
-     * @param sourcePath Path to the source files for which documentation should be generated.
-     * @param outputPath Path where the generated documentation will be placed.
-     * @param generatorCommand The command-line tool used for generating documentation (e.g., "jsdoc").
+     * @param sourcePath - Path to the source files for which documentation should be generated.
+     * @param outputPath - Path where the generated documentation will be placed.
+     * @param generatorCommand - The command-line tool used for generating documentation (e.g., "jsdoc").
      */
     constructor(sourcePath: string, outputPath: string, generatorCommand: string);
     /**
