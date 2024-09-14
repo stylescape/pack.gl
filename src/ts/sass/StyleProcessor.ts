@@ -85,7 +85,9 @@ class StyleProcessor {
                 inputFile,
                 { 
                     style: styleOption,
-                    importers: [new NodePackageImporter()],
+                    importers: [
+                        new NodePackageImporter()
+                    ],
                 }
             );
 
