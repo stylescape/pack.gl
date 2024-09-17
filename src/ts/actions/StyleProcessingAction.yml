@@ -1,0 +1,31 @@
+# pack.yml
+
+# Define global options if needed (optional)
+globalOptions:
+  logLevel: info
+  stepTimeout: 30000 # Timeout in milliseconds for each step
+
+# Define stages of the pipeline
+stages:
+  - name: CompileStyles
+    description: "Compile SCSS files and process them with PostCSS."
+    steps:
+      - name: ProcessMainStyles
+        action: StyleProcessingAction
+        options:
+          inputFile: "./src/styles/main.scss"       # Path to the input SCSS file
+          outputFile: "./dist/styles/main.css"      # Path to the output CSS file
+          styleOption: "compressed"                 # Output style: 'expanded' or 'compressed'
+    dependsOn: []                                  # Define dependencies if this stage relies on others
+
+  - name: CompileAdditionalStyles
+    description: "Compile additional SCSS files."
+    steps:
+      - name: ProcessAdditionalStyles
+        action: StyleProcessingAction
+        options:
+          inputFile: "./src/styles/additional.scss" # Another SCSS file to process
+          outputFile: "./dist/styles/additional.css"
+          styleOption: "expanded"                   # Example of using 'expanded' style
+    dependsOn:
+      - CompileStyles # This stage depends on the completion of CompileStyles
