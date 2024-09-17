@@ -43,8 +43,8 @@ const postcss_1 = __importDefault(require("postcss"));
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
 const sass_1 = require("sass"); // Update this path based on the actual source of NodePackageImporter
-const postcss_config_expanded_js_1 = __importDefault(require("../config/postcss.config.expanded.js"));
-const postcss_config_compressed_js_1 = __importDefault(require("../config/postcss.config.compressed.js"));
+const postcss_config_expanded_js_1 = __importDefault(require("../../config/postcss.config.expanded.js"));
+const postcss_config_compressed_js_1 = __importDefault(require("../../config/postcss.config.compressed.js"));
 // ============================================================================
 // Classes
 // ============================================================================
@@ -108,7 +108,9 @@ class StyleProcessor {
                 // Compile SCSS to CSS
                 const result = yield sass.compileAsync(inputFile, {
                     style: styleOption,
-                    importers: [new sass_1.NodePackageImporter()],
+                    importers: [
+                        new sass_1.NodePackageImporter()
+                    ],
                 });
                 // Process the compiled CSS with PostCSS
                 const processedCss = yield this.processPostCSS(result.css, styleOption);

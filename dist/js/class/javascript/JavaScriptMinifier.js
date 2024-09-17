@@ -17,7 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const terser_1 = require("terser");
 const fs_1 = require("fs");
-const terser_config_js_1 = __importDefault(require("../config/terser.config.js"));
+const terser_config_js_1 = __importDefault(require("../../config/terser.config.js"));
 // ============================================================================
 // Classes
 // ============================================================================

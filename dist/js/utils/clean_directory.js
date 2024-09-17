@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const DirectoryCleaner_js_1 = __importDefault(require("../directory/DirectoryCleaner.js"));
+const DirectoryCleaner_js_1 = __importDefault(require("../class/directory/DirectoryCleaner.js"));
 const StylizedLogger_js_1 = __importDefault(require("../class/StylizedLogger.js"));
 // ============================================================================
 // Constants

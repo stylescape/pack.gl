@@ -5,7 +5,7 @@
 import svgSprite from "svg-sprite";
 import fs from "fs";
 import path from "path";
-import svgspriteConfig from "../config/svgsprite.config.js"
+import svgspriteConfig from "../../config/svgsprite.config.js"
 
 
 // ============================================================================

@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import DirectoryCleaner from '../directory/DirectoryCleaner.js';
+import DirectoryCleaner from '../class/directory/DirectoryCleaner.js';
 import StylizedLogger from '../class/StylizedLogger.js';
 
 

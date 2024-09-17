@@ -3,36 +3,36 @@
 // ============================================================================
 
 // Import | Utility Classes
-import DirectoryScanner from './directory/DirectoryScanner';
-import DirectoryCleaner from './directory/DirectoryCleaner';
-import DirectoryCopier from './directory/DirectoryCopier';
-import DirectoryCreator from './directory/DirectoryCreator';
-import FileCopier from './file/FileCopier';
-import FileRenamer from './file/FileRenamer';
-import FilenameExtractor from './file/FilenameExtractor';
+import DirectoryScanner from './class/directory/DirectoryScanner';
+import DirectoryCleaner from './class/directory/DirectoryCleaner';
+import DirectoryCopier from './class/directory/DirectoryCopier';
+import DirectoryCreator from './class/directory/DirectoryCreator';
+import FileCopier from './class/file/FileCopier';
+import FileRenamer from './class/file/FileRenamer';
+import FilenameExtractor from './class/file/FilenameExtractor';
 
 // Import | Internal Classes
 import FontGenerator from './class/FontGenerator.js';
-import PackageCreator from './package/PackageCreator.js';
-import StyleProcessor from "./sass/StyleProcessor.js";
-import VersionManager from './version/VersionManager.js';
-import VersionWriter from './version/VersionWriter.js';
+import PackageCreator from './class/package/PackageCreator.js';
+import StyleProcessor from "./class/sass/StyleProcessor.js";
+import VersionManager from './class/version/VersionManager.js';
+import VersionWriter from './class/version/VersionWriter.js';
 
 
-import TypeScriptCompiler from './javascript/TypeScriptCompiler.js';
-import JavaScriptMinifier from './javascript/JavaScriptMinifier.js';
+import TypeScriptCompiler from './class/javascript/TypeScriptCompiler.js';
+import JavaScriptMinifier from './class/javascript/JavaScriptMinifier.js';
 import NpmCommandRunner from './class/NpmCommandRunner.js';
 import StylizedLogger from './class/StylizedLogger.js';
 import TemplateWriter from './class/TemplateWriter.js';
 
-import SvgReader from './svg/SvgReader.js';
-import SvgToPngConverter from './svg/SvgToPngConverter.js';
-import SvgSpriteGenerator from "./svg/SvgSpriteGenerator.js";
-import SvgPackager from "./svg/SvgPackager.js";
+import SvgReader from './class/svg/SvgReader.js';
+import SvgToPngConverter from './class/svg/SvgToPngConverter.js';
+import SvgSpriteGenerator from "./class/svg/SvgSpriteGenerator.js";
+import SvgPackager from "./class/svg/SvgPackager.js";
 
 import TestRunner from './class/TestRunner.js';
-import DocumentationGenerator from './javascript/DocumentationGenerator.js';
-import CodeLinter from './javascript/CodeLinter.js';
+import DocumentationGenerator from './class/javascript/DocumentationGenerator.js';
+import CodeLinter from './class/javascript/CodeLinter.js';
 import JSONLoader from './class/JSONLoader.js';
 
 

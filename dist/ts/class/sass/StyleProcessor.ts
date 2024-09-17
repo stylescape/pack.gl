@@ -8,8 +8,8 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NodePackageImporter } from "sass"; // Update this path based on the actual source of NodePackageImporter
 
-import postcssConfigExpanded from "../config/postcss.config.expanded.js";
-import postcssConfigCompressed from "../config/postcss.config.compressed.js";
+import postcssConfigExpanded from "../../config/postcss.config.expanded.js";
+import postcssConfigCompressed from "../../config/postcss.config.compressed.js";
 
 
 // ============================================================================
@@ -85,7 +85,9 @@ class StyleProcessor {
                 inputFile,
                 { 
                     style: styleOption,
-                    importers: [new NodePackageImporter()],
+                    importers: [
+                        new NodePackageImporter()
+                    ],
                 }
             );
 

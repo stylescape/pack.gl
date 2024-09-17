@@ -18,7 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const svg_sprite_1 = __importDefault(require("svg-sprite"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const svgsprite_config_js_1 = __importDefault(require("../config/svgsprite.config.js"));
+const svgsprite_config_js_1 = __importDefault(require("../../config/svgsprite.config.js"));
 // ============================================================================
 // Classes
 // ============================================================================
