@@ -1,7 +1,7 @@
 // src/pack.ts
 
 import { Pipeline } from './core/Pipeline';
-import { loadConfig } from './config';
+import { ConfigLoader } from './core/ConfigLoader'; // Updated import path for ConfigLoader
 
 /**
  * The main function initializes the pipeline with the loaded configuration
@@ -9,8 +9,9 @@ import { loadConfig } from './config';
  */
 async function main() {
     try {
-        // Load the configuration from the YAML file
-        const config = loadConfig();
+        // Initialize the ConfigLoader and load the configuration from the YAML file
+        const configLoader = new ConfigLoader();
+        const config = configLoader.loadConfig();
 
         // Create a new Pipeline instance with the loaded configuration
         const pipeline = new Pipeline(config);
