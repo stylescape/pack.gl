@@ -5,7 +5,7 @@
 // Import
 // ============================================================================
 
-import { StepActionInterface } from "./StepActionInterface";
+import { ActionInterface } from "./ActionInterface";
 import { StepOptionsInterface } from "./StepOptionsInterface";
 
 
@@ -28,12 +28,12 @@ export interface StepInterface {
 
     /**
      * The action that this step will perform, represented by a class
-     * implementing the StepActionInterface. This action defines the core
+     * implementing the ActionInterface. This action defines the core
      * functionality of the step, such as building, testing, or deploying.
      * The action is responsible for executing the main logic associated with
      * the step.
      */
-    action: StepActionInterface;
+    action: ActionInterface;
 
     /**
      * Optional configuration options specific to the step.
