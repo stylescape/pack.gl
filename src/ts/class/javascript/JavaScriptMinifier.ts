@@ -4,7 +4,7 @@
 
 import { minify } from "terser";
 import { promises as fs } from "fs";
-import terserConfig from "../config/terser.config.js"
+import terserConfig from "../../config/terser.config.js"
 
 
 // ============================================================================

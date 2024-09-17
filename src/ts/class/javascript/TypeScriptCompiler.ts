@@ -4,7 +4,7 @@
 
 import ts from 'typescript';
 import path from 'path';
-import tsConfig from "../config/ts.config.js"
+import tsConfig from "../../config/ts.config.js"
 import fs from 'fs';
 
 
