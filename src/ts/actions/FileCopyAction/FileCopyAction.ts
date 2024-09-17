@@ -1,5 +1,5 @@
-import { BaseStepAction } from '../core/BaseStepAction';
-import { ActionOptionsType } from '../types/ActionOptionsType';
+import { BaseStepAction } from '../../core/BaseStepAction';
+import { ActionOptionsType } from '../../types/ActionOptionsType';
 import fs from 'fs';
 import path from 'path';
 

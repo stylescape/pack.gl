@@ -1,14 +1,17 @@
-import { ActionOptionsType } from '../types/ActionOptionsType';
+
+
+import path from 'path';
+import { promises as fs } from 'fs';
 import * as sass from 'sass';
 import postcss from 'postcss';
-import { promises as fs } from 'fs';
-import path from 'path';
-import { NodePackageImporter } from 'sass'; // Update the path based on your project setup
+
+
+import { BaseStepAction } from '../../core/BaseStepAction.js';
+import { ActionOptionsType } from '../../types/ActionOptionsType.js';
 
 // Assuming the PostCSS configurations are available at the given paths
-import postcssConfigExpanded from '../config/postcss.config.expanded.js';
-import postcssConfigCompressed from '../config/postcss.config.compressed.js';
-import { BaseStepAction } from '../core/BaseStepAction';
+import postcssConfigExpanded from '../../config/postcss.config.expanded.js';
+import postcssConfigCompressed from '../../config/postcss.config.compressed.js';
 
 
 /**
@@ -46,7 +49,7 @@ export class StyleProcessingAction extends BaseStepAction {
             const result = await sass.compileAsync(inputFile, { 
                 style: styleOption,
                 importers: [
-                    new NodePackageImporter(),
+                    new sass.NodePackageImporter(),
                 ],
             });
 
