@@ -1,118 +1,66 @@
-// src/Step.ts
+// src/core/Step.ts
 
-import { Step as StepType } from './types';
+
+// ============================================================================
+// Import
+// ============================================================================
+
+import { StepActionInterface } from '../interface/StepActionInterface';
+import { StepInterface } from '../interface/StepInterface';
+import { getStepAction } from './StepActionRegistry';
+
+
+// ============================================================================
+// Class
+// ============================================================================
 
 /**
  * Represents a single step in a stage, encapsulating its execution logic.
+ * This class manages the resolution and execution of actions associated with each step.
  */
 export class Step {
     private name: string;
-    private action: string;
+    private action: StepActionInterface;
     private options?: Record<string, any>;
 
     /**
      * Constructs a Step instance with the given step definition.
+     * Dynamically resolves the action class from the registry based on the action name.
      * @param step - The step definition containing name, action, and options.
      */
-    constructor(step: StepType) {
+    constructor(step: StepInterface) {
         this.name = step.name;
-        this.action = step.action;
+        
+        // Resolve the action class from the registry using the action name
+        const ActionClass = getStepAction(step.action.constructor.name); 
+        if (!ActionClass) {
+            throw new Error(`Unknown action: ${step.action.constructor.name}. Please ensure it is registered.`);
+        }
+        
+        // Initialize the action with the specific class from the registry
+        this.action = new ActionClass();
         this.options = step.options;
     }
 
     /**
-     * Executes the step, handling the action specified and managing errors.
-     * Includes logging of the start and completion of each step.
+     * Executes the step by invoking its action's execute method.
      */
-    async execute() {
+    async execute(): Promise<void> {
         console.log(`Running step: ${this.name}`);
         try {
-            // Simulate the task execution logic
-            switch (this.action) {
-                case 'build':
-                    await this.build();
-                    break;
-                case 'test':
-                    await this.test();
-                    break;
-                case 'lint':
-                    await this.lint();
-                    break;
-                case 'package':
-                    await this.package();
-                    break;
-                case 'deploy':
-                    await this.deploy();
-                    break;
-                case 'custom':
-                    await this.customAction();
-                    break;
-                default:
-                    throw new Error(`Unknown action: ${this.action}`);
+            // Validate options if the action provides a validation method
+            if (typeof this.action.validateOptions === 'function') {
+                const isValid = this.action.validateOptions(this.options || {});
+                if (!isValid) {
+                    throw new Error(`Invalid options for step: ${this.name}`);
+                }
             }
+
+            // Execute the action with the provided options
+            await this.action.execute(this.options || {});
             console.log(`Step ${this.name} completed successfully.`);
         } catch (error) {
             console.error(`Error executing step ${this.name}:`, error);
         }
-    }
-
-    /**
-     * Handles the 'build' action.
-     * Simulates a build process with optional configurations.
-     */
-    private async build() {
-        console.log(`Building with options: ${JSON.stringify(this.options)}`);
-        // Simulate build operation
-        await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-
-    /**
-     * Handles the 'test' action.
-     * Simulates a testing process with optional configurations.
-     */
-    private async test() {
-        console.log(`Testing with options: ${JSON.stringify(this.options)}`);
-        // Simulate test operation
-        await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-
-    /**
-     * Handles the 'lint' action.
-     * Simulates a linting process with optional configurations.
-     */
-    private async lint() {
-        console.log(`Linting with options: ${JSON.stringify(this.options)}`);
-        // Simulate lint operation
-        await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-
-    /**
-     * Handles the 'package' action.
-     * Simulates a packaging process with optional configurations.
-     */
-    private async package() {
-        console.log(`Packaging with options: ${JSON.stringify(this.options)}`);
-        // Simulate package operation
-        await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-
-    /**
-     * Handles the 'deploy' action.
-     * Simulates a deployment process with optional configurations.
-     */
-    private async deploy() {
-        console.log(`Deploying with options: ${JSON.stringify(this.options)}`);
-        // Simulate deploy operation
-        await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-
-    /**
-     * Handles a 'custom' action.
-     * Allows for user-defined behavior.
-     */
-    private async customAction() {
-        console.log(`Executing custom action with options: ${JSON.stringify(this.options)}`);
-        // Simulate custom action
-        await new Promise(resolve => setTimeout(resolve, 1000));
     }
 }
