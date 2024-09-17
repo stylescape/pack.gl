@@ -5,9 +5,9 @@
 // Import
 // ============================================================================
 
-import { StepActionInterface } from '../interface/StepActionInterface';
+import { ActionInterface } from '../interface/ActionInterface';
 import { StepInterface } from '../interface/StepInterface';
-import { getStepAction } from './StepActionRegistry';
+import { getAction } from './ActionRegistry';
 
 
 // ============================================================================
@@ -20,7 +20,7 @@ import { getStepAction } from './StepActionRegistry';
  */
 export class Step {
     private name: string;
-    private action: StepActionInterface;
+    private action: ActionInterface;
     private options?: Record<string, any>;
 
     /**
@@ -32,7 +32,7 @@ export class Step {
         this.name = step.name;
         
         // Resolve the action class from the registry using the action name
-        const ActionClass = getStepAction(step.action.constructor.name); 
+        const ActionClass = getAction(step.action.constructor.name); 
         if (!ActionClass) {
             throw new Error(`Unknown action: ${step.action.constructor.name}. Please ensure it is registered.`);
         }
