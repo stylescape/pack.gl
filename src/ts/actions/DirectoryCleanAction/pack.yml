@@ -1,0 +1,10 @@
+# pack.yml
+
+stages:
+  - name: CleanBuildDirectory
+    description: "Clean the build directory before starting a new build."
+    steps:
+      - name: CleanBuildDirStep
+        action: DirectoryCleanAction
+        options:
+          dirPath: "./dist"  # Path to the directory to be cleaned
