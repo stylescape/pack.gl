@@ -1,10 +1,10 @@
 // src/actions/BuildAction.ts
 
 
-import { BaseStepAction } from '../core/BaseStepAction';
+import { BaseAction } from '../core/BaseAction';
 import { ActionOptionsType } from '../types/ActionOptionsType';
 
-export class BuildAction extends BaseStepAction {
+export class BuildAction extends BaseAction {
 
     async execute(options: ActionOptionsType): Promise<void> {
         this.log('Starting build process...');
