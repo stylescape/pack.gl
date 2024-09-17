@@ -1,4 +1,4 @@
-import { BaseStepAction } from '../../core/BaseStepAction';
+import { BaseAction } from '../../core/BaseAction';
 import { ActionOptionsType } from '../../types/ActionOptionsType';
 import fs from 'fs';
 import path from 'path';
@@ -8,7 +8,7 @@ import path from 'path';
  * location to a destination directory. This action handles file path resolution
  * and ensures that existing files in the destination can be replaced if necessary.
  */
-export class FileCopyAction extends BaseStepAction {
+export class FileCopyAction extends BaseAction {
 
     /**
      * Executes the file copy action.
