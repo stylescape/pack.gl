@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "config": {
         "version_short": "0.0"
     },
@@ -84,7 +84,9 @@
     },
     "devDependencies": {
         "@types/eslint": "^9.6.0",
+        "@types/express": "^4.17.21",
         "@types/semver": "^7.5.6",
+        "@types/ws": "^8.5.12",
         "pack.gl": "^0.0.61",
         "ts-node": "^10.9.1",
         "tslib": "^2.7.0",
