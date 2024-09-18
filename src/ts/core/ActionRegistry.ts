@@ -5,7 +5,12 @@
 // Import
 // ============================================================================
 
-import { BuildAction } from '../actions/BuildAction';
+import { DirectoryCleanAction } from '../actions/DirectoryCleanAction/DirectoryCleanAction';
+import { DirectoryCopyAction } from '../actions/DirectoryCopyAction/DirectoryCopyAction';
+import { FileCopyAction } from '../actions/FileCopyAction/FileCopyAction';
+import { PackageManagerAction } from '../actions/PackageManagerAction/PackageManagerAction';
+import { StyleProcessingAction } from '../actions/StyleProcessingAction/StyleProcessingAction';
+import { VersionWriteAction } from '../actions/VersionWriterAction/VersionWriterAction';
 import { ActionInterface } from '../interface/ActionInterface';
 
 
@@ -59,4 +64,9 @@ export function listRegisteredActions(): string[] {
 }
 
 // Pre-register core actions
-registerAction('build', BuildAction);
+registerAction('DirectoryCleanAction', DirectoryCleanAction);
+registerAction('DirectoryCopyAction', DirectoryCopyAction);
+registerAction('FileCopyAction', FileCopyAction);
+registerAction('PackageManagerAction', PackageManagerAction);
+registerAction('StyleProcessingAction', StyleProcessingAction);
+registerAction('VersionWriteAction', VersionWriteAction);
