@@ -1,13 +1,14 @@
-import { BaseAction } from '../../core/BaseAction';
+import { Action } from '../../core/Action';
 import { ActionOptionsType } from '../../types/ActionOptionsType';
 import path from 'path';
 import fs from 'fs';
 
 /**
  * DirectoryCleanAction is a step action responsible for cleaning a directory
- * by recursively deleting all its contents, including files and subdirectories.
+ * by recursively deleting all its contents, including files and
+ * subdirectories.
  */
-export class DirectoryCleanAction extends BaseAction {
+export class DirectoryCleanAction extends Action {
 
     /**
      * Executes the directory cleaning action.
