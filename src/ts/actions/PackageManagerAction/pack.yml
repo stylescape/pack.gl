@@ -1,0 +1,19 @@
+# pack.yml
+
+stages:
+  - name: ManagePackageJson
+    description: "Read and/or create package.json files based on configuration."
+    steps:
+      - name: ReadPackageJson
+        action: PackageManagerAction
+        options:
+          packageJsonPath: "./path/to/package.json"
+      - name: CreatePackageJson
+        action: PackageManagerAction
+        options:
+          outputDir: "./path/to/output"
+          customConfig:
+            name: "my-new-project"
+            version: "1.0.0"
+            description: "A new Node.js project"
+            author: "Developer Name"
