@@ -6,7 +6,7 @@ import * as sass from 'sass';
 import postcss from 'postcss';
 
 
-import { BaseAction } from '../../core/BaseAction.js';
+import { Action } from '../../core/Action.js';
 import { ActionOptionsType } from '../../types/ActionOptionsType.js';
 
 // Assuming the PostCSS configurations are available at the given paths
@@ -19,7 +19,7 @@ import postcssConfigCompressed from '../../config/postcss.config.compressed.js';
  * including compiling SCSS and applying PostCSS transformations. It supports
  * expanded and compressed output styles based on the provided configuration.
  */
-export class StyleProcessingAction extends BaseAction {
+export class StyleProcessingAction extends Action {
 
     /**
      * Executes the style processing action.
