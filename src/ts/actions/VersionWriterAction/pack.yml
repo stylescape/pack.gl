@@ -1,0 +1,11 @@
+# pack.yml
+
+stages:
+  - name: WriteVersion
+    description: "Write version information to a file."
+    steps:
+      - name: WriteVersionStep
+        action: VersionWriteAction
+        options:
+          filePath: "./VERSION.txt"   # Path to the file where the version will be written
+          version: "1.0.3"            # Version string to write
