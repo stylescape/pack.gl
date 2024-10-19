@@ -39,13 +39,17 @@
     "main": "src/ts/index.ts",
     "type": "module",
     "module": "dist/js/index.js",
+    "bin": {
+        "pack": "./dist/cli.js"
+    },
     "scripts": {
         "format": "npx prettier --write .",
         "lint": "eslint 'src/**/*.ts' || true",
         "prettify": "prettier --write 'src/**/*.ts'",
         "build": "npm run build-compile && npm run build-process",
         "build-compile": "tsc -p bin/tsconfig.json",
-        "build-process": "node bin/js/index.js"
+        "build-process": "node bin/js/index.js",
+        "build-tsc": "tsc -p ./tsconfig.json"
     },
     "dependencies": {
         "@babel/core": "^7.23.6",
