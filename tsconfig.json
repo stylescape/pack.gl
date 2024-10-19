@@ -18,7 +18,8 @@
         // "disableReferencedProjectLoad": true,                /* Reduce the number of projects loaded automatically by TypeScript. */
 
         /* Language and Environment */
-        "target": "es2015",                                     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+        // "target": "es2015",                                     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+        "target": "ES6",                                     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
         "lib": ["esnext", "es2017", "ES2015", "dom"],           /* Specify a set of bundled library declaration files that describe the target runtime environment. */
         // "jsx": "preserve",                                   /* Specify what JSX code is generated. */
         "experimentalDecorators": true,                         /* Enable experimental support for TC39 stage 2 draft decorators. */
@@ -28,11 +29,10 @@
         // "jsxImportSource": "",                               /* Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.` */
         // "reactNamespace": "",                                /* Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit. */
         // "noLib": true,                                       /* Disable including any library files, including the default lib.d.ts. */
-        // "useDefineForClassFields": true,                      /* Emit ECMAScript-standard-compliant class fields. */
+        // "useDefineForClassFields": true,                     /* Emit ECMAScript-standard-compliant class fields. */
 
         /* Modules */
-        // "module": "CommonJS",
-        "module": "esnext",                                      /* Specify what module code is generated. */
+        "module": "esnext",                                     /* Specify what module code is generated. */
         //"rootDir": ".",                                       /* Specify the root folder within your source files. */
         "moduleResolution": "node",                             /* Specify how TypeScript looks up a file from a given module specifier. */
         //"baseUrl": "src"                                      /* Specify the base directory to resolve non-relative module names. */,
@@ -46,22 +46,22 @@
         ],
         // "types": [],                                         /* Specify type package names to be included without being referenced in a source file. */
         // "allowUmdGlobalAccess": true,                        /* Allow accessing UMD globals from modules. */
-        "resolveJsonModule": true,                           /* Enable importing .json files */
+        "resolveJsonModule": true,                              /* Enable importing .json files */
         // "noResolve": true,                                   /* Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project. */
 
         /* JavaScript Support */
-        "allowJs": true,                                         /* Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files. */
-        "checkJs": false,                                        /* Enable error reporting in type-checked JavaScript files. */
+        "allowJs": true,                                        /* Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files. */
+        "checkJs": false,                                       /* Enable error reporting in type-checked JavaScript files. */
         // "maxNodeModuleJsDepth": 1,                           /* Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`. */
 
 
         /* Emit */
-    //   "declaration": true,                                 /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
-    //   "declarationMap": true,                              /* Create sourcemaps for d.ts files. */
+        // "declaration": true,                                 /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
+        // "declarationMap": true,                              /* Create sourcemaps for d.ts files. */
         // "emitDeclarationOnly": true,                         /* Only output d.ts files and not JavaScript files. */
         "sourceMap": true,                                      /* Create source map files for emitted JavaScript files. */
         // "outFile": "./",                                     /* Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output. */
-        "outDir": "./dist",                                  /* Specify an output folder for all emitted files. */
+        "outDir": "./dist",                                     /* Specify an output folder for all emitted files. */
         "removeComments": true,                                 /* Disable emitting comments. */
         // "noEmit": true,                                      /* Disable emitting files from a compilation. */
         "noImplicitReturns": true,
@@ -91,7 +91,7 @@
         // "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
 
         /* Type Checking */
-        "strict": true,                                          /* Enable all strict type-checking options. */
+        "strict": true,                                         /* Enable all strict type-checking options. */
         "noImplicitAny": true,                                  /* Enable error reporting for expressions and declarations with an implied `any` type.. */
         "strictNullChecks": true,                               /* When type checking, take into account `null` and `undefined`. */
         "strictFunctionTypes": true,                            /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
@@ -113,7 +113,7 @@
 
         /* Completeness */
         // "skipDefaultLibCheck": true,                         /* Skip type checking .d.ts files that are included with TypeScript. */
-        "skipLibCheck": true,                                    /* Skip type checking all .d.ts files. */
+        "skipLibCheck": true,                                   /* Skip type checking all .d.ts files. */
 
     },
 
@@ -123,13 +123,12 @@
     },
 
     "include": [
-        "src/**/*",
+        // "src/**/*",
         "src/**/*.ts",
-        "bin/**/*",
-        "src/index.ts.xxx",
-        "src/index.ts.xxx",
-        // "script/release.ts",
-        "bin/**/*.ts",
+        // "bin/**/*",
+        // "src/index.ts.xxx",
+        // "src/index.ts.xxx",
+        // "bin/**/*.ts",
 
     ],
 
