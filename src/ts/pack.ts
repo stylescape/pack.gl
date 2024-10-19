@@ -1,8 +1,5 @@
-// src/pack.ts
-
-
 // ============================================================================
-// Import
+// Imports
 // ============================================================================
 
 import { Pipeline } from './core/Pipeline';
@@ -29,58 +26,70 @@ const IGNORED_PATHS = /node_modules/;
  * The main function initializes the pipeline with the loaded configuration,
  * and optionally sets up live reload functionality based on the '--live' flag.
  */
-async function main() {
+export async function main() {
     try {
-        // Check for the '--live' flag in the command-line arguments
+        // Determine if live reload is enabled based on the '--live' flag
         const isLiveReloadEnabled = process.argv.includes('--live');
 
-        // Initialize the ConfigLoader and load the configuration from the YAML file
+        // Load the configuration using ConfigLoader
         const configLoader = new ConfigLoader();
         const config = configLoader.loadConfig();
 
-        // Create a new Pipeline instance with the loaded configuration
+        // Create and run the pipeline
         const pipeline = new Pipeline(config);
-
-        // Run the pipeline
         await pipeline.run();
-
         console.log('Pipeline execution finished successfully.');
 
         if (isLiveReloadEnabled) {
-            // Initialize the live reload server
-            const liveReloadServer = new LiveReloadServer(PORT);
-
-            // Initialize the pipeline manager
-            const pipelineManager = new PipelineManager(liveReloadServer);
-
-            // Initialize the file watcher
-            const fileWatcher = new FileWatcher(WATCH_PATHS, IGNORED_PATHS, (filePath) => {
-                console.log(`Detected change in: ${filePath}. Restarting pipeline...`);
-                pipelineManager.restartPipelineWithDelay(500); // Restart with delay to handle rapid changes
-            });
-
-            // Start the initial pipeline process with live reload capabilities
-            pipelineManager.restartPipeline();
-
-            // Gracefully shutdown on process termination signals
-            process.on('SIGINT', async () => {
-                console.log('Received SIGINT. Shutting down...');
-                await pipelineManager.stopPipeline();
-                await liveReloadServer.shutdown();
-                process.exit(0);
-            });
-
-            process.on('SIGTERM', async () => {
-                console.log('Received SIGTERM. Shutting down...');
-                await pipelineManager.stopPipeline();
-                await liveReloadServer.shutdown();
-                process.exit(0);
-            });
+            setupLiveReload();
         }
 
     } catch (error) {
         console.error('An error occurred during the pipeline execution:', error);
         process.exit(1); // Exit with an error code to signal failure
+    }
+}
+
+/**
+ * Sets up live reload functionality, including the server, file watcher, and
+ * pipeline manager.
+ */
+function setupLiveReload() {
+    // Initialize the live reload server
+    const liveReloadServer = new LiveReloadServer(PORT);
+
+    // Initialize the pipeline manager
+    const pipelineManager = new PipelineManager(liveReloadServer);
+
+    // Initialize the file watcher
+    const fileWatcher = new FileWatcher(WATCH_PATHS, IGNORED_PATHS, (filePath) => {
+        console.log(`Detected change in: ${filePath}. Restarting pipeline...`);
+        pipelineManager.restartPipelineWithDelay(500); // Restart with a delay to handle rapid changes
+    });
+
+    // Start the initial pipeline process with live reload capabilities
+    pipelineManager.restartPipeline();
+
+    // Set up graceful shutdown handlers
+    process.on('SIGINT', () => handleShutdown(pipelineManager, liveReloadServer));
+    process.on('SIGTERM', () => handleShutdown(pipelineManager, liveReloadServer));
+}
+
+/**
+ * Handles the shutdown of the pipeline and live reload server.
+ * 
+ * @param pipelineManager - The pipeline manager instance.
+ * @param liveReloadServer - The live reload server instance.
+ */
+async function handleShutdown(pipelineManager: PipelineManager, liveReloadServer: LiveReloadServer) {
+    console.log('Shutdown signal received. Shutting down...');
+    try {
+        await pipelineManager.stopPipeline();
+        await liveReloadServer.shutdown();
+    } catch (error) {
+        console.error('Error during shutdown:', error);
+    } finally {
+        process.exit(0);
     }
 }
 
