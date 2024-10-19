@@ -6,7 +6,7 @@
 export { Pipeline } from './Pipeline';
 export { Stage } from './Stage';
 export { Step } from './Step';
-export { BaseAction } from './Action';
+export { Action } from './Action';
 export { LiveReloadServer } from './LiveReloadServer';
 export { FileWatcher } from './FileWatcher';
 export { PipelineManager } from './PipelineManager';
