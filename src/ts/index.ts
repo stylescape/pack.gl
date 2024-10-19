@@ -42,6 +42,9 @@ import cleanDirectory from './utils/clean_directory';
 import readPackageJson from "./utils/readPackageJson.js"
 
 
+
+import { main } from "./pack.js"
+
 // ============================================================================
 // Export
 // ============================================================================
@@ -83,4 +86,8 @@ export {
     cleanDirectory,
     readPackageJson,
 
+    main
 };
+
+export * from './types';
+export * from './cli.js';
