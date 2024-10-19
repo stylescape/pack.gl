@@ -43,7 +43,9 @@ import readPackageJson from "./utils/readPackageJson.js"
 
 
 
-import { main } from "./pack.js"
+// import { main } from "./pack.js"
+
+
 
 // ============================================================================
 // Export
@@ -86,8 +88,30 @@ export {
     cleanDirectory,
     readPackageJson,
 
-    main
+    // main
 };
 
+// Export any specific types if needed
 export * from './types';
 export * from './cli.js';
+export { main } from './pack';
+
+// src/index.ts
+
+// Export core modules and functionalities
+export { Pipeline } from './core/Pipeline';
+export { ConfigLoader } from './core/ConfigLoader';
+export { LiveReloadServer } from './core/LiveReloadServer';
+export { FileWatcher } from './core/FileWatcher';
+export { PipelineManager } from './core/PipelineManager';
+
+// Export any actions or utility functions
+export { Action } from './core/Action'; // If this is an actual export from './core/Action'
+// export { DirectoryCleaner } from './actions/DirectoryCleaner';
+// export { FileCopier } from './actions/FileCopier';
+// export { DirectoryCopier } from './actions/DirectoryCopier';
+// export { VersionWriter } from './actions/VersionWriter';
+
+
+
+// Export the main function if it needs to be accessed programmatically
