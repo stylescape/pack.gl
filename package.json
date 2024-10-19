@@ -36,11 +36,10 @@
             "url": "https://github.com/sponsors/scape-foundation"
         }
     ],
-    "main": "src/ts/index.ts",
     "type": "module",
     "module": "dist/js/index.js",
     "bin": {
-        "pack": "./dist/cli.js"
+        "pack": "./dist/js/cli.js"
     },
     "scripts": {
         "format": "npx prettier --write .",
@@ -62,7 +61,7 @@
         "@types/nunjucks": "^3.2.6",
         "@types/svg-sprite": "^0.0.39",
         "autoprefixer": "^10.4.16",
-        "chokidar": "^4.0.1",
+        "chokidar": "^3.6.0",
         "cssnano": "^7.0.4",
         "del": "^8.0.0",
         "eslint": "^9.9.0",
@@ -91,7 +90,7 @@
         "@types/express": "^5.0.0",
         "@types/semver": "^7.5.6",
         "@types/ws": "^8.5.12",
-        "pack.gl": "^0.0.61",
+        "pack.gl": "^0.1.2",
         "ts-node": "^10.9.1",
         "tslib": "^2.7.0",
         "typescript": "^5.5.4"
