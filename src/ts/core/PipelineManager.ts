@@ -6,7 +6,7 @@
 // ============================================================================
 
 import { spawn, ChildProcess } from "child_process";
-import { LiveReloadServer } from "../core/LiveReloadServer";
+import { LiveReloadServer } from "../live/LiveReloadServer";
 
 
 // ============================================================================
@@ -14,14 +14,29 @@ import { LiveReloadServer } from "../core/LiveReloadServer";
 // ============================================================================
 
 export class PipelineManager {
+
+
+    // Parameters
+    // ========================================================================
+
     private pipelineProcess: ChildProcess | null = null;
+
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Initializes the PipelineManager with a LiveReloadServer instance.
      * @param reloadServer - The LiveReloadServer instance to notify when the
      * pipeline restarts.
      */
-    constructor(private reloadServer: LiveReloadServer) {}
+    constructor(
+        private reloadServer: LiveReloadServer
+    ) {}
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Restarts the pipeline process, killing the existing process if it"s
