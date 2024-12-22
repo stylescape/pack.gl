@@ -25,7 +25,14 @@ const execAsync = util.promisify(exec);
  */
 class VersionManager {
 
+    // Parameters
+    // ========================================================================
+
     private currentVersion: string;
+
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Initializes the version manager with a valid semantic version.
@@ -39,6 +46,10 @@ class VersionManager {
         }
         this.currentVersion = currentVersion;
     }
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Updates the current version based on the specified release type.
@@ -67,12 +78,13 @@ class VersionManager {
     async generateChangelog(): Promise<void> {
         try {
             // Placeholder for actual changelog generation logic.
-            console.log('Generating changelog...');
+            console.log("Generating changelog...");
             // Example: Using conventional-changelog-cli
-            // await execAsync('npx conventional-changelog -p angular -i CHANGELOG.md -s');
-            console.log('Changelog generation logic goes here');
+            // await execAsync("npx conventional-changelog -p angular -i
+            // CHANGELOG.md -s");
+            console.log("Changelog generation logic goes here");
         } catch (error) {
-            console.error('Error generating changelog:', error);
+            console.error("Error generating changelog:", error);
             throw error;
         }
     }
