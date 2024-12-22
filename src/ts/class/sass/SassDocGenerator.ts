@@ -3,26 +3,42 @@
 // ============================================================================
 
 // @ts-ignore: Implicit any type for sassdoc module
-import sassdoc from 'sassdoc';
-import path from 'path';
+import sassdoc from "sassdoc";
+import path from "path";
 
 
 // ============================================================================
-// Class: SassDocGenerator
+// Classes
 // ============================================================================
 
 /**
- * SassDocGenerator is responsible for generating SASS documentation using SassDoc.
- * It provides methods to configure and execute the documentation generation process.
+ * SassDocGenerator is responsible for generating SASS documentation using
+ * SassDoc. It provides methods to configure and execute the documentation
+ * generation process.
  */
 class SassDocGenerator {
 
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
+
     /**
-     * Generates SASS documentation for the specified source files or directories.
-     * @param sourcePaths - Array of file or directory paths to generate documentation for.
-     * @param destDir - The directory where the generated documentation should be saved.
+     * Generates SASS documentation for the specified source files or
+     * directories.
+     * @param sourcePaths - Array of file or directory paths to generate
+     * documentation for.
+     * @param destDir - The directory where the generated documentation
+     * should be saved.
      * @param options - Additional options for SassDoc configuration.
-     * @returns A promise that resolves when documentation generation is complete.
+     * @returns A promise that resolves when documentation generation is
+     * complete.
      */
     public async generateDocumentation(
         sourcePaths: string[],
@@ -46,7 +62,7 @@ class SassDocGenerator {
             );
         } catch (error) {
             console.error(
-                'An error occurred while generating SASS documentation:',
+                "An error occurred while generating SASS documentation:",
                 error
             );
             throw error;
@@ -66,14 +82,14 @@ export default SassDocGenerator;
 // Example Usage
 // ============================================================================
 
-// import SassDocGenerator from './SassDocGenerator';
+// import SassDocGenerator from "./SassDocGenerator";
 
 // const sassDocGenerator = new SassDocGenerator();
 
-// sassDocGenerator.generateDocumentation(['src/styles'], 'docs/sass')
+// sassDocGenerator.generateDocumentation(["src/styles"], "docs/sass")
 //     .then(() => {
-//         console.log('Documentation generation complete.');
+//         console.log("Documentation generation complete.");
 //     })
 //     .catch(error => {
-//         console.error('Error generating documentation:', error);
+//         console.error("Error generating documentation:", error);
 //     });
