@@ -1,6 +1,6 @@
 import { __assign } from "tslib";
-import ts from 'typescript';
-import path from 'path';
+import ts from "typescript";
+import path from "path";
 import tsConfig from "../config/ts.config.js";
 var TypeScriptCompiler = (function () {
     function TypeScriptCompiler(customConfig) {
@@ -10,14 +10,14 @@ var TypeScriptCompiler = (function () {
     TypeScriptCompiler.prototype.loadConfig = function (configFilePath, customConfig) {
         var configFile = ts.readConfigFile(configFilePath, ts.sys.readFile);
         if (configFile.error) {
-            var error = ts.flattenDiagnosticMessageText(configFile.error.messageText, '\n');
+            var error = ts.flattenDiagnosticMessageText(configFile.error.messageText, "\n");
             throw new Error("Error reading tsconfig.json: ".concat(error));
         }
         var configParseResult = ts.parseJsonConfigFileContent(configFile.config, ts.sys, path.dirname(configFilePath), customConfig);
         if (configParseResult.errors.length > 0) {
             var errors = configParseResult.errors.map(function (diagnostic) {
-                return ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-            }).join('\n');
+                return ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
+            }).join("\n");
             throw new Error("Error parsing tsconfig.json: ".concat(errors));
         }
         return configParseResult;
