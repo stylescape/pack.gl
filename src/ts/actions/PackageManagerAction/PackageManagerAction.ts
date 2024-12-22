@@ -18,7 +18,7 @@ import { ActionOptionsType } from "../../types/ActionOptionsType.js";
  * and creating `package.json` files, supporting custom configurations and
  * merging with default settings.
  */
-class PackageManagerAction extends Action {
+export class PackageManagerAction extends Action {
 
     // Parameters
     // ========================================================================
@@ -167,4 +167,4 @@ class PackageManagerAction extends Action {
 // Export
 // ============================================================================
 
-export default PackageManagerAction;
+// export default PackageManagerAction;
