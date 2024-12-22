@@ -1,4 +1,4 @@
-import ts from 'typescript';
+import ts from "typescript";
 declare const tsConfig: {
     target: ts.ScriptTarget;
     lib: string[];
