@@ -1,30 +1,48 @@
+// ============================================================================
+// Import
+// ============================================================================
 
+import path from "path";
+import { promises as fs } from "fs";
+import * as sass from "sass";
+import postcss from "postcss";
 
-import path from 'path';
-import { promises as fs } from 'fs';
-import * as sass from 'sass';
-import postcss from 'postcss';
-
-
-import { Action } from '../../core/Action.js';
-import { ActionOptionsType } from '../../types/ActionOptionsType.js';
+import { Action } from "../../core/Action.js";
+import { ActionOptionsType } from "../../types/ActionOptionsType.js";
 
 // Assuming the PostCSS configurations are available at the given paths
-import postcssConfigExpanded from '../../config/postcss.config.expanded.js';
-import postcssConfigCompressed from '../../config/postcss.config.compressed.js';
+import postcssConfigExpanded from "../../config/postcss.config.expanded.js";
+import postcssConfigCompressed from "../../config/postcss.config.compressed.js";
 
+
+// ============================================================================
+// Classes
+// ============================================================================
 
 /**
  * StyleProcessingAction is a step action responsible for processing styles,
  * including compiling SCSS and applying PostCSS transformations. It supports
  * expanded and compressed output styles based on the provided configuration.
  */
-export class StyleProcessingAction extends Action {
+class StyleProcessingAction extends Action {
+
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Executes the style processing action.
-     * @param options - The options specific to style processing, including input/output file paths and style format.
-     * @returns A Promise that resolves when the styles are processed successfully, or rejects with an error if the action fails.
+     * @param options - The options specific to style processing, including
+     * input/output file paths and style format.
+     * @returns A Promise that resolves when the styles are processed
+     * successfully, or rejects with an error if the action fails.
      */
     async execute(
         options: ActionOptionsType
@@ -32,13 +50,17 @@ export class StyleProcessingAction extends Action {
 
         const inputFile = options.inputFile as string;
         const outputFile = options.outputFile as string;
-        const styleOption = options.styleOption as 'expanded' | 'compressed';
+        const styleOption = options.styleOption as "expanded" | "compressed";
 
         if (!inputFile || !outputFile || !styleOption) {
-            throw new Error('Missing required options: inputFile, outputFile, or styleOption.');
+            throw new Error(
+                "Missing required options: inputFile, outputFile, or styleOption."
+            );
         }
 
-        this.log(`Processing styles from ${inputFile} to ${outputFile} with ${styleOption} style.`);
+        this.log(
+            `Processing styles from ${inputFile} to ${outputFile} with ${styleOption} style.`
+        );
 
         try {
             // Ensure the output directory exists
@@ -54,15 +76,26 @@ export class StyleProcessingAction extends Action {
             });
 
             // Process the compiled CSS with PostCSS
-            const processedCss = await this.processPostCSS(result.css, styleOption);
+            const processedCss = await this.processPostCSS(
+                result.css,
+                styleOption
+            );
 
             // Write the processed CSS to a file
-            await fs.writeFile(outputFile, processedCss, 'utf-8');
+            await fs.writeFile(
+                outputFile,
+                processedCss,
+                "utf-8"
+            );
 
-            this.log(`Styles processed successfully from ${inputFile} to ${outputFile}.`);
+            this.log(
+                `Styles processed successfully from ${inputFile} to ${outputFile}.`
+            );
 
         } catch (error) {
-            this.logError(`Error processing styles from ${inputFile}: ${error}`);
+            this.logError(
+                `Error processing styles from ${inputFile}: ${error}`
+            );
             throw error;
         }
     }
@@ -70,11 +103,15 @@ export class StyleProcessingAction extends Action {
     /**
      * Processes the given CSS with PostCSS based on the provided style option.
      * @param css - The CSS string to process.
-     * @param styleOption - The style option, either 'expanded' or 'compressed'.
+     * @param styleOption - The style option, either "expanded" or "compressed".
      * @returns Processed CSS string.
      */
-    private async processPostCSS(css: string, styleOption: 'expanded' | 'compressed'): Promise<string> {
-        const config = styleOption === 'expanded' ? postcssConfigExpanded : postcssConfigCompressed;
+    private async processPostCSS(
+        css: string,
+        styleOption: "expanded" | "compressed"
+    ): Promise<string> {
+
+        const config = styleOption === "expanded" ? postcssConfigExpanded : postcssConfigCompressed;
         const result = await postcss(config.plugins).process(css, { from: undefined, map: { inline: false } });
         return result.css;
     }
@@ -89,7 +126,7 @@ export class StyleProcessingAction extends Action {
         } catch (error) {
             if (error instanceof Error) {
                 const nodeError = error as NodeJS.ErrnoException;
-                if (nodeError.code !== 'EEXIST') {
+                if (nodeError.code !== "EEXIST") {
                     throw nodeError;
                 }
             } else {
@@ -103,6 +140,13 @@ export class StyleProcessingAction extends Action {
      * @returns A string description of the action.
      */
     describe(): string {
-        return 'Processes SCSS files into CSS, applying PostCSS transformations for expanded or compressed outputs.';
+        return "Processes SCSS files into CSS, applying PostCSS transformations for expanded or compressed outputs.";
     }
 }
+
+
+// ============================================================================
+// Export
+// ============================================================================
+
+export default StyleProcessingAction;
