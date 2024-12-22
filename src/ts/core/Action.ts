@@ -1,6 +1,3 @@
-// src/core/BaseAction.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -42,7 +39,9 @@ export abstract class Action implements ActionInterface {
      * @returns A boolean indicating whether the options are valid. Default
      * implementation always returns true.
      */
-    validateOptions(options: ActionOptionsType): boolean {
+    validateOptions(
+        options: ActionOptionsType
+    ): boolean {
         // Default validation: always returns true, can be overridden in
         // derived classes
         return true;
@@ -58,7 +57,9 @@ export abstract class Action implements ActionInterface {
      * @returns A Promise that resolves when the action completes successfully,
      * or rejects with an error if the action fails.
      */
-    abstract execute(options: ActionOptionsType): Promise<void>;
+    abstract execute(
+        options: ActionOptionsType
+    ): Promise<void>;
 
     /**
      * Provides a summary or description of the action.
@@ -90,7 +91,18 @@ export abstract class Action implements ActionInterface {
      * @param error - The error to log, either as a string or an Error object.
      */
     protected logError(error: string | Error): void {
-        console.error(`[${this.constructor.name}] Error:`, error);
+        if (error instanceof Error) {
+            console.error(
+                `[${this.constructor.name}] Error: ${error.message}`
+            );
+            console.error(
+                `[${this.constructor.name}] Stack: ${error.stack}`
+            );
+        } else {
+            console.error(
+                `[${this.constructor.name}] Error: ${error}`
+            );
+        }
     }
 
 }
