@@ -1,14 +1,11 @@
-// src/live/LiveReloadServer.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
 
-import express, { Request, Response, NextFunction } from "express";
 import path from "path";
 import { Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
+import express, { Request, Response, NextFunction } from "express";
 import rateLimit from "express-rate-limit";
 
 
@@ -137,15 +134,14 @@ export class LiveReloadServer {
      */
     private setupMiddleware(): void {
 
-        // Serve static files from the "public" directory
-        // Securely resolve public directory
+        // Securely serve static files from the "public" directory
         const publicPath = path.resolve(
             __dirname,
             "public"
         );
+        console.log("Resolved public directory:", path.resolve(__dirname, "public"));
+        console.log(`Serving static files from: ${publicPath}`);
         this.app.use(express.static(publicPath));
-
-
         // Middleware to inject the live reload script into HTML files
         this.app.use(this.injectLiveReloadScript.bind(this));
 
@@ -211,36 +207,43 @@ export class LiveReloadServer {
         );
     }
 
+
     /**
      * Gracefully shuts down the server and all WebSocket connections.
      */
     public async shutdown(): Promise<void> {
-
         console.log("Shutting down Live Reload Server...");
 
-        this.clients.forEach(client => client.close());
+        this.clients.forEach((client) => client.close());
         this.wss.close();
 
-        await new Promise<void>(
-            (resolve, reject) => {
-                this.server.close(
-                    (err) => {
-                        if (err) {
-                            console.error(
-                                "Error shutting down server:",
-                                err
-                            );
-                            reject(err);
-                        } else {
-                            resolve();
-                        }
+        await new Promise<void>((resolve, reject) => {
+            this.server.close((err) => {
+                if (err) {
+                    if (this.isErrnoException(err) && err.code === "ERR_SERVER_NOT_RUNNING") {
+                        console.warn("Server is not running, skipping shutdown.");
+                        resolve();
+                    } else {
+                        console.error("Error shutting down server:", err);
+                        reject(err);
                     }
-                );
-            }
-        );
+                } else {
+                    resolve();
+                }
+            });
+        });
 
         console.log("Live Reload Server has been shut down.");
-
     }
+
+    /**
+     * Type guard to check if an error is an instance of NodeJS.ErrnoException.
+     * @param error - The error to check.
+     * @returns True if the error has a `code` property.
+     */
+    private isErrnoException(error: unknown): error is NodeJS.ErrnoException {
+        return typeof error === "object" && error !== null && "code" in error;
+    }
+
 
 }
