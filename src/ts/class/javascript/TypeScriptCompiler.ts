@@ -27,6 +27,9 @@ import fs from "fs";
  */
 class TypeScriptCompiler {
 
+    // Parameters
+    // ========================================================================
+
     /**
      *  Configuration for the TypeScript compiler.
      */
@@ -41,6 +44,9 @@ class TypeScriptCompiler {
     private static defaultConfig: any = tsConfig;
     // private static defaultConfig: ts.CompilerOptions = tsConfig;
 
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Initializes a new instance of the TypeScriptCompiler with optional
@@ -67,10 +73,15 @@ class TypeScriptCompiler {
     //     this.parsedConfig = this.loadConfig(configFilePath, customConfig);
     // }
 
+
+    // Methods
+    // ========================================================================
+
     /**
      * Loads and parses the TypeScript configuration from a tsconfig.json file.
      * @param configFilePath Path to the tsconfig.json file.
-     * @param customConfig Additional compiler options to override the default settings.
+     * @param customConfig Additional compiler options to override the default
+     * settings.
      * @returns Parsed command line configuration.
      */
     private loadConfig(
