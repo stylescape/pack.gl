@@ -17,7 +17,7 @@ import { ActionOptionsType } from "../../types";
  * subdirectories from one directory to another, using asynchronous operations
  * for efficient handling.
  */
-class DirectoryCopyAction extends Action {
+export class DirectoryCopyAction extends Action {
 
     // Parameters
     // ========================================================================
@@ -135,4 +135,4 @@ class DirectoryCopyAction extends Action {
 // Export
 // ============================================================================
 
-export default DirectoryCopyAction;
+// export default DirectoryCopyAction;
