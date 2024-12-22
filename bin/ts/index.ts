@@ -3,7 +3,7 @@
 // ============================================================================
 
 // Import necessary modules and classes
-import path from 'path';
+import path from "path";
 import {
     DirectoryCleaner,
     DirectoryCopier,
@@ -15,7 +15,7 @@ import {
     StylizedLogger,
     gl_installer,
     readPackageJson,
-} from 'pack.gl';
+} from "pack.gl";
 import TypeScriptCompiler from "./javascript/TypeScriptCompiler.js";
 
 // ============================================================================
@@ -24,12 +24,12 @@ import TypeScriptCompiler from "./javascript/TypeScriptCompiler.js";
 
 const CONFIG = {
     path: {
-        src:                './src',
-        dist:               './dist',
-        json_output:        './dist',
-        ts_input:           './src/ts',
-        ts_output:          './dist/ts',
-        js_output:          './dist/js',
+        src:                "./src",
+        dist:               "./dist",
+        json_output:        "./dist",
+        ts_input:           "./src/ts",
+        ts_output:          "./dist/ts",
+        js_output:          "./dist/js",
     },
 };
 
@@ -63,7 +63,7 @@ async function main() {
         // --------------------------------------------------------------------
 
         const directoryCleaner = new DirectoryCleaner();
-        logger.header('Clean Directories');
+        logger.header("Clean Directories");
         directoryCleaner.cleanDirectory(CONFIG.path.dist);
         logger.body(`Directory cleaned: ${CONFIG.path.dist}`);
 
@@ -71,7 +71,7 @@ async function main() {
         // Package JSON
         // --------------------------------------------------------------------
 
-        const localPackageConfig = await readPackageJson('./package.json');
+        const localPackageConfig = await readPackageJson("./package.json");
         const packageCreator = new PackageCreator(localPackageConfig);
         const packageConfig = packageCreator.config
         packageCreator.createPackageJson(CONFIG.path.dist);
@@ -82,11 +82,11 @@ async function main() {
 
         const fileCopier = new FileCopier();
         fileCopier.copyFileToDirectory(
-            path.join('.', 'README.md'),
+            path.join(".", "README.md"),
             CONFIG.path.dist,
         )
         fileCopier.copyFileToDirectory(
-            path.join('.', 'LICENSE'),
+            path.join(".", "LICENSE"),
             CONFIG.path.dist,
         )
 
@@ -99,14 +99,14 @@ async function main() {
             CONFIG.path.ts_input,
             CONFIG.path.ts_output,
         );
-        console.log('Files copied successfully.');
+        console.log("Files copied successfully.");
 
 
         // Version
         // --------------------------------------------------------------------
 
         const versionWriter = new VersionWriter();
-        await versionWriter.writeVersionToFile('VERSION', packageConfig.version);
+        await versionWriter.writeVersionToFile("VERSION", packageConfig.version);
 
 
         // Compile TypeScript to JavaScript
@@ -114,19 +114,19 @@ async function main() {
 
         const tsCompiler = new TypeScriptCompiler();
         const tsFiles = [
-            path.join(CONFIG.path.ts_input, 'index.ts'),
+            path.join(CONFIG.path.ts_input, "index.ts"),
         ];
-        const outputDir = './dist/js';
-        // console.log('Starting TypeScript compilation...');
+        const outputDir = "./dist/js";
+        // console.log("Starting TypeScript compilation...");
         await tsCompiler.compile(tsFiles, outputDir);
-        console.log('TypeScript compilation completed.');
+        console.log("TypeScript compilation completed.");
 
 
         // Rename Ts
         // --------------------------------------------------------------------
 
         // await fileRenamer.renameFile(
-        //     path.join(CONFIG.path.js_output, 'index.js'),
+        //     path.join(CONFIG.path.js_output, "index.js"),
         //     path.join(CONFIG.path.js_output, `${packageConfig.name}.js`),
         // )
 
@@ -135,15 +135,15 @@ async function main() {
         // --------------------------------------------------------------------
         // const jsMinifier = new JavaScriptMinifier();
         // await jsMinifier.minifyFile(
-        //     path.join(CONFIG.path.js_output, 'index.js'),
+        //     path.join(CONFIG.path.js_output, "index.js"),
         //     path.join(CONFIG.path.js_output, `${packageConfig.name}.min.js`),
         // )
-        // .then(() => console.log('JavaScript minification completed.'))
+        // .then(() => console.log("JavaScript minification completed."))
         // .catch(console.error);
 
 
     } catch (error) {
-        console.error('An error occurred:', error);
+        console.error("An error occurred:", error);
     }
 
 }
