@@ -18,6 +18,17 @@ import path from "path";
  */
  class FileRenamer {
 
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
+
     /**
      * Renames a file from its current path to a new path. This operation is
      * atomic on most file systems, which means it is either completed fully
@@ -25,10 +36,15 @@ import path from "path";
      * 
      * @param srcPath The current path of the file to be renamed.
      * @param targetPath The new path where the file will be renamed.
-     * @returns A Promise that resolves when the file has been successfully renamed, or rejects if an error occurs.
-     * @throws {Error} Errors could include "ENOENT" if the source file does not exist, or "EACCES" if permission is denied.
+     * @returns A Promise that resolves when the file has been successfully
+     * renamed, or rejects if an error occurs.
+     * @throws {Error} Errors could include "ENOENT" if the source file does
+     * not exist, or "EACCES" if permission is denied.
      */
-    async renameFile(srcPath: string, targetPath: string): Promise<void> {
+    async renameFile(
+        srcPath: string,
+        targetPath: string
+    ): Promise<void> {
         try {
             await fs.promises.rename(srcPath, targetPath);
             console.log(`File renamed from ${srcPath} to ${targetPath}`);
