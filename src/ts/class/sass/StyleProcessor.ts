@@ -23,6 +23,17 @@ import postcssConfigCompressed from "../../config/postcss.config.compressed.js";
  */
 class StyleProcessor {
 
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
+
     /**
      * Processes the given CSS with PostCSS based on the provided style option.
      * @param css The CSS string to process.
