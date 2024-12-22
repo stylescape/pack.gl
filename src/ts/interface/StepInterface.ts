@@ -1,6 +1,3 @@
-// src/interface/StepInterface.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -19,6 +16,7 @@ import { StepOptionsInterface } from "./StepOptionsInterface";
  * its behavior, and optional configuration options tailored to that action.
  */
 export interface StepInterface {
+
     /**
      * A unique identifier for the step, used for logging, debugging, and
      * reporting. This name should be descriptive and clearly indicate the
