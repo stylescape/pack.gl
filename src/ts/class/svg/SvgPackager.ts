@@ -2,11 +2,11 @@
 // Import
 // ============================================================================
 
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import * as glob from 'glob';
-import SVGO from 'svgo';
-import { loadConfig } from 'svgo';
+import * as fs from "fs/promises";
+import * as path from "path";
+import * as glob from "glob";
+import SVGO from "svgo";
+import { loadConfig } from "svgo";
 
 
 // ============================================================================
@@ -20,11 +20,24 @@ import { loadConfig } from 'svgo';
  */
 class SvgPackager {
 
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
     /**
      * Constructor for SvgPackager class.
      * Optionally accepts configurations or dependencies.
      */
-    constructor(private svgoConfigPath: string) {}
+    constructor(
+        private svgoConfigPath: string
+    ) {}
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Processes all SVG files in a given directory.
@@ -51,7 +64,7 @@ class SvgPackager {
 
                 // console.log(`Processing file: ${file}`);
                 const iconName = this.sanitizeFileName(
-                    path.basename(file, '.svg')
+                    path.basename(file, ".svg")
                 );
                 iconNames.push(iconName);
 
@@ -103,10 +116,10 @@ class SvgPackager {
     // private async readSvgFile(filePath: string): Promise<string> {
     //     try {
     //         const absolutePath = path.resolve(filePath);
-    //         const svgContent = await fs.readFile(absolutePath, 'utf8');
+    //         const svgContent = await fs.readFile(absolutePath, "utf8");
     //         return svgContent;
     //     } catch (error) {
-    //         console.error('Error reading file:', filePath, error);
+    //         console.error("Error reading file:", filePath, error);
     //         throw error;
     //     }
     // }
@@ -123,10 +136,10 @@ class SvgPackager {
      */
     // private sanitizeFileName(fileName: string): string {
     //         // Implement more robust sanitization logic if necessary
-    //         return fileName.replace(/[^a-zA-Z0-9_]/g, '_');
+    //         return fileName.replace(/[^a-zA-Z0-9_]/g, "_");
     // }
     private sanitizeFileName(fileName: string): string {
-        return fileName.replace(/[^a-zA-Z0-9_]/g, '_');
+        return fileName.replace(/[^a-zA-Z0-9_]/g, "_");
     }
 
     private async writeFiles(
@@ -159,7 +172,7 @@ class SvgPackager {
     //     try {
             
     //         const config = await loadConfig(
-    //             path.join(__dirname, '../config/svgo.config.js')
+    //             path.join(__dirname, "../config/svgo.config.js")
     //         )
 
     //         const result = await SVGO.optimize(
@@ -169,7 +182,7 @@ class SvgPackager {
 
     //         return result.data;
     //     } catch (error) {
-    //         console.error('Error optimizing SVG:', error);
+    //         console.error("Error optimizing SVG:", error);
     //         throw error;
     //     }
     // }
@@ -287,9 +300,9 @@ export default SvgPackager;
 // Example
 // ============================================================================
 
-// import SvgPackager from './SvgPackager';
+// import SvgPackager from "./SvgPackager";
 
-// const packager = new SvgPackager('./config/svgo.config.js');
-// packager.processSvgFiles('./src/icons', './dist/icons', './dist/ts', './dist')
-//     .then(() => console.log('SVG packaging completed.'))
-//     .catch(error => console.error('Error packaging SVGs:', error));
+// const packager = new SvgPackager("./config/svgo.config.js");
+// packager.processSvgFiles("./src/icons", "./dist/icons", "./dist/ts", "./dist")
+//     .then(() => console.log("SVG packaging completed."))
+//     .catch(error => console.error("Error packaging SVGs:", error));
