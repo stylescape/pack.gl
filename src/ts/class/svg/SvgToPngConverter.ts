@@ -13,17 +13,30 @@ import path from "path";
 // ============================================================================
 
 /**
- * A utility class for converting SVG images to PNG format. This class uses the `sharp` library
- * for image conversion and `jsdom` to manipulate SVG elements.
+ * A utility class for converting SVG images to PNG format. This class uses
+ * the `sharp` library for image conversion and `jsdom` to manipulate
+ * SVG elements.
  */
 class SvgToPngConverter {
+
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Converts SVG content to a PNG file.
      * Optionally resizes the image to the specified width and height.
      *
      * @param {string} svgContent The SVG content to be converted.
-     * @param {string} outputPath The filesystem path where the PNG should be saved.
+     * @param {string} outputPath The filesystem path where the PNG should be
+     * saved.
      * @param {number} [width] Optional width to resize the resulting PNG.
      * @param {number} [height] Optional height to resize the resulting PNG.
      * @throws {Error} Throws an error if the conversion process fails.
