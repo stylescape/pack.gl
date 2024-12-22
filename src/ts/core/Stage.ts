@@ -20,9 +20,18 @@ import { Step } from "./Step";
  * managed before execution.
  */
 export class Stage {
+
+
+    // Parameters
+    // ========================================================================
+
     private name: string;
     private steps: Step[];
     private dependsOn?: string[];
+
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Constructs a Stage instance with the given stage definition.
@@ -34,6 +43,10 @@ export class Stage {
         this.steps = stage.steps.map(step => new Step(step));
         this.dependsOn = stage.dependsOn;
     }
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Executes the stage by running its steps consecutively.
