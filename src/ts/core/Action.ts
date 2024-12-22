@@ -14,9 +14,10 @@ import { ActionOptionsType } from '../types/ActionOptionsType';
 // ============================================================================
 
 /**
- * BaseAction provides a common foundation for step actions in the pack.gl pipeline.
- * This class implements the ActionInterface and provides basic structure and utility methods
- * that can be extended by specific actions like BuildAction, LintAction, etc.
+ * BaseAction provides a common foundation for step actions in the pack.gl
+ * pipeline. This class implements the ActionInterface and provides basic
+ * structure and utility methods that can be extended by specific actions
+ * like BuildAction, LintAction, etc.
  */
 export abstract class Action implements ActionInterface {
 
@@ -25,8 +26,10 @@ export abstract class Action implements ActionInterface {
      * Derived classes can override this method to implement specific
      * validation logic.
      * 
-     * @param options - The options to validate, ensuring they meet the action's specific requirements.
-     * @returns A boolean indicating whether the options are valid. Default implementation always returns true.
+     * @param options - The options to validate, ensuring they meet the
+     * action's specific requirements.
+     * @returns A boolean indicating whether the options are valid. Default
+     * implementation always returns true.
      */
     validateOptions(options: ActionOptionsType): boolean {
         // Default validation: always returns true, can be overridden in
@@ -39,8 +42,10 @@ export abstract class Action implements ActionInterface {
      * the action's main logic.
      * This method is invoked during the step execution process.
      * 
-     * @param options - A structured set of options specific to the action's configuration.
-     * @returns A Promise that resolves when the action completes successfully, or rejects with an error if the action fails.
+     * @param options - A structured set of options specific to the action's
+     * configuration.
+     * @returns A Promise that resolves when the action completes successfully,
+     * or rejects with an error if the action fails.
      */
     abstract execute(options: ActionOptionsType): Promise<void>;
 
@@ -76,4 +81,5 @@ export abstract class Action implements ActionInterface {
     protected logError(error: string | Error): void {
         console.error(`[${this.constructor.name}] Error:`, error);
     }
+
 }

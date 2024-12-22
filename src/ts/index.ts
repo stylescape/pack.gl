@@ -18,7 +18,6 @@ import StyleProcessor from "./class/sass/StyleProcessor.js";
 import VersionManager from './class/version/VersionManager.js';
 import VersionWriter from './class/version/VersionWriter.js';
 
-
 import TypeScriptCompiler from './class/javascript/TypeScriptCompiler.js';
 import JavaScriptMinifier from './class/javascript/JavaScriptMinifier.js';
 import NpmCommandRunner from './class/NpmCommandRunner.js';

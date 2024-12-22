@@ -14,9 +14,10 @@ import { Step } from './Step';
 // ============================================================================
 
 /**
- * Represents a stage in the pipeline, encapsulating its execution logic and dependencies.
- * Each stage consists of multiple steps that are executed consecutively, and stages can
- * have dependencies on other stages which are managed before execution.
+ * Represents a stage in the pipeline, encapsulating its execution logic and
+ * dependencies. Each stage consists of multiple steps that are executed
+ * consecutively, and stages can have dependencies on other stages which are
+ * managed before execution.
  */
 export class Stage {
     private name: string;
@@ -25,7 +26,8 @@ export class Stage {
 
     /**
      * Constructs a Stage instance with the given stage definition.
-     * @param stage - The stage definition containing name, steps, and dependencies.
+     * @param stage - The stage definition containing name, steps, and
+     * dependencies.
      */
     constructor(stage: StageInterface) {
         this.name = stage.name;
@@ -35,8 +37,10 @@ export class Stage {
 
     /**
      * Executes the stage by running its steps consecutively.
-     * Manages dependencies by waiting for dependent stages to complete before execution.
-     * @param completedStages - A set of completed stage names used for dependency tracking.
+     * Manages dependencies by waiting for dependent stages to complete 
+     * before execution.
+     * @param completedStages - A set of completed stage names used for
+     * dependency tracking.
      * @throws Error if any step within the stage fails.
      */
     async execute(completedStages: Set<string>): Promise<void> {
@@ -56,34 +60,56 @@ export class Stage {
             completedStages.add(this.name);
         } catch (error) {
             console.error(`Error executing stage ${this.name}:`, error);
-            throw error; // Propagate the error to halt pipeline or manage based on global settings
+            // Propagate the error to halt pipeline or manage based on
+            // global settings
+            throw error;
         }
     }
 
     /**
      * Resolves dependencies by ensuring all required stages have completed.
-     * @param completedStages - A set of completed stage names used for dependency tracking.
+     * @param completedStages - A set of completed stage names used for
+     * dependency tracking.
      * @returns A promise that resolves once all dependencies are met.
      */
     private async resolveDependencies(completedStages: Set<string>): Promise<void> {
         if (!this.dependsOn) return;
 
-        console.log(`Stage ${this.name} is waiting for dependencies: ${this.dependsOn.join(', ')}`);
+        console.log(
+            `Stage ${this.name} is waiting for dependencies: ${this.dependsOn.join(', ')}`
+        );
         await Promise.all(
-            this.dependsOn.map(dep => this.waitForStageCompletion(dep, completedStages))
+            this.dependsOn.map(
+                dep => this.waitForStageCompletion(
+                    dep,
+                    completedStages
+                )
+            )
         );
         console.log(`All dependencies resolved for stage: ${this.name}`);
     }
 
     /**
-     * Waits for a specified stage to complete by monitoring the completed stages set.
+     * Waits for a specified stage to complete by monitoring the completed
+     * stages set.
      * @param stageName - The name of the stage to wait for.
-     * @param completedStages - A set of completed stage names used for dependency tracking.
-     * @returns A promise that resolves when the specified stage is marked as completed.
+     * @param completedStages - A set of completed stage names used for
+     * dependency tracking.
+     * @returns A promise that resolves when the specified stage is marked
+     * as completed.
      */
-    private async waitForStageCompletion(stageName: string, completedStages: Set<string>): Promise<void> {
+    private async waitForStageCompletion(
+        stageName: string,
+        completedStages: Set<string>
+    ): Promise<void> {
         while (!completedStages.has(stageName)) {
-            await new Promise(resolve => setTimeout(resolve, 100)); // Polling interval to check completion status
+            await new Promise(
+                resolve => setTimeout(
+                    resolve,
+                    100 // Polling interval to check completion status
+                )
+            );
         }
     }
+
 }

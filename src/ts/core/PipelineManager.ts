@@ -18,13 +18,15 @@ export class PipelineManager {
 
     /**
      * Initializes the PipelineManager with a LiveReloadServer instance.
-     * @param reloadServer - The LiveReloadServer instance to notify when the pipeline restarts.
+     * @param reloadServer - The LiveReloadServer instance to notify when the
+     * pipeline restarts.
      */
     constructor(private reloadServer: LiveReloadServer) {}
 
     /**
-     * Restarts the pipeline process, killing the existing process if it's running.
-     * Notifies connected clients via the LiveReloadServer after restarting.
+     * Restarts the pipeline process, killing the existing process if it's
+     * running. Notifies connected clients via the LiveReloadServer after
+     * restarting.
      */
     public restartPipeline(): void {
         if (this.pipelineProcess) {
@@ -41,21 +43,29 @@ export class PipelineManager {
 
         this.pipelineProcess.on('close', (code) => {
             if (code !== 0) {
-                console.error(`Pipeline process exited with code ${code}`);
+                console.error(
+                    `Pipeline process exited with code ${code}`
+                );
             }
             // Reload clients when pipeline restarts
             this.reloadServer.reloadClients();
         });
 
         this.pipelineProcess.on('error', (error) => {
-            console.error('Error starting pipeline process:', error);
+            console.error(
+                'Error starting pipeline process:', error
+            );
         });
 
         this.pipelineProcess.on('exit', (code, signal) => {
             if (signal) {
-                console.log(`Pipeline process was killed with signal: ${signal}`);
+                console.log(
+                    `Pipeline process was killed with signal: ${signal}`
+                );
             } else {
-                console.log(`Pipeline process exited with code: ${code}`);
+                console.log(
+                    `Pipeline process exited with code: ${code}`
+                );
             }
         });
     }
@@ -68,9 +78,13 @@ export class PipelineManager {
         if (this.pipelineProcess) {
             this.pipelineProcess.kill('SIGTERM');
             this.pipelineProcess = null;
-            console.log('Pipeline process stopped.');
+            console.log(
+                'Pipeline process stopped.'
+            );
         } else {
-            console.log('No pipeline process is currently running.');
+            console.log(
+                'No pipeline process is currently running.'
+            );
         }
     }
 
@@ -88,7 +102,9 @@ export class PipelineManager {
      * @param delay - The delay in milliseconds before restarting the pipeline.
      */
     public restartPipelineWithDelay(delay: number = 1000): void {
-        console.log(`Delaying pipeline restart by ${delay} milliseconds...`);
+        console.log(
+            `Delaying pipeline restart by ${delay} milliseconds...`
+        );
         setTimeout(() => this.restartPipeline(), delay);
     }
 }

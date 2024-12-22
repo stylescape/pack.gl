@@ -43,4 +43,5 @@ export interface StepInterface {
      * environments.
      */
     options?: StepOptionsInterface;
+
 }

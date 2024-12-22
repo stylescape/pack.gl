@@ -26,9 +26,13 @@ export class LiveReloadServer {
      * @param port - The port on which the server will listen.
      */
     constructor(private port: number) {
-        this.server = this.app.listen(this.port, () => {
-            console.log(`Live Reload Server running at http://localhost:${this.port}`);
-        });
+        this.server = this.app.listen(
+            this.port, () => {
+                console.log(
+                    `Live Reload Server running at http://localhost:${this.port}`
+                );
+            }
+        );
 
         this.wss = new WebSocketServer({ server: this.server });
         this.setupWebSocketHandlers();
@@ -56,7 +60,8 @@ export class LiveReloadServer {
     }
 
     /**
-     * Sets up middleware for serving static files and injecting the live reload script into HTML files.
+     * Sets up middleware for serving static files and injecting the live
+     * reload script into HTML files.
      */
     private setupMiddleware(): void {
         // Serve static files from the 'public' directory
@@ -72,7 +77,11 @@ export class LiveReloadServer {
      * @param res - The HTTP response object.
      * @param next - The next middleware function.
      */
-    private injectLiveReloadScript(req: Request, res: Response, next: NextFunction): void {
+    private injectLiveReloadScript(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): void {
         if (req.url.endsWith('.html')) {
             res.sendFile(path.join(__dirname, 'public', req.url), (err) => {
                 if (err) {

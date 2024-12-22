@@ -13,7 +13,9 @@
  * to correct locations, ensuring a seamless build experience.
  */
 const CONFIG = {
+
     path: {
+
         src: './src',                           // Source directory for raw files
         dist: './dist',                         // Distribution directory for built files
 
@@ -31,6 +33,7 @@ const CONFIG = {
         ts_output: './dist/ts',                 // Output directory for compiled TypeScript files
         ts_output_icons: './src/ts/icons',      // Output directory for TypeScript icon components
         js_output: './dist/js',                 // Output directory for JavaScript files
+
     },
 
 };

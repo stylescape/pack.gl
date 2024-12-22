@@ -1,5 +1,3 @@
-
-
 // This configuration is tailored to a typical web application setup. Adjust the `noCache` option
 // according to your caching strategy for production environments to optimize performance.
 

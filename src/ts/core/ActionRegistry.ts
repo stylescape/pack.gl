@@ -19,9 +19,9 @@ import { ActionInterface } from '../interface/ActionInterface';
 // ============================================================================
 
 /**
- * A registry for all step actions, mapping action names to their corresponding classes.
- * This registry allows dynamic resolution of step actions within the pipeline,
- * enabling the integration of custom actions by developers.
+ * A registry for all step actions, mapping action names to their corresponding
+ * classes. This registry allows dynamic resolution of step actions within the
+ * pipeline, enabling the integration of custom actions by developers.
  */
 const actionRegistry: Map<string, new () => ActionInterface> = new Map();
 
@@ -30,13 +30,21 @@ const actionRegistry: Map<string, new () => ActionInterface> = new Map();
  * This function allows developers to add custom step actions to the pipeline,
  * enhancing the extensibility of pack.gl.
  *
- * @param name - The unique name of the action. This name is used to reference the action in pipeline configurations.
- * @param actionClass - The class that implements the ActionInterface interface. This class defines the action's behavior.
- * @throws Error if the action name is already registered, ensuring uniqueness of action names.
+ * @param name - The unique name of the action. This name is used to reference
+ * the action in pipeline configurations.
+ * @param actionClass - The class that implements the ActionInterface
+ * interface. This class defines the action's behavior.
+ * @throws Error if the action name is already registered, ensuring uniqueness
+ * of action names.
  */
-export function registerAction(name: string, actionClass: new () => ActionInterface): void {
+export function registerAction(
+    name: string,
+    actionClass: new () => ActionInterface
+): void {
     if (actionRegistry.has(name)) {
-        throw new Error(`Action "${name}" is already registered. Please choose a unique name.`);
+        throw new Error(
+            `Action "${name}" is already registered. Please choose a unique name.`
+        );
     }
     actionRegistry.set(name, actionClass);
 }
@@ -47,7 +55,8 @@ export function registerAction(name: string, actionClass: new () => ActionInterf
  * that implements the ActionInterface.
  *
  * @param name - The name of the action to retrieve.
- * @returns The action class constructor if found, or undefined if no action with the given name is registered.
+ * @returns The action class constructor if found, or undefined if no action
+ * with the given name is registered.
  */
 export function getAction(name: string): (new () => ActionInterface) | undefined {
     return actionRegistry.get(name);
@@ -55,7 +64,8 @@ export function getAction(name: string): (new () => ActionInterface) | undefined
 
 /**
  * Lists all registered step actions.
- * Provides a utility to view currently registered actions, useful for debugging and validation.
+ * Provides a utility to view currently registered actions, useful for
+ * debugging and validation.
  *
  * @returns An array of action names currently registered in the system.
  */

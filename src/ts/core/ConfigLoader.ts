@@ -1,6 +1,7 @@
 /**
- * ConfigLoader is responsible for loading and parsing the `pack.yaml` configuration file.
- * This class reads the YAML configuration, validates it, and converts it into a usable format for the pipeline.
+ * ConfigLoader is responsible for loading and parsing the `pack.yaml`
+ * configuration file. This class reads the YAML configuration, validates it,
+ * and converts it into a usable format for the pipeline.
  */
 
 import path from 'path';
@@ -12,7 +13,8 @@ export class ConfigLoader {
     private configPath: string;
 
     /**
-     * Constructs a ConfigLoader instance, setting up the path to the configuration file.
+     * Constructs a ConfigLoader instance, setting up the path to the
+     * configuration file.
      */
     constructor(configFileName: string = 'pack.yaml') {
         this.configPath = path.resolve(process.cwd(), configFileName);
