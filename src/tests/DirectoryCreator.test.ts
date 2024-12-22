@@ -1,14 +1,9 @@
-// tests/DirectoryCreator.test.ts
-
-
-
-
 // ============================================================================
 // Import
 // ============================================================================
 
 import DirectoryCreator from "../ts/class/directory/DirectoryCreator";
-import fs from "fs";
+import fs from "fs/promises";
 import path from "path";
 
 
@@ -21,27 +16,64 @@ describe("DirectoryCreator", () => {
     const basePath = "./testDirectory";
     const directories = ["dir1", "dir2", "dir3"];
 
-    beforeAll(() => {
-        // Optional: setup if required before all tests run
+    beforeAll(async () => {
+        // Ensure the base directory is clean before starting
+        try {
+            await fs.rmdir(basePath, { recursive: true });
+        } catch (error) {
+            if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+                console.error("Error during setup:", error);
+                throw error;
+            }
+        }
     });
 
-    afterAll(() => {
-        // Cleanup after all tests run
-        // This is where you can delete the test directories created, if you wish
-        directories.forEach(dir => {
-            fs.rmdirSync(path.join(basePath, dir), { recursive: true });
-        });
-        fs.rmdirSync(basePath, { recursive: true });
+    afterAll(async () => {
+        // Cleanup after all tests
+        try {
+            await fs.rmdir(basePath, { recursive: true });
+        } catch (error) {
+            console.error("Error during cleanup:", error);
+        }
     });
 
     it("should create directories correctly", async () => {
         await directoryCreator.createDirectories(basePath, directories);
 
-        directories.forEach(dir => {
+        for (const dir of directories) {
             const dirPath = path.join(basePath, dir);
-            expect(fs.existsSync(dirPath)).toBeTruthy();
-        });
+            const exists = await fs.stat(dirPath).then(
+                () => true,
+                () => false
+            );
+            expect(exists).toBe(true);
+        }
     });
 
-    // Add more tests here if needed
+    it("should not throw an error if the base directory already exists", async () => {
+        await expect(
+            directoryCreator.createDirectories(basePath, directories)
+        ).resolves.not.toThrow();
+
+        for (const dir of directories) {
+            const dirPath = path.join(basePath, dir);
+            const exists = await fs.stat(dirPath).then(
+                () => true,
+                () => false
+            );
+            expect(exists).toBe(true);
+        }
+    });
+
+    it("should handle empty directories array gracefully", async () => {
+        await expect(
+            directoryCreator.createDirectories(basePath, [])
+        ).resolves.not.toThrow();
+
+        const baseExists = await fs.stat(basePath).then(
+            () => true,
+            () => false
+        );
+        expect(baseExists).toBe(true);
+    });
 });
