@@ -10,7 +10,16 @@ import yaml from "js-yaml";
 import { ConfigInterface } from "../interface/ConfigInterface";
 
 export class ConfigLoader {
+
+
+    // Parameters
+    // ========================================================================
+
     private configPath: string;
+
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Constructs a ConfigLoader instance, setting up the path to the
@@ -19,6 +28,10 @@ export class ConfigLoader {
     constructor(configFileName: string = "pack.yaml") {
         this.configPath = path.resolve(process.cwd(), configFileName);
     }
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Loads the configuration from the YAML file.
