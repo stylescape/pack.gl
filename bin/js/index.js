@@ -1,15 +1,15 @@
 import { __awaiter, __generator } from "tslib";
-import path from 'path';
-import { DirectoryCleaner, DirectoryCopier, FileCopier, PackageCreator, VersionWriter, StylizedLogger, readPackageJson, } from 'pack.gl';
+import path from "path";
+import { DirectoryCleaner, DirectoryCopier, FileCopier, PackageCreator, VersionWriter, StylizedLogger, readPackageJson, } from "pack.gl";
 import TypeScriptCompiler from "./javascript/TypeScriptCompiler.js";
 var CONFIG = {
     path: {
-        src: './src',
-        dist: './dist',
-        json_output: './dist',
-        ts_input: './src/ts',
-        ts_output: './dist/ts',
-        js_output: './dist/js',
+        src: "./src",
+        dist: "./dist",
+        json_output: "./dist",
+        ts_input: "./src/ts",
+        ts_output: "./dist/ts",
+        js_output: "./dist/js",
     },
 };
 function main() {
@@ -21,40 +21,40 @@ function main() {
                     _a.trys.push([0, 5, , 6]);
                     logger = new StylizedLogger();
                     directoryCleaner = new DirectoryCleaner();
-                    logger.header('Clean Directories');
+                    logger.header("Clean Directories");
                     directoryCleaner.cleanDirectory(CONFIG.path.dist);
                     logger.body("Directory cleaned: ".concat(CONFIG.path.dist));
-                    return [4, readPackageJson('./package.json')];
+                    return [4, readPackageJson("./package.json")];
                 case 1:
                     localPackageConfig = _a.sent();
                     packageCreator = new PackageCreator(localPackageConfig);
                     packageConfig = packageCreator.config;
                     packageCreator.createPackageJson(CONFIG.path.dist);
                     fileCopier = new FileCopier();
-                    fileCopier.copyFileToDirectory(path.join('.', 'README.md'), CONFIG.path.dist);
-                    fileCopier.copyFileToDirectory(path.join('.', 'LICENSE'), CONFIG.path.dist);
+                    fileCopier.copyFileToDirectory(path.join(".", "README.md"), CONFIG.path.dist);
+                    fileCopier.copyFileToDirectory(path.join(".", "LICENSE"), CONFIG.path.dist);
                     directoryCopier = new DirectoryCopier();
                     return [4, directoryCopier.recursiveCopy(CONFIG.path.ts_input, CONFIG.path.ts_output)];
                 case 2:
                     _a.sent();
-                    console.log('Files copied successfully.');
+                    console.log("Files copied successfully.");
                     versionWriter = new VersionWriter();
-                    return [4, versionWriter.writeVersionToFile('VERSION', packageConfig.version)];
+                    return [4, versionWriter.writeVersionToFile("VERSION", packageConfig.version)];
                 case 3:
                     _a.sent();
                     tsCompiler = new TypeScriptCompiler();
                     tsFiles = [
-                        path.join(CONFIG.path.ts_input, 'index.ts'),
+                        path.join(CONFIG.path.ts_input, "index.ts"),
                     ];
-                    outputDir = './dist/js';
+                    outputDir = "./dist/js";
                     return [4, tsCompiler.compile(tsFiles, outputDir)];
                 case 4:
                     _a.sent();
-                    console.log('TypeScript compilation completed.');
+                    console.log("TypeScript compilation completed.");
                     return [3, 6];
                 case 5:
                     error_1 = _a.sent();
-                    console.error('An error occurred:', error_1);
+                    console.error("An error occurred:", error_1);
                     return [3, 6];
                 case 6: return [2];
             }
