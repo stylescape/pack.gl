@@ -1,6 +1,3 @@
-// src/live/FileWatcher.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -14,14 +11,17 @@ import chokidar, { FSWatcher } from "chokidar";
 
 /**
  * FileWatcher is a utility class for monitoring file and directory changes.
- * It uses `chokidar` to efficiently watch for changes and trigger callbacks.
+ * It leverages the `chokidar` library to efficiently detect file changes and
+ * trigger appropriate callbacks.
  */
 export class FileWatcher {
 
     // Parameters
     // ========================================================================
 
-    // private watcher: FSWatcher;
+    /**
+     * The chokidar file watcher instance.
+     */
     private watcher: FSWatcher | null = null;
 
 
@@ -30,10 +30,11 @@ export class FileWatcher {
 
     /**
      * Creates an instance of FileWatcher.
-     * @param pathsToWatch - An array of paths to watch for changes.
-     * @param ignoredPaths - A regular expression for paths to ignore.
-     * @param onChange - A callback function to execute when a file change
-     * is detected.
+     * @param pathsToWatch - An array of paths to monitor for changes.
+     * @param ignoredPaths - A regular expression to specify paths or patterns
+     * to exclude from watching.
+     * @param onChange - A callback function that is executed when a file
+     * change is detected.
      */
     constructor(
         private pathsToWatch: string[], 
@@ -41,34 +42,15 @@ export class FileWatcher {
         private onChange: (filePath: string) => void
     ) {
         this.startWatching();
-
-        // this.watcher = chokidar.watch(
-        //     this.pathsToWatch,
-        //     {
-        //         ignored: this.ignoredPaths,
-        //         persistent: true,
-        //         // Prevents initial "add" events on startup
-        //         ignoreInitial: true,
-        //         awaitWriteFinish: {
-        //             // Waits for file to finish writing
-        //             stabilityThreshold: 100,
-        //             // Polling interval to check for file stability
-        //             pollInterval: 100,
-        //         },
-        //     }
-        // );
-
-        // this.setupWatchers();
     }
 
     // Methods
     // ========================================================================
 
     /**
-     * Sets up file watchers with chokidar.
-     * Logs when the watcher is ready and handles file change events.
+     * Initializes and configures the chokidar watcher to monitor files and
+     * directories.
      */
-
     private setupWatchers() {
         if (!this.watcher) return;
 
@@ -92,12 +74,9 @@ export class FileWatcher {
             });
     }
 
-
-
-
     /**
-     * Starts the file watcher if it is not already started. Re-initializes
-     * if it has been stopped.
+     * Starts the file watcher if it is not already running. If the watcher
+     * was stopped previously, it re-initializes the watcher.
      */
     public startWatching() {
         if (this.watcher) {
@@ -109,9 +88,12 @@ export class FileWatcher {
         this.watcher = chokidar.watch(this.pathsToWatch, {
             ignored: this.ignoredPaths,
             persistent: true,
+            // Prevents initial "add" events on startup
             ignoreInitial: true,
             awaitWriteFinish: {
+                // Polling interval to check for file stability
                 pollInterval: 100,
+                // Waits for file to finish writing
                 stabilityThreshold: 100,
             },
         });
@@ -120,7 +102,8 @@ export class FileWatcher {
     }
 
     /**
-     * Stops the file watcher and releases resources.
+     * Stops the file watcher and releases its resources. This is useful when
+     * you need to clean up or reinitialize the watcher.
      */
     public async stopWatching() {
         if (this.watcher) {
@@ -130,6 +113,11 @@ export class FileWatcher {
         }
     }
 
+    /**
+     * Restarts the file watcher by first stopping the existing watcher (if
+     * any) and then starting a new one. This can be useful in scenarios where
+     * watcher configurations or paths have changed.
+     */
     public async restartWatcher() {
         console.log("Restarting file watcher...");
         await this.stopWatching();
