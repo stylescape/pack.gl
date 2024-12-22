@@ -5,8 +5,8 @@
 // Import
 // ============================================================================
 
-import { StageInterface } from '../interface/StageInterface';
-import { Step } from './Step';
+import { StageInterface } from "../interface/StageInterface";
+import { Step } from "./Step";
 
 
 // ============================================================================
@@ -76,7 +76,7 @@ export class Stage {
         if (!this.dependsOn) return;
 
         console.log(
-            `Stage ${this.name} is waiting for dependencies: ${this.dependsOn.join(', ')}`
+            `Stage ${this.name} is waiting for dependencies: ${this.dependsOn.join(", ")}`
         );
         await Promise.all(
             this.dependsOn.map(

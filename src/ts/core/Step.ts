@@ -5,9 +5,9 @@
 // Import
 // ============================================================================
 
-import { ActionInterface } from '../interface/ActionInterface';
-import { StepInterface } from '../interface/StepInterface';
-import { getAction } from './ActionRegistry';
+import { ActionInterface } from "../interface/ActionInterface";
+import { StepInterface } from "../interface/StepInterface";
+import { getAction } from "./ActionRegistry";
 
 
 // ============================================================================
@@ -53,7 +53,7 @@ export class Step {
         console.log(`Running step: ${this.name}`);
         try {
             // Validate options if the action provides a validation method
-            if (typeof this.action.validateOptions === 'function') {
+            if (typeof this.action.validateOptions === "function") {
                 const isValid = this.action.validateOptions(
                     this.options || {}
                 );

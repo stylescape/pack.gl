@@ -5,8 +5,8 @@
 // Import
 // ============================================================================
 
-import { ConfigInterface } from '../interface/ConfigInterface';
-import { Stage } from './Stage';
+import { ConfigInterface } from "../interface/ConfigInterface";
+import { Stage } from "./Stage";
 
 
 // ============================================================================
@@ -27,7 +27,7 @@ export class Pipeline {
     /**
      * Global options that apply across the entire pipeline.
      */
-    private globalOptions?: ConfigInterface['globalOptions'];
+    private globalOptions?: ConfigInterface["globalOptions"];
 
     /**
      * Constructs a new Pipeline instance with the given configuration.
@@ -47,7 +47,7 @@ export class Pipeline {
      * handling, and execution control.
      */
     async run(): Promise<void> {
-        console.log('Starting pipeline execution...');
+        console.log("Starting pipeline execution...");
 
         // Track stages that have been completed
         const completedStages = new Set<string>();
@@ -59,16 +59,16 @@ export class Pipeline {
             );
             await this.runWithConcurrencyControl(stagePromises);
         } catch (error) {
-            console.error('Pipeline execution failed:', error);
+            console.error("Pipeline execution failed:", error);
             if (this.globalOptions?.haltOnFailure !== false) {
-                console.error('Halting pipeline due to failure.');
+                console.error("Halting pipeline due to failure.");
                 // Optionally halt the process if the pipeline is set to
                 // halt on failure
                 process.exit(1);
             }
         }
 
-        console.log('Pipeline execution completed successfully.');
+        console.log("Pipeline execution completed successfully.");
     }
 
     /**

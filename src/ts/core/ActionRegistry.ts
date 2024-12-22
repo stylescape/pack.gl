@@ -5,13 +5,13 @@
 // Import
 // ============================================================================
 
-import { DirectoryCleanAction } from '../actions/DirectoryCleanAction/DirectoryCleanAction';
-import { DirectoryCopyAction } from '../actions/DirectoryCopyAction/DirectoryCopyAction';
-import { FileCopyAction } from '../actions/FileCopyAction/FileCopyAction';
-import { PackageManagerAction } from '../actions/PackageManagerAction/PackageManagerAction';
-import { StyleProcessingAction } from '../actions/StyleProcessingAction/StyleProcessingAction';
-import { VersionWriteAction } from '../actions/VersionWriterAction/VersionWriterAction';
-import { ActionInterface } from '../interface/ActionInterface';
+import { DirectoryCleanAction } from "../actions/DirectoryCleanAction/DirectoryCleanAction";
+import { DirectoryCopyAction } from "../actions/DirectoryCopyAction/DirectoryCopyAction";
+import { FileCopyAction } from "../actions/FileCopyAction/FileCopyAction";
+import { PackageManagerAction } from "../actions/PackageManagerAction/PackageManagerAction";
+import { StyleProcessingAction } from "../actions/StyleProcessingAction/StyleProcessingAction";
+import { VersionWriteAction } from "../actions/VersionWriterAction/VersionWriterAction";
+import { ActionInterface } from "../interface/ActionInterface";
 
 
 // ============================================================================
@@ -33,7 +33,7 @@ const actionRegistry: Map<string, new () => ActionInterface> = new Map();
  * @param name - The unique name of the action. This name is used to reference
  * the action in pipeline configurations.
  * @param actionClass - The class that implements the ActionInterface
- * interface. This class defines the action's behavior.
+ * interface. This class defines the action"s behavior.
  * @throws Error if the action name is already registered, ensuring uniqueness
  * of action names.
  */
@@ -74,9 +74,9 @@ export function listRegisteredActions(): string[] {
 }
 
 // Pre-register core actions
-registerAction('DirectoryCleanAction', DirectoryCleanAction);
-registerAction('DirectoryCopyAction', DirectoryCopyAction);
-registerAction('FileCopyAction', FileCopyAction);
-registerAction('PackageManagerAction', PackageManagerAction);
-registerAction('StyleProcessingAction', StyleProcessingAction);
-registerAction('VersionWriteAction', VersionWriteAction);
+registerAction("DirectoryCleanAction", DirectoryCleanAction);
+registerAction("DirectoryCopyAction", DirectoryCopyAction);
+registerAction("FileCopyAction", FileCopyAction);
+registerAction("PackageManagerAction", PackageManagerAction);
+registerAction("StyleProcessingAction", StyleProcessingAction);
+registerAction("VersionWriteAction", VersionWriteAction);

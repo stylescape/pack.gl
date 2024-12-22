@@ -5,8 +5,8 @@
 // Import
 // ============================================================================
 
-import { spawn, ChildProcess } from 'child_process';
-import { LiveReloadServer } from '../core/LiveReloadServer';
+import { spawn, ChildProcess } from "child_process";
+import { LiveReloadServer } from "../core/LiveReloadServer";
 
 
 // ============================================================================
@@ -24,24 +24,24 @@ export class PipelineManager {
     constructor(private reloadServer: LiveReloadServer) {}
 
     /**
-     * Restarts the pipeline process, killing the existing process if it's
+     * Restarts the pipeline process, killing the existing process if it"s
      * running. Notifies connected clients via the LiveReloadServer after
      * restarting.
      */
     public restartPipeline(): void {
         if (this.pipelineProcess) {
-            console.log('Stopping current pipeline process...');
+            console.log("Stopping current pipeline process...");
             this.stopPipeline();
         }
 
-        console.log('Starting pipeline...');
+        console.log("Starting pipeline...");
         this.pipelineProcess = spawn(
-            'npm',
-            ['run', 'start'],
-            { stdio: 'inherit' }
+            "npm",
+            ["run", "start"],
+            { stdio: "inherit" }
         );
 
-        this.pipelineProcess.on('close', (code) => {
+        this.pipelineProcess.on("close", (code) => {
             if (code !== 0) {
                 console.error(
                     `Pipeline process exited with code ${code}`
@@ -51,13 +51,13 @@ export class PipelineManager {
             this.reloadServer.reloadClients();
         });
 
-        this.pipelineProcess.on('error', (error) => {
+        this.pipelineProcess.on("error", (error) => {
             console.error(
-                'Error starting pipeline process:', error
+                "Error starting pipeline process:", error
             );
         });
 
-        this.pipelineProcess.on('exit', (code, signal) => {
+        this.pipelineProcess.on("exit", (code, signal) => {
             if (signal) {
                 console.log(
                     `Pipeline process was killed with signal: ${signal}`
@@ -76,14 +76,14 @@ export class PipelineManager {
      */
     public stopPipeline(): void {
         if (this.pipelineProcess) {
-            this.pipelineProcess.kill('SIGTERM');
+            this.pipelineProcess.kill("SIGTERM");
             this.pipelineProcess = null;
             console.log(
-                'Pipeline process stopped.'
+                "Pipeline process stopped."
             );
         } else {
             console.log(
-                'No pipeline process is currently running.'
+                "No pipeline process is currently running."
             );
         }
     }

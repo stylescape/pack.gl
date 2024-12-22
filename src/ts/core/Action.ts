@@ -5,8 +5,8 @@
 // Import
 // ============================================================================
 
-import { ActionInterface } from '../interface/ActionInterface';
-import { ActionOptionsType } from '../types/ActionOptionsType';
+import { ActionInterface } from "../interface/ActionInterface";
+import { ActionOptionsType } from "../types/ActionOptionsType";
 
 
 // ============================================================================
@@ -27,7 +27,7 @@ export abstract class Action implements ActionInterface {
      * validation logic.
      * 
      * @param options - The options to validate, ensuring they meet the
-     * action's specific requirements.
+     * action"s specific requirements.
      * @returns A boolean indicating whether the options are valid. Default
      * implementation always returns true.
      */
@@ -39,7 +39,7 @@ export abstract class Action implements ActionInterface {
 
     /**
      * Abstract method that must be implemented by derived classes to perform
-     * the action's main logic.
+     * the action"s main logic.
      * This method is invoked during the step execution process.
      * 
      * @param options - A structured set of options specific to the action's
@@ -57,7 +57,7 @@ export abstract class Action implements ActionInterface {
      * @returns A string description of the action.
      */
     describe(): string {
-        return 'Base action for executing steps in the pipeline.';
+        return "Base action for executing steps in the pipeline.";
     }
 
     /**

@@ -4,10 +4,10 @@
  * and converts it into a usable format for the pipeline.
  */
 
-import path from 'path';
-import fs from 'fs';
-import yaml from 'js-yaml';
-import { ConfigInterface } from '../interface/ConfigInterface';
+import path from "path";
+import fs from "fs";
+import yaml from "js-yaml";
+import { ConfigInterface } from "../interface/ConfigInterface";
 
 export class ConfigLoader {
     private configPath: string;
@@ -16,19 +16,21 @@ export class ConfigLoader {
      * Constructs a ConfigLoader instance, setting up the path to the
      * configuration file.
      */
-    constructor(configFileName: string = 'pack.yaml') {
+    constructor(configFileName: string = "pack.yaml") {
         this.configPath = path.resolve(process.cwd(), configFileName);
     }
 
     /**
      * Loads the configuration from the YAML file.
-     * @returns ConfigInterface - The parsed configuration object containing the pipeline stages, steps, and global options.
-     * @throws Error if the configuration file cannot be read, parsed, or validated.
+     * @returns ConfigInterface - The parsed configuration object containing
+     * the pipeline stages, steps, and global options.
+     * @throws Error if the configuration file cannot be read, parsed,
+     * or validated.
      */
     public loadConfig(): ConfigInterface {
         try {
             // Read and parse the YAML configuration file
-            const fileContents = fs.readFileSync(this.configPath, 'utf8');
+            const fileContents = fs.readFileSync(this.configPath, "utf8");
             const config = yaml.load(fileContents) as ConfigInterface;
 
             // Validate the configuration structure
@@ -36,19 +38,24 @@ export class ConfigLoader {
 
             return config;
         } catch (error) {
-            throw new Error(`Failed to load config from ${this.configPath}: ${(error as Error).message}`);
+            throw new Error(
+                `Failed to load config from ${this.configPath}: ${(error as Error).message}`
+            );
         }
     }
 
     /**
      * Validates the structure and content of the configuration object.
-     * Ensures that stages have unique names, valid dependencies, and that the configuration adheres to expected formats.
+     * Ensures that stages have unique names, valid dependencies, and that
+     * the configuration adheres to expected formats.
      * @param config - The configuration object to validate.
      * @throws Error if the configuration is invalid.
      */
     private validateConfig(config: ConfigInterface): void {
         if (!config || !Array.isArray(config.stages)) {
-            throw new Error('Invalid configuration format: "stages" must be an array.');
+            throw new Error(
+                "Invalid configuration format: 'stages' must be an array."
+            );
         }
 
         const stageNames = new Set<string>();
@@ -64,7 +71,9 @@ export class ConfigLoader {
             if (stage.dependsOn) {
                 for (const dependency of stage.dependsOn) {
                     if (!stageNames.has(dependency)) {
-                        throw new Error(`Stage "${stage.name}" has an undefined dependency: "${dependency}".`);
+                        throw new Error(
+                            `Stage "${stage.name}" has an undefined dependency: "${dependency}".`
+                        );
                     }
                 }
             }
@@ -75,31 +84,41 @@ export class ConfigLoader {
     }
 
     /**
-     * Validates the steps within a stage, ensuring each step has the necessary properties.
+     * Validates the steps within a stage, ensuring each step has the
+     * necessary properties.
      * @param steps - The steps array to validate.
      * @param stageName - The name of the stage containing the steps.
      * @throws Error if any step is invalid.
      */
     private validateSteps(steps: any[], stageName: string): void {
         if (!Array.isArray(steps) || steps.length === 0) {
-            throw new Error(`Stage "${stageName}" must contain at least one step.`);
+            throw new Error(
+                `Stage "${stageName}" must contain at least one step.`
+            );
         }
 
         const stepNames = new Set<string>();
 
         for (const step of steps) {
-            if (!step.name || typeof step.name !== 'string') {
-                throw new Error(`Each step in stage "${stageName}" must have a valid "name" property.`);
+            if (!step.name || typeof step.name !== "string") {
+                throw new Error(
+                    `Each step in stage "${stageName}" must have a valid "name" property.`
+                );
             }
 
             if (stepNames.has(step.name)) {
-                throw new Error(`Duplicate step name found in stage "${stageName}": "${step.name}".`);
+                throw new Error(
+                    `Duplicate step name found in stage "${stageName}": "${step.name}".`
+                );
             }
             stepNames.add(step.name);
 
-            // Further validation for step actions and options could be added here as needed
-            if (!step.action || typeof step.action !== 'string') {
-                throw new Error(`Step "${step.name}" in stage "${stageName}" must have a valid "action" property.`);
+            // Further validation for step actions and options could be added
+            // here as needed
+            if (!step.action || typeof step.action !== "string") {
+                throw new Error(
+                    `Step "${step.name}" in stage "${stageName}" must have a valid "action" property.`
+                );
             }
         }
     }
