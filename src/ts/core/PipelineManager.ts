@@ -1,6 +1,3 @@
-// src/live/PipelineManager.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -32,7 +29,10 @@ export class PipelineManager {
      */
     constructor(
         private reloadServer: LiveReloadServer
-    ) {}
+    )
+    {
+        
+    }
 
 
     // Methods
