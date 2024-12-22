@@ -1,9 +1,9 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.1.10",
+    "version": "0.1.11",
     "config": {
-        "version_short": "0.0"
+        "version_short": "0.1"
     },
     "keywords": [
         "pack.gl",
