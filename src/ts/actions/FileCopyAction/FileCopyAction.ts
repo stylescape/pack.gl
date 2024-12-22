@@ -18,7 +18,7 @@ import path from "path";
  * resolution and ensures that existing files in the destination can be
  * replaced if necessary.
  */
-class FileCopyAction extends Action {
+export class FileCopyAction extends Action {
 
     // Parameters
     // ========================================================================
@@ -132,4 +132,4 @@ class FileCopyAction extends Action {
 // Export
 // ============================================================================
 
-export default FileCopyAction;
+// export default FileCopyAction;
