@@ -17,7 +17,7 @@ import fs from "fs";
  * by recursively deleting all its contents, including files and
  * subdirectories.
  */
-class DirectoryCleanAction extends Action {
+export class DirectoryCleanAction extends Action {
 
     // Parameters
     // ========================================================================
@@ -101,4 +101,4 @@ class DirectoryCleanAction extends Action {
 // Export
 // ============================================================================
 
-export default DirectoryCleanAction;
+// export default DirectoryCleanAction;
