@@ -21,7 +21,8 @@ export class FileWatcher {
     // Parameters
     // ========================================================================
 
-    private watcher: FSWatcher;
+    // private watcher: FSWatcher;
+    private watcher: FSWatcher | null = null;
 
 
     // Constructor
@@ -39,23 +40,25 @@ export class FileWatcher {
         private ignoredPaths: RegExp, 
         private onChange: (filePath: string) => void
     ) {
-        this.watcher = chokidar.watch(
-            this.pathsToWatch,
-            {
-                ignored: this.ignoredPaths,
-                persistent: true,
-                // Prevents initial "add" events on startup
-                ignoreInitial: true,
-                awaitWriteFinish: {
-                    // Waits for file to finish writing
-                    stabilityThreshold: 100,
-                    // Polling interval to check for file stability
-                    pollInterval: 100,
-                },
-            }
-        );
+        this.startWatching();
 
-        this.setupWatchers();
+        // this.watcher = chokidar.watch(
+        //     this.pathsToWatch,
+        //     {
+        //         ignored: this.ignoredPaths,
+        //         persistent: true,
+        //         // Prevents initial "add" events on startup
+        //         ignoreInitial: true,
+        //         awaitWriteFinish: {
+        //             // Waits for file to finish writing
+        //             stabilityThreshold: 100,
+        //             // Polling interval to check for file stability
+        //             pollInterval: 100,
+        //         },
+        //     }
+        // );
+
+        // this.setupWatchers();
     }
 
     // Methods
@@ -65,17 +68,16 @@ export class FileWatcher {
      * Sets up file watchers with chokidar.
      * Logs when the watcher is ready and handles file change events.
      */
+
     private setupWatchers() {
+        if (!this.watcher) return;
+
         this.watcher
             .on("ready", () => {
-                console.log(
-                    "File watching is active. Waiting for changes..."
-                );
+                console.log("File watching is active. Waiting for changes...");
             })
             .on("change", (filePath) => {
-                console.log(
-                    `File changed: ${filePath}`
-                );
+                console.log(`File changed: ${filePath}`);
                 try {
                     this.onChange(filePath);
                 } catch (error) {
@@ -86,48 +88,52 @@ export class FileWatcher {
                 }
             })
             .on("error", (error) => {
-                console.error(
-                    "Watcher encountered an error:",
-                    error
-                );
+                console.error("Watcher encountered an error:", error);
             });
     }
+
+
+
 
     /**
      * Starts the file watcher if it is not already started. Re-initializes
      * if it has been stopped.
      */
-    public startWatching(): void {
-        if (!this.watcher) {
-            this.watcher = chokidar.watch(this.pathsToWatch, {
-                ignored: this.ignoredPaths,
-                persistent: true,
-                ignoreInitial: true,
-            });
-            this.setupWatchers();
-            console.log("File watching started.");
+    public startWatching() {
+        if (this.watcher) {
+            console.log("Watcher is already running.");
+            return;
         }
+
+        console.log("Starting file watcher...");
+        this.watcher = chokidar.watch(this.pathsToWatch, {
+            ignored: this.ignoredPaths,
+            persistent: true,
+            ignoreInitial: true,
+            awaitWriteFinish: {
+                pollInterval: 100,
+                stabilityThreshold: 100,
+            },
+        });
+
+        this.setupWatchers();
     }
 
     /**
      * Stops the file watcher and releases resources.
      */
-    public stopWatching(): void {
+    public async stopWatching() {
         if (this.watcher) {
-            this.watcher
-                .close()
-                .then(() => {
-                    console.log(
-                        "File watching has been stopped."
-                    );
-                })
-                .catch((error) => {
-                    console.error(
-                        "Error stopping file watcher:",
-                        error
-                    );
-                });
+            await this.watcher.close();
+            console.log("File watching has been stopped.");
+            this.watcher = null;
         }
+    }
+
+    public async restartWatcher() {
+        console.log("Restarting file watcher...");
+        await this.stopWatching();
+        this.startWatching();
     }
 
 }
