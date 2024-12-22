@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import ts from 'typescript';
+import ts from "typescript";
 
 
 // ============================================================================
@@ -50,15 +50,15 @@ const tsConfig = {
 
 
     lib: ["lib.es2015.d.ts", "lib.dom.d.ts"],
-    // lib: ['ES2015', 'DOM'], // Use correct enum values for lib options
+    // lib: ["ES2015", "DOM"], // Use correct enum values for lib options
     // lib: ["esnext", "es2017`", "ES2015", "dom"],           // Specify a set of bundled library declaration files that describe the target runtime environment.
     // lib: ["es2015", "dom"],             // Specify library files to be included in the compilation
     // lib: ["es2015"],             // Specify library files to be included in the compilation
     // jsx: "preserve",                                   // Specify what JSX code is generated.
     // experimentalDecorators: true,                         // Enable experimental support for TC39 stage 2 draft decorators.
     // emitDecoratorMetadata: true,                          // Emit design-type metadata for decorated declarations in source files.
-    // jsxFactory: "",                                    // Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'
-    // jsxFragmentFactory: "",                            // Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. 'React.Fragment' or 'Fragment'.
+    // jsxFactory: "",                                    // Specify the JSX factory function used when targeting React JSX emit, e.g. "React.createElement" or "h"
+    // jsxFragmentFactory: "",                            // Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. "React.Fragment" or "Fragment".
     // jsxImportSource: "",                               // Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.`
     // reactNamespace: "",                                // Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.
     // noLib: true,                                       // Disable including any library files, including the default lib.d.ts.
@@ -140,7 +140,7 @@ const tsConfig = {
     // ========================================================================
 
     // isolatedModules: true,                             // Ensure that each file can be safely transpiled without relying on other imports.
-    allowSyntheticDefaultImports: true,                   // Allow 'import x from y' when a module doesn't have a default export.
+    allowSyntheticDefaultImports: true,                   // Allow "import x from y" when a module doesn"t have a default export.
     // Enables compatibility with Babel imports
     esModuleInterop: true,                                // Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.
     // preserveSymlinks: true,                            // Disable resolving symlinks to their realpath. This correlates to the same flag in node.
@@ -158,14 +158,14 @@ const tsConfig = {
     // strictBindCallApply: true,                            // Check that the arguments for `bind`, `call`, and `apply` methods match the original function.
     // strictPropertyInitialization: true,                // Check for class properties that are declared but not set in the constructor.
     // noImplicitThis: true,                              // Enable error reporting when `this` is given the type `any`.
-    // useUnknownInCatchVariables: true,                  // Type catch clause variables as 'unknown' instead of 'any'.
-    // alwaysStrict: true,                                // Ensure 'use strict' is always emitted.
-    // noUnusedLocals: true,                              // Enable error reporting when a local variables aren't read.
-    // noUnusedParameters: true,                          // Raise an error when a function parameter isn't read
-    // exactOptionalPropertyTypes: true,                  // Interpret optional property types as written, rather than adding 'undefined'.
+    // useUnknownInCatchVariables: true,                  // Type catch clause variables as "unknown" instead of "any".
+    // alwaysStrict: true,                                // Ensure "use strict" is always emitted.
+    // noUnusedLocals: true,                              // Enable error reporting when a local variables aren"t read.
+    // noUnusedParameters: true,                          // Raise an error when a function parameter isn"t read
+    // exactOptionalPropertyTypes: true,                  // Interpret optional property types as written, rather than adding "undefined".
     // noImplicitReturns: true,                           // Enable error reporting for codepaths that do not explicitly return in a function.
     // noFallthroughCasesInSwitch: true,                     // Enable error reporting for fallthrough cases in switch statements.
-    // noUncheckedIndexedAccess: true,                    // Include 'undefined' in index signature results
+    // noUncheckedIndexedAccess: true,                    // Include "undefined" in index signature results
     // noImplicitOverride: true,                          // Ensure overriding members in derived classes are marked with an override modifier.
     // noPropertyAccessFromIndexSignature: true,          // Enforces using indexed accessors for keys declared using an indexed type
     // allowUnusedLabels: true,                           // Disable error reporting for unused labels.
@@ -242,7 +242,7 @@ const tsConfig = {
     // noUncheckedIndexedAccess?: boolean;
     // out?: string;
     // outDir?: string;
-    // outFile: 'icon.gl.js' // string;
+    // outFile: "icon.gl.js" // string;
     // paths?: MapLike<string[]>;
     // preserveConstEnums?: boolean;
     // noImplicitOverride?: boolean;
