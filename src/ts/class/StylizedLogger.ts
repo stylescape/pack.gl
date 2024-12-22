@@ -13,6 +13,9 @@
 
 class StylizedLogger {
 
+    // Parameters
+    // ========================================================================
+
     /**
      * A utility class for stylized console logging with foreground and
      * background colors. This class utilizes ANSI escape codes to provide
@@ -41,6 +44,14 @@ class StylizedLogger {
             white: "\x1b[47m"
         }
     };
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Logs a message with specified foreground and background colors.
