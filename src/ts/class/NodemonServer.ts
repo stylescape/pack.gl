@@ -6,8 +6,8 @@
 // Import
 // ============================================================================
 
-// import express from 'express';
-// import path from 'path';
+// import express from "express";
+// import path from "path";
 
 // ============================================================================
 // Classes
@@ -29,12 +29,12 @@
 //      * Configures the server routes including static files and any additional API endpoints.
 //      */
 //     private configureRoutes(): void {
-//         // Serve static files from the 'public' directory
-//         this.app.use(express.static(path.join(__dirname, 'public')));
+//         // Serve static files from the "public" directory
+//         this.app.use(express.static(path.join(__dirname, "public")));
 
 //         // Additional routes can be configured here
-//         this.app.get('/', (req, res) => {
-//             res.send('Hello, world!');
+//         this.app.get("/", (req, res) => {
+//             res.send("Hello, world!");
 //         });
 //     }
 
@@ -71,7 +71,7 @@
 /**
  * Usage Example:
  * 
- * import CustomServer from './CustomServer';
+ * import CustomServer from "./CustomServer";
  * 
  * const server = new CustomServer();
  * server.listen(3000); // Listen on port 3000
