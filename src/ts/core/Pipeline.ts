@@ -19,6 +19,11 @@ import { Stage } from "./Stage";
  * dependency handling, and applying global options for consistent pipeline behavior.
  */
 export class Pipeline {
+
+
+    // Parameters
+    // ========================================================================
+
     /**
      * List of stages to be executed in the pipeline.
      */
@@ -28,6 +33,10 @@ export class Pipeline {
      * Global options that apply across the entire pipeline.
      */
     private globalOptions?: ConfigInterface["globalOptions"];
+
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Constructs a new Pipeline instance with the given configuration.
@@ -39,6 +48,10 @@ export class Pipeline {
         this.stages = config.stages.map(stage => new Stage(stage));
         this.globalOptions = config.globalOptions;
     }
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Runs the pipeline, executing stages based on their dependencies.
@@ -72,9 +85,11 @@ export class Pipeline {
     }
 
     /**
-     * Runs the stage promises with concurrency control based on global options.
-     * Limits the number of parallel running stages if maxConcurrentStages is set in global options.
-     * @param stagePromises - An array of promises representing stage executions.
+     * Runs the stage promises with concurrency control based on global
+     * options. Limits the number of parallel running stages if
+     * maxConcurrentStages is set in global options.
+     * @param stagePromises - An array of promises representing stage
+     * executions.
      */
     private async runWithConcurrencyControl(
         stagePromises: Promise<void>[]
