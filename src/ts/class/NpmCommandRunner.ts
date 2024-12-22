@@ -20,11 +20,24 @@ import { exec } from "child_process";
  */
 class NpmCommandRunner {
 
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
+
     /**
      * Executes a given npm command and handles its output or errors.
      * 
-     * @param command The npm command to be executed, such as "install", "update", or a custom script.
-     * @returns A promise that resolves with the standard output of the command, or rejects with an error message.
+     * @param command The npm command to be executed, such as "install",
+     * "update", or a custom script.
+     * @returns A promise that resolves with the standard output of the
+     * command, or rejects with an error message.
      * 
      * @example
      * // Example usage:
