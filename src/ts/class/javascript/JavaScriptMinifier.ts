@@ -19,6 +19,9 @@ import terserConfig from "../../config/terser.config.js"
  */
 class JavaScriptMinifier {
 
+    // Parameters
+    // ========================================================================
+
     /**
      * Configuration for the Terser minification process.
      */
@@ -30,6 +33,10 @@ class JavaScriptMinifier {
      */
     private static defaultConfig: any = terserConfig;
  
+
+    // Constructor
+    // ========================================================================
+
     /**
      * Constructs an instance with merged configuration of default and
      * optionally provided custom settings.
@@ -46,6 +53,10 @@ class JavaScriptMinifier {
         };
     }
 
+
+    // Methods
+    // ========================================================================
+
     /**
      * Minifies a JavaScript file using the configured Terser settings.
      * 
@@ -54,7 +65,8 @@ class JavaScriptMinifier {
      * @returns {Promise<void>} A promise that resolves when the minification
      * process is complete, or rejects with an error.
      * @throws {Error} An error is thrown if there are issues reading the
-     * input file, the minification fails, or the output file cannot be written.
+     * input file, the minification fails, or the output file cannot be
+     * written.
      */
     async minifyFile(
         inputPath: string,
