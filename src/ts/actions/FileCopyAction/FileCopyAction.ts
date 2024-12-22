@@ -1,49 +1,88 @@
-import { Action } from '../../core/Action';
-import { ActionOptionsType } from '../../types/ActionOptionsType';
-import fs from 'fs';
-import path from 'path';
+// ============================================================================
+// Import
+// ============================================================================
+
+import { Action } from "../../core/Action";
+import { ActionOptionsType } from "../../types/ActionOptionsType";
+import fs from "fs";
+import path from "path";
+
+
+// ============================================================================
+// Classes
+// ============================================================================
 
 /**
  * FileCopyAction is a step action responsible for copying files from a source
- * location to a destination directory. This action handles file path resolution
- * and ensures that existing files in the destination can be replaced if necessary.
+ * location to a destination directory. This action handles file path
+ * resolution and ensures that existing files in the destination can be
+ * replaced if necessary.
  */
-export class FileCopyAction extends Action {
+class FileCopyAction extends Action {
+
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Executes the file copy action.
-     * @param options - The options specific to file copying, including source file and destination directory.
-     * @returns A Promise that resolves when the file has been successfully copied, or rejects with an error if the action fails.
+     * @param options - The options specific to file copying, including source
+     * file and destination directory.
+     * @returns A Promise that resolves when the file has been successfully
+     * copied, or rejects with an error if the action fails.
      */
-    async execute(options: ActionOptionsType): Promise<void> {
+    async execute(
+        options: ActionOptionsType
+    ): Promise<void> {
+
         const srcFile = options.srcFile as string;
         const destDir = options.destDir as string;
 
         if (!srcFile || !destDir) {
-            throw new Error('Missing required options: srcFile or destDir.');
+            throw new Error(
+                "Missing required options: srcFile or destDir."
+            );
         }
 
         this.log(`Copying file from ${srcFile} to ${destDir}.`);
 
         try {
             await this.copyFileToDirectory(srcFile, destDir);
-            this.log(`File copied successfully from ${srcFile} to ${destDir}.`);
+            this.log(
+                `File copied successfully from ${srcFile} to ${destDir}.`
+            );
         } catch (error) {
-            this.logError(`Error copying file from ${srcFile} to ${destDir}: ${error}`);
+            this.logError(
+                `Error copying file from ${srcFile} to ${destDir}: ${error}`
+            );
             throw error;
         }
     }
 
     /**
      * Copies a file from a specified source to a destination directory.
-     * Handles file path resolution and ensures the destination directory exists.
+     * Handles file path resolution and ensures the destination directory
+     * exists.
      * 
      * @param srcFile - The path of the source file to be copied.
-     * @param destDir - The destination directory where the file should be placed.
-     * @returns A Promise that resolves when the file has been successfully copied.
-     * @throws {Error} If the file cannot be copied, including due to permission errors or the source file not existing.
+     * @param destDir - The destination directory where the file should
+     * be placed.
+     * @returns A Promise that resolves when the file has been successfully
+     * copied.
+     * @throws {Error} If the file cannot be copied, including due to
+     * permission errors or the source file not existing.
      */
-    private async copyFileToDirectory(srcFile: string, destDir: string): Promise<void> {
+    private async copyFileToDirectory(
+        srcFile: string,
+        destDir: string
+    ): Promise<void> {
         try {
             // Ensure the destination directory exists
             await this.ensureDirectoryExists(destDir);
@@ -70,7 +109,7 @@ export class FileCopyAction extends Action {
         } catch (error) {
             if (error instanceof Error) {
                 const nodeError = error as NodeJS.ErrnoException;
-                if (nodeError.code !== 'EEXIST') {
+                if (nodeError.code !== "EEXIST") {
                     throw nodeError;
                 }
             } else {
@@ -84,6 +123,13 @@ export class FileCopyAction extends Action {
      * @returns A string description of the action.
      */
     describe(): string {
-        return 'Copies a file from a source location to a destination directory, ensuring directories exist and handling errors gracefully.';
+        return "Copies a file from a source location to a destination directory, ensuring directories exist and handling errors gracefully.";
     }
 }
+
+
+// ============================================================================
+// Export
+// ============================================================================
+
+export default FileCopyAction;
