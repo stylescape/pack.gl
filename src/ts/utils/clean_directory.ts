@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import DirectoryCleaner from '../class/directory/DirectoryCleaner.js';
-import StylizedLogger from '../class/StylizedLogger.js';
+import DirectoryCleaner from "../class/directory/DirectoryCleaner.js";
+import StylizedLogger from "../class/StylizedLogger.js";
 
 
 // ============================================================================
@@ -28,7 +28,7 @@ const logger = new StylizedLogger();
  */
 async function cleanDirectory(directoryPath: string): Promise<void> {
     try {
-        logger.header('Clean Directories');
+        logger.header("Clean Directories");
         await directoryCleaner.cleanDirectory(directoryPath);
         logger.body(`Directory cleaned: ${directoryPath}`);
     } catch (error) {
@@ -49,6 +49,6 @@ export default cleanDirectory;
 // Example
 // ============================================================================
 
-// cleanDirectory('path/to/directory')
-//     .then(() => console.log('Directory cleaning completed successfully.'))
-//     .catch(error => console.error('Directory cleaning failed:', error));
+// cleanDirectory("path/to/directory")
+//     .then(() => console.log("Directory cleaning completed successfully."))
+//     .catch(error => console.error("Directory cleaning failed:", error));
