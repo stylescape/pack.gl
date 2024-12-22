@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "config": {
         "version_short": "0.0"
     },
@@ -40,7 +40,7 @@
     "type": "module",
     "module": "dist/js/index.js",
     "bin": {
-        "pack": "dist/js/cli.js"
+        "pack.gl": "js/cli.js"
     },
     "scripts": {
         "format": "npx prettier --write .",
