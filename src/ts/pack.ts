@@ -68,7 +68,9 @@ export async function main(): Promise<void> {
  */
 function setupLiveReload(): void {
 
-    console.log("Live reload functionality is enabled.");
+    console.log(
+        "Live reload functionality is enabled."
+    );
 
     // Initialize the live reload server
     const liveReloadServer = new LiveReloadServer(PORT);
