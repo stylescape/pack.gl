@@ -21,6 +21,17 @@ import { ActionOptionsType } from "../types/ActionOptionsType";
  */
 export abstract class Action implements ActionInterface {
 
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
+
     /**
      * Provides a basic validation mechanism for action options.
      * Derived classes can override this method to implement specific
