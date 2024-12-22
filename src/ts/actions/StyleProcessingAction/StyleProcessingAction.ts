@@ -24,7 +24,7 @@ import postcssConfigCompressed from "../../config/postcss.config.compressed.js";
  * including compiling SCSS and applying PostCSS transformations. It supports
  * expanded and compressed output styles based on the provided configuration.
  */
-class StyleProcessingAction extends Action {
+export class StyleProcessingAction extends Action {
 
     // Parameters
     // ========================================================================
@@ -149,4 +149,4 @@ class StyleProcessingAction extends Action {
 // Export
 // ============================================================================
 
-export default StyleProcessingAction;
+// export default StyleProcessingAction;
