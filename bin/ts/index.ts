@@ -10,10 +10,7 @@ import {
     FileCopier,
     PackageCreator,
     VersionWriter,
-    // TypeScriptCompiler,
-    JavaScriptMinifier,
     StylizedLogger,
-    gl_installer,
     readPackageJson,
 } from "pack.gl";
 import TypeScriptCompiler from "./javascript/TypeScriptCompiler.js";
@@ -120,26 +117,6 @@ async function main() {
         // console.log("Starting TypeScript compilation...");
         await tsCompiler.compile(tsFiles, outputDir);
         console.log("TypeScript compilation completed.");
-
-
-        // Rename Ts
-        // --------------------------------------------------------------------
-
-        // await fileRenamer.renameFile(
-        //     path.join(CONFIG.path.js_output, "index.js"),
-        //     path.join(CONFIG.path.js_output, `${packageConfig.name}.js`),
-        // )
-
-
-        // Minify JavaScript
-        // --------------------------------------------------------------------
-        // const jsMinifier = new JavaScriptMinifier();
-        // await jsMinifier.minifyFile(
-        //     path.join(CONFIG.path.js_output, "index.js"),
-        //     path.join(CONFIG.path.js_output, `${packageConfig.name}.min.js`),
-        // )
-        // .then(() => console.log("JavaScript minification completed."))
-        // .catch(console.error);
 
 
     } catch (error) {
