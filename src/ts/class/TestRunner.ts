@@ -21,7 +21,14 @@ const execAsync = util.promisify(exec);
  */
 class TestRunner {
 
+    // Parameters
+    // ========================================================================
+
     private testCommand: string;
+
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Constructs a TestRunner with a specific test command.
@@ -30,6 +37,10 @@ class TestRunner {
     constructor(testCommand: string) {
         this.testCommand = testCommand;
     }
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Executes the test command in a child process and returns the results.
@@ -52,6 +63,7 @@ class TestRunner {
             throw error;
         }
     }
+
 }
 
 
