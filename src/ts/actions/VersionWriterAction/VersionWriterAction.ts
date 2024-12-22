@@ -16,7 +16,7 @@ import { ActionOptionsType } from "../../types";
  * string to a specified file. This is commonly used for managing and tracking
  * software version releases.
  */
-class VersionWriteAction extends Action {
+export class VersionWriteAction extends Action {
 
     /**
      * Executes the version writing action.
@@ -93,4 +93,4 @@ class VersionWriteAction extends Action {
 // Export
 // ============================================================================
 
-export default VersionWriteAction;
+// export default VersionWriteAction;
