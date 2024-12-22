@@ -37,8 +37,21 @@ export class LiveReloadServer {
         );
 
         this.wss = new WebSocketServer({ server: this.server });
+        this.setupRateLimiter(); // Apply rate limiting
         this.setupWebSocketHandlers();
         this.setupMiddleware();
+    }
+
+    /**
+     * Sets up rate limiting middleware to prevent abuse.
+     */
+    private setupRateLimiter(): void {
+        const limiter = rateLimit({
+            windowMs: 15 * 60 * 1000, // 15 minutes
+            max: 100, // Limit each IP to 100 requests per windowMs
+            message: "Too many requests from this IP, please try again later.",
+        });
+        this.app.use(limiter);
     }
 
     /**
@@ -103,15 +116,19 @@ export class LiveReloadServer {
         );
         this.app.use(express.static(publicPath));
 
-        // Apply rate limiting to the live reload script injection middleware
-        const rateLimiter = rateLimit({
-            windowMs: 15 * 60 * 1000, // 15 minutes
-            max: 100, // Limit each IP to 100 requests per `windowMs`
-            message: "Too many requests from this IP, please try again later.",
-        });
 
-        // Use rate limiter and inject middleware
-        this.app.use(rateLimiter, this.injectLiveReloadScript.bind(this));
+        // Middleware to inject the live reload script into HTML files
+        this.app.use(this.injectLiveReloadScript.bind(this));
+
+        // // Apply rate limiting to the live reload script injection middleware
+        // const rateLimiter = rateLimit({
+        //     windowMs: 15 * 60 * 1000, // 15 minutes
+        //     max: 100, // Limit each IP to 100 requests per `windowMs`
+        //     message: "Too many requests from this IP, please try again later.",
+        // });
+
+        // // Use rate limiter and inject middleware
+        // this.app.use(rateLimiter, this.injectLiveReloadScript.bind(this));
     }
 
 
