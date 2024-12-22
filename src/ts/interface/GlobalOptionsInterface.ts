@@ -1,6 +1,3 @@
-// src/interface/GlobalOptionsInterface.ts
-
-
 // ============================================================================
 // Interfaces
 // ============================================================================
@@ -11,6 +8,7 @@
  * that affect how all stages and steps within the pipeline operate.
  */
 export interface GlobalOptionsInterface {
+
     /**
      * Specifies the level of logging to be used throughout the pipeline.
      * The available levels are:
@@ -77,4 +75,5 @@ export interface GlobalOptionsInterface {
      * with other tools and systems that track execution context.
      */
     tags?: Record<string, string>;
+
 }
