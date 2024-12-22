@@ -20,6 +20,9 @@ import packageConfig from "../../config/package.config.js"
  */
 class PackageCreator {
 
+    // Parameters
+    // ========================================================================
+
     /**
      *  Configuration for the Package.json.
      */
@@ -33,6 +36,10 @@ class PackageCreator {
      */
     // private static defaultConfig: any = packageConfig;
     private static defaultConfig: Record<string, any> = packageConfig;
+
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Constructs an instance with merged default and custom configuration
@@ -66,6 +73,10 @@ class PackageCreator {
          };
      }
     
+
+    // Methods
+    // ========================================================================
+
     /**
      * Creates a package.json file with the stored configuration in the
      * specified directory. If the directory does not exist, it will be
@@ -119,9 +130,9 @@ class PackageCreator {
             if (
                 error instanceof Error && (
                     error as NodeJS.ErrnoException
-                ).code !== 'EEXIST'
+                ).code !== "EEXIST"
             ) {
-                // Rethrow if it's not a 'directory exists' error
+                // Rethrow if it"s not a "directory exists" error
                 throw error;
             }
         }
@@ -141,7 +152,7 @@ export default PackageCreator;
 // Example
 // ============================================================================
 
-// import PackageCreator from './PackageCreator';
+// import PackageCreator from "./PackageCreator";
 
 // const customConfig = {
 //     name: "my-new-project",
