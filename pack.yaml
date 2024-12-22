@@ -1,0 +1,85 @@
+
+---
+
+# Configuration for pack.gl pipeline with stages, steps, and dependencies
+
+stages:
+
+  - name: Build Stage
+
+    steps:
+      - name: Compile Source
+        action: build
+        options:
+          minify: true
+          sourcemap: true
+
+      - name: Generate Assets
+        action: build
+        options:
+          target: assets
+          optimize: true
+
+  - name: Testing Stage
+    steps:
+      - name: Unit Tests
+        action: test
+        options:
+          framework: jest
+          coverage: true
+
+      - name: Integration Tests
+        action: test
+        options:
+          framework: mocha
+          database: test-db
+    dependsOn:
+      - Build Stage  # This stage depends on the completion of the Build Stage
+
+  - name: Linting Stage
+    steps:
+      - name: Lint Code
+        action: lint
+        options:
+          fix: true
+          format: eslint
+    dependsOn:
+      - Build Stage  # This stage also depends on the Build Stage
+
+  - name: Packaging Stage
+    steps:
+      - name: Create Archive
+        action: package
+        options:
+          format: zip
+          outputDir: dist
+
+      - name: Package Docker Image
+        action: package
+        options:
+          format: docker
+          tag: latest
+    dependsOn:
+      - Testing Stage  # Packaging Stage depends on the Testing Stage
+
+  - name: Deployment Stage
+    steps:
+      - name: Deploy to Staging
+        action: deploy
+        options:
+          environment: staging
+          server: staging.example.com
+
+      - name: Deploy to Production
+        action: deploy
+        options:
+          environment: production
+          server: prod.example.com
+          canary: true
+    dependsOn:
+      - Packaging Stage  # Deployment Stage depends on the Packaging Stage
+
+# Global options applicable to the entire pipeline
+globalOptions:
+  logLevel: info           # Log level for the pipeline (verbose, info, warn, error)
+  stepTimeout: 30000       # Timeout for each step in milliseconds
