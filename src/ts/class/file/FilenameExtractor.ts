@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import path from 'path';
+import path from "path";
 
 
 // ============================================================================
@@ -18,13 +18,25 @@ import path from 'path';
  */
 class FilenameExtractor {
 
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
+
     /**
      * Retrieves the file name from a full file path, excluding the file
      * extension. This method utilizes the Node.js `path` module to parse and
      * extract the file name, ensuring compatibility with various file system
      * path formats.
      *
-     * @param filePath The full path of the file from which the name should be extracted.
+     * @param filePath The full path of the file from which the name should
+     * be extracted.
      * @returns The file name without its extension, as a string.
      */
     getFilenameWithoutExtension(filePath: string): string {
@@ -45,10 +57,10 @@ export default FilenameExtractor;
 // Example
 // ============================================================================
 
-// import FilenameExtractor from './FilenameExtractor';
+// import FilenameExtractor from "./FilenameExtractor";
 
 // const extractor = new FilenameExtractor();
-// const filePath = '/path/to/file.txt';
+// const filePath = "/path/to/file.txt";
 // const filename = extractor.getFilenameWithoutExtension(filePath);
 
-// console.log('Filename without extension:', filename);
+// console.log("Filename without extension:", filename);
