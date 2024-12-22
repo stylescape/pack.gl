@@ -27,6 +27,9 @@ import fantasticonConfig from "../config/fantasticon.config.js"
  */
 class FontGenerator {
 
+    // Parameters
+    // ========================================================================
+
     /**
      *  Configuration for the TypeScript compiler.
      */
@@ -40,14 +43,15 @@ class FontGenerator {
      private static defaultConfig: RunnerOptions = fantasticonConfig;
  
 
-     /**
-      * Constructs an instance with merged configuration of default and custom options.
-      * @param {svgSprite.Config} customConfig - Optional custom configuration object for svg-sprite.
-      */
+    // Constructor
+    // ========================================================================
+
     /**
-     * Constructs an instance of FontGenerator, merging default configuration with optional custom settings.
+     * Constructs an instance of FontGenerator, merging default configuration
+     * with optional custom settings.
      * 
-     * @param {RunnerOptions} customConfig Optional custom configuration to override the defaults.
+     * @param {RunnerOptions} customConfig Optional custom configuration to
+     * override the defaults.
      */
     constructor(
         // customConfig: any = {},
@@ -59,13 +63,20 @@ class FontGenerator {
          };
      }
 
+
+    // Methods
+    // ========================================================================
+
     /**
-     * Generates font assets from SVG icons located in the specified source directory,
-     * and outputs them to the specified output directory.
+     * Generates font assets from SVG icons located in the specified source
+     * directory, and outputs them to the specified output directory.
      * 
-     * @param {string} sourceDirectory The directory containing SVG files to be converted.
-     * @param {string} outputDirectory The directory where the generated font files will be stored.
-     * @param {Partial<RunnerOptions>} options Additional options to customize the font generation process.
+     * @param {string} sourceDirectory The directory containing SVG files to
+     * be converted.
+     * @param {string} outputDirectory The directory where the generated font
+     * files will be stored.
+     * @param {Partial<RunnerOptions>} options Additional options to customize
+     * the font generation process.
      */
     async generateFonts(
         sourceDirectory: string,
