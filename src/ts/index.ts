@@ -40,19 +40,28 @@ import gl_installer from "./utils/gl_installer";
 import cleanDirectory from "./utils/clean_directory";
 import readPackageJson from "./utils/readPackageJson.js"
 
+// Core Modules
+// import { Pipeline } from "./core/Pipeline";
+// import { ConfigLoader } from "./core/ConfigLoader";
+// import { PipelineManager } from "./core/PipelineManager";
 
+// Live Modules
+// import { LiveReloadServer } from "./live/LiveReloadServer";
+// import { FileWatcher } from "./live/FileWatcher";
 
-// import { main } from "./pack.js"
+// Actions or Utilities
+// import { Action } from "./core/Action";
 
+// Main Entry
+// import { main } from "./pack";
 
 
 // ============================================================================
-// Export
+// Exports
 // ============================================================================
 
+// Export | Utility Classes
 export {
-
-    // Export | Utility Classes
     DirectoryScanner,
     DirectoryCleaner,
     DirectoryCopier,
@@ -60,8 +69,10 @@ export {
     FileCopier,
     FileRenamer,
     FilenameExtractor,
+};
 
-    // // Export | Internal Classes
+// Export | Internal Classes
+export {
     FontGenerator,
     PackageCreator,
     StyleProcessor,
@@ -76,41 +87,34 @@ export {
     DocumentationGenerator,
     CodeLinter,
     JSONLoader,
-
     SvgReader,
     SvgToPngConverter,
     SvgSpriteGenerator,
     SvgPackager,
-
-    // Export | Internal Functions
-    gl_installer,
-    cleanDirectory,
-    readPackageJson,
-
-    // main
 };
 
-// Export any specific types if needed
-export * from "./types";
-export * from "./cli.js";
+
+
+// Utility Functions
+export { gl_installer, cleanDirectory, readPackageJson };
+
+// Core Modules
+// export { Pipeline } from "./core/Pipeline";
+// export { ConfigLoader } from "./core/ConfigLoader";
+// export { PipelineManager } from "./core/PipelineManager";
+
+// Live Modules
+// export { LiveReloadServer } from "./live/LiveReloadServer";
+// export { FileWatcher } from "./live/FileWatcher";
+
+// Actions and Other Utilities
+export { Action } from "./core/Action";
+
+// Main Function
 export { main } from "./pack";
 
-// src/index.ts
+// Additional Types
+export * from "./types";
 
-// Export core modules and functionalities
-export { Pipeline } from "./core/Pipeline";
-export { ConfigLoader } from "./core/ConfigLoader";
-export { LiveReloadServer } from "./live/LiveReloadServer";
-export { FileWatcher } from "./live/FileWatcher";
-export { PipelineManager } from "./core/PipelineManager";
-
-// Export any actions or utility functions
-export { Action } from "./core/Action"; // If this is an actual export from "./core/Action"
-// export { DirectoryCleaner } from "./actions/DirectoryCleaner";
-// export { FileCopier } from "./actions/FileCopier";
-// export { DirectoryCopier } from "./actions/DirectoryCopier";
-// export { VersionWriter } from "./actions/VersionWriter";
-
-
-
-// Export the main function if it needs to be accessed programmatically
+// CLI Functions (if required programmatically)
+export * from "./cli.js";
