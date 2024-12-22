@@ -17,6 +17,17 @@ import { promises as fsPromises } from "fs";
  */
 class DirectoryCopier {
 
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
+
     /**
      * Asynchronously copies all files and subdirectories from the source
      * directory to the destination directory. If the destination directory
