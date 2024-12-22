@@ -16,6 +16,17 @@ import { promises as fs } from "fs";
  */
 class VersionWriter {
 
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
+
     /**
      * Writes a version string to a specified file path. This method is
      * asynchronous and uses Node.js"s filesystem promises to handle the
