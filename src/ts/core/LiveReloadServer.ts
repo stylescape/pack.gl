@@ -16,18 +16,38 @@ import rateLimit from "express-rate-limit";
 // Class
 // ============================================================================
 
+/**
+ * LiveReloadServer class provides functionality to serve static files,
+ * inject live reload scripts into HTML responses, and manage WebSocket
+ * connections to enable live reload capabilities.
+ */
 export class LiveReloadServer {
 
+    // Parameters
+    // ========================================================================
+
+    // Express application
     private app = express();
+
+    // HTTP server
     private server: Server;
+
+    // WebSocket server
     private wss: WebSocketServer;
+
+    // Set of connected WebSocket clients
     private clients: Set<WebSocket> = new Set();
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Initializes the LiveReloadServer.
      * @param port - The port on which the server will listen.
      */
     constructor(private port: number) {
+
+        // Start the HTTP server
         this.server = this.app.listen(
             this.port, () => {
                 console.log(
@@ -36,14 +56,22 @@ export class LiveReloadServer {
             }
         );
 
-        this.wss = new WebSocketServer({ server: this.server });
+        // Initialize WebSocket server
+        this.wss = new WebSocketServer(
+            { server: this.server }
+        );
+
+        // Set up middleware, rate limiting, and WebSocket handlers
         this.setupRateLimiter(); // Apply rate limiting
         this.setupWebSocketHandlers();
         this.setupMiddleware();
     }
 
+    // Methods
+    // ========================================================================
+
     /**
-     * Sets up rate limiting middleware to prevent abuse.
+     * Sets up rate limiting middleware to prevent abuse of HTTP requests.
      */
     private setupRateLimiter(): void {
         const limiter = rateLimit({
@@ -108,6 +136,7 @@ export class LiveReloadServer {
      * reload script into HTML files.
      */
     private setupMiddleware(): void {
+
         // Serve static files from the "public" directory
         // Securely resolve public directory
         const publicPath = path.resolve(
@@ -120,21 +149,12 @@ export class LiveReloadServer {
         // Middleware to inject the live reload script into HTML files
         this.app.use(this.injectLiveReloadScript.bind(this));
 
-        // // Apply rate limiting to the live reload script injection middleware
-        // const rateLimiter = rateLimit({
-        //     windowMs: 15 * 60 * 1000, // 15 minutes
-        //     max: 100, // Limit each IP to 100 requests per `windowMs`
-        //     message: "Too many requests from this IP, please try again later.",
-        // });
-
-        // // Use rate limiter and inject middleware
-        // this.app.use(rateLimiter, this.injectLiveReloadScript.bind(this));
     }
 
-
-
     /**
-     * Middleware function to inject the live reload script into HTML files.
+     * Middleware function to inject the live reload script into HTML
+     * responses. Prevents directory traversal attacks by sanitizing the
+     * requested file path.
      * @param req - The HTTP request object.
      * @param res - The HTTP response object.
      * @param next - The next middleware function.
@@ -179,34 +199,48 @@ export class LiveReloadServer {
      * Sends a reload signal to all connected WebSocket clients.
      */
     public reloadClients(): void {
+
         console.log("Reloading all connected clients...");
-        this.clients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send("reload");
+
+        this.clients.forEach(
+            client => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send("reload");
+                }
             }
-        });
+        );
     }
 
     /**
      * Gracefully shuts down the server and all WebSocket connections.
      */
     public async shutdown(): Promise<void> {
+
         console.log("Shutting down Live Reload Server...");
+
         this.clients.forEach(client => client.close());
         this.wss.close();
 
-        await new Promise<void>((resolve, reject) => {
-            this.server.close((err) => {
-                if (err) {
-                    console.error("Error shutting down server:", err);
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        });
+        await new Promise<void>(
+            (resolve, reject) => {
+                this.server.close(
+                    (err) => {
+                        if (err) {
+                            console.error(
+                                "Error shutting down server:",
+                                err
+                            );
+                            reject(err);
+                        } else {
+                            resolve();
+                        }
+                    }
+                );
+            }
+        );
 
         console.log("Live Reload Server has been shut down.");
+
     }
 
 }
