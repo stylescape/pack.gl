@@ -18,14 +18,29 @@ import path from "path";
  */
  class FileCopier {
 
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
+
     /**
-     * Copies a file from a specified source to a destination directory. This method takes care of
-     * file path resolution and checks for existing files in the destination, replacing them if necessary.
+     * Copies a file from a specified source to a destination directory. This
+     * method takes care of file path resolution and checks for existing files
+     * in the destination, replacing them if necessary.
      *
      * @param {string} srcFile - The path of the source file to be copied.
-     * @param {string} destDir - The destination directory where the file should be placed.
-     * @returns {Promise<void>} A promise that resolves when the file has been successfully copied.
-     * @throws {Error} If the file cannot be copied, including due to permission errors or the source file not existing.
+     * @param {string} destDir - The destination directory where the file
+     * should be placed.
+     * @returns {Promise<void>} A promise that resolves when the file has
+     * been successfully copied.
+     * @throws {Error} If the file cannot be copied, including due to
+     * permission errors or the source file not existing.
      */
     async copyFileToDirectory(
         srcFile: string,
