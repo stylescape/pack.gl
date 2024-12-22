@@ -36,27 +36,20 @@ export class ConfigLoader {
      * @param filenames - Optional list of configuration filenames to search for.
      * Defaults to `["pack.yaml", "pack.yml"]`.
      */
-    constructor(
-        private filenames: string[] = [
-            "pack.yaml",
-            "pack.yml"
-        ]
-    ) {
-
-        for (const filename of this.filenames) {
-            const resolvedPath = path.resolve(process.cwd(), filename);
+    constructor() {
+        const possibleFiles = ["pack.yaml", "pack.yml"];
+        for (const fileName of possibleFiles) {
+            const resolvedPath = path.resolve(process.cwd(), fileName);
             if (fs.existsSync(resolvedPath)) {
                 this.configPath = resolvedPath;
-                console.log(
-                    `[ConfigLoader] Found configuration file: ${resolvedPath}`
-                );
+                console.log(`[ConfigLoader] Found configuration file: ${resolvedPath}`);
                 break;
             }
         }
-
+    
         if (!this.configPath) {
             console.warn(
-                "[ConfigLoader] No configuration file found. Proceeding without `pack.yaml` or `pack.yml`."
+                "[ConfigLoader] No configuration file (pack.yaml or pack.yml) found. Proceeding with default settings."
             );
         }
     }
@@ -70,14 +63,29 @@ export class ConfigLoader {
      * @returns Parsed configuration object or `null` if no config file is found.
      */
     public loadConfig(): ConfigInterface | null {
+
         if (!this.configPath) {
-            return null; // No configuration file found
+            console.warn(
+                "[ConfigLoader] No configuration file found. Using default empty configuration."
+            );
+            return { stages: [] }; // Example fallback configuration
+            // return null; // No configuration file found
         }
 
         try {
             // Read and parse the YAML configuration file
             const fileContents = fs.readFileSync(this.configPath, "utf8");
             const config = yaml.load(fileContents) as ConfigInterface;
+
+            if (!config || typeof config !== "object" || !Array.isArray(config.stages)) {
+                throw new Error(
+                    `[ConfigLoader] Invalid configuration format: 'stages' must be an array. Loaded config: ${JSON.stringify(
+                        config,
+                        null,
+                        2
+                    )}`
+                );
+            }
 
             // Validate the configuration structure
             this.validateConfig(config);
@@ -90,6 +98,7 @@ export class ConfigLoader {
                 }`
             );
         }
+
     }
 
     /**
@@ -101,9 +110,11 @@ export class ConfigLoader {
     private validateConfig(
         config: ConfigInterface
     ): void {
-        if (!config || !Array.isArray(config.stages)) {
+        if (!config || typeof config !== "object" || !Array.isArray(config.stages)) {
+        // if (!config || !Array.isArray(config.stages)) {
             throw new Error(
-                "[ConfigLoader] Invalid configuration format: 'stages' must be an array."
+                `[ConfigLoader] Invalid configuration format: 'stages' must be an array. Found: ${JSON.stringify(config, null, 2)}`
+                // "[ConfigLoader] Invalid configuration format: 'stages' must be an array."
             );
         }
 
@@ -133,15 +144,24 @@ export class ConfigLoader {
         }
 
         if (stageNames.has(stage.name)) {
-            throw new Error(`[ConfigLoader] Duplicate stage name found: "${stage.name}".`);
+            throw new Error(
+                `[ConfigLoader] Duplicate stage name found: "${stage.name}".`
+            );
         }
         stageNames.add(stage.name);
 
         if (stage.dependsOn) {
-            this.validateDependencies(stage.dependsOn, stageNames, stage.name);
+            this.validateDependencies(
+                stage.dependsOn,
+                stageNames,
+                stage.name
+            );
         }
 
-        this.validateSteps(stage.steps, stage.name);
+        this.validateSteps(
+            stage.steps,
+            stage.name
+        );
     }
 
     /**
@@ -199,5 +219,7 @@ export class ConfigLoader {
                 );
             }
         }
+
     }
+
 }
