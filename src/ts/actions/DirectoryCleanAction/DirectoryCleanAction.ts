@@ -1,25 +1,47 @@
-import { Action } from '../../core/Action';
-import { ActionOptionsType } from '../../types/ActionOptionsType';
-import path from 'path';
-import fs from 'fs';
+// ============================================================================
+// Import
+// ============================================================================
+
+import { Action } from "../../core/Action";
+import { ActionOptionsType } from "../../types/ActionOptionsType";
+import path from "path";
+import fs from "fs";
+
+
+// ============================================================================
+// Classes
+// ============================================================================
 
 /**
  * DirectoryCleanAction is a step action responsible for cleaning a directory
  * by recursively deleting all its contents, including files and
  * subdirectories.
  */
-export class DirectoryCleanAction extends Action {
+class DirectoryCleanAction extends Action {
+
+    // Parameters
+    // ========================================================================
+
+
+    // Constructor
+    // ========================================================================
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Executes the directory cleaning action.
-     * @param options - The options specific to directory cleaning, including the directory path.
-     * @returns A Promise that resolves when the directory has been successfully cleaned, or rejects with an error if the action fails.
+     * @param options - The options specific to directory cleaning, including
+     * the directory path.
+     * @returns A Promise that resolves when the directory has been 
+     * uccessfully cleaned, or rejects with an error if the action fails.
      */
     async execute(options: ActionOptionsType): Promise<void> {
         const dirPath = options.dirPath as string;
 
         if (!dirPath) {
-            throw new Error('Missing required option: dirPath.');
+            throw new Error("Missing required option: dirPath.");
         }
 
         this.log(`Cleaning directory: ${dirPath}`);
@@ -39,7 +61,8 @@ export class DirectoryCleanAction extends Action {
      * If the directory does not exist, the method does nothing.
      * 
      * @param dirPath - The path to the directory to be cleaned.
-     * @returns A Promise that resolves when the directory has been successfully cleaned.
+     * @returns A Promise that resolves when the directory has been
+     * successfully cleaned.
      * @throws {Error} Throws an error if deleting any file or directory fails.
      */
     private async cleanDirectory(dirPath: string): Promise<void> {
@@ -68,6 +91,14 @@ export class DirectoryCleanAction extends Action {
      * @returns A string description of the action.
      */
     describe(): string {
-        return 'Cleans a directory by recursively deleting all its contents, including files and subdirectories.';
+        return "Cleans a directory by recursively deleting all its contents, including files and subdirectories.";
     }
+
 }
+
+
+// ============================================================================
+// Export
+// ============================================================================
+
+export default DirectoryCleanAction;
