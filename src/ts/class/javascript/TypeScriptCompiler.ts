@@ -2,10 +2,10 @@
 // Import
 // ============================================================================
 
-import ts from 'typescript';
-import path from 'path';
+import ts from "typescript";
+import path from "path";
 import tsConfig from "../../config/ts.config.js"
-import fs from 'fs';
+import fs from "fs";
 
 
 // ============================================================================
@@ -88,7 +88,7 @@ class TypeScriptCompiler {
         if (configFile.error) {
             const error = ts.flattenDiagnosticMessageText(
                 configFile.error.messageText,
-                '\n'
+                "\n"
             );
             throw new Error(
                 `Error reading tsconfig.json: ${error}`
@@ -106,8 +106,8 @@ class TypeScriptCompiler {
         // Check if there were errors during parsing
         if (configParseResult.errors.length > 0) {
             const errors = configParseResult.errors.map(diagnostic =>
-                ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
-            ).join('\n');
+                ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")
+            ).join("\n");
             throw new Error(`Error parsing tsconfig.json: ${errors}`);
         }
 
@@ -266,7 +266,7 @@ export default TypeScriptCompiler;
 
 //         // Check if there was an error reading the config file
 //         if (configFile.error) {
-//             const error = ts.flattenDiagnosticMessageText(configFile.error.messageText, '\n');
+//             const error = ts.flattenDiagnosticMessageText(configFile.error.messageText, "\n");
 //             throw new Error(`Error reading tsconfig.json: ${error}`);
 //         }
 
@@ -281,8 +281,8 @@ export default TypeScriptCompiler;
 //         // Check if there were errors during parsing
 //         if (configParseResult.errors.length > 0) {
 //             const errors = configParseResult.errors.map(diagnostic =>
-//                 ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
-//             ).join('\n');
+//                 ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")
+//             ).join("\n");
 //             throw new Error(`Error parsing tsconfig.json: ${errors}`);
 //         }
 
@@ -309,19 +309,19 @@ export default TypeScriptCompiler;
 //             allDiagnostics.forEach(diagnostic => {
 //                 if (diagnostic.file) {
 //                     const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
-//                     const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+//                     const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
 //                     console.error(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
 //                 } else {
-//                     console.error(ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'));
+//                     console.error(ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"));
 //                 }
 //             });
 
 //             // Check if the compilation was successful
 //             if (emitResult.emitSkipped) {
-//                 console.error('Compilation failed.');
-//                 reject(new Error('TypeScript compilation failed'));
+//                 console.error("Compilation failed.");
+//                 reject(new Error("TypeScript compilation failed"));
 //             } else {
-//                 console.log('Compilation completed successfully.');
+//                 console.log("Compilation completed successfully.");
 //                 resolve();
 //             }
 //         });
@@ -339,13 +339,13 @@ export default TypeScriptCompiler;
 // // Example Usage
 // // ============================================================================
 
-// // import TypeScriptCompiler from './TypeScriptCompiler';
+// // import TypeScriptCompiler from "./TypeScriptCompiler";
 
 // // Ensure you provide the correct path to the tsconfig.json when creating the instance
-// // const compiler = new TypeScriptCompiler('./path/to/tsconfig.json', { noImplicitAny: true });
-// // const filePaths = ['./src/index.ts', './src/app.ts'];
+// // const compiler = new TypeScriptCompiler("./path/to/tsconfig.json", { noImplicitAny: true });
+// // const filePaths = ["./src/index.ts", "./src/app.ts"];
 
 // // Compile the TypeScript files to JavaScript
 // // compiler.compile(filePaths)
-// //     .then(() => console.log('Compilation successful'))
-// //     .catch(error => console.error('Compilation errors:', error));
+// //     .then(() => console.log("Compilation successful"))
+// //     .catch(error => console.error("Compilation errors:", error));
