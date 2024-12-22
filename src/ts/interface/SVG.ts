@@ -2,8 +2,6 @@
 // Interfaces
 // ============================================================================
 
-
-
 // export interface Svg {
 //     metadata: {
 //     name: string;
@@ -17,7 +15,7 @@
 /**
  * Represents the metadata associated with an SVG graphic.
  */
- interface SvgMetadata {
+interface SvgMetadata {
     name: string;               // The name of the SVG graphic.
     creator?: string;           // Optional creator of the SVG graphic.
     description?: string;       // Optional description of the SVG graphic.
