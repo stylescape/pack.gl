@@ -1,4 +1,4 @@
-import ts from 'typescript';
+import ts from "typescript";
 var tsConfig = {
     target: ts.ScriptTarget.ES2015,
     lib: ["lib.es2015.d.ts", "lib.dom.d.ts"],
