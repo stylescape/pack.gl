@@ -33,7 +33,19 @@
 
 **Package Builder for the `.gl`-libraries of Scape Agency and its affiliates.**
 
+Pack.gl is a highly customizable and efficient package builder designed to streamline software development workflows. It provides a modular framework for managing build pipelines with support for live reload functionality.
+
 `pack.gl` is a package builder designed to enhance the efficiency and organization of software development projects. Key to its design philosophy is the adaptability to various development workflows, making it an ideal companion for a range of projects from small-scale personal endeavors to large, complex enterprise applications. `pack.gl` stands not just as a tool but as a partner in the software development journey, enhancing productivity, reducing overhead, and bringing clarity and ease to the package management process.
+
+---
+
+## Features
+
+- Modular pipeline system with stages and steps.
+- Live reload functionality for enhanced developer experience.
+- Plugin-based architecture to extend functionality.
+- TypeScript support for a modern development workflow.
+- Robust error handling and logging.
 
 ---
 
@@ -52,6 +64,165 @@ npm install pack.gl --save-dev
 ``` bash
 yarn add pack.gl --dev
 ```
+
+---
+
+## Installation
+
+1. Clone the Repository:
+
+    ``` sh
+    git clone <https://github.com/stylescape/pack.gl.git>
+    cd pack.gl
+    ```
+
+2. Install Dependencies:
+
+    ``` sh
+    npm install
+    ```
+
+3. Build the Project:
+
+    ``` sh
+    npm run build
+    ```
+
+4. Link the CLI Globally:
+
+    ``` sh
+    npm link
+    ```
+
+---
+
+## Usage
+
+### Run the Pipeline
+
+Run the pipeline defined in your pack.yaml file:
+
+``` sh
+pack
+```
+
+### Enable Live Reload
+
+Run the pipeline with live reload enabled:
+
+``` sh
+pack --live
+```
+
+---
+
+## Configuration
+
+The pipeline configuration is defined in a pack.yaml file located in the root of your project. Here’s an example:
+
+``` sh
+stages:
+
+- name: build
+    steps:
+  - name: compile
+        action: build
+        options:
+          source: src/
+          output: dist/
+- name: test
+    dependsOn: [build]
+    steps:
+  - name: run-tests
+        action: test
+```
+
+Stage and Step Structure
+
+- Stages: Define a group of steps to be executed.
+- Steps: Individual tasks within a stage (e.g., compiling, testing).
+- Dependencies: Stages can depend on other stages to enforce execution order.
+
+---
+
+## Development
+
+### Build
+
+Compile the TypeScript files into JavaScript:
+
+``` sh
+npm run build-tsc
+```
+
+### Lint
+
+Run ESLint to check for code issues:
+
+``` sh
+npm run lint
+```
+
+### Run Tests
+
+Run all tests in the src/tests directory:
+
+``` sh
+npm run test
+```
+
+### Live Reload
+
+To enable live reload during development, add the --live flag:
+
+``` sh
+pack --live
+```
+
+---
+
+## Folder Structure
+
+``` sh
+pack.gl/
+├── src/
+│   ├── core/           # Core pipeline logic
+│   ├── live/           # Live reload server and related components
+│   ├── actions/        # Built-in step actions (e.g., build, test)
+│   ├── tests/          # Unit tests
+│   └── pack.ts         # Entry point for the CLI
+├── dist/               # Compiled JavaScript output
+├── pack.yaml           # Example configuration file
+├── package.json        # Project metadata and dependencies
+├── tsconfig.json       # TypeScript configuration
+└── README.md           # Project documentation
+```
+
+---
+
+## Key Components
+
+### Pipeline
+
+The Pipeline class manages the execution of stages and steps defined in the pack.yaml file.
+
+### LiveReloadServer
+
+The LiveReloadServer provides live reload functionality by watching files for changes and notifying connected clients.
+
+### ConfigLoader
+
+The ConfigLoader reads and validates the pipeline configuration from the pack.yaml file.
+
+### Actions
+
+Pack.gl supports plugin-based actions. Default actions include:
+
+- build: Compiles source files.
+- test: Runs tests.
+- lint: Lints the codebase.
+
+Custom actions can be implemented and registered as plugins.
 
 ---
 
@@ -74,6 +245,13 @@ Scape Agency is a spatial innovation collective that dreams, discovers and desig
 
 We'd love for you to contribute and to make this project even better than it is today!
 Please refer to the [contribution guidelines](.github/CONTRIBUTING.md) for information.
+
+Contributions are welcome! Follow these steps to contribute:
+
+1. Fork the repository.
+2. Create a new feature branch.
+3. Make your changes and write tests.
+4. Submit a pull request.
 
 ### Legal Information
 
