@@ -1,5 +1,3 @@
-// src/interface/StepOptionsInterface.ts
-
 // ============================================================================
 // Interfaces
 // ============================================================================
@@ -12,6 +10,7 @@
  * the packaging pipeline.
  */
 export interface StepOptionsInterface {
+
     /**
      * An optional description of the step, useful for logging, debugging, and
      * reporting. This provides additional context about the step's purpose and
