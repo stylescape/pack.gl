@@ -20,9 +20,18 @@ import { getAction } from "./ActionRegistry";
  * with each step.
  */
 export class Step {
+
+
+    // Parameters
+    // ========================================================================
+
     private name: string;
     private action: ActionInterface;
     private options?: Record<string, any>;
+
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Constructs a Step instance with the given step definition.
@@ -45,6 +54,10 @@ export class Step {
         this.action = new ActionClass();
         this.options = step.options;
     }
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Executes the step by invoking its action's execute method.
