@@ -100,8 +100,8 @@ export { main } from './pack';
 // Export core modules and functionalities
 export { Pipeline } from './core/Pipeline';
 export { ConfigLoader } from './core/ConfigLoader';
-export { LiveReloadServer } from './core/LiveReloadServer';
-export { FileWatcher } from './core/FileWatcher';
+export { LiveReloadServer } from './live/LiveReloadServer';
+export { FileWatcher } from './live/FileWatcher';
 export { PipelineManager } from './core/PipelineManager';
 
 // Export any actions or utility functions
