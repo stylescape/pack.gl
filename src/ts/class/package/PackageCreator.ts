@@ -64,6 +64,7 @@ class PackageCreator {
             homepage: customConfig.homepage,
             repository: customConfig.repository,
             funding: customConfig.funding,
+            bin: customConfig.bin,
             dependencies: customConfig.dependencies,
             exports: customConfig.exports,
         }
