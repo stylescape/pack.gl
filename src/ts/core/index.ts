@@ -1,19 +1,34 @@
-// src/core/index.ts
+// ============================================================================
+// Core Module Exports
+// ============================================================================
 
+/**
+ * Export core classes and modules for use in the application.
+ * Ensure all essential components are listed here to provide a unified API.
+ */
 
-// Export core classes and functions from the core directory
-
+// Core Classes
 export { Pipeline } from "./Pipeline";
 export { Stage } from "./Stage";
 export { Step } from "./Step";
 export { Action } from "./Action";
 export { PipelineManager } from "./PipelineManager";
 
-// export { StyleProcessingAction } from "./StyleProcessingAction"; // Example of exporting a specific action, add others as needed
-
-// Export utility functions or other core modules if applicable
-// For example:
+// Utility Functions and Modules
+// If there are reusable utilities, add them here.
+// Example:
 // export { someUtilityFunction } from "./utils";
 
-// Export registry for actions
-// export { registerAction, getAction, listRegisteredActions } from "../actions/ActionRegistry";
+// Action Registry
+// Export functions related to action registration and retrieval.
+// export {
+//     registerAction,
+//     getAction,
+//     listRegisteredActions
+// } from "../actions/ActionRegistry";
+
+/**
+ * Note: If new modules or files are added in the `core` directory,
+ * consider using an automated script to dynamically export them here.
+ * Tools like `barrel` can help maintain such an index file efficiently.
+ */
