@@ -1,6 +1,3 @@
-// src/core/ActionRegistry.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -58,7 +55,9 @@ export function registerAction(
  * @returns The action class constructor if found, or undefined if no action
  * with the given name is registered.
  */
-export function getAction(name: string): (new () => ActionInterface) | undefined {
+export function getAction(
+    name: string
+): (new () => ActionInterface) | undefined {
     return actionRegistry.get(name);
 }
 
@@ -73,10 +72,29 @@ export function listRegisteredActions(): string[] {
     return Array.from(actionRegistry.keys());
 }
 
-// Pre-register core actions
-registerAction("DirectoryCleanAction", DirectoryCleanAction);
-registerAction("DirectoryCopyAction", DirectoryCopyAction);
-registerAction("FileCopyAction", FileCopyAction);
-registerAction("PackageManagerAction", PackageManagerAction);
-registerAction("StyleProcessingAction", StyleProcessingAction);
-registerAction("VersionWriteAction", VersionWriteAction);
+
+// ============================================================================
+// Pre-Register Core Actions
+// ============================================================================
+
+/**
+ * Pre-registers core actions that are included with the pipeline by default.
+ * Developers can extend this by registering additional custom actions as needed.
+ */
+function registerCoreActions(): void {
+    const coreActions: Record<string, new () => ActionInterface> = {
+        DirectoryCleanAction,
+        DirectoryCopyAction,
+        FileCopyAction,
+        PackageManagerAction,
+        StyleProcessingAction,
+        VersionWriteAction,
+    };
+
+    for (const [name, actionClass] of Object.entries(coreActions)) {
+        registerAction(name, actionClass);
+    }
+}
+
+// Initialize the registry with core actions
+registerCoreActions();
