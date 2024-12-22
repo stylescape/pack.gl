@@ -5,8 +5,7 @@
 // Import
 // ============================================================================
 
-// import fs from "fs/promises";
-import { mkdir, writeFile } from 'fs/promises'; // Correct way to import from 'fs/promises'
+import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import nunjucks from "nunjucks";
 import nunjucksConfig from "../config/nunjucks.config.js"
@@ -24,6 +23,9 @@ import nunjucksConfig from "../config/nunjucks.config.js"
  */
 class TemplateWriter {
 
+    // Parameters
+    // ========================================================================
+
     // context: {};
     context: Record<string, any>;
 
@@ -39,10 +41,16 @@ class TemplateWriter {
     // private static defaultConfig: any = nunjucksConfig;
     private static defaultConfig: Record<string, any> = nunjucksConfig;
 
+
+    // Constructor
+    // ========================================================================
+
     /**
      * Constructs a TemplateWriter instance with specified settings.
-     * @param {string} templatesDir The directory containing Nunjucks templates.
-     * @param {object} context Global data object that will be available to all templates.
+     * @param {string} templatesDir The directory containing Nunjucks
+     * templates.
+     * @param {object} context Global data object that will be available to
+     * all templates.
      * @param {object} customConfig Custom configuration settings for Nunjucks.
      */
      constructor(
@@ -63,6 +71,10 @@ class TemplateWriter {
             this.config,
         );
     }
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Generates content from a Nunjucks template file.
@@ -87,7 +99,7 @@ class TemplateWriter {
     //         nunjucks.render(template, this.context, (err, result) => {
     //             if (err) {
     //                 console.error(`Error generating template: ${err}`);
-    //                 reject(new Error('Template generation failed'));
+    //                 reject(new Error("Template generation failed"));
     //             } else {
     //                 resolve(result);
     //             }
@@ -98,10 +110,14 @@ class TemplateWriter {
     /**
      * Writes the rendered template content to a specified file path.
      * @param {string} template The template file name.
-     * @param {string} outputFile The output file path where content will be written.
+     * @param {string} outputFile The output file path where content will
+     * be written.
      * @throws {Error} If there is an error in writing the file.
      */
-     async generateToFile(template: string, outputFile: string): Promise<void> {
+     async generateToFile(
+        template: string,
+        outputFile: string
+    ): Promise<void> {
         try {
             const content = await this.generateTemplate(template);
             const dir = path.dirname(outputFile);
@@ -112,7 +128,7 @@ class TemplateWriter {
 
             // Write the file
             // await fs.writeFile(outputFile, content, "utf-8");
-            await writeFile(outputFile, content, 'utf-8');
+            await writeFile(outputFile, content, "utf-8");
 
             console.log(`File written to ${outputFile}`);
 
