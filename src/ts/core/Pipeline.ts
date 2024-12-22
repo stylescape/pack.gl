@@ -1,6 +1,3 @@
-// src/core/pipeline.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -15,8 +12,9 @@ import { Stage } from "./Stage";
 
 /**
  * Represents the pipeline of stages to be executed.
- * This class manages the execution flow of stages, including parallel execution,
- * dependency handling, and applying global options for consistent pipeline behavior.
+ * This class manages the execution flow of stages, including parallel
+ * execution, dependency handling, and applying global options for consistent
+ * pipeline behavior.
  */
 export class Pipeline {
 
@@ -44,7 +42,9 @@ export class Pipeline {
      * @param config - The configuration object defining the stages, steps,
      * and global options for the pipeline.
      */
-    constructor(private config: ConfigInterface) {
+    constructor(
+        private config: ConfigInterface
+    ) {
         this.stages = config.stages.map(stage => new Stage(stage));
         this.globalOptions = config.globalOptions;
     }
