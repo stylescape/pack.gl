@@ -16,8 +16,15 @@ import { ESLint } from "eslint";
  */
 class CodeLinter {
 
+    // Parameters
+    // ========================================================================
+
     private eslint: ESLint;
     private projectRoot: string;
+
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Initializes a new instance of the CodeLinter class with a specified
@@ -30,6 +37,10 @@ class CodeLinter {
         this.projectRoot = projectRoot;
         this.eslint = new ESLint({ cwd: projectRoot });
     }
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Runs ESLint on the specified files or directories and fixes fixable
