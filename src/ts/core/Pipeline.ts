@@ -45,7 +45,9 @@ export class Pipeline {
     constructor(
         private config: ConfigInterface
     ) {
-        this.stages = config.stages.map(stage => new Stage(stage));
+        this.stages = config.stages.map(
+            stage => new Stage(stage)
+        );
         this.globalOptions = config.globalOptions;
     }
 
@@ -60,7 +62,9 @@ export class Pipeline {
      * handling, and execution control.
      */
     async run(): Promise<void> {
-        console.log("Starting pipeline execution...");
+        console.log(
+            "Starting pipeline execution..."
+        );
 
         // Track stages that have been completed
         const completedStages = new Set<string>();
