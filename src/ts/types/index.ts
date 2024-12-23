@@ -1,3 +1,3 @@
 // src/types/index.ts
 
-export { ActionOptionsType } from './ActionOptionsType';
+export { ActionOptionsType } from "./ActionOptionsType";
