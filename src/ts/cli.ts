@@ -12,6 +12,7 @@
 // ============================================================================
 
 import { main } from "./pack";
+import { getMode } from "./cli/getMode"
 
 
 // ============================================================================
@@ -23,12 +24,29 @@ import { main } from "./pack";
 
         try {
 
+            // Retrieve the mode from the CLI arguments
+            const mode = getMode();
+            const validModes = ["development", "production", "none"];
+
+            // Validate the mode
+            if (!validModes.includes(mode)) {
+                console.error(
+                    `[Pack.GL CLI] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
+                        ", "
+                    )}.`
+                );
+                process.exit(1);
+            }
+
             /**
-             * Calls the main function defined in `pack.ts` to execute the
+             * Invokes the main function with the determined mode in `pack.ts` to execute the
              * pipeline or perform other tasks. This function is awaited to
              * handle any asynchronous operations properly.
              */
-            await main();
+            console.log(`[Pack.GL CLI] Running in ${mode} mode...`);
+            await main(mode);
+
+
 
         } catch (error) {
 
@@ -50,6 +68,8 @@ import { main } from "./pack";
     }
 )();
 
+
+export { getMode };
 /**
  * Note: The `#!/usr/bin/env node` shebang at the top of the file ensures that
  * the script can be executed directly in environments where Node.js is
