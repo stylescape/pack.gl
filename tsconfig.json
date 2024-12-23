@@ -125,7 +125,7 @@
     "include": [
         // "src/**/*",
         "src/**/*.ts",
-        "scripts/run-tests.ts",
+        // "scripts/run-tests.ts",
         // "bin/**/*",
         // "src/index.ts.xxx",
         // "src/index.ts.xxx",
