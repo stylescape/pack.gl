@@ -23,6 +23,27 @@ const IGNORED_PATHS = /node_modules/;
 
 
 // ============================================================================
+// Utility Functions
+// ============================================================================
+
+/**
+ * Parses the `--mode` flag from the CLI arguments.
+ * Defaults to `development` if no mode is specified.
+ * @returns The mode as a string (`development`, `production`, or `none`).
+ */
+function getMode(): string {
+    const modeArgIndex = process.argv.findIndex((arg) => arg === "--mode");
+    if (modeArgIndex !== -1 && process.argv[modeArgIndex + 1]) {
+        return process.argv[modeArgIndex + 1];
+    }
+    console.warn(
+        "[CLI] No `--mode` flag specified. Defaulting to `development` mode."
+    );
+    return "development";
+}
+
+
+// ============================================================================
 // Main
 // ============================================================================
 
@@ -30,8 +51,10 @@ const IGNORED_PATHS = /node_modules/;
  * The main function initializes the pipeline with the loaded configuration,
  * and optionally sets up live reload functionality based on the "--live" flag.
  */
-export async function main(): Promise<void> {
+export async function main(mode: string): Promise<void> {
     try {
+
+        console.log(`[CLI] Starting pipeline in ${mode} mode...`);
 
         // Determine if live reload is enabled based on the "--live" flag
         const isLiveReloadEnabled = process.argv.includes("--live");
@@ -40,21 +63,24 @@ export async function main(): Promise<void> {
         const configLoader = new ConfigLoader();
         const config = configLoader.loadConfig();
 
+        if (!config) {
+            throw new Error(
+                "Configuration file not found. Ensure 'pack.yaml' or 'pack.yml' exists in the working directory."
+            );
+        }
+
         // Create and run the pipeline
         const pipeline = new Pipeline(config);
         await pipeline.run();
-        console.log(
-            "Pipeline execution finished successfully."
-        );
+        console.log(`[CLI] Pipeline execution finished successfully in ${mode} mode.`);
 
         // Set up live reload if enabled
         if (isLiveReloadEnabled) {
             setupLiveReload();
         }
-
     } catch (error) {
         console.error(
-            "An error occurred during the pipeline execution:",
+            "[CLI] An error occurred during the pipeline execution:",
             error
         );
         // Exit with an error code to signal failure
@@ -69,7 +95,7 @@ export async function main(): Promise<void> {
 function setupLiveReload(): void {
 
     console.log(
-        "Live reload functionality is enabled."
+        "[CLI] Live reload functionality is enabled."
     );
 
     // Initialize the live reload server
@@ -84,8 +110,9 @@ function setupLiveReload(): void {
         IGNORED_PATHS,
         (filePath) => {
             console.log(
-                `Detected change in: ${filePath}. Restarting pipeline...`
+                `[CLI] Detected change in: ${filePath}. Restarting pipeline...`
             );
+
             // Restart pipeline with a delay to handle rapid changes
             pipelineManager.restartPipelineWithDelay(500);
         }
@@ -121,12 +148,17 @@ async function handleShutdown(
     pipelineManager: PipelineManager,
     liveReloadServer: LiveReloadServer,
 ): Promise<void> {
-    console.log("Shutdown signal received. Shutting down...");
+    console.log(
+        "[CLI] Shutdown signal received. Shutting down..."
+    );
     try {
         await pipelineManager.stopPipeline();
         await liveReloadServer.shutdown();
     } catch (error) {
-        console.error("Error during shutdown:", error);
+        console.error(
+            "[CLI] Error during shutdown:",
+            error
+        );
     } finally {
         // Exit gracefully
         process.exit(0);
@@ -134,11 +166,27 @@ async function handleShutdown(
 }
 
 
+
 // ============================================================================
 // Execute
 // ============================================================================
 
-// Execute the main function if the script is run directly
+/**
+ * Execute the script only if the `--mode` flag is provided, and a valid mode
+ * (`development`, `production`, or `none`) is specified.
+ */
 if (require.main === module) {
-    main();
+    const mode = getMode();
+    const validModes = ["development", "production", "none"];
+
+    if (!validModes.includes(mode)) {
+        console.error(
+            `[CLI] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
+                ", "
+            )}.`
+        );
+        process.exit(1);
+    }
+
+    main(mode);
 }
