@@ -175,18 +175,18 @@ async function handleShutdown(
  * Execute the script only if the `--mode` flag is provided, and a valid mode
  * (`development`, `production`, or `none`) is specified.
  */
-if (require.main === module) {
-    const mode = getMode();
-    const validModes = ["development", "production", "none"];
+// if (require.main === module) {
+//     const mode = getMode();
+//     const validModes = ["development", "production", "none"];
 
-    if (!validModes.includes(mode)) {
-        console.error(
-            `[CLI] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
-                ", "
-            )}.`
-        );
-        process.exit(1);
-    }
+//     if (!validModes.includes(mode)) {
+//         console.error(
+//             `[CLI] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
+//                 ", "
+//             )}.`
+//         );
+//         process.exit(1);
+//     }
 
-    main(mode);
-}
+//     main(mode);
+// }
