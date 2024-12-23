@@ -32,6 +32,7 @@ export interface StepInterface {
      * the step.
      */
     action: ActionInterface;
+    // action: string; // Name of the action to perform (matches registry).
 
     /**
      * Optional configuration options specific to the step.
