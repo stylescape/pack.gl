@@ -31,10 +31,13 @@ export class Step {
     // ========================================================================
 
     /**
-     * Constructs a Step instance with the given step definition.
-     * Dynamically resolves the action class from the registry based on the
-     * action name.
-     * @param step - The step definition containing name, action, and options.
+     * Constructs a Step instance based on the provided step definition.
+     * Dynamically resolves the action class from the registry.
+     *
+     * @param step - The step definition containing the step name, action name,
+     * and options.
+     * @throws Error if the specified action is not registered in the action
+     * registry.
      */
     constructor(step: StepInterface) {
         this.name = step.name;
@@ -43,7 +46,7 @@ export class Step {
         const ActionClass = getAction(step.action.constructor.name); 
         if (!ActionClass) {
             throw new Error(
-                `Unknown action: ${step.action.constructor.name}. Please ensure it is registered.`
+                `Unknown action "${step.action}" for step "${this.name}". Ensure the action is registered in the registry.`
             );
         }
         
