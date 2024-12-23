@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.1.15",
+    "version": "0.1.16",
     "config": {
         "version_short": "0.1"
     },
@@ -99,7 +99,7 @@
         "@types/ws": "^8.5.12",
         "jest": "^29.7.0",
         "mocha": "^11.0.1",
-        "pack.gl": "^0.1.14",
+        "pack.gl": "^0.0.63",
         "supertest": "^7.0.0",
         "ts-jest": "^29.2.5",
         "ts-node": "^10.9.2",
