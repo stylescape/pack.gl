@@ -40,6 +40,7 @@ export class Step {
      * registry.
      */
     constructor(step: StepInterface) {
+    
         this.name = step.name;
         
         // Resolve the action class from the registry using the action name
