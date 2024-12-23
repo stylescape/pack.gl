@@ -1,6 +1,9 @@
 /**
  * Enum for valid modes.
  * Provides a fixed set of values for `development`, `production`, and `none`.
+ * 
+ * https://webpack.js.org/configuration/mode/
+ * 
  */
 export enum Mode {
     DEVELOPMENT = "development",
