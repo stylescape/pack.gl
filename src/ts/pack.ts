@@ -3,7 +3,7 @@
 // ============================================================================
 
 import { Pipeline } from "./core/Pipeline";
-import { ConfigLoader } from "./core/ConfigLoader";
+import { ConfigLoader } from "./core/config/ConfigLoader";
 import { LiveReloadServer } from "./live/LiveReloadServer";
 import { FileWatcher } from "./live/FileWatcher";
 import { PipelineManager } from "./core/PipelineManager";
@@ -37,7 +37,7 @@ function getMode(): string {
         return process.argv[modeArgIndex + 1];
     }
     console.warn(
-        "[CLI] No `--mode` flag specified. Defaulting to `development` mode."
+        "[pack.gl CLI] No `--mode` flag specified. Defaulting to `development` mode."
     );
     return "development";
 }
@@ -51,15 +51,21 @@ function getMode(): string {
  * The main function initializes the pipeline with the loaded configuration,
  * and optionally sets up live reload functionality based on the "--live" flag.
  */
-export async function main(mode: string): Promise<void> {
+export async function main(
+    mode: string
+): Promise<void> {
+
     try {
 
-        console.log(`[CLI] Starting pipeline in ${mode} mode...`);
+        console.log(
+            `[pack.gl main] Starting pipeline in ${mode} mode...`
+        );
 
         // Determine if live reload is enabled based on the "--live" flag
         const isLiveReloadEnabled = process.argv.includes("--live");
 
         // Load the configuration using ConfigLoader
+        console.log(`[pack.gl main] setting up new ConfigLoader`);
         const configLoader = new ConfigLoader();
         const config = configLoader.loadConfig();
 
@@ -72,20 +78,26 @@ export async function main(mode: string): Promise<void> {
         // Create and run the pipeline
         const pipeline = new Pipeline(config);
         await pipeline.run();
-        console.log(`[CLI] Pipeline execution finished successfully in ${mode} mode.`);
+        console.log(
+            `[pack.gl CLI] Pipeline execution finished successfully in ${mode} mode.`
+        );
 
         // Set up live reload if enabled
         if (isLiveReloadEnabled) {
             setupLiveReload();
         }
+
     } catch (error) {
+
         console.error(
-            "[CLI] An error occurred during the pipeline execution:",
+            "[pack.gl CLI] An error occurred during the pipeline execution:",
             error
         );
+
         // Exit with an error code to signal failure
         process.exit(1);
     }
+
 }
 
 /**
@@ -95,7 +107,7 @@ export async function main(mode: string): Promise<void> {
 function setupLiveReload(): void {
 
     console.log(
-        "[CLI] Live reload functionality is enabled."
+        "[pack.gl CLI] Live reload functionality is enabled."
     );
 
     // Initialize the live reload server
@@ -110,7 +122,7 @@ function setupLiveReload(): void {
         IGNORED_PATHS,
         (filePath) => {
             console.log(
-                `[CLI] Detected change in: ${filePath}. Restarting pipeline...`
+                `[pack.gl CLI] Detected change in: ${filePath}. Restarting pipeline...`
             );
 
             // Restart pipeline with a delay to handle rapid changes
@@ -149,14 +161,14 @@ async function handleShutdown(
     liveReloadServer: LiveReloadServer,
 ): Promise<void> {
     console.log(
-        "[CLI] Shutdown signal received. Shutting down..."
+        "[pack.gl CLI] Shutdown signal received. Shutting down..."
     );
     try {
         await pipelineManager.stopPipeline();
         await liveReloadServer.shutdown();
     } catch (error) {
         console.error(
-            "[CLI] Error during shutdown:",
+            "[pack.gl CLI] Error during shutdown:",
             error
         );
     } finally {
@@ -181,7 +193,7 @@ async function handleShutdown(
 
 //     if (!validModes.includes(mode)) {
 //         console.error(
-//             `[CLI] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
+//             `[pack.gl CLI] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
 //                 ", "
 //             )}.`
 //         );
