@@ -31,7 +31,7 @@ import { getMode } from "./cli/getMode"
             // Validate the mode
             if (!validModes.includes(mode)) {
                 console.error(
-                    `[Pack.GL CLI] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
+                    `[pack.gl CLI] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
                         ", "
                     )}.`
                 );
@@ -43,7 +43,7 @@ import { getMode } from "./cli/getMode"
              * pipeline or perform other tasks. This function is awaited to
              * handle any asynchronous operations properly.
              */
-            console.log(`[Pack.GL CLI] Running in ${mode} mode...`);
+            console.log(`[pack.gl CLI] Running in ${mode} mode...`);
             await main(mode);
 
 
