@@ -34,6 +34,7 @@ export interface ActionInterface {
      * @returns A Promise that resolves when the action completes successfully, or rejects with an error if the action fails.
      */
     execute(options: ActionOptionsType): Promise<void>;
+    // execute(options: StepOptionsInterface): Promise<void>; // Core logic for the action.
 
     /**
      * Validates the provided options before execution.
