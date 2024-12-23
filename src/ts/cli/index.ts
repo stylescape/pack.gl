@@ -1,0 +1,3 @@
+
+
+export { getMode } from "./getMode";
