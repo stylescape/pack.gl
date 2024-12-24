@@ -2,6 +2,7 @@
 // Import
 // ============================================================================
 
+import { AbstractProcess } from "./AbstractProcess";
 import { spawn, ChildProcess } from "child_process";
 import { LiveReloadServer } from "../live/LiveReloadServer";
 
@@ -10,7 +11,7 @@ import { LiveReloadServer } from "../live/LiveReloadServer";
 // Class
 // ============================================================================
 
-export class PipelineManager {
+export class PipelineManager extends AbstractProcess {
 
 
     // Parameters
@@ -29,58 +30,50 @@ export class PipelineManager {
      */
     constructor(
         private reloadServer: LiveReloadServer
-    )
-    {
-        
+    ) {
+        super(); // Initialize logging
+        this.log("PipelineManager initialized.");
     }
 
 
     // Methods
     // ========================================================================
 
+
     /**
-     * Restarts the pipeline process, killing the existing process if it"s
+     * Restarts the pipeline process, killing the existing process if it's
      * running. Notifies connected clients via the LiveReloadServer after
      * restarting.
      */
     public restartPipeline(): void {
         if (this.pipelineProcess) {
-            console.log("Stopping current pipeline process...");
+            this.log("Stopping current pipeline process...");
             this.stopPipeline();
         }
 
-        console.log("Starting pipeline...");
-        this.pipelineProcess = spawn(
-            "npm",
-            ["run", "start"],
-            { stdio: "inherit" }
-        );
+        this.log("Starting pipeline...");
+        this.pipelineProcess = spawn("npm", ["run", "start"], {
+            stdio: "inherit",
+        });
 
         this.pipelineProcess.on("close", (code) => {
             if (code !== 0) {
-                console.error(
-                    `Pipeline process exited with code ${code}`
-                );
+                this.logError(`Pipeline process exited with code ${code}`);
+            } else {
+                this.log("Pipeline process exited successfully.");
             }
-            // Reload clients when pipeline restarts
             this.reloadServer.reloadClients();
         });
 
         this.pipelineProcess.on("error", (error) => {
-            console.error(
-                "Error starting pipeline process:", error
-            );
+            this.logError(`Error starting pipeline process: ${error}`, error);
         });
 
         this.pipelineProcess.on("exit", (code, signal) => {
             if (signal) {
-                console.log(
-                    `Pipeline process was killed with signal: ${signal}`
-                );
+                this.log(`Pipeline process was killed with signal: ${signal}`);
             } else {
-                console.log(
-                    `Pipeline process exited with code: ${code}`
-                );
+                this.log(`Pipeline process exited with code: ${code}`);
             }
         });
     }
