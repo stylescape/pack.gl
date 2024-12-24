@@ -1,11 +1,5 @@
 #!/usr/bin/env node
 
-/**
- * The entry point for the Pack CLI application.
- * This script sets up the runtime environment, invokes the `main` function
- * from `pack.ts`, and handles any unexpected errors during execution.
- */
-
 
 // ============================================================================
 // Import
@@ -13,12 +7,28 @@
 
 import { main } from "./pack";
 import { getMode } from "./cli/getMode"
+import { Logger } from "./utils/Logger";
+
+
+// ============================================================================
+// Constants
+// ============================================================================
+
+/** 
+ * The context string for logging.
+ */
+const CONTEXT = "CLI";
 
 
 // ============================================================================
 // Main
 // ============================================================================
 
+/**
+ * The entry point for the Pack CLI application.
+ * This script sets up the runtime environment, invokes the `main` function
+ * from `pack.ts`, and handles any unexpected errors during execution.
+ */
 (
     async () => {
 
@@ -26,26 +36,36 @@ import { getMode } from "./cli/getMode"
 
             // Retrieve the mode from the CLI arguments
             const mode = getMode();
-            const validModes = ["development", "production", "none"];
+            const validModes = [
+                "development",
+                "production",
+                "none"
+            ];
 
             // Validate the mode
             if (!validModes.includes(mode)) {
                 console.error(
-                    `[pack.gl CLI] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
+                    `[${CONTEXT}] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
                         ", "
                     )}.`
                 );
                 process.exit(1);
             }
 
-            /**
-             * Invokes the main function with the determined mode in `pack.ts` to execute the
-             * pipeline or perform other tasks. This function is awaited to
-             * handle any asynchronous operations properly.
-             */
-            console.log(`[pack.gl CLI] Running in ${mode} mode...`);
-            await main(mode);
+            // Initialize the Logger with the verbose flag based on mode or configuration
+            const verbose = mode === "development"; // Example: Enable verbose logging in development mode
+            Logger.initialize(verbose);
 
+            // Log the startup message
+            const logger = Logger.getInstance();
+            logger.log(CONTEXT, `Running in ${mode} mode...`);
+
+            /**
+             * Invokes the main function with the determined mode in `pack.ts`
+             * to execute the pipeline or perform other tasks. This function
+             * is awaited to handle any asynchronous operations properly.
+             */
+            await main(mode);
 
 
         } catch (error) {
@@ -55,10 +75,14 @@ import { getMode } from "./cli/getMode"
              * Logs the error message to the console and exits with a non-zero
              * error code.
              */
-            console.error(
-                "An unexpected error occurred:",
-                error instanceof Error ? error.message : error
-            );
+            // Log unexpected errors
+            const logger = Logger.getInstance();
+            // Narrow the error type before passing to the logger
+            if (error instanceof Error) {
+                logger.error(CONTEXT, error);
+            } else {
+                logger.error(CONTEXT, String(error));
+            }
 
             // Exit with an error code to signal failure
             process.exit(1);
