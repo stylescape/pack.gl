@@ -7,6 +7,8 @@ import { ConfigLoader } from "./core/config/ConfigLoader";
 import { LiveReloadServer } from "./live/LiveReloadServer";
 import { FileWatcher } from "./live/FileWatcher";
 import { PipelineManager } from "./core/PipelineManager";
+import { Logger } from "./utils/Logger";
+import { ActionRegistry } from "./core/ActionRegistry"; // Import ActionRegistry
 
 
 // ============================================================================
@@ -21,26 +23,10 @@ const WATCH_PATHS = [
 ];
 const IGNORED_PATHS = /node_modules/;
 
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-
-/**
- * Parses the `--mode` flag from the CLI arguments.
- * Defaults to `development` if no mode is specified.
- * @returns The mode as a string (`development`, `production`, or `none`).
+/** 
+ * The context string for logging.
  */
-function getMode(): string {
-    const modeArgIndex = process.argv.findIndex((arg) => arg === "--mode");
-    if (modeArgIndex !== -1 && process.argv[modeArgIndex + 1]) {
-        return process.argv[modeArgIndex + 1];
-    }
-    console.warn(
-        "[pack.gl CLI] No `--mode` flag specified. Defaulting to `development` mode."
-    );
-    return "development";
-}
+const CONTEXT = "Pack Main";
 
 
 // ============================================================================
@@ -55,17 +41,27 @@ export async function main(
     mode: string
 ): Promise<void> {
 
+    // Initialize the Logger
+    const logger = Logger.getInstance();
+
     try {
 
-        console.log(
-            `[pack.gl main] Starting pipeline in ${mode} mode...`
-        );
+
+        logger.log(CONTEXT, `Starting pipeline in ${mode} mode...`);
+;
+
+
+        // Initialize the ActionRegistry singleton
+        logger.log(CONTEXT, "Initializing ActionRegistry...");
+        ActionRegistry.initialize();
+        logger.log(CONTEXT, "ActionRegistry initialized successfully.");
+
 
         // Determine if live reload is enabled based on the "--live" flag
         const isLiveReloadEnabled = process.argv.includes("--live");
 
         // Load the configuration using ConfigLoader
-        console.log(`[pack.gl main] setting up new ConfigLoader`);
+        logger.log(CONTEXT, "Loading pipeline configuration...");
         const configLoader = new ConfigLoader();
         const config = configLoader.loadConfig();
 
@@ -76,11 +72,11 @@ export async function main(
         }
 
         // Create and run the pipeline
+        logger.log(CONTEXT, "Initializing pipeline...");
         const pipeline = new Pipeline(config);
         await pipeline.run();
-        console.log(
-            `[pack.gl CLI] Pipeline execution finished successfully in ${mode} mode.`
-        );
+        logger.log(CONTEXT, "Pipeline execution finished successfully.");
+
 
         // Set up live reload if enabled
         if (isLiveReloadEnabled) {
@@ -89,10 +85,8 @@ export async function main(
 
     } catch (error) {
 
-        console.error(
-            "[pack.gl CLI] An error occurred during the pipeline execution:",
-            error
-        );
+
+        logger.error("main", `An error occurred during the pipeline execution: ${error instanceof Error ? error.message : error}`, error);
 
         // Exit with an error code to signal failure
         process.exit(1);
