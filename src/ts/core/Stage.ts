@@ -2,6 +2,7 @@
 // Import
 // ============================================================================
 
+import { AbstractProcess } from "./AbstractProcess";
 import { StageInterface } from "../interface/StageInterface";
 import { Step } from "./Step";
 
@@ -16,7 +17,7 @@ import { Step } from "./Step";
  * consecutively, and stages can have dependencies on other stages which are
  * managed before execution.
  */
-export class Stage {
+export class Stage extends AbstractProcess {
 
 
     // Parameters
@@ -36,10 +37,17 @@ export class Stage {
      * dependencies.
      */
     constructor(stage: StageInterface) {
+        super(); // Initialize logging
         this.name = stage.name;
         this.steps = stage.steps.map(step => new Step(step));
         this.dependsOn = stage.dependsOn;
+
+        this.log(`Stage "${this.name}" initialized with ${this.steps.length} steps.`);
     }
+
+
+    // Methods
+    // ========================================================================
 
 
     // Methods
@@ -47,35 +55,37 @@ export class Stage {
 
     /**
      * Executes the stage by running its steps consecutively.
-     * Manages dependencies by waiting for dependent stages to complete 
+     * Manages dependencies by waiting for dependent stages to complete
      * before execution.
      * @param completedStages - A set of completed stage names used for
      * dependency tracking.
      * @throws Error if any step within the stage fails.
      */
     async execute(completedStages: Set<string>): Promise<void> {
+
         // Handle dependencies before executing the stage
         if (this.dependsOn) {
             await this.resolveDependencies(completedStages);
         }
 
-        console.log(`Executing stage: ${this.name}`);
+        this.log(`Executing stage: ${this.name}`);
 
         // Execute all steps within the stage consecutively
         try {
             for (const step of this.steps) {
                 await step.execute();
             }
-            console.log(`Stage ${this.name} completed successfully.`);
+            this.log(`Stage "${this.name}" completed successfully.`);
             completedStages.add(this.name);
         } catch (error) {
-            console.error(`Error executing stage ${this.name}:`, error);
+            this.logError(`Error executing stage "${this.name}": ${error}`, error);
             // Propagate the error to halt pipeline or manage based on
             // global settings
             throw error;
         }
     }
-
+    
+    
     /**
      * Resolves dependencies by ensuring all required stages have completed.
      * @param completedStages - A set of completed stage names used for
@@ -85,18 +95,13 @@ export class Stage {
     private async resolveDependencies(completedStages: Set<string>): Promise<void> {
         if (!this.dependsOn) return;
 
-        console.log(
-            `Stage ${this.name} is waiting for dependencies: ${this.dependsOn.join(", ")}`
-        );
+        this.log(`Stage "${this.name}" is waiting for dependencies: ${this.dependsOn.join(", ")}`);
         await Promise.all(
-            this.dependsOn.map(
-                dep => this.waitForStageCompletion(
-                    dep,
-                    completedStages
-                )
+            this.dependsOn.map(dep =>
+                this.waitForStageCompletion(dep, completedStages)
             )
         );
-        console.log(`All dependencies resolved for stage: ${this.name}`);
+        this.log(`All dependencies resolved for stage: "${this.name}"`);
     }
 
     /**
@@ -121,5 +126,6 @@ export class Stage {
             );
         }
     }
+
 
 }
