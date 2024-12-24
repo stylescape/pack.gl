@@ -69,7 +69,7 @@ import { getMode } from "./cli/getMode"
 )();
 
 
-export { getMode };
+
 /**
  * Note: The `#!/usr/bin/env node` shebang at the top of the file ensures that
  * the script can be executed directly in environments where Node.js is
