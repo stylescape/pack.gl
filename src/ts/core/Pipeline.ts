@@ -2,8 +2,10 @@
 // Import
 // ============================================================================
 
+import { AbstractProcess } from "./AbstractProcess";
 import { ConfigInterface } from "../interface/ConfigInterface";
 import { Stage } from "./Stage";
+// import { registerCoreActions } from "./ActionRegistry";
 
 
 // ============================================================================
@@ -16,7 +18,7 @@ import { Stage } from "./Stage";
  * execution, dependency handling, and applying global options for consistent
  * pipeline behavior.
  */
-export class Pipeline {
+export class Pipeline extends AbstractProcess {
 
 
     // Parameters
@@ -45,10 +47,12 @@ export class Pipeline {
     constructor(
         private config: ConfigInterface
     ) {
+        super();
         this.stages = config.stages.map(
             stage => new Stage(stage)
         );
         this.globalOptions = config.globalOptions;
+        this.log("Pipeline instance created.");
     }
 
 
@@ -62,30 +66,37 @@ export class Pipeline {
      * handling, and execution control.
      */
     async run(): Promise<void> {
-        console.log(
-            "Starting pipeline execution..."
-        );
+
+        // registerCoreActions(); // Invoke this before pipeline execution
+        
+        this.log("Starting pipeline execution...");
 
         // Track stages that have been completed
         const completedStages = new Set<string>();
 
         // Run stages with dependency management and parallel execution control
         try {
+
+            this.debug("Pipeline execution debug message.");
+
             const stagePromises = this.stages.map(
                 stage => stage.execute(completedStages)
             );
             await this.runWithConcurrencyControl(stagePromises);
         } catch (error) {
-            console.error("Pipeline execution failed:", error);
+
+            this.logError("Pipeline execution failed:", error);
+
             if (this.globalOptions?.haltOnFailure !== false) {
-                console.error("Halting pipeline due to failure.");
+                this.logError("Halting pipeline due to failure.");
                 // Optionally halt the process if the pipeline is set to
                 // halt on failure
                 process.exit(1);
             }
         }
 
-        console.log("Pipeline execution completed successfully.");
+        this.log("Pipeline execution completed successfully.");
+
     }
 
     /**
