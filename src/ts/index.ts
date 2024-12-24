@@ -40,6 +40,7 @@ import gl_installer from "./utils/gl_installer";
 import cleanDirectory from "./utils/clean_directory";
 import readPackageJson from "./utils/readPackageJson.js"
 
+import * as cli from "./cli.js";
 
 // ============================================================================
 // Exports
@@ -96,10 +97,10 @@ export { gl_installer, cleanDirectory, readPackageJson };
 // export { Action } from "./core/Action";
 
 // Main Function
-// export { main } from "./pack";
+export { main } from "./pack";
 
 // Additional Types
 export * from "./types";
 
 // CLI Functions (if required programmatically)
-// export * from "./cli.js";
+export * from "./cli.js";
