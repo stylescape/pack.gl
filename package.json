@@ -50,6 +50,7 @@
         "build-compile": "tsc -p bin/tsconfig.json",
         "build-process": "node bin/js/index.js",
         "build-tsc": "tsc -p ./tsconfig.json",
+        "test-cli": "node dist/js/cli.js",
         "test": "node --loader ts-node/esm scripts/run-tests.ts"
     },
     "dependencies": {
@@ -99,7 +100,7 @@
         "@types/ws": "^8.5.12",
         "jest": "^29.7.0",
         "mocha": "^11.0.1",
-        "pack.gl": "^0.0.63",
+        "pack.gl": "^0.1.17",
         "supertest": "^7.0.0",
         "ts-jest": "^29.2.5",
         "ts-node": "^10.9.2",
