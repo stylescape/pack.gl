@@ -2,6 +2,7 @@
 // Import
 // ============================================================================
 
+import { AbstractProcess } from "./AbstractProcess";
 import { ActionInterface } from "../interface/ActionInterface";
 import { ActionOptionsType } from "../types/ActionOptionsType";
 
@@ -16,7 +17,7 @@ import { ActionOptionsType } from "../types/ActionOptionsType";
  * structure and utility methods that can be extended by specific actions
  * like BuildAction, LintAction, etc.
  */
-export abstract class Action implements ActionInterface {
+export abstract class Action extends AbstractProcess implements ActionInterface {
 
     // Parameters
     // ========================================================================
@@ -25,6 +26,13 @@ export abstract class Action implements ActionInterface {
     // Constructor
     // ========================================================================
 
+    /**
+     * Constructs a new Action instance.
+     * Inherits the logger from the AbstractProcess base class.
+     */
+    constructor() {
+        super();
+    }
 
     // Methods
     // ========================================================================
@@ -70,39 +78,6 @@ export abstract class Action implements ActionInterface {
      */
     describe(): string {
         return "Base action for executing steps in the pipeline.";
-    }
-
-    /**
-     * Utility method for logging messages with a consistent format.
-     * Can be used by derived classes to standardize logging output during
-     * action execution.
-     * 
-     * @param message - The message to log.
-     */
-    protected log(message: string): void {
-        console.log(`[${this.constructor.name}] ${message}`);
-    }
-
-    /**
-     * Utility method for logging errors with a consistent format.
-     * Can be used by derived classes to standardize error output during action
-     * execution.
-     * 
-     * @param error - The error to log, either as a string or an Error object.
-     */
-    protected logError(error: string | Error): void {
-        if (error instanceof Error) {
-            console.error(
-                `[${this.constructor.name}] Error: ${error.message}`
-            );
-            console.error(
-                `[${this.constructor.name}] Stack: ${error.stack}`
-            );
-        } else {
-            console.error(
-                `[${this.constructor.name}] Error: ${error}`
-            );
-        }
     }
 
 }
