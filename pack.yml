@@ -9,3 +9,12 @@ stages:
         action: DirectoryCleanAction
         options:
           dirPath: "./dist"  # Path to the directory to be cleaned
+
+globalOptions:
+  verboseLogging: true
+
+
+# Global options applicable to the entire pipeline
+# globalOptions:
+#   logLevel: info           # Log level for the pipeline (verbose, info, warn, error)
+#   stepTimeout: 30000       # Timeout for each step in milliseconds
