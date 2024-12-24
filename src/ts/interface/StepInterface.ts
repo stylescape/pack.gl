@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { ActionInterface } from "./ActionInterface";
+// import { ActionInterface } from "./ActionInterface";
 import { StepOptionsInterface } from "./StepOptionsInterface";
 
 
@@ -31,8 +31,8 @@ export interface StepInterface {
      * The action is responsible for executing the main logic associated with
      * the step.
      */
-    action: ActionInterface;
-    // action: string; // Name of the action to perform (matches registry).
+    // action: ActionInterface;
+    action: string; // Name of the action to perform (matches registry).
 
     /**
      * Optional configuration options specific to the step.
