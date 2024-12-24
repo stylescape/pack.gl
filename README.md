@@ -224,6 +224,38 @@ Pack.gl supports plugin-based actions. Default actions include:
 
 Custom actions can be implemented and registered as plugins.
 
+``` mermaid
+graph TD
+    subgraph Pipeline
+        Stage1[Stage 1]
+        Stage2[Stage 2]
+        Stage3[Stage 3]
+    end
+
+    subgraph Stage1
+        Step1_1[Step 1.1]
+        Step1_2[Step 1.2]
+    end
+    subgraph Stage2
+        Step2_1[Step 2.1]
+        Step2_2[Step 2.2]
+    end
+    subgraph Stage3
+        Step3_1[Step 3.1]
+        Step3_2[Step 3.2]
+    end
+
+    Step1_1 --> Action1_1[Action: DirectoryCleanAction]
+    Step1_2 --> Action1_2[Action: DirectoryCopyAction]
+    Step2_1 --> Action2_1[Action: FileCopyAction]
+    Step2_2 --> Action2_2[Action: StyleProcessingAction]
+    Step3_1 --> Action3_1[Action: PackageManagerAction]
+    Step3_2 --> Action3_2[Action: VersionWriteAction]
+
+    Stage1 --> Stage2
+    Stage2 --> Stage3
+```
+
 ---
 
 ## Colophon
