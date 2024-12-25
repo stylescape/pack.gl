@@ -1,0 +1,11 @@
+# pack.yml
+
+stages:
+  - name: CopyBuildArtifacts
+    description: "Copy build artifacts from the build directory to the deployment directory."
+    steps:
+      - name: CopyArtifacts
+        action: DirectoryCopyAction
+        options:
+          srcDir: "./build"             # Source directory
+          destDir: "./deploy"           # Destination directory
