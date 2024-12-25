@@ -9,6 +9,8 @@
  */
 export interface OptionsInterface {
 
+    mode?: "development" | "production" | "none";
+
     /**
      * Specifies the level of logging to be used throughout the pipeline.
      * The available levels are:
