@@ -3,8 +3,8 @@
 // ============================================================================
 
 // Export core classes for live reload functionality
-export { LiveReloadServer } from "./LiveReloadServer"; // Manages server operations and live reload communication
-export { FileWatcher } from "./FileWatcher"; // Watches for file changes and triggers reload actions
+export { LiveServer } from "./LiveServer"; // Manages server operations and live reload communication
+export { LiveWatcher } from "./LiveWatcher"; // Watches for file changes and triggers reload actions
 
 // Future-proofing: Add additional exports as the project evolves
 // Example:
