@@ -4,7 +4,7 @@
 
 import path from "path";
 import { promises as fs } from "fs";
-import { Action } from "../../core/Action";
+import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types";
 
 
@@ -47,11 +47,11 @@ export class DirectoryCopyAction extends Action {
             );
         }
 
-        this.log(`Copying files from ${srcDir} to ${destDir}`);
+        this.logInfo(`Copying files from ${srcDir} to ${destDir}`);
 
         try {
             await this.copyFiles(srcDir, destDir);
-            this.log(
+            this.logInfo(
                 `Files copied successfully from ${srcDir} to ${destDir}`
             );
         } catch (error) {
