@@ -1,0 +1,122 @@
+// ============================================================================
+// Import
+// ============================================================================
+
+import { AbstractProcess } from "../abstract/AbstractProcess";
+import { ActionInterface } from "../../interface/ActionInterface";
+import { ActionOptionsType } from "../../types/ActionOptionsType";
+
+
+// ============================================================================
+// Class
+// ============================================================================
+
+/**
+ * Action is an abstract base class that serves as a foundation for all step
+ * actions in the pipeline. It provides a consistent structure and utility
+ * methods for derived action classes, making it easier to implement and
+ * integrate custom behaviors like `BuildAction`, `LintAction`, and more.
+ */
+export abstract class Action extends AbstractProcess implements ActionInterface {
+
+    // Parameters
+    // ========================================================================
+
+    /**
+     * Gets the unique name of the action.
+     * The name is derived from the class name of the concrete action.
+     */
+    public get name(): string {
+        return this.constructor.name;
+    }
+
+    // Constructor
+    // ========================================================================
+
+    /**
+     * Constructs a new Action instance.
+     * Inherits the logger from the AbstractProcess base class.
+     */
+    constructor() {
+        super();
+    }
+
+
+    // Methods
+    // ========================================================================
+
+    /**
+     * Provides a basic validation mechanism for action options.
+     * Derived classes can override this method to implement specific
+     * validation logic.
+     * 
+     * @param options - The options to validate, ensuring they meet the
+     * action"s specific requirements.
+     * @returns A boolean indicating whether the options are valid. Default
+     * implementation always returns true.
+     */
+    validateOptions(
+        options: ActionOptionsType
+    ): boolean {
+        // Default validation: always returns true, can be overridden in
+        // derived classes
+        return true;
+    }
+
+    /**
+     * Abstract method that must be implemented by derived classes to perform
+     * the action"s main logic.
+     * This method is invoked during the step execution process.
+     * 
+     * @param options - A structured set of options specific to the action's
+     * configuration.
+     * @returns A Promise that resolves when the action completes successfully,
+     * or rejects with an error if the action fails.
+     */
+    abstract execute(
+        options: ActionOptionsType
+    ): Promise<void>;
+
+    /**
+     * Provides a summary or description of the action.
+     * This method can be overridden by derived classes to provide more
+     * specific details about the action.
+     * 
+     * @returns A string description of the action.
+     */
+    describe(): string {
+        return "Base action for executing steps in the pipeline.";
+    }
+
+    /**
+     * Logs an error encountered during the execution of the action.
+     * This utility method ensures consistent error logging across all derived
+     * actions.
+     * 
+     * @param message - The error message to log.
+     * @param error - The optional error object to log for additional details.
+     */
+    protected logError(message: string, error?: unknown): void {
+        if (error instanceof Error) {
+            this.logError(`${message}: ${error.message}`, error);
+        } else {
+            this.logError(message);
+        }
+    }
+
+    /**
+     * Logs a message indicating the start of the action's execution.
+     * Useful for tracking progress in pipelines with multiple steps.
+     */
+    protected logStart(): void {
+        this.logInfo(`Starting action: ${this.name}`);
+    }
+
+    /**
+     * Logs a message indicating the successful completion of the action.
+     */
+    protected logSuccess(): void {
+        this.logInfo(`Successfully completed action: ${this.name}`);
+    }
+
+}
