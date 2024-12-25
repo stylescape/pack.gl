@@ -7,7 +7,7 @@ import { promises as fs } from "fs";
 import * as sass from "sass";
 import postcss from "postcss";
 
-import { Action } from "../../core/Action.js";
+import { Action } from "../../core/pipeline/Action.js";
 import { ActionOptionsType } from "../../types/ActionOptionsType.js";
 
 // Assuming the PostCSS configurations are available at the given paths
@@ -58,7 +58,7 @@ export class StyleProcessingAction extends Action {
             );
         }
 
-        this.log(
+        this.logInfo(
             `Processing styles from ${inputFile} to ${outputFile} with ${styleOption} style.`
         );
 
@@ -88,7 +88,7 @@ export class StyleProcessingAction extends Action {
                 "utf-8"
             );
 
-            this.log(
+            this.logInfo(
                 `Styles processed successfully from ${inputFile} to ${outputFile}.`
             );
 
