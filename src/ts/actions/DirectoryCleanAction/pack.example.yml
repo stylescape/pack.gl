@@ -1,0 +1,11 @@
+# pack.yml
+
+steps:
+  - name: CleanBuildDirStep
+    action: DirectoryCleanAction
+    options:
+      dirPath: "./build"
+      keep:
+        - "static-assets/**"  # Retain all files and subdirectories in static-assets
+        - "important-config.json"  # Retain this specific file
+        - "*.log"  # Retain all log files in the directory
