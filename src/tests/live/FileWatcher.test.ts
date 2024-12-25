@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { FileWatcher } from "../../ts/live/FileWatcher";
+import { FileWatcher } from "../../ts/live/LiveWatcher";
 import * as fs from "fs";
 
 
