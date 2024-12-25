@@ -2,68 +2,51 @@
 // Imports
 // ============================================================================
 
-import { Pipeline } from "./core/Pipeline";
+import { Pipeline } from "./core/pipeline/Pipeline";
 import { ConfigLoader } from "./core/config/ConfigLoader";
-import { LiveReloadServer } from "./live/LiveReloadServer";
-import { FileWatcher } from "./live/FileWatcher";
-import { PipelineManager } from "./core/PipelineManager";
+import { LiveServer } from "./live/LiveServer";
+import { LiveWatcher } from "./live/LiveWatcher";
+import { PipelineManager } from "./core/pipeline/PipelineManager";
 import { Logger } from "./utils/Logger";
-import { ActionRegistry } from "./core/ActionRegistry"; // Import ActionRegistry
-
+import { ActionRegistry } from "./core/pipeline/ActionRegistry";
 
 // ============================================================================
 // Constants
 // ============================================================================
 
 const PORT = 3000;
-const WATCH_PATHS = [
-    "src/**/*",
-    "config/**/*",
-    "pack.yaml"
-];
+const WATCH_PATHS = ["src/**/*", "config/**/*", "pack.yaml"];
 const IGNORED_PATHS = /node_modules/;
-
-/** 
- * The context string for logging.
- */
-const CONTEXT = "Pack Main";
-
+const CONTEXT = "Pack Main"; // The context string for logging
 
 // ============================================================================
-// Main
+// Main Functionality
 // ============================================================================
 
 /**
- * The main function initializes the pipeline with the loaded configuration,
- * and optionally sets up live reload functionality based on the "--live" flag.
+ * Main function initializes the pipeline and optionally sets up live reload functionality.
+ *
+ * @param mode - The execution mode ("development", "production", or "none").
  */
-export async function main(
-    mode: string
-): Promise<void> {
-
-    // Initialize the Logger
+export async function main(mode: string): Promise<void> {
     const logger = Logger.getInstance();
 
     try {
+        logger.logInfo(CONTEXT, `Starting pipeline in ${mode} mode...`);
 
-
-        logger.log(CONTEXT, `Starting pipeline in ${mode} mode...`);
-;
-
-
-        // Initialize the ActionRegistry singleton
-        logger.log(CONTEXT, "Initializing ActionRegistry...");
+        // Initialize ActionRegistry
+        logger.logInfo(CONTEXT, "Initializing ActionRegistry...");
         ActionRegistry.initialize();
-        logger.log(CONTEXT, "ActionRegistry initialized successfully.");
+        logger.logInfo(CONTEXT, "ActionRegistry initialized successfully.");
 
-
-        // Determine if live reload is enabled based on the "--live" flag
+        // Check for live reload flag
         const isLiveReloadEnabled = process.argv.includes("--live");
 
-        // Load the configuration using ConfigLoader
-        logger.log(CONTEXT, "Loading pipeline configuration...");
+        // Load configuration
+        logger.logInfo(CONTEXT, "Loading pipeline configuration...");
         const configLoader = new ConfigLoader();
-        const config = configLoader.loadConfig();
+        await configLoader.initialize(); // Call the async initialization method
+        const config = await configLoader.loadConfig();
 
         if (!config) {
             throw new Error(
@@ -71,128 +54,95 @@ export async function main(
             );
         }
 
-        // Create and run the pipeline
-        logger.log(CONTEXT, "Initializing pipeline...");
+        // Initialize and run the pipeline
+        logger.logInfo(CONTEXT, "Initializing pipeline...");
         const pipeline = new Pipeline(config);
         await pipeline.run();
-        logger.log(CONTEXT, "Pipeline execution finished successfully.");
-
+        logger.logInfo(CONTEXT, "Pipeline execution finished successfully.");
 
         // Set up live reload if enabled
         if (isLiveReloadEnabled) {
             setupLiveReload();
         }
-
     } catch (error) {
-
-
-        logger.error("main", `An error occurred during the pipeline execution: ${error instanceof Error ? error.message : error}`, error);
-
-        // Exit with an error code to signal failure
-        process.exit(1);
+        handleMainError(error, logger);
     }
-
 }
 
 /**
- * Sets up live reload functionality, including the server, file watcher, and
- * pipeline manager.
+ * Handles errors occurring during the main pipeline execution.
+ *
+ * @param error - The error object.
+ * @param logger - The Logger instance for logging.
+ */
+function handleMainError(error: unknown, logger: Logger): void {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.logError(CONTEXT, `An error occurred during the pipeline execution: ${errorMessage}`, error);
+
+    // Exit with error code to signal failure
+    process.exit(1);
+}
+
+/**
+ * Sets up live reload functionality, including the server, file watcher, and pipeline manager.
  */
 function setupLiveReload(): void {
+    const logger = Logger.getInstance();
+    logger.logInfo(CONTEXT, "Enabling live reload functionality...");
 
-    console.log(
-        "[pack.gl CLI] Live reload functionality is enabled."
-    );
-
-    // Initialize the live reload server
-    const liveReloadServer = new LiveReloadServer(PORT);
-
-    // Initialize the pipeline manager
+    // Initialize components
+    const liveReloadServer = new LiveServer(PORT);
     const pipelineManager = new PipelineManager(liveReloadServer);
+    const fileWatcher = new LiveWatcher(WATCH_PATHS, IGNORED_PATHS, (filePath) => {
+        logger.logInfo(CONTEXT, `Detected change in: ${filePath}. Restarting pipeline...`);
+        pipelineManager.restartPipelineWithDelay(500);
+    });
 
-    // Initialize the file watcher
-    const fileWatcher = new FileWatcher(
-        WATCH_PATHS,
-        IGNORED_PATHS,
-        (filePath) => {
-            console.log(
-                `[pack.gl CLI] Detected change in: ${filePath}. Restarting pipeline...`
-            );
-
-            // Restart pipeline with a delay to handle rapid changes
-            pipelineManager.restartPipelineWithDelay(500);
-        }
-    );
-
-    // Start the initial pipeline process with live reload capabilities
+    // Start initial pipeline process with live reload capabilities
     pipelineManager.restartPipeline();
 
     // Set up graceful shutdown handlers
-    process.on(
-        "SIGINT",
-        () => handleShutdown(
-            pipelineManager,
-            liveReloadServer
-        )
-    );
-    process.on(
-        "SIGTERM",
-        () => handleShutdown(
-            pipelineManager,
-            liveReloadServer
-        )
-    );
+    process.on("SIGINT", () => handleShutdown(pipelineManager, liveReloadServer));
+    process.on("SIGTERM", () => handleShutdown(pipelineManager, liveReloadServer));
 }
 
 /**
- * Handles the shutdown of the pipeline and live reload server.
- * 
+ * Handles graceful shutdown of the pipeline and live reload server.
+ *
  * @param pipelineManager - The pipeline manager instance.
  * @param liveReloadServer - The live reload server instance.
  */
-async function handleShutdown(
-    pipelineManager: PipelineManager,
-    liveReloadServer: LiveReloadServer,
-): Promise<void> {
-    console.log(
-        "[pack.gl CLI] Shutdown signal received. Shutting down..."
-    );
+async function handleShutdown(pipelineManager: PipelineManager, liveReloadServer: LiveServer): Promise<void> {
+    const logger = Logger.getInstance();
+    logger.logInfo(CONTEXT, "Shutdown signal received. Shutting down...");
+
     try {
         await pipelineManager.stopPipeline();
         await liveReloadServer.shutdown();
+        logger.logInfo(CONTEXT, "Shutdown completed successfully.");
     } catch (error) {
-        console.error(
-            "[pack.gl CLI] Error during shutdown:",
-            error
-        );
+        logger.logError(CONTEXT, "Error during shutdown.", error);
     } finally {
-        // Exit gracefully
-        process.exit(0);
+        process.exit(0); // Exit gracefully
     }
 }
-
-
 
 // ============================================================================
 // Execute
 // ============================================================================
 
-/**
- * Execute the script only if the `--mode` flag is provided, and a valid mode
- * (`development`, `production`, or `none`) is specified.
- */
-// if (require.main === module) {
-//     const mode = getMode();
-//     const validModes = ["development", "production", "none"];
+if (require.main === module) {
+    const validModes = ["development", "production", "none"];
+    const modeIndex = process.argv.indexOf("--mode");
 
-//     if (!validModes.includes(mode)) {
-//         console.error(
-//             `[pack.gl CLI] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
-//                 ", "
-//             )}.`
-//         );
-//         process.exit(1);
-//     }
+    if (modeIndex === -1 || !validModes.includes(process.argv[modeIndex + 1])) {
+        console.error(`[pack.gl CLI] Invalid or missing mode. Valid modes: ${validModes.join(", ")}.`);
+        process.exit(1);
+    }
 
-//     main(mode);
-// }
+    const mode = process.argv[modeIndex + 1];
+    main(mode).catch((error) => {
+        console.error("[pack.gl CLI] Unhandled exception:", error);
+        process.exit(1);
+    });
+}
