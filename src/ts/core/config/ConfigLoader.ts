@@ -6,6 +6,7 @@ import path from "path";
 import fs from "fs";
 import yaml from "js-yaml";
 import { ConfigInterface } from "../../interface/ConfigInterface";
+import { AbstractProcess } from "../abstract/AbstractProcess";
 
 
 // ============================================================================
@@ -14,10 +15,11 @@ import { ConfigInterface } from "../../interface/ConfigInterface";
 
 /**
  * ConfigLoader is responsible for loading and parsing configuration files
- * (`pack.yaml` or `pack.yml`). It validates the configuration structure
- * and provides it in a usable format for the pipeline.
+ * (`pack.yaml` or `pack.yml` by deault). It validates the configuration
+ * structure and provides it in a usable format for the pipeline.
+ * Extends `AbstractProcess` for consistent logging.
  */
-export class ConfigLoader {
+export class ConfigLoader extends AbstractProcess {
 
 
     // Parameters
@@ -30,78 +32,118 @@ export class ConfigLoader {
     // ========================================================================
 
     /**
-     * Constructs a ConfigLoader instance, searching for `pack.yaml` or
-     * `pack.yml` in the current working directory.
-     * 
-     * @param filenames - Optional list of configuration filenames to search for.
-     * Defaults to `["pack.yaml", "pack.yml"]`.
+     * Constructs a ConfigLoader instance.
+     * Searches for `pack.yaml` or `pack.yml` in the working directory
+     * unless a custom path is provided.
+     *
+     * @param configPath - Optional custom configuration file path.
      */
-    constructor() {
-
-        const possibleFiles = ["pack.yaml", "pack.yml"];
-
+    constructor(configPath?: string) {
+        super();
+        this.configPath = null;
+        this.logInfo("ConfigLoader initialized.");
+    }
+    
+    public async initialize(configPath?: string): Promise<void> {
+        const possibleFiles = configPath ? [configPath] : ["pack.yaml", "pack.yml"];
         for (const fileName of possibleFiles) {
             const resolvedPath = path.resolve(process.cwd(), fileName);
-            if (fs.existsSync(resolvedPath)) {
+            try {
+                await fs.promises.access(resolvedPath, fs.constants.F_OK);
                 this.configPath = resolvedPath;
-                console.log(`[ConfigLoader] Found configuration file: ${resolvedPath}`);
+                this.logInfo(`Found configuration file: ${resolvedPath}`);
                 break;
+            } catch {
+                continue; // Try the next file
             }
         }
     
         if (!this.configPath) {
-            console.warn(
-                "[ConfigLoader] No configuration file (pack.yaml or pack.yml) found. Proceeding with default settings."
-            );
+            this.logWarn("No configuration file found. Proceeding with default settings.");
         }
     }
 
     // Methods
     // ========================================================================
 
-    /**
-     * Loads the configuration from the YAML file if it exists.
-     * 
-     * @returns Parsed configuration object or `null` if no config file is found.
-     */
-    public loadConfig(): ConfigInterface | null {
 
+
+    /**
+     * Loads and validates the configuration file.
+     * 
+     * @returns Parsed and validated configuration object.
+     * @throws Error if the configuration file cannot be read or validated.
+     */
+    public async loadConfig(): Promise<ConfigInterface> {
         if (!this.configPath) {
-            console.warn(
-                "[ConfigLoader] No configuration file found. Using default empty configuration."
-            );
-            return { stages: [] }; // Example fallback configuration
-            // return null; // No configuration file found
+            this.logWarn("No configuration file found. Using default configuration.");
+            return { stages: [] };
         }
 
         try {
-            // Read and parse the YAML configuration file
-            const fileContents = fs.readFileSync(this.configPath, "utf8");
+            const fileContents = await fs.promises.readFile(this.configPath, "utf8");
             const config = yaml.load(fileContents) as ConfigInterface;
 
-            if (!config || typeof config !== "object" || !Array.isArray(config.stages)) {
-                throw new Error(
-                    `[ConfigLoader] Invalid configuration format: 'stages' must be an array. Loaded config: ${JSON.stringify(
-                        config,
-                        null,
-                        2
-                    )}`
-                );
+            if (!Array.isArray(config.stages)) {
+                throw new Error("Invalid configuration format: 'stages' must be an array.");
             }
 
-            // Validate the configuration structure
             this.validateConfig(config);
-
+            this.logInfo(`Successfully loaded configuration from ${this.configPath}`);
             return config;
         } catch (error) {
-            throw new Error(
-                `[ConfigLoader] Failed to load config from ${this.configPath}: ${
-                    (error as Error).message
-                }`
-            );
+            this.logError("Failed to load configuration.", error);
+            throw new Error(`Failed to load configuration: ${(error as Error).message}`);
         }
-
     }
+
+
+    // /**
+    //  * Loads the configuration from the YAML file.
+    //  *
+    //  * @returns Parsed configuration or default empty configuration.
+    //  * @throws {Error} Throws an error if parsing or validation fails.
+    //  */
+    // public async loadConfig(): Promise<ConfigInterface> {
+    //     if (!this.configPath) {
+    //         this.logWarn("No configuration file found. Using empty configuration.");
+    //         return { stages: [] }; // Default fallback configuration
+    //     }
+
+    //     try {
+    //         // Read and parse the YAML configuration file
+    //         const fileContents = await fs.promises.readFile(
+    //             this.configPath,
+    //             "utf8"
+    //         );
+    //         const config = yaml.load(fileContents) as ConfigInterface;
+
+    //         if (
+    //             !config || 
+    //             typeof config !== "object" || 
+    //             !Array.isArray(config.stages)
+    //         ) {
+    //             throw new Error(
+    //                 `Invalid configuration format: 'stages' must be an array. 
+    //                 Loaded config: ${JSON.stringify(config, null, 2)}`
+    //             );
+    //         }
+
+    //         // Validate the configuration structure
+    //         this.validateConfig(config);
+    //         this.logInfo(
+    //             `Successfully loaded configuration from ${this.configPath}`
+    //         );
+    //         return config;
+    //     } catch (error) {
+    //         const errorMsg = `
+    //             Failed to load configuration from ${this.configPath}: 
+    //             ${(error as Error).message}
+    //         `;
+    //         this.logError(errorMsg, error);
+    //         throw new Error(errorMsg);
+    //     }
+    // }
 
     /**
      * Validates the structure and content of the configuration object.
@@ -109,14 +151,10 @@ export class ConfigLoader {
      * @param config - The configuration object to validate.
      * @throws Error if the configuration is invalid.
      */
-    private validateConfig(
-        config: ConfigInterface
-    ): void {
+    private validateConfig(config: ConfigInterface): void {
         if (!config || typeof config !== "object" || !Array.isArray(config.stages)) {
-        // if (!config || !Array.isArray(config.stages)) {
             throw new Error(
-                `[ConfigLoader] Invalid configuration format: 'stages' must be an array. Found: ${JSON.stringify(config, null, 2)}`
-                // "[ConfigLoader] Invalid configuration format: 'stages' must be an array."
+                `Invalid configuration format: 'stages' must be an array. Found: ${JSON.stringify(config, null, 2)}`
             );
         }
 
@@ -127,6 +165,36 @@ export class ConfigLoader {
         }
     }
 
+    // /**
+    //  * Validates the configuration structure.
+    //  * 
+    //  * @param config - The configuration object to validate.
+    //  */
+    // private validateConfig(config: ConfigInterface): void {
+    //     const stageNames = new Set<string>();
+    //     for (const stage of config.stages) {
+    //         if (!stage.name || typeof stage.name !== "string") {
+    //             throw new Error("Each stage must have a valid 'name' property.");
+    //         }
+
+    //         if (stageNames.has(stage.name)) {
+    //             throw new Error(`Duplicate stage name found: "${stage.name}".`);
+    //         }
+    //         stageNames.add(stage.name);
+
+    //         if (stage.dependsOn) {
+    //             stage.dependsOn.forEach((dependency) => {
+    //                 if (!stageNames.has(dependency)) {
+    //                     throw new Error(`Stage "${stage.name}" has an undefined dependency: "${dependency}".`);
+    //                 }
+    //             });
+    //         }
+
+    //         if (!Array.isArray(stage.steps)) {
+    //             throw new Error(`Stage "${stage.name}" must contain an array of steps.`);
+    //         }
+    //     }
+    // }
 
     /**
      * Validates an individual stage in the configuration.
@@ -135,35 +203,21 @@ export class ConfigLoader {
      * @param stageNames - A set to track unique stage names.
      * @throws Error if the stage is invalid.
      */
-    private validateStage(
-        stage: any,
-        stageNames: Set<string>
-    ): void {
+    private validateStage(stage: any, stageNames: Set<string>): void {
         if (!stage.name || typeof stage.name !== "string") {
-            throw new Error(
-                "[ConfigLoader] Each stage must have a valid 'name' property."
-            );
+            throw new Error("Each stage must have a valid 'name' property.");
         }
 
         if (stageNames.has(stage.name)) {
-            throw new Error(
-                `[ConfigLoader] Duplicate stage name found: "${stage.name}".`
-            );
+            throw new Error(`Duplicate stage name found: "${stage.name}".`);
         }
         stageNames.add(stage.name);
 
         if (stage.dependsOn) {
-            this.validateDependencies(
-                stage.dependsOn,
-                stageNames,
-                stage.name
-            );
+            this.validateDependencies(stage.dependsOn, stageNames, stage.name);
         }
 
-        this.validateSteps(
-            stage.steps,
-            stage.name
-        );
+        this.validateSteps(stage.steps, stage.name);
     }
 
     /**
@@ -174,20 +228,13 @@ export class ConfigLoader {
      * @param stageName - The name of the current stage.
      * @throws Error if any dependency is invalid.
      */
-    private validateDependencies(
-        dependencies: string[],
-        stageNames: Set<string>,
-        stageName: string
-    ): void {
+    private validateDependencies(dependencies: string[], stageNames: Set<string>, stageName: string): void {
         for (const dependency of dependencies) {
             if (!stageNames.has(dependency)) {
-                throw new Error(
-                    `[ConfigLoader] Stage "${stageName}" has an undefined dependency: "${dependency}".`
-                );
+                throw new Error(`Stage "${stageName}" has an undefined dependency: "${dependency}".`);
             }
         }
     }
-
 
     /**
      * Validates the steps within a stage.
@@ -198,30 +245,24 @@ export class ConfigLoader {
      */
     private validateSteps(steps: any[], stageName: string): void {
         if (!Array.isArray(steps) || steps.length === 0) {
-            throw new Error(`[ConfigLoader] Stage "${stageName}" must contain at least one step.`);
+            throw new Error(`Stage "${stageName}" must contain at least one step.`);
         }
 
         const stepNames = new Set<string>();
 
         for (const step of steps) {
             if (!step.name || typeof step.name !== "string") {
-                throw new Error(`[ConfigLoader] Each step in stage "${stageName}" must have a valid 'name' property.`);
+                throw new Error(`Each step in stage "${stageName}" must have a valid 'name' property.`);
             }
 
             if (stepNames.has(step.name)) {
-                throw new Error(
-                    `[ConfigLoader] Duplicate step name found in stage "${stageName}": "${step.name}".`
-                );
+                throw new Error(`Duplicate step name found in stage "${stageName}": "${step.name}".`);
             }
             stepNames.add(step.name);
 
             if (!step.action || typeof step.action !== "string") {
-                throw new Error(
-                    `[ConfigLoader] Step "${step.name}" in stage "${stageName}" must have a valid 'action' property.`
-                );
+                throw new Error(`Step "${step.name}" in stage "${stageName}" must have a valid 'action' property.`);
             }
         }
-
     }
-
 }
