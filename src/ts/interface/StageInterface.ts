@@ -65,4 +65,35 @@ export interface StageInterface {
      */
     timeout?: number;
 
+    /**
+     * Priority level for the stage, used to influence execution order in
+     * concurrent scenarios. Higher priority stages may execute before lower
+     * priority ones when multiple stages are eligible to run simultaneously.
+     * Default: `'normal'`.
+     * - `'low'`: Lower execution priority.
+     * - `'normal'`: Default execution priority.
+     * - `'high'`: Higher execution priority.
+     */
+    priority?: 'low' | 'normal' | 'high';
+
+    /**
+     * Optional tags to attach metadata or labels to the stage. Tags can be
+     * used for filtering, reporting, or integration with external tools that
+     * require context or categorization.
+     */
+    tags?: Record<string, string>;
+
+    /**
+     * Optional hooks that allow custom logic to be executed before or after
+     * the stage.
+     * Useful for injecting custom behavior or performing additional
+     * setup/cleanup tasks.
+     * - `before`: Function to run before the stage starts.
+     * - `after`: Function to run after the stage completes.
+     */
+    hooks?: {
+        before?: () => Promise<void> | void;
+        after?: () => Promise<void> | void;
+    };
+
 }
