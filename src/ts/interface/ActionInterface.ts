@@ -19,6 +19,14 @@ import { ActionOptionsType } from "../types/ActionOptionsType";
  * behaviors within different stages.
  */
 export interface ActionInterface {
+
+    /**
+     * A unique name identifying the action.
+     * This property is used for logging, registration in the ActionRegistry,
+     * and debugging purposes.
+     */
+    name: string;
+
     /**
      * Executes the action with the provided options.
      * Implementations of this method should perform the main logic of the
@@ -31,7 +39,8 @@ export interface ActionInterface {
      *                  Example configurations might include:
      *                  - For 'build': { minify: boolean, sourceMap: boolean, target: string }
      *                  - For 'lint': { fix: boolean, formatter: string }
-     * @returns A Promise that resolves when the action completes successfully, or rejects with an error if the action fails.
+     * @returns A Promise that resolves when the action completes successfully,
+     *      or rejects with an error if the action fails.
      */
     execute(options: ActionOptionsType): Promise<void>;
     // execute(options: StepOptionsInterface): Promise<void>; // Core logic for the action.
@@ -56,5 +65,14 @@ export interface ActionInterface {
      * @returns A string description of the action.
      */
     describe?(): string;
+
+    /**
+     * Optional cleanup logic to execute after the main action completes.
+     * Implementations can use this for teardown tasks, like removing temporary
+     * files or restoring the state altered during execution.
+     * 
+     * @returns A promise that resolves after cleanup is complete.
+     */
+    cleanup?(): Promise<void>;
 
 }
