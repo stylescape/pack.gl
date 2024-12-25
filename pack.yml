@@ -5,13 +5,23 @@ stages:
   - name: CleanBuildDirectory
     description: "Clean the build directory before starting a new build."
     steps:
-      - name: CleanBuildDirStep
-        action: DirectoryCleanAction
-        options:
-          dirPath: "./dist"  # Path to the directory to be cleaned
+  #     - name: CleanBuildDirStep
+  #       action: DirectoryCleanAction
+  #       options:
+  #         dirPath: "./dist"  # Path to the directory to be cleaned
+  #         keep: ".gitkeep"
 
-globalOptions:
-  verboseLogging: true
+      - name: ReplaceVersion
+        action: VersionWriteAction
+        options:
+          # version: "1.3.0" # Optional; if omitted, retrieved from package.json
+          files:
+            - path: "./CITATION.cff"
+              key: "version: "
+            - path: "./VERSION.txt" # Defaults to "version:"
+
+options:
+  verbose: true
 
 
 # Global options applicable to the entire pipeline
