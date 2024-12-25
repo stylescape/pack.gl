@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { LiveReloadServer } from "../../ts/live/LiveReloadServer";
+import { LiveReloadServer } from "../../ts/live/LiveServer";
 import { WebSocket } from "ws";
 import request from "supertest";
 import path from "path";
