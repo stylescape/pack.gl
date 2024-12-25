@@ -10,6 +10,7 @@ import { PipelineManager } from "./core/pipeline/PipelineManager";
 import { Logger } from "./utils/Logger";
 import { ActionRegistry } from "./core/pipeline/ActionRegistry";
 
+
 // ============================================================================
 // Constants
 // ============================================================================
@@ -19,12 +20,14 @@ const WATCH_PATHS = ["src/**/*", "config/**/*", "pack.yaml"];
 const IGNORED_PATHS = /node_modules/;
 const CONTEXT = "Pack Main"; // The context string for logging
 
+
 // ============================================================================
 // Main Functionality
 // ============================================================================
 
 /**
- * Main function initializes the pipeline and optionally sets up live reload functionality.
+ * Main function initializes the pipeline and optionally sets up live reload
+ * functionality.
  *
  * @param mode - The execution mode ("development", "production", or "none").
  */
@@ -112,7 +115,10 @@ function setupLiveReload(): void {
  * @param pipelineManager - The pipeline manager instance.
  * @param liveReloadServer - The live reload server instance.
  */
-async function handleShutdown(pipelineManager: PipelineManager, liveReloadServer: LiveServer): Promise<void> {
+async function handleShutdown(
+    pipelineManager: PipelineManager,
+    liveReloadServer: LiveServer
+): Promise<void> {
     const logger = Logger.getInstance();
     logger.logInfo(CONTEXT, "Shutdown signal received. Shutting down...");
 
