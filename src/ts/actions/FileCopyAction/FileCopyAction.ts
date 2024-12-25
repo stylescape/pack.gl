@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { Action } from "../../core/Action";
+import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
 import fs from "fs";
 import path from "path";
@@ -51,11 +51,11 @@ export class FileCopyAction extends Action {
             );
         }
 
-        this.log(`Copying file from ${srcFile} to ${destDir}.`);
+        this.logInfo(`Copying file from ${srcFile} to ${destDir}.`);
 
         try {
             await this.copyFileToDirectory(srcFile, destDir);
-            this.log(
+            this.logInfo(
                 `File copied successfully from ${srcFile} to ${destDir}.`
             );
         } catch (error) {
