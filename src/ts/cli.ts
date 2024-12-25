@@ -1,14 +1,12 @@
 #!/usr/bin/env node
 
-
 // ============================================================================
-// Import
+// Imports
 // ============================================================================
 
 import { main } from "./pack";
-import { getMode } from "./cli/getMode"
 import { Logger } from "./utils/Logger";
-
+import { ArgumentParser } from "./cli/ArgumentParser";
 
 // ============================================================================
 // Constants
@@ -17,85 +15,58 @@ import { Logger } from "./utils/Logger";
 /** 
  * The context string for logging.
  */
-const CONTEXT = "CLI";
+const CONTEXT = "Pack CLI";
 
+const VALID_MODES = ["development", "production", "none"];
 
 // ============================================================================
-// Main
+// Main Entry Point
 // ============================================================================
 
 /**
  * The entry point for the Pack CLI application.
- * This script sets up the runtime environment, invokes the `main` function
- * from `pack.ts`, and handles any unexpected errors during execution.
+ * This script sets up the runtime environment, parses arguments, validates the mode,
+ * and invokes the main pipeline logic. It handles any unexpected errors gracefully.
  */
-(
-    async () => {
+(async () => {
+    const logger = Logger.getInstance();
 
-        try {
+    try {
+        // Initialize CLI argument parser
+        const parser = new ArgumentParser();
 
-            // Retrieve the mode from the CLI arguments
-            const mode = getMode();
-            const validModes = [
-                "development",
-                "production",
-                "none"
-            ];
+        // Retrieve the mode
+        const mode = parser.getOption("mode", { default: "none" });
 
-            // Validate the mode
-            if (!validModes.includes(mode)) {
-                console.error(
-                    `[${CONTEXT}] Invalid mode: "${mode}". Valid modes are: ${validModes.join(
-                        ", "
-                    )}.`
-                );
-                process.exit(1);
-            }
-
-            // Initialize the Logger with the verbose flag based on mode or configuration
-            const verbose = mode === "development"; // Example: Enable verbose logging in development mode
-            Logger.initialize(verbose);
-
-            // Log the startup message
-            const logger = Logger.getInstance();
-            logger.log(CONTEXT, `Running in ${mode} mode...`);
-
-            /**
-             * Invokes the main function with the determined mode in `pack.ts`
-             * to execute the pipeline or perform other tasks. This function
-             * is awaited to handle any asynchronous operations properly.
-             */
-            await main(mode);
-
-
-        } catch (error) {
-
-            /**
-             * Handles unexpected errors during execution.
-             * Logs the error message to the console and exits with a non-zero
-             * error code.
-             */
-            // Log unexpected errors
-            const logger = Logger.getInstance();
-            // Narrow the error type before passing to the logger
-            if (error instanceof Error) {
-                logger.error(CONTEXT, error);
-            } else {
-                logger.error(CONTEXT, String(error));
-            }
-
-            // Exit with an error code to signal failure
+        // Ensure mode is a string before validation
+        if (typeof mode !== "string" || !VALID_MODES.includes(mode)) {
+            logger.logError(
+                CONTEXT,
+                `Invalid mode: "${mode}". Valid modes are: ${VALID_MODES.join(", ")}.`
+            );
             process.exit(1);
-
         }
 
+        // Initialize the Logger with verbose mode in development
+        const isVerbose = mode === "development";
+        // Logger.initialize(isVerbose);
+        logger.logInfo(CONTEXT, `Logger initialized with verbose=${isVerbose}.`);
+        logger.logInfo(CONTEXT, `Running in ${mode} mode...`);
+
+        // Execute the main function
+        await main(mode);
+
+    } catch (error) {
+        // Handle unexpected errors
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        logger.logError(CONTEXT, `An unexpected error occurred: ${errorMessage}`, error);
+
+        // Exit with a failure code
+        process.exit(1);
     }
-)();
-
-
+})();
 
 /**
- * Note: The `#!/usr/bin/env node` shebang at the top of the file ensures that
- * the script can be executed directly in environments where Node.js is
- * available. It invokes the Node.js runtime to execute this file.
+ * Note: The `#!/usr/bin/env node` shebang ensures that the script can be executed
+ * directly as a Node.js script on compatible systems.
  */
