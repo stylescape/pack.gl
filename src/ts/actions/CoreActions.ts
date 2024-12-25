@@ -1,4 +1,7 @@
-// CoreActions.ts
+
+// ============================================================================
+// Import
+// ============================================================================
 
 import { DirectoryCleanAction } from "../actions/DirectoryCleanAction/DirectoryCleanAction";
 import { DirectoryCopyAction } from "../actions/DirectoryCopyAction/DirectoryCopyAction";
@@ -8,26 +11,19 @@ import { StyleProcessingAction } from "../actions/StyleProcessingAction/StylePro
 import { VersionWriteAction } from "../actions/VersionWriterAction/VersionWriterAction";
 import { ActionInterface } from "../interface/ActionInterface";
 
-/**
- * Enum for core action names.
- */
-export enum CoreActionNames {
-    DirectoryClean = "DirectoryCleanAction",
-    DirectoryCopy = "DirectoryCopyAction",
-    FileCopy = "FileCopyAction",
-    PackageManager = "PackageManagerAction",
-    StyleProcessing = "StyleProcessingAction",
-    VersionWrite = "VersionWriteAction",
-}
+// ============================================================================
+// Core Actions
+// ============================================================================
 
 /**
- * A record mapping core action names to their respective classes.
+ * A record of core actions, mapped by their unique `name` property.
+ * Automatically derives names from the action classes.
  */
 export const coreActions: Record<string, new () => ActionInterface> = {
-    [CoreActionNames.DirectoryClean]: DirectoryCleanAction,
-    [CoreActionNames.DirectoryCopy]: DirectoryCopyAction,
-    [CoreActionNames.FileCopy]: FileCopyAction,
-    [CoreActionNames.PackageManager]: PackageManagerAction,
-    [CoreActionNames.StyleProcessing]: StyleProcessingAction,
-    [CoreActionNames.VersionWrite]: VersionWriteAction,
+    [new DirectoryCleanAction().name]: DirectoryCleanAction,
+    [new DirectoryCopyAction().name]: DirectoryCopyAction,
+    [new FileCopyAction().name]: FileCopyAction,
+    [new PackageManagerAction().name]: PackageManagerAction,
+    [new StyleProcessingAction().name]: StyleProcessingAction,
+    [new VersionWriteAction().name]: VersionWriteAction,
 };
