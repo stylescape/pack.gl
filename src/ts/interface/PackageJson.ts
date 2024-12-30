@@ -11,75 +11,155 @@
 
 /**
  * TypeScript interface describing the structure of a package.json file.
- * This interface includes all standard fields used by npm, as well as common fields
- * used by related tools like Yarn, and can be extended with custom fields as needed.
+ * This interface includes all standard fields used by npm, as well as common
+ * fields used by related tools like Yarn, and can be extended with custom
+ * fields as needed.
  */
 export interface PackageJson {
 
-    name: string;  // The name of the package.
-    version: string;  // The version of the package.
-    description?: string;  // A brief description of the package.
-    main?: string;  // The entry point for the package.
-    scripts?: Record<string, string>;  // Scripts that can be executed with npm/yarn.
-    dependencies?: Record<string, string>;  // Production dependencies of the package.
-    devDependencies?: Record<string, string>;  // Development dependencies of the package.
-    repository?: {  // Repository information for the package.
+    // The name of the package.
+    name: string;
+
+    // The version of the package.
+    version: string;
+
+    // A brief description of the package.
+    description?: string;
+
+    // The entry point for the package.
+    main?: string;
+
+    // Scripts that can be executed with npm/yarn.
+    scripts?: Record<string, string>;
+
+    // Production dependencies of the package.
+    dependencies?: Record<string, string>;
+
+    // Development dependencies of the package.
+    devDependencies?: Record<string, string>;
+
+    // Repository information for the package.
+    repository?: {
         type: string;
         url: string;
     };
-    keywords?: string[];  // Keywords associated with the package.
-    author?: string | {  // The author of the package.
+
+    // Keywords associated with the package.
+    keywords?: string[];
+
+    // The author of the package.
+    author?: string | {
         name: string;
         email?: string;
         url?: string;
     };
-    license?: string;  // The license under which the package is provided.
-    bugs?: {  // Links to the package bug tracker.
+
+    // The license under which the package is provided.
+    license?: string;
+
+    // Links to the package bug tracker.
+    bugs?: {
         url?: string;
         email?: string;
     };
-    homepage?: string;  // The URL to the homepage of the package.
-    private?: boolean;  // Indicates if the package should be published.
-    peerDependencies?: Record<string, string>;  // Peer dependencies of the package.
-    engines?: {  // Engine requirements for the package.
+
+    // The URL to the homepage of the package.
+    homepage?: string;
+
+    // Indicates if the package should be published.
+    private?: boolean;
+
+    // Peer dependencies of the package.
+    peerDependencies?: Record<string, string>;
+
+    // Engine requirements for the package.
+    engines?: {
         node?: string;
         npm?: string;
     };
-    bin?: Record<string, string>;  // Executable files included with the package.
-    types?: string;  // Path to the TypeScript declaration files.
-    contributors?: Array<string | {  // Other contributors to the package.
+
+    // Executable files included with the package.
+    bin?: Record<string, string>;
+
+    // Path to the TypeScript declaration files.
+    types?: string;
+
+    // Other contributors to the package.
+    contributors?: Array<string | {
         name: string;
         email?: string;
         url?: string;
     }>;
-    funding?: string | {  // Funding information for the package.
+
+    // Funding information for the package.
+    funding?: string | {
         type: string;
         url: string;
     };
-    files?: string[];  // An array of file patterns included in the package.
-    browserslist?: string[] | Record<string, string[]>;  // Target browsers/environments for tools like Babel.
-    publishConfig?: Record<string, any>;  // Configuration for publishing the package.
-    config?: Record<string, any>;  // Configuration parameters used in scripts.
-    typings?: string;  // Alternative to "types", path to TypeScript declaration files.
-    exports?: Record<string, any>;  // Define export map for submodules and conditions.
-    module?: string;  // Specify an ES module entry point.
-    sideEffects?: boolean | string[];  // Indicate which modules in the package have side effects.
 
-    optionalDependencies?: Record<string, string>;  // Optional dependencies.
-    bundledDependencies?: string[];  // Dependencies to be bundled with the package.
-    peerDependenciesMeta?: Record<string, { optional?: boolean }>;  // Metadata for peer dependencies.
-    resolutions?: Record<string, string>;  // Dependency resolution hints for yarn.
-    workspaces?: string[] | {  // Workspace configuration for managing multiple packages.
+    // An array of file patterns included in the package.
+    files?: string[];
+
+    // Target browsers/environments for tools like Babel.
+    browserslist?: string[] | Record<string, string[]>;
+
+    // Configuration for publishing the package.
+    publishConfig?: Record<string, any>;
+
+    // Configuration parameters used in scripts.
+    config?: Record<string, any>;
+
+    // Alternative to "types", path to TypeScript declaration files.
+    typings?: string;
+
+    // Define export map for submodules and conditions.
+    exports?: Record<string, any>;
+
+    // Specify an ES module entry point.
+    module?: string;
+
+    // Indicate which modules in the package have side effects.
+    sideEffects?: boolean | string[];
+
+    // Optional dependencies.
+    optionalDependencies?: Record<string, string>;
+
+    // Dependencies to be bundled with the package.
+    bundledDependencies?: string[];
+
+    // Metadata for peer dependencies.
+    peerDependenciesMeta?: Record<string, { optional?: boolean }>;
+
+    // Dependency resolution hints for yarn.
+    resolutions?: Record<string, string>;
+
+    // Workspace configuration for managing multiple packages.
+    workspaces?: string[] | {
       packages: string[];
     };
-    eslintConfig?: Record<string, any>;  // ESLint configuration embedded in package.json.
-    babel?: Record<string, any>;  // Babel configuration embedded in package.json.
-    prettier?: Record<string, any>;  // Prettier configuration embedded in package.json.
-    husky?: Record<string, any>;  // Husky configuration for Git hooks.
-    jest?: Record<string, any>;  // Jest configuration for unit tests.
-    enginesStrict?: boolean;  // Enforce engine requirements strictly.
-    os?: string[];  // Specify OS compatibility.
-    cpu?: string[];  // Specify CPU architecture compatibility.
 
-    
+    // ESLint configuration embedded in package.json.
+    eslintConfig?: Record<string, any>;
+
+    // Babel configuration embedded in package.json.
+    babel?: Record<string, any>;
+
+    // Prettier configuration embedded in package.json.
+    prettier?: Record<string, any>;
+
+    // Husky configuration for Git hooks.
+    husky?: Record<string, any>;
+
+    // Jest configuration for unit tests.
+    jest?: Record<string, any>;
+
+    // Enforce engine requirements strictly.
+    enginesStrict?: boolean;
+
+    // Specify OS compatibility.
+    os?: string[];
+
+    // Specify CPU architecture compatibility.
+    cpu?: string[];
+
 }
