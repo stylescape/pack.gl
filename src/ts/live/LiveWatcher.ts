@@ -3,6 +3,9 @@
 // ============================================================================
 
 import chokidar, { FSWatcher } from "chokidar";
+import { AbstractProcess } from "../core/abstract/AbstractProcess";
+import { ConfigStore } from "../core/config/ConfigStore";
+import { OptionsInterface } from "../interface/OptionsInterface";
 
 
 // ============================================================================
@@ -14,7 +17,7 @@ import chokidar, { FSWatcher } from "chokidar";
  * It leverages the `chokidar` library to efficiently detect file changes and
  * trigger appropriate callbacks.
  */
-export class LiveWatcher {
+export class LiveWatcher extends AbstractProcess {
 
     // Parameters
     // ========================================================================
@@ -24,6 +27,9 @@ export class LiveWatcher {
      */
     private watcher: FSWatcher | null = null;
 
+    private pathsToWatch: string[];
+    private ignoredPaths: string[];
+    private onChange: (filePath: string) => void;
 
     // Constructor
     // ========================================================================
@@ -37,10 +43,20 @@ export class LiveWatcher {
      * change is detected.
      */
     constructor(
-        private pathsToWatch: string[], 
-        private ignoredPaths: RegExp, 
-        private onChange: (filePath: string) => void
+        // private pathsToWatch: string[], 
+        // private ignoredPaths: RegExp, 
+        onChange: (filePath: string) => void,
     ) {
+        super();
+
+        // Retrieve live reload configuration from ConfigStore
+        const liveReloadOptions = ConfigStore.getInstance().get<OptionsInterface["liveReload"]>("options.liveReload") || {};
+
+        this.pathsToWatch = liveReloadOptions.watchPaths ?? ["src/**/*", "config/**/*", "pack.yaml"];
+        this.ignoredPaths = liveReloadOptions.ignoredPaths ?? ["node_modules"];
+
+        this.onChange = onChange;
+
         this.startWatching();
     }
 
@@ -56,21 +72,28 @@ export class LiveWatcher {
 
         this.watcher
             .on("ready", () => {
-                console.log("File watching is active. Waiting for changes...");
+                this.logInfo(
+                    "File watching is active. Waiting for changes..."
+                );
             })
             .on("change", (filePath) => {
-                console.log(`File changed: ${filePath}`);
+                this.logInfo(
+                    `File changed: ${filePath}`
+                );
                 try {
                     this.onChange(filePath);
                 } catch (error) {
-                    console.error(
+                    this.logError(
                         `Error handling file change for ${filePath}:`,
                         error
                     );
                 }
             })
             .on("error", (error) => {
-                console.error("Watcher encountered an error:", error);
+                this.logError(
+                    "Watcher encountered an error:",
+                    error
+                );
             });
     }
 
@@ -80,23 +103,26 @@ export class LiveWatcher {
      */
     public startWatching() {
         if (this.watcher) {
-            console.log("Watcher is already running.");
+            this.logInfo("Watcher is already running.");
             return;
         }
 
-        console.log("Starting file watcher...");
-        this.watcher = chokidar.watch(this.pathsToWatch, {
-            ignored: this.ignoredPaths,
-            persistent: true,
-            // Prevents initial "add" events on startup
-            ignoreInitial: true,
-            awaitWriteFinish: {
-                // Polling interval to check for file stability
-                pollInterval: 100,
-                // Waits for file to finish writing
-                stabilityThreshold: 100,
-            },
-        });
+        this.logInfo("Starting file watcher...");
+        this.watcher = chokidar.watch(
+            this.pathsToWatch,
+            {
+                ignored: this.ignoredPaths,
+                persistent: true,
+                // Prevents initial "add" events on startup
+                ignoreInitial: true,
+                awaitWriteFinish: {
+                    // Polling interval to check for file stability
+                    pollInterval: 100,
+                    // Waits for file to finish writing
+                    stabilityThreshold: 100,
+                },
+            }
+        );
 
         this.setupWatchers();
     }
@@ -108,7 +134,7 @@ export class LiveWatcher {
     public async stopWatching() {
         if (this.watcher) {
             await this.watcher.close();
-            console.log("File watching has been stopped.");
+            this.logInfo("File watching has been stopped.");
             this.watcher = null;
         }
     }
@@ -119,7 +145,7 @@ export class LiveWatcher {
      * watcher configurations or paths have changed.
      */
     public async restartWatcher() {
-        console.log("Restarting file watcher...");
+        this.logInfo("Restarting file watcher...");
         await this.stopWatching();
         this.startWatching();
     }
