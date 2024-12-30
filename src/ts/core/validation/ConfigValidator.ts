@@ -6,8 +6,9 @@ import { AbstractValidator } from "../abstract/AbstractValidator";
 import { ConfigInterface } from "../../interface/ConfigInterface";
 import { StageValidator } from "./StageValidator";
 
+
 // ============================================================================
-// ConfigValidator Class
+// Class
 // ============================================================================
 
 /**
@@ -15,13 +16,23 @@ import { StageValidator } from "./StageValidator";
  */
 export class ConfigValidator extends AbstractValidator<ConfigInterface> {
 
+    // Parameters
+    // ========================================================================
+
     private stageValidator: StageValidator;
+
+
+    // Constructor
+    // ========================================================================
 
     constructor() {
         super();
         this.stageValidator = new StageValidator();
         this.logInfo("ConfigValidator initialized.");
     }
+
+    // Methods
+    // ========================================================================
 
     /**
      * Validates the entire configuration object.
