@@ -7,6 +7,9 @@ import { Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import express, { Request, Response, NextFunction } from "express";
 import rateLimit from "express-rate-limit";
+import { AbstractProcess } from "../core/abstract/AbstractProcess";
+import { ConfigStore } from "../core/config/ConfigStore";
+import { OptionsInterface } from "../interface/OptionsInterface";
 
 
 // ============================================================================
@@ -18,54 +21,157 @@ import rateLimit from "express-rate-limit";
  * inject live reload scripts into HTML responses, and manage WebSocket
  * connections to enable live reload capabilities.
  */
-export class LiveServer {
+export class LiveServer extends AbstractProcess {
 
     // Parameters
     // ========================================================================
 
-    // Express application
+    /**
+     * Express application
+     */
     private app = express();
 
-    // HTTP server
+    /**
+     * The underlying HTTP server used by the LiveServer.
+     * Handles incoming HTTP requests and serves static files.
+     */
     private server: Server;
 
-    // WebSocket server
+    /**
+     * The WebSocket server responsible for managing WebSocket connections.
+     * Enables real-time communication with connected clients.
+     */
     private wss: WebSocketServer;
 
-    // Set of connected WebSocket clients
+    /**
+     * A set of WebSocket clients currently connected to the server.
+     * Each client represents an active WebSocket connection.
+     */
     private clients: Set<WebSocket> = new Set();
+
+    /**
+     * The port number on which the server is running.
+     * Defaults to 3000 if not specified in the configuration.
+     */
+    private port: number;
+
+    /**
+     * The root directory from which static files are served.
+     * Defaults to the "public" folder in the current working directory.
+     */
+    private root: string;
+
+    /**
+     * An array of paths to watch for changes.
+     * When a file within these paths changes, the server triggers live reload.
+     */
+    private watchPaths: string[];
+
+    /**
+     * An array of paths or patterns to ignore during file watching.
+     * Prevents unnecessary reloads caused by changes in these paths.
+     * Defaults to ignoring the "node_modules" directory.
+     */
+    private ignoredPaths: string[];
+
 
     // Constructor
     // ========================================================================
 
     /**
      * Initializes the LiveServer.
-     * @param port - The port on which the server will listen.
+    //  * @param port - The port on which the server will listen.
      */
-    constructor(private port: number) {
+    constructor(
+        // private port: number
+    ) {
+
+        super();
+
+        const configStore = ConfigStore.getInstance();
+
+        const liveReloadOptions = configStore.get<OptionsInterface["liveReload"]>("options.liveReload") || {};
+
+        // Extract and apply live reload options with defaults
+        this.port = liveReloadOptions.port || 3000;
+        this.root = path.resolve(
+            process.cwd(),
+            liveReloadOptions.root || "public"
+        );
+        this.watchPaths = (
+            liveReloadOptions.watchPaths || [
+                "src/**/*",
+                "config/**/*",
+                "pack.yaml"
+            ]
+        ).map((p) =>
+            path.resolve(process.cwd(), p)
+        );
+        this.ignoredPaths = (
+            liveReloadOptions.ignoredPaths || [
+                "node_modules"
+            ]
+        ).map((p) =>
+            path.resolve(process.cwd(), p)
+        );
+
+        // Log initialization details
+        this.logInitializationDetails();
+
+        // Initialize server
+        // this.initializeServer();
 
         // Start the HTTP server
         this.server = this.app.listen(
             this.port, () => {
-                console.log(
-                    `Live Reload Server running at http://localhost:${this.port}`
+                this.logInfo(
+                    `Live Server running at http://localhost:${this.port}`
                 );
             }
         );
 
         // Initialize WebSocket server
-        this.wss = new WebSocketServer(
-            { server: this.server }
-        );
+        this.wss = new WebSocketServer({ server: this.server });
 
-        // Set up middleware, rate limiting, and WebSocket handlers
-        this.setupRateLimiter(); // Apply rate limiting
+        // Set up rate limiting
+        this.setupRateLimiter();
+
+        // Set up WebSocket handlers
         this.setupWebSocketHandlers();
+
+        // Set up middleware
         this.setupMiddleware();
+
     }
+
 
     // Methods
     // ========================================================================
+
+    /**
+     * Initializes the HTTP server and WebSocket server.
+     */
+    private initializeServer(): void {
+        // Start the HTTP server
+        this.server = this.app.listen(
+            this.port, () => {
+                this.logInfo(
+                    `Live Server running at http://localhost:${this.port}`
+                );
+            }
+        );
+
+        // Initialize WebSocket server
+        this.wss = new WebSocketServer({ server: this.server });
+    }
+
+    /** Logs initialization details for the LiveServer. */
+    private logInitializationDetails(): void {
+        this.logInfo(`LiveServer initialized with port: ${this.port}`);
+        this.logInfo(`Serving static files from: ${this.root}`);
+        this.logInfo(`Watching paths: ${JSON.stringify(this.watchPaths)}`);
+        this.logInfo(`Ignoring paths: ${JSON.stringify(this.ignoredPaths)}`);
+    }
 
     /**
      * Sets up rate limiting middleware to prevent abuse of HTTP requests.
@@ -84,48 +190,33 @@ export class LiveServer {
      */
     private setupWebSocketHandlers(): void {
 
-        this.wss.on(
-            "connection",
-            (ws: WebSocket) => {
+        this.wss.on("connection", (ws: WebSocket) => {
 
-                console.log(
-                    "New WebSocket connection established."
+            this.logInfo(
+                "New WebSocket connection established."
+            );
+            this.clients.add(ws);
+
+            ws.on("message", (message) => {
+                this.logInfo(
+                    `WebSocket message received: ${message.toString()}`
                 );
-                this.clients.add(ws);
-
-                ws.on(
-                    "message",
-                    (message) => {
-                        console.log(
-                            "WebSocket message received:",
-                            message.toString()
-                        );
-                    }
+            });
+            ws.on("close", () => {
+                this.logInfo(
+                    "WebSocket connection closed.",
                 );
-
-                ws.on(
-                    "close",
-                    () => {
-                        console.log(
-                            "WebSocket connection closed.",
-                        );
-                        this.clients.delete(ws);
-                    }
+                this.clients.delete(ws);
+            });
+            ws.on("error", (error) => {
+                console.error(
+                    "WebSocket encountered an error:",
+                    error
                 );
+                this.clients.delete(ws);
+            });
 
-                ws.on(
-                    "error",
-                    (error) => {
-                        console.error(
-                            "WebSocket encountered an error:",
-                            error
-                        );
-                        this.clients.delete(ws);
-                    }
-                );
-
-            }
-        );
+        });
     }
 
     /**
@@ -135,15 +226,25 @@ export class LiveServer {
     private setupMiddleware(): void {
 
         // Securely serve static files from the "public" directory
-        const publicPath = path.resolve(
-            __dirname,
-            "public"
+        // const publicPath = path.resolve(
+        //     __dirname,
+        //     "public"
+        // );
+        this.logInfo(
+            `Resolved public directory: ${this.root}`
         );
-        console.log("Resolved public directory:", path.resolve(__dirname, "public"));
-        console.log(`Serving static files from: ${publicPath}`);
-        this.app.use(express.static(publicPath));
+        this.logInfo(
+            `Serving static files from: ${this.root}`
+        );
+        this.app.use(
+            express.static(this.root)
+        );
         // Middleware to inject the live reload script into HTML files
-        this.app.use(this.injectLiveReloadScript.bind(this));
+        this.app.use(
+            this.injectLiveReloadScript.bind(this)
+        );
+
+        
 
     }
 
@@ -177,7 +278,7 @@ export class LiveServer {
                             const ws = new WebSocket("ws://localhost:${this.port}");
                             ws.onmessage = (event) => {
                                 if (event.data === "reload") {
-                                    console.log("Reloading page...");
+                                    this.logInfo("Reloading page...");
                                     window.location.reload();
                                 }
                             };
@@ -196,7 +297,7 @@ export class LiveServer {
      */
     public reloadClients(): void {
 
-        console.log("Reloading all connected clients...");
+        this.logInfo("Reloading all connected clients...");
 
         this.clients.forEach(
             client => {
@@ -207,12 +308,11 @@ export class LiveServer {
         );
     }
 
-
     /**
      * Gracefully shuts down the server and all WebSocket connections.
      */
     public async shutdown(): Promise<void> {
-        console.log("Shutting down Live Reload Server...");
+        this.logInfo("Shutting down Live Reload Server...");
 
         this.clients.forEach((client) => client.close());
         this.wss.close();
@@ -220,11 +320,18 @@ export class LiveServer {
         await new Promise<void>((resolve, reject) => {
             this.server.close((err) => {
                 if (err) {
-                    if (this.isErrnoException(err) && err.code === "ERR_SERVER_NOT_RUNNING") {
-                        console.warn("Server is not running, skipping shutdown.");
+                    if (
+                        this.isErrnoException(err) && err.code === "ERR_SERVER_NOT_RUNNING"
+                    ) {
+                        this.logWarn(
+                            "Server is not running, skipping shutdown."
+                        );
                         resolve();
                     } else {
-                        console.error("Error shutting down server:", err);
+                        this.logError(
+                            "Error shutting down server:",
+                            err
+                        );
                         reject(err);
                     }
                 } else {
@@ -233,7 +340,9 @@ export class LiveServer {
             });
         });
 
-        console.log("Live Reload Server has been shut down.");
+        this.logInfo(
+            "Live Reload Server has been shut down."
+        );
     }
 
     /**
@@ -241,9 +350,10 @@ export class LiveServer {
      * @param error - The error to check.
      * @returns True if the error has a `code` property.
      */
-    private isErrnoException(error: unknown): error is NodeJS.ErrnoException {
+    private isErrnoException(
+        error: unknown
+    ): error is NodeJS.ErrnoException {
         return typeof error === "object" && error !== null && "code" in error;
     }
-
 
 }
