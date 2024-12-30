@@ -11,6 +11,15 @@ export interface OptionsInterface {
 
     mode?: "development" | "production" | "none";
 
+    live?: boolean;
+    liveReload?: {
+        port?: number;
+        root?: string; // Path to serve static files
+        watchPaths?: string[];
+        ignoredPaths?: string[];
+    };
+    configPath?: string; // Add this line
+
     /**
      * Specifies the level of logging to be used throughout the pipeline.
      * The available levels are:
@@ -109,4 +118,5 @@ export interface OptionsInterface {
      */
     enableTimingLogs?: boolean;
 
+    [key: string]: unknown; // Allow additional keys if required
 }
