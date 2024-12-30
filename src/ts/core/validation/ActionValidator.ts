@@ -1,23 +1,49 @@
+// ============================================================================
+// Import
+// ============================================================================
+
 import { AbstractValidator } from "../abstract/AbstractValidator";
 import { ActionRegistry } from "../pipeline/ActionRegistry";
+
+
+// ============================================================================
+// Types
+// ============================================================================
 
 /**
  * Type representing the structure of action properties for validation.
  */
 type ActionValidationKeys = "action";
 
+
+// ============================================================================
+// Class
+// ============================================================================
+
 /**
  * Validates actions by ensuring they are registered in the `ActionRegistry`.
  * Extends `AbstractValidator` for consistent validation and logging.
  */
 export class ActionValidator extends AbstractValidator<Record<ActionValidationKeys, string>> {
+
+    // Parameters
+    // ========================================================================
+
     private actionRegistry: ActionRegistry;
+
+
+    // Constructor
+    // ========================================================================
 
     constructor() {
         super();
         this.actionRegistry = ActionRegistry.getInstance();
         this.logInfo("ActionValidator initialized.");
     }
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Validates an action object with the structure { action: string }.
