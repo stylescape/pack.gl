@@ -2,8 +2,11 @@
 // Import
 // ============================================================================
 
+import { readdirSync } from "fs";
+import { join } from "path";
 import { AbstractProcess } from "../abstract/AbstractProcess";
 import { ActionInterface } from "../../interface/ActionInterface";
+import { ActionPlugin } from "../../interface/ActionPlugin";
 import { coreActions } from "../../actions/CoreActions";
 
 
@@ -22,10 +25,14 @@ export class ActionRegistry extends AbstractProcess {
     // Parameters
     // ========================================================================
 
-    // Singleton instance
+    /**
+     * Singleton instance
+     */
     private static instance: ActionRegistry | null = null;
 
-    // Map to store registered actions
+    /**
+     * Map to store registered actions
+     */
     private registry: Map<string, new () => ActionInterface>;
 
 
@@ -42,6 +49,7 @@ export class ActionRegistry extends AbstractProcess {
         this.registry = new Map();
         // Automatically register core actions
         this.registerCoreActions();
+        this.discoverPlugins();
         this.logInfo("ActionRegistry initialized.");
     }
 
@@ -57,7 +65,9 @@ export class ActionRegistry extends AbstractProcess {
      */
     public static initialize(): void {
         if (ActionRegistry.instance) {
-            throw new Error("ActionRegistry has already been initialized.");
+            throw new Error(
+                "ActionRegistry has already been initialized."
+            );
         }
         ActionRegistry.instance = new ActionRegistry();
     }
@@ -94,15 +104,21 @@ export class ActionRegistry extends AbstractProcess {
      * @param actionClass - The class implementing `ActionInterface`.
      * @throws Error if the action name is already registered or missing.
      */
-    public registerAction(actionClass: new () => ActionInterface): void {
+    public registerAction(
+        actionClass: new () => ActionInterface
+    ): void {
         const actionInstance = new actionClass();
         const name = actionInstance.name;
 
         if (!name || typeof name !== "string") {
-            throw new Error(`[ActionRegistry] Action class must have a valid 'name' property.`);
+            throw new Error(
+                `[ActionRegistry] Action class must have a valid 'name' property.`
+            );
         }
         if (this.registry.has(name)) {
-            throw new Error(`[ActionRegistry] Action "${name}" is already registered.`);
+            throw new Error(
+                `[ActionRegistry] Action "${name}" is already registered.`
+            );
         }
 
         this.registry.set(name, actionClass);
@@ -118,7 +134,10 @@ export class ActionRegistry extends AbstractProcess {
      * @returns The action class constructor if found, or undefined if no such
      *  action is registered.
      */
-    public getAction(name: string): (new () => ActionInterface) | undefined {
+    public getAction(
+        name: string
+    ): (new () => ActionInterface) | undefined {
+
         // Validate the input name
         if (!name || typeof name !== "string") {
             this.logWarn(`Invalid action name requested: "${name}".`);
@@ -160,6 +179,39 @@ export class ActionRegistry extends AbstractProcess {
             this.registerAction(actionClass);
         });
         this.logInfo("Core actions registered successfully.");
+    }
+
+    private discoverPlugins(): void {
+        this.logInfo("Discovering external plugins...");
+
+        const nodeModulesPath = join(process.cwd(), "node_modules");
+        const pluginPrefix = "@pack/plugin-";
+
+        try {
+            const directories = readdirSync(nodeModulesPath, {
+                withFileTypes: true,
+            });
+
+            for (const dir of directories) {
+                if (dir.isDirectory() && dir.name.startsWith(pluginPrefix)) {
+                    const pluginPath = join(nodeModulesPath, dir.name);
+                    const plugin: ActionPlugin = require(pluginPath).default;
+
+                    if (plugin && typeof plugin.registerActions === "function") {
+                        const actions = plugin.registerActions();
+                        for (const [name, actionClass] of Object.entries(
+                            actions
+                        )) {
+                            this.registerAction(actionClass);
+                        }
+                    }
+                }
+            }
+
+            this.logInfo("Plugins loaded successfully.");
+        } catch (error) {
+            this.logError("Failed to discover plugins.", error);
+        }
     }
 
     /**
