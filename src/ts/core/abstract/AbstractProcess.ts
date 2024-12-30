@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { Logger } from "../../utils/Logger";
+import { Logger } from "../../logger/Logger";
 
 
 // ============================================================================
@@ -38,7 +38,7 @@ export abstract class AbstractProcess {
     }
 
 
-    // Methods
+    // Logging Methods
     // ========================================================================
 
     /**
@@ -46,7 +46,9 @@ export abstract class AbstractProcess {
      * Use this for standard informational messages.
      * @param message - The message to log.
      */
-    protected logInfo(message: string): void {
+    protected logInfo(
+        message: string
+    ): void {
         this.logger.logInfo(this.constructor.name, message);
     }
 
@@ -55,17 +57,20 @@ export abstract class AbstractProcess {
      * Logs a debug message with the originating class name as context.
      * @param message - The debug message to log.
      */
-    protected logDebug(message: string): void {
+    protected logDebug(
+        message: string
+    ): void {
         this.logger.logDebug(this.constructor.name, message);
     }
-
 
     /**
      * Logs a warning message with the originating class name as context.
      * Use this to highlight potential issues that are non-critical.
      * @param message - The warning message to log.
      */
-    protected logWarn(message: string): void {
+    protected logWarn(
+        message: string
+    ): void {
         this.logger.logWarn(this.constructor.name, message);
     }
 
@@ -74,10 +79,15 @@ export abstract class AbstractProcess {
      * Handles any type of error and ensures consistent error reporting.
      * Use this for logging critical issues or exceptions.
      * 
-     * @param message - A custom message providing additional context for the error.
-     * @param error - (Optional) The error to log. Can be a string, an Error object, or other types.
+     * @param message - A custom message providing additional context for
+     * the error.
+     * @param error - (Optional) The error to log. Can be a string, an Error
+     * object, or other types.
      */
-    protected logError(message: string, error?: unknown): void {
+    protected logError(
+        message: string,
+        error?: unknown
+    ): void {
         const errorMessage = this.formatError(message, error);
         this.logger.logError(this.constructor.name, errorMessage);
     }
@@ -90,7 +100,10 @@ export abstract class AbstractProcess {
      * @param error - Additional error information, such as an Error object.
      * @returns A formatted string combining the message and error details.
      */
-    private formatError(message: string, error?: unknown): string {
+    private formatError(
+        message: string,
+        error?: unknown
+    ): string {
         if (error instanceof Error) {
             return `${message}: ${error.message}`;
         } else if (typeof error === "string") {
@@ -107,7 +120,9 @@ export abstract class AbstractProcess {
      * 
      * @param message - The success message to log.
      */
-    protected logSuccess(message: string): void {
+    protected logSuccess(
+        message: string
+    ): void {
         this.logger.logSuccess(this.constructor.name, message);
     }
 
