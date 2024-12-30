@@ -97,7 +97,7 @@ export { gl_installer, cleanDirectory, readPackageJson };
 // export { Action } from "./core/Action";
 
 // Main Function
-export { main } from "./pack";
+export { Pack } from "./pack";
 
 // Additional Types
 export * from "./types";
