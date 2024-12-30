@@ -1,6 +1,3 @@
-// src/interface/ConfigInterface.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -57,6 +54,8 @@ export interface ConfigInterface {
      * @returns A boolean indicating whether the configuration is valid, or
      *      throws an error if validation fails.
      */
-    validateConfig?(config: ConfigInterface): boolean;
+    validateConfig?(
+        config: ConfigInterface
+    ): boolean;
 
 }
