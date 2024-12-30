@@ -6,8 +6,9 @@ import { AbstractValidator } from "../abstract/AbstractValidator";
 import { StageInterface } from "../../interface/StageInterface";
 import { StepValidator } from "./StepValidator";
 
+
 // ============================================================================
-// StageValidator Class
+// Class
 // ============================================================================
 
 /**
@@ -15,15 +16,27 @@ import { StepValidator } from "./StepValidator";
  * It validates the stage properties, dependencies, and steps for correctness.
  */
 export class StageValidator extends AbstractValidator<StageInterface> {
+
+
+    // Parameters
+    // ========================================================================
+
     private stageNames: Set<string>;
     private stepValidator: StepValidator;
+
+
+    // Constructor
+    // ========================================================================
 
     constructor() {
         super();
         this.stageNames = new Set();
         this.stepValidator = new StepValidator();
-        this.log("StageValidator initialized.");
+        this.logInfo("StageValidator initialized.");
     }
+
+    // Methods
+    // ========================================================================
 
     /**
      * Validates an entire stage object.
@@ -32,7 +45,7 @@ export class StageValidator extends AbstractValidator<StageInterface> {
      * @throws Error if the stage or any of its properties are invalid.
      */
     public validate(stage: StageInterface): void {
-        this.log(`Validating stage: "${stage.name}"`);
+        this.logInfo(`Validating stage: "${stage.name}"`);
 
         try {
             // Validate individual properties of the stage
@@ -40,7 +53,7 @@ export class StageValidator extends AbstractValidator<StageInterface> {
             this.validateProperty("dependsOn", stage.dependsOn);
             this.validateProperty("steps", stage.steps);
 
-            this.log(`Stage "${stage.name}" validated successfully.`);
+            this.logInfo(`Stage "${stage.name}" validated successfully.`);
         } catch (error) {
             this.logError(`Validation failed for stage "${stage.name}": ${(error as Error).message}`);
             throw error;
