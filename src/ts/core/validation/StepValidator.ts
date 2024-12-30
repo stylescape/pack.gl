@@ -7,16 +7,26 @@ import { StepInterface } from "../../interface/StepInterface";
 import { ActionValidator } from "./ActionValidator";
 import { StepOptionsInterface } from "../../interface/StepOptionsInterface";
 
+
 // ============================================================================
-// StepValidator Class
+// Class
 // ============================================================================
 
 /**
  * Validates individual steps within a stage.
- * Ensures steps conform to the expected structure and all associated actions are valid.
+ * Ensures steps conform to the expected structure and all associated
+ * actions are valid.
  */
 export class StepValidator extends AbstractValidator<StepInterface> {
+
+    // Parameters
+    // ========================================================================
+
     private actionValidator: ActionValidator;
+
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Initializes the StepValidator.
@@ -27,6 +37,10 @@ export class StepValidator extends AbstractValidator<StepInterface> {
         this.actionValidator = new ActionValidator();
         this.logInfo("StepValidator initialized.");
     }
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Validates an entire step object.
@@ -65,7 +79,11 @@ export class StepValidator extends AbstractValidator<StepInterface> {
                 this.validateOptions(value as Record<string, any>);
                 break;
             default:
-                this.throwValidationError(key, value, "Unknown key provided for validation.");
+                this.throwValidationError(
+                    key,
+                    value,
+                    "Unknown key provided for validation."
+                );
         }
 
         this.logValidationSuccess(key, value);
@@ -96,7 +114,9 @@ export class StepValidator extends AbstractValidator<StepInterface> {
      * @throws Error if the action is invalid.
      */
     private validateActions(action: StepInterface["action"]): void {
-        if (!action || typeof action.name !== "string" || action.name.trim() === "") {
+        if (
+            !action || typeof action.name !== "string" || action.name.trim() === ""
+        ) {
             this.throwValidationError(
                 "action",
                 action,
@@ -107,7 +127,11 @@ export class StepValidator extends AbstractValidator<StepInterface> {
         try {
             this.actionValidator.validate(action.name); // Validate the action name
         } catch (error) {
-            this.throwValidationError("action", action, (error as Error).message);
+            this.throwValidationError(
+                "action",
+                action,
+                (error as Error).message
+            );
         }
     }
 
