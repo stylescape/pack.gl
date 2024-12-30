@@ -1,6 +1,3 @@
-// src/interface/ActionInterface.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -34,16 +31,16 @@ export interface ActionInterface {
      * custom-defined processes.
      * 
      * @param options - A structured set of options specific to the action's
-     *                  configuration. Implementations are responsible for
-     *                  validating and applying these options.
-     *                  Example configurations might include:
-     *                  - For 'build': { minify: boolean, sourceMap: boolean, target: string }
-     *                  - For 'lint': { fix: boolean, formatter: string }
+     * configuration. Implementations are responsible for validating and
+     * applying these options. Example configurations might include:
+     * - For 'build': { minify: boolean, sourceMap: boolean, target: string }
+     * - For 'lint': { fix: boolean, formatter: string }
      * @returns A Promise that resolves when the action completes successfully,
-     *      or rejects with an error if the action fails.
+     * or rejects with an error if the action fails.
      */
-    execute(options: ActionOptionsType): Promise<void>;
-    // execute(options: StepOptionsInterface): Promise<void>; // Core logic for the action.
+    execute(
+        options: ActionOptionsType
+    ): Promise<void>;
 
     /**
      * Validates the provided options before execution.
@@ -51,11 +48,13 @@ export interface ActionInterface {
      * options object, ensuring that required fields are present and valid.
      * 
      * @param options - The options to validate, ensuring they meet the
-     *      action's specific requirements.
+     * action's specific requirements.
      * @returns A boolean indicating whether the options are valid. Throws an
-     *      error or returns false if validation fails.
+     * error or returns false if validation fails.
      */
-    validateOptions?(options: ActionOptionsType): boolean;
+    validateOptions?(
+        options: ActionOptionsType
+    ): boolean;
 
     /**
      * Provides a summary or description of the action.
@@ -68,8 +67,8 @@ export interface ActionInterface {
 
     /**
      * Optional cleanup logic to execute after the main action completes.
-     * Implementations can use this for teardown tasks, like removing temporary
-     * files or restoring the state altered during execution.
+     * Implementations can use this for teardown tasks, like removing
+     * temporary files or restoring the state altered during execution.
      * 
      * @returns A promise that resolves after cleanup is complete.
      */
