@@ -60,9 +60,9 @@ export interface StepInterface {
     timeout?: number;
 
     /**
-     * An optional description providing additional context or details about the step.
-     * Useful for documentation, reporting, or explaining the purpose of the step
-     * to maintainers.
+     * An optional description providing additional context or details about
+     * the step. Useful for documentation, reporting, or explaining the
+     * purpose of the step to maintainers.
      */
     description?: string;
 
