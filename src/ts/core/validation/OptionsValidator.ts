@@ -5,8 +5,9 @@
 import { AbstractValidator } from "../abstract/AbstractValidator";
 import { OptionsInterface } from "../../interface/OptionsInterface";
 
+
 // ============================================================================
-// OptionsValidator Class
+// Class
 // ============================================================================
 
 /**
@@ -15,17 +16,26 @@ import { OptionsInterface } from "../../interface/OptionsInterface";
  */
 export class OptionsValidator extends AbstractValidator<OptionsInterface> {
 
- 
+    // Parameters
+    // ========================================================================
+
     // A runtime mapping of enumerated options for validation
     private static allowedValues: Partial<Record<keyof OptionsInterface, unknown[]>> = {
         logLevel: ["verbose", "info", "warn", "error"],
         defaultPriority: ["low", "normal", "high"],
     };
 
+
+    // Constructor
+    // ========================================================================
+
     constructor() {
         super();
         this.logInfo("OptionsValidator initialized.");
     }
+
+    // Methods
+    // ========================================================================
 
     /**
      * Validates a specific property of the options object.
@@ -98,3 +108,8 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
         }
     }
 }
+
+
+// if (options.liveReload?.port && (options.liveReload.port < 1 || options.liveReload.port > 65535)) {
+//     throw new Error("Invalid port number in liveReload configuration.");
+// }
