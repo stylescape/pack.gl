@@ -42,7 +42,9 @@ export class Stage extends AbstractProcess {
         this.steps = stage.steps.map(step => new Step(step));
         this.dependsOn = stage.dependsOn;
 
-        this.logInfo(`Stage "${this.name}" initialized with ${this.steps.length} steps.`);
+        this.logInfo(
+            `Stage "${this.name}" initialized with ${this.steps.length} steps.`
+        );
     }
 
 
@@ -78,7 +80,10 @@ export class Stage extends AbstractProcess {
             this.logInfo(`Stage "${this.name}" completed successfully.`);
             completedStages.add(this.name);
         } catch (error) {
-            this.logError(`Error executing stage "${this.name}": ${error}`, error);
+            this.logError(
+                `Error executing stage "${this.name}": ${error}`,
+                error
+            );
             // Propagate the error to halt pipeline or manage based on
             // global settings
             throw error;
@@ -92,16 +97,26 @@ export class Stage extends AbstractProcess {
      * dependency tracking.
      * @returns A promise that resolves once all dependencies are met.
      */
-    private async resolveDependencies(completedStages: Set<string>): Promise<void> {
+    private async resolveDependencies(
+        completedStages: Set<string>
+    ): Promise<void> {
         if (!this.dependsOn) return;
 
-        this.logInfo(`Stage "${this.name}" is waiting for dependencies: ${this.dependsOn.join(", ")}`);
+        this.logInfo(
+            `Stage "${this.name}" is waiting for
+            dependencies:${this.dependsOn.join(", ")}`
+        );
         await Promise.all(
-            this.dependsOn.map(dep =>
-                this.waitForStageCompletion(dep, completedStages)
+            this.dependsOn.map(
+                dep => this.waitForStageCompletion(
+                    dep,
+                    completedStages
+                )
             )
         );
-        this.logInfo(`All dependencies resolved for stage: "${this.name}"`);
+        this.logInfo(
+            `All dependencies resolved for stage: "${this.name}"`
+        );
     }
 
     /**
@@ -126,6 +141,5 @@ export class Stage extends AbstractProcess {
             );
         }
     }
-
 
 }
