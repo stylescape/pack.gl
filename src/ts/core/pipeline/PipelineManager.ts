@@ -5,6 +5,8 @@
 import { AbstractProcess } from "../abstract/AbstractProcess";
 import { spawn, ChildProcess } from "child_process";
 import { LiveServer } from "../../live/LiveServer";
+import path from "path";
+
 
 // ============================================================================
 // Class
@@ -15,21 +17,28 @@ import { LiveServer } from "../../live/LiveServer";
  * LiveServer for client notifications upon pipeline events.
  */
 export class PipelineManager extends AbstractProcess {
+
     // Parameters
     // ========================================================================
+
     private pipelineProcess: ChildProcess | null = null;
+
 
     // Constructor
     // ========================================================================
+
     /**
      * Initializes the PipelineManager with a LiveServer instance.
-     * @param reloadServer - The LiveServer instance to notify when the
+     * @param liveServer - The LiveServer instance to notify when the
      * pipeline restarts.
      */
-    constructor(private reloadServer: LiveServer) {
+    constructor(
+        private liveServer: LiveServer
+    ) {
         super();
         this.logInfo("PipelineManager initialized.");
     }
+
 
     // Methods
     // ========================================================================
@@ -45,7 +54,10 @@ export class PipelineManager extends AbstractProcess {
         }
 
         this.logInfo("Starting pipeline...");
-        this.pipelineProcess = spawn("npm", ["run", "start"], { stdio: "inherit" });
+
+        const scriptPath = path.resolve(process.cwd(), "dist/js/cli.js");
+
+        this.pipelineProcess = spawn("node", [scriptPath], { stdio: "inherit" });
 
         this.attachProcessListeners();
     }
@@ -59,22 +71,33 @@ export class PipelineManager extends AbstractProcess {
 
         this.pipelineProcess.on("close", (code) => {
             if (code !== 0) {
-                this.logError(`Pipeline process exited with code ${code}`);
+                this.logError(
+                    `Pipeline process exited with code ${code}`
+                );
             } else {
-                this.logInfo("Pipeline process exited successfully.");
+                this.logInfo(
+                    "Pipeline process exited successfully."
+                );
             }
-            this.reloadServer.reloadClients();
+            this.liveServer.reloadClients();
         });
 
         this.pipelineProcess.on("error", (error) => {
-            this.logError("Error starting pipeline process.", error);
+            this.logError(
+                "Error starting pipeline process.",
+                error
+            );
         });
 
         this.pipelineProcess.on("exit", (code, signal) => {
             if (signal) {
-                this.logWarn(`Pipeline process was terminated with signal: ${signal}`);
+                this.logWarn(
+                    `Pipeline process was terminated with signal: ${signal}`
+                );
             } else {
-                this.logInfo(`Pipeline process exited with code: ${code}`);
+                this.logInfo(
+                    `Pipeline process exited with code: ${code}`
+                );
             }
         });
     }
@@ -108,7 +131,10 @@ export class PipelineManager extends AbstractProcess {
      * @param delay - The delay in milliseconds before restarting the pipeline.
      */
     public restartPipelineWithDelay(delay: number = 1000): void {
-        this.logInfo(`Delaying pipeline restart by ${delay} milliseconds...`);
+        this.logInfo(
+            `Delaying pipeline restart by ${delay} milliseconds...`
+        );
         setTimeout(() => this.restartPipeline(), delay);
     }
+
 }
