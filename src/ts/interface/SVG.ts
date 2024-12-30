@@ -16,32 +16,48 @@
  * Represents the metadata associated with an SVG graphic.
  */
 interface SvgMetadata {
-    name: string;               // The name of the SVG graphic.
-    creator?: string;           // Optional creator of the SVG graphic.
-    description?: string;       // Optional description of the SVG graphic.
-    license?: string;           // Optional license information for the SVG graphic.
+    // The name of the SVG graphic.
+    name: string;
+    // Optional creator of the SVG graphic.
+    creator?: string;
+    // Optional description of the SVG graphic.
+    description?: string;
+    // Optional license information for the SVG graphic.
+    license?: string;
 }
 
 /**
  * Represents an SVG (Scalable Vector Graphics) object.
  */
 export interface Svg {
-    metadata: SvgMetadata;      // Metadata associated with the SVG.
-    source: string;             // The SVG content as a string.
-    width?: number;             // Optional width of the SVG graphic.
-    height?: number;            // Optional height of the SVG graphic.
-    viewBox?: string;           // Optional 'viewBox' attribute that defines the position and dimension, in user space, of an SVG viewport.
-    paths?: SvgPath[];          // Optional array of path data (for more detailed manipulation or data extraction).
+    // Metadata associated with the SVG.
+    metadata: SvgMetadata;
+    // The SVG content as a string.
+    source: string;
+    // Optional width of the SVG graphic.
+    width?: number;
+    // Optional height of the SVG graphic.
+    height?: number;
+    // Optional 'viewBox' attribute that defines the position and dimension,
+    // in user space, of an SVG viewport.
+    viewBox?: string;
+    // Optional array of path data (for more detailed manipulation or data
+    // extraction).
+    paths?: SvgPath[];
 }
 
 /**
  * Represents the path element within an SVG, detailing its specific properties.
  */
 interface SvgPath {
-    d: string;                  // Path data (the "d" attribute).
-    fill?: string;              // Optional fill color.
-    stroke?: string;            // Optional stroke color.
-    strokeWidth?: number;       // Optional stroke width.
+    // Path data (the "d" attribute).
+    d: string;
+    // Optional fill color.
+    fill?: string;
+    // Optional stroke color.
+    stroke?: string;
+    // Optional stroke width.
+    strokeWidth?: number;
 }
 
 /**
@@ -64,4 +80,5 @@ const exampleSvg: Svg = {
         stroke: "black",
         strokeWidth: 2
     }]
+
 };
