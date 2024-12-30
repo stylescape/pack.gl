@@ -4,64 +4,49 @@
 // Imports
 // ============================================================================
 
-import { main } from "./pack";
-import { Logger } from "./utils/Logger";
+import { Pack } from "./pack";
 import { ArgumentParser } from "./cli/ArgumentParser";
+import { ConfigStore } from "./core/config/ConfigStore";
+import { ConfigLoader } from "./core/config/ConfigLoader";
 
-// ============================================================================
-// Constants
-// ============================================================================
-
-/** 
- * The context string for logging.
- */
-const CONTEXT = "Pack CLI";
-
-const VALID_MODES = ["development", "production", "none"];
 
 // ============================================================================
 // Main Entry Point
 // ============================================================================
 
 /**
- * The entry point for the Pack CLI application.
- * This script sets up the runtime environment, parses arguments, validates the mode,
- * and invokes the main pipeline logic. It handles any unexpected errors gracefully.
+ * The entry point for the Pack CLI application. Sets up the runtime
+ * environment, loads configuration, and invokes the Pack class.
  */
 (async () => {
-    const logger = Logger.getInstance();
-
     try {
+        // console.log("Raw arguments:", process.argv);
+
         // Initialize CLI argument parser
         const parser = new ArgumentParser();
+        const cliOptions = parser.getAllFlags();
+        // console.log(cliOptions)
 
-        // Retrieve the mode
-        const mode = parser.getOption("mode", { default: "none" });
 
-        // Ensure mode is a string before validation
-        if (typeof mode !== "string" || !VALID_MODES.includes(mode)) {
-            logger.logError(
-                CONTEXT,
-                `Invalid mode: "${mode}". Valid modes are: ${VALID_MODES.join(", ")}.`
-            );
-            process.exit(1);
-        }
+        // Initialize ConfigStore and load configuration
+        const configStore = ConfigStore.getInstance();
+        const configLoader = await new ConfigLoader();
+        await configLoader.initialize()
+        const fileConfig = await configLoader.loadConfig();
+        // configStore.print()
+        configStore.merge(fileConfig); // Merge file-based config
+        // console.log(fileConfig)
+        // configStore.print()
+        configStore.merge({ options: cliOptions }); // Merge CLI options
+        // console.log(cliOptions)
+        // configStore.print()
 
-        // Initialize the Logger with verbose mode in development
-        const isVerbose = mode === "development";
-        // Logger.initialize(isVerbose);
-        logger.logInfo(CONTEXT, `Logger initialized with verbose=${isVerbose}.`);
-        logger.logInfo(CONTEXT, `Running in ${mode} mode...`);
-
-        // Execute the main function
-        await main(mode);
+        // Create a Pack instance and execute the workflow
+        const pack = new Pack();
+        await pack.run();
 
     } catch (error) {
-        // Handle unexpected errors
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        logger.logError(CONTEXT, `An unexpected error occurred: ${errorMessage}`, error);
-
-        // Exit with a failure code
+        console.error(`[CLI] An unexpected error occurred:`, error);
         process.exit(1);
     }
 })();
