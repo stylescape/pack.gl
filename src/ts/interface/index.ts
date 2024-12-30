@@ -1,5 +1,3 @@
-// src/interface/index.ts
-
 // Exporting all interfaces from the interfaces directory
 
 export { ActionInterface } from "./ActionInterface";
