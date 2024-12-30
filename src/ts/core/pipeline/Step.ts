@@ -19,7 +19,6 @@ import { ActionRegistry } from "./ActionRegistry";
  */
 export class Step extends AbstractProcess {
 
-
     // Parameters
     // ========================================================================
 
@@ -40,25 +39,25 @@ export class Step extends AbstractProcess {
      * @throws Error if the specified action is not registered in the action
      * registry.
      */
-    constructor(step: StepInterface) {
-        super(); // Initialize logging
+    constructor(
+        step: StepInterface
+    ) {
+        super();
         this.name = step.name;
 
         // Resolve the action class from the registry using the action name
-        // const actionRegistry = ActionRegistry.getInstance();
-        // const ActionClass = actionRegistry.getAction(step.action);
-        // const ActionClass = actionRegistry.getAction(step.action.constructor.name);
-        // if (!ActionClass) {
-        //     const errorMessage = `Unknown action "${step.action}" for step "${this.name}". Ensure the action is registered in the registry.`;
-        //     this.logError(errorMessage);
-        //     throw new Error(errorMessage);
-        // }
-        // Resolve the action class from the registry using the action name
         const actionRegistry = ActionRegistry.getInstance();
-        const ActionClass = actionRegistry.getAction(step.action.name); // Use action name directly
+        console.log(step.action)
+        console.log(step.action.name)
+        // const ActionClass = actionRegistry.getAction(step.action.name);
+        const ActionClass = actionRegistry.getAction(String(step.action));
         if (!ActionClass) {
-            this.logError(`Unknown action "${step.action}" for step "${this.name}". Ensure the action is registered in the registry.`);
-            throw new Error(`Unknown action "${step.action}" for step "${this.name}". Ensure the action is registered in the registry.`);
+            let msg = `
+                Unknown action "${step.action}" for step "${this.name}".
+                Ensure the action is registered in the registry.
+                `
+            this.logError(msg);
+            throw new Error(msg);
         }
 
 
@@ -66,7 +65,10 @@ export class Step extends AbstractProcess {
         this.action = new ActionClass();
         this.options = step.options;
 
-        this.logInfo(`Step "${this.name}" initialized with action "${step.action.constructor.name}".`);
+        this.logInfo(
+            `Step "${this.name}" initialized with 
+            action "${step.action.constructor.name}".`
+        );
     }
 
 
@@ -81,7 +83,9 @@ export class Step extends AbstractProcess {
         try {
             // Validate options if the action provides a validation method
             if (typeof this.action.validateOptions === "function") {
-                const isValid = this.action.validateOptions(this.options || {});
+                const isValid = this.action.validateOptions(
+                    this.options || {}
+                );
                 if (!isValid) {
                     throw new Error(`Invalid options for step: ${this.name}`);
                 }
@@ -89,9 +93,14 @@ export class Step extends AbstractProcess {
 
             // Execute the action with the provided options
             await this.action.execute(this.options || {});
-            this.logInfo(`Step "${this.name}" completed successfully.`);
+            this.logInfo(
+                `Step "${this.name}" completed successfully.`
+            );
         } catch (error) {
-            this.logError(`Error executing step "${this.name}": ${error}`, error);
+            this.logError(
+                `Error executing step "${this.name}": ${error}`,
+                error
+            );
         }
     }
 
