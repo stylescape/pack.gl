@@ -11,13 +11,15 @@ export interface File {
 
     /**
      * The full path to the file.
-     * This should include the complete directory path and the file name with its extension.
+     * This should include the complete directory path and the file name with
+     * its extension.
      */
     filepath: string;
 
     /**
      * The source content of the file.
-     * This could be any form of text, such as code, configuration, or plain text.
+     * This could be any form of text, such as code, configuration, or plain
+     * text.
      */
     source: string;
 
