@@ -6,8 +6,9 @@ import { AbstractProcess } from "../core/abstract/AbstractProcess";
 import { OptionsValidator } from "../core/validation/OptionsValidator";
 import { OptionsInterface } from "../interface/OptionsInterface";
 
+
 // ============================================================================
-// ArgumentParser Class
+// Class
 // ============================================================================
 
 /**
@@ -16,8 +17,17 @@ import { OptionsInterface } from "../interface/OptionsInterface";
  * Extends AbstractProcess for consistent logging.
  */
 export class ArgumentParser extends AbstractProcess {
+
+
+    // Parameters
+    // ========================================================================
+
     private args: string[];
     private validator: OptionsValidator;
+
+
+    // Constructor
+    // ========================================================================
 
     /**
      * Initializes the ArgumentParser with command-line arguments and an
@@ -25,12 +35,23 @@ export class ArgumentParser extends AbstractProcess {
      *
      * @param args - Command-line arguments. Defaults to `process.argv.slice(2)`.
      */
-    constructor(args: string[] = process.argv.slice(2)) {
+    constructor(
+        // args: string[] = process.argv.slice(2)
+    ) {
         super();
-        this.args = args;
+        this.args = process.argv.slice(2); // Skip Node.js and script path
+
+        // console.log(process.argv.slice(2))
+
+        // this.args = args;
         this.validator = new OptionsValidator();
         this.logInfo("ArgumentParser initialized with arguments.");
+        
     }
+
+
+    // Methods
+    // ========================================================================
 
     /**
      * Retrieves the value of a specific option from the CLI arguments, with validation.
@@ -68,27 +89,46 @@ export class ArgumentParser extends AbstractProcess {
     public hasFlag(key: keyof OptionsInterface): boolean {
         const flag = `--${key}`;
         const exists = this.args.includes(flag);
-        this.logInfo(`Flag "${flag}" is ${exists ? "present" : "not present"}.`);
+        this.logInfo(
+            `Flag "${flag}" is ${exists ? "present" : "not present"}.`
+        );
         return exists;
     }
 
     /**
-     * Retrieves all CLI flags and their values as a key-value object.
-     *
-     * @returns An object where keys are flag names and values are either
-     * the assigned value or `true` if no value is provided.
+     * Parses all CLI arguments into a key-value object.
+     * Flags are treated as boolean if not followed by a value.
+     * 
+     * Example:
+     * --live --mode development => { live: true, mode: "development" }
      */
     public getAllFlags(): Record<string, string | boolean> {
-        const result: Record<string, string | boolean> = {};
-        this.args.forEach((arg, index) => {
+        const flags: Record<string, string | boolean> = {};
+        for (let i = 0; i < this.args.length; i++) {
+            const arg = this.args[i];
             if (arg.startsWith("--")) {
-                const key = arg.slice(2); // Remove the "--" prefix
-                const value = this.args[index + 1];
-                result[key] = value && !value.startsWith("--") ? value : true;
+                const key = arg.slice(2);
+                const nextArg = this.args[i + 1];
+                if (nextArg && !nextArg.startsWith("--")) {
+                    flags[key] = nextArg;
+                    i++; // Skip the next argument since it's a value
+                } else {
+                    flags[key] = true; // Flag with no value is treated as boolean true
+                }
             }
-        });
-
-        this.logInfo(`Retrieved all flags: ${JSON.stringify(result)}`);
-        return result;
+        }
+        return flags;
     }
+
+    /**
+     * Retrieves a specific flag value.
+     * @param key - The flag name to retrieve.
+     * @param defaultValue - The default value if the flag is not present.
+     * @returns The value of the flag or the default value.
+     */
+    public getFlag(key: string, defaultValue: string | boolean = false): string | boolean {
+        const flags = this.getAllFlags();
+        return flags[key] ?? defaultValue;
+    }
+
 }
