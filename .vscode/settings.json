@@ -6,12 +6,12 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode", // Set Prettier as the default formatter
     "editor.tabSize": 4,                                // Set tab size to 4 spaces for better readability
     "editor.detectIndentation": false,                  // Ensure consistent indentation
-    "editor.cursorSmoothCaretAnimation": true,          // Smooth cursor animation for a better visual experience
+    "editor.cursorSmoothCaretAnimation": "on",          // Smooth cursor animation for a better visual experience
     "editor.minimap.enabled": true,                     // Enable the minimap for code overview
     "editor.rulers": [80, 120],                         // Show rulers at 80 and 120 characters for code readability
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true,                     // Automatically fix ESLint issues on save
-        "source.organizeImports": true                    // Automatically organize imports on save
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "explicit"
     },
     "files.eol": "\n",                                  // Use LF for end-of-line characters
     "files.trimTrailingWhitespace": true,               // Trim trailing whitespace in all files
