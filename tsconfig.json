@@ -1,7 +1,5 @@
-// tsconfig.json
-
 {
-    
+
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "ESM",
 
@@ -123,14 +121,7 @@
     },
 
     "include": [
-        // "src/**/*",
         "src/**/*.ts",
-        // "scripts/run-tests.ts",
-        // "bin/**/*",
-        // "src/index.ts.xxx",
-        // "src/index.ts.xxx",
-        // "bin/**/*.ts",
-
     ],
 
     "exclude": [
