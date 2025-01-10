@@ -2,8 +2,7 @@
 // Import
 // ============================================================================
 
-import { FileWatcher } from "../../ts/live/LiveWatcher";
-import * as fs from "fs";
+import { LiveWatcher } from "../../ts/live/LiveWatcher";
 
 
 // ============================================================================
@@ -36,7 +35,7 @@ jest.mock("chokidar", () => {
     return chokidarMock;
 });
 
-import chokidar, { FSWatcher } from "chokidar";
+import chokidar from "chokidar";
 
 // Explicitly cast chokidar.watch as a mock function
 const mockedChokidar = chokidar as jest.Mocked<typeof chokidar>;
@@ -45,8 +44,8 @@ const mockedChokidar = chokidar as jest.Mocked<typeof chokidar>;
 // Test Suite
 // ============================================================================
 
-describe("FileWatcher", () => {
-    let fileWatcher: FileWatcher;
+describe("LiveWatcher", () => {
+    let LiveWatcher: LiveWatcher;
     const mockPathsToWatch = ["src/**/*", "config/**/*"];
     const mockIgnoredPaths = /node_modules/;
     const mockOnChange = jest.fn();
@@ -54,7 +53,7 @@ describe("FileWatcher", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         jest.spyOn(console, "error").mockImplementation(() => {}); // Mock console.error
-        fileWatcher = new FileWatcher(mockPathsToWatch, mockIgnoredPaths, mockOnChange);
+        LiveWatcher = new LiveWatcher(mockPathsToWatch, mockIgnoredPaths, mockOnChange);
     });
 
     afterEach(() => {
@@ -113,7 +112,7 @@ describe("FileWatcher", () => {
     });
 
     test("should stop the file watcher", async () => {
-        await fileWatcher.stopWatching();
+        await LiveWatcher.stopWatching();
 
         const watcherInstance = (chokidar.watch as jest.Mock).mock.results[0].value;
         expect(watcherInstance.close).toHaveBeenCalled();
@@ -121,12 +120,12 @@ describe("FileWatcher", () => {
 
     test("should restart the file watcher", async () => {
         const initialWatcherInstance = mockedChokidar.watch.mock.results[0].value;
-    
-        await fileWatcher.restartWatcher();
-    
+
+        await LiveWatcher.restartWatcher();
+
         // Ensure the initial watcher was stopped
         expect(initialWatcherInstance.close).toHaveBeenCalled();
-    
+
         // Ensure a new watcher was started
         expect(mockedChokidar.watch).toHaveBeenCalledTimes(2); // Once during initialization, once during restart
     });
