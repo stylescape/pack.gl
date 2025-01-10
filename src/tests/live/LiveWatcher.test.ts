@@ -53,7 +53,11 @@ describe("LiveWatcher", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         jest.spyOn(console, "error").mockImplementation(() => {}); // Mock console.error
-        LiveWatcher = new LiveWatcher(mockPathsToWatch, mockIgnoredPaths, mockOnChange);
+        LiveWatcher = new LiveWatcher(
+            mockPathsToWatch,
+            mockIgnoredPaths,
+            mockOnChange
+        );
     });
 
     afterEach(() => {
