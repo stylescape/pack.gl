@@ -2,11 +2,10 @@
 // Import
 // ============================================================================
 
-import { LiveReloadServer } from "../../ts/live/LiveServer";
-import { WebSocket } from "ws";
-import request from "supertest";
-import path from "path";
 import fs from "fs";
+import request from "supertest";
+import { WebSocket } from "ws";
+import { LiveServer } from "../../ts/live/LiveServer";
 
 // ============================================================================
 // Mock Setup
@@ -42,13 +41,13 @@ jest.mock("fs", () => ({
 // Test Suite
 // ============================================================================
 
-describe("LiveReloadServer", () => {
-    let server: LiveReloadServer;
+describe("LiveServer", () => {
+    let server: LiveServer;
     const port = 3001;
     const mockedPublicPath = "/mocked/public";
 
     beforeAll(() => {
-        server = new LiveReloadServer(port);
+        server = new LiveServer(port);
 
         jest.spyOn(fs, "existsSync").mockImplementation((filePath) => filePath === `${mockedPublicPath}/index.html`);
         jest.spyOn(fs, "readFileSync").mockImplementation((filePath) => {
