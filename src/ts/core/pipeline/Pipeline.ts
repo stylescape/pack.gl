@@ -40,6 +40,7 @@ export class Pipeline extends AbstractProcess {
     /**
      * Constructs a new Pipeline instance with the given configuration.
      * Initializes stages and applies global options for execution control.
+     *
      * @param config - The configuration object defining the stages, steps,
      * and global options for the pipeline.
      */
@@ -74,8 +75,9 @@ export class Pipeline extends AbstractProcess {
         // Run stages with dependency management and parallel execution control
         try {
 
-            this.logDebug("Pipeline execution debug message.");
+            this.logDebug("Pipeline execution started with debug logging.");
 
+            // Execute all stages with concurrency control
             const stagePromises = this.stages.map(
                 stage => stage.execute(completedStages)
             );
@@ -87,11 +89,12 @@ export class Pipeline extends AbstractProcess {
 
             this.logError("Pipeline execution failed:", error);
 
+            // Halt pipeline if configured to do so on failure
             if (this.options?.haltOnFailure !== false) {
                 this.logError("Halting pipeline due to failure.");
-                // Optionally halt the process if the pipeline is set to
-                // halt on failure
                 process.exit(1);
+            } else {
+                this.logWarn("Continuing pipeline execution despite errors.");
             }
         }
 
@@ -128,29 +131,5 @@ export class Pipeline extends AbstractProcess {
         // Wait for all remaining stages to complete
         await Promise.all(executingStages);
     }
-
-    /**
-     * Validates the pipeline configuration before execution.
-     * Ensures all stages and dependencies are properly defined.
-     * @throws Error if the configuration is invalid.
-     */
-    // private validateConfig(): void {
-    //     this.logInfo("Validating pipeline configuration...");
-
-    //     if (!this.stages.length) {
-    //         throw new Error("Pipeline configuration must include at least one stage.");
-    //     }
-
-    //     const stageNames = new Set<string>();
-    //     for (const stage of this.stages) {
-    //         if (stageNames.has(stage.name)) {
-    //             throw new Error(`Duplicate stage name detected: ${stage.name}`);
-    //         }
-    //         stageNames.add(stage.name);
-    //     }
-
-    //     this.logInfo("Pipeline configuration validated successfully.");
-    // }
-
 
 }
