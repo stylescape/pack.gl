@@ -25,9 +25,9 @@ export class Logger {
     private static instance: Logger | null = null;
 
     /**
-     * Verbose logging flag
+     * Current log level
      */
-    private verbose: boolean;
+    private logLevel: "debug" | "info" | "warn" | "error";
 
 
     // Constructor
@@ -35,13 +35,14 @@ export class Logger {
 
     /**
      * Private constructor to enforce singleton pattern.
-     * @param verbose - A flag to enable or disable verbose logging.
+     * @param logLevel - The log level for controlling log output.
      */
     private constructor(
-        verbose: boolean = false
+        logLevel: "debug" | "info" | "warn" | "error" = "info"
     ) {
-        this.verbose = verbose;
+        this.logLevel = logLevel;
     }
+
 
     // Singleton Methods
     // ========================================================================
@@ -50,13 +51,15 @@ export class Logger {
      * Retrieves the singleton instance of Logger.
      * Initializes a non-verbose Logger instance if it hasn't been explicitly
      * initialized.
-     * 
+     *
      * @returns The Logger instance.
      */
-    public static getInstance(): Logger {
+    public static getInstance(
+        logLevel: "debug" | "info" | "warn" | "error" = "info"
+    ): Logger {
         if (!Logger.instance) {
-            // Default to non-verbose mode if not initialized explicitly
-            Logger.instance = new Logger();
+            // Default to "info" level if not initialized explicitly
+            Logger.instance = new Logger(logLevel);
         }
         return Logger.instance;
     }
@@ -73,153 +76,80 @@ export class Logger {
     // Logging Methods
     // ========================================================================
 
+
     /**
-     * Constructs and returns a formatted log message string.
+     * Logs a message with a specific level if it meets the current log level.
      *
      * @param level - The log level (e.g., "INFO", "WARN", "ERROR").
      * @param context - The context or class name where the log originates.
      * @param message - The message content to log.
      * @param fgStyle - The foreground color style to apply to the log level.
-     * @param bgStyle - The background color style to apply to the log level
-     * (default is reset).
-     * @returns A formatted log string with applied styles and context.
+     * @param bgStyle - The background color style to apply to the log level (default is reset).
      */
-    private message(
-        level: string,
+    private log(
+        level: "debug" | "info" | "warn" | "error",
         context: string,
         message: string,
         fgStyle: LoggerStyles,
         bgStyle: LoggerStyles = LoggerStyles.Reset
-    ): string {
-        let l = `${fgStyle}${bgStyle}[${level}]${LoggerStyles.Reset} `;
-        let c = `[${LoggerStyles.Cyan}${context}${LoggerStyles.Reset}] `;
-        let m = `${message}`;
-        return (l + c + m);
+    ): void {
+        if (this.shouldLog(level)) {
+            const formattedMessage = `${fgStyle}${bgStyle}[${level.toUpperCase()}]${LoggerStyles.Reset} [${LoggerStyles.Cyan}${context}${LoggerStyles.Reset}] ${message}`;
+            console[level === "error" ? "error" : level === "warn" ? "warn" : "log"](formattedMessage);
+        }
     }
 
     /**
-     * Logs a message with a class name prefix.
-     * 
-     * @param context - The originating class name.
-     * @param message - The message to log.
+     * Determines if a log should be displayed based on the current log level.
+     *
+     * @param level - The level of the log being checked.
+     * @returns True if the log should be displayed, otherwise false.
      */
-    public logInfo(
-        context: string,
-        message: string
-    ): void {
-
-        let log = this.message(
-            "INFO",
-            context,
-            message,
-            LoggerStyles.Blue
-        );
-
-        console.log(log);
-
+    private shouldLog(level: "debug" | "info" | "warn" | "error"): boolean {
+        const levels = ["debug", "info", "warn", "error"];
+        return levels.indexOf(level) >= levels.indexOf(this.logLevel);
     }
 
     /**
-     * Logs a warning message with a class name prefix.
-     * 
-     * @param context - The originating class name.
-     * @param message - The message to log.
+     * Logs an informational message.
+     *
+     * @param context - The originating class or module.
+     * @param message - The informational message to log.
      */
-    public logWarn(
-        context: string,
-        message: string
-    ): void {
-
-        let log = this.message(
-            "WARN",
-            context,
-            message,
-            LoggerStyles.Yellow
-        );
-
-        console.warn(log);
-
+    public logInfo(context: string, message: string): void {
+        this.log("info", context, message, LoggerStyles.Blue);
     }
 
     /**
-     * Logs an error message with detailed context, message, and stack trace
-     * if verbose mode is enabled.
-     * 
-     * @param context - The originating module or class name.
-     * @param message - A custom message providing additional context for
-     * the error.
-     * @param error - (Optional) The error object or additional details to log.
+     * Logs a warning message.
+     *
+     * @param context - The originating class or module.
+     * @param message - The warning message to log.
      */
-    public logError(
-        context: string,
-        message: string,
-        error?: unknown
-    ): void {
+    public logWarn(context: string, message: string): void {
+        this.log("warn", context, message, LoggerStyles.Yellow);
+    }
+
+    /**
+     * Logs an error message.
+     *
+     * @param context - The originating class or module.
+     * @param message - The error message to log.
+     * @param error - (Optional) Additional error details.
+     */
+    public logError(context: string, message: string, error?: unknown): void {
         const formattedMessage = this.formatError(message, error);
-
-        let log = this.message(
-            "ERROR",
-            context,
-            message,
-            LoggerStyles.Red,
-            LoggerStyles.BgYellow
-        );
-        console.error(log);
-
-        if (error instanceof Error && this.verbose && error.stack) {
-            console.error(
-                `${LoggerStyles.Red}Stack trace:${LoggerStyles.Reset}\n${error.stack}`
-            );
-        }
-
-
-    } 
-
-    /**
-     * Logs a debug message with a class name prefix.
-     * Only logs if verbose mode is enabled.
-     * 
-     * @param context - The originating class name.
-     * @param message - The message to log.
-     */
-    public logDebug(
-        context: string,
-        message: string
-    ): void {
-        if (this.verbose) {
-
-            let log = this.message(
-                "DEBUG",
-                context,
-                message,
-                LoggerStyles.Magenta,
-            );
-            
-            console.error(log);
-
-        }
+        this.log("error", context, formattedMessage, LoggerStyles.Red, LoggerStyles.BgYellow);
     }
 
     /**
-     * Logs a success message with a class name prefix.
-     * @param context - The originating module or class name.
-     * @param message - The success message to log.
+     * Logs a debug message.
+     *
+     * @param context - The originating class or module.
+     * @param message - The debug message to log.
      */
-    public logSuccess(
-        context: string,
-        message: string
-    ): void {
-
-        let log = this.message(
-            "SUCCESS",
-            context,
-            message,
-            LoggerStyles.Green,
-            LoggerStyles.BgGray
-        );
-
-        console.log(log);
-
+    public logDebug(context: string, message: string): void {
+        this.log("debug", context, message, LoggerStyles.Magenta);
     }
 
 
@@ -227,31 +157,19 @@ export class Logger {
     // ========================================================================
 
     /**
-     * Enables verbose logging.
+     * Sets the log level dynamically.
+     *
+     * @param level - The log level to set (e.g., "debug", "info").
      */
-    public enableVerbose(): void {
-        this.verbose = true;
+    public setLogLevel(level: "debug" | "info" | "warn" | "error"): void {
+        this.logLevel = level;
     }
 
-    /**
-     * Disables verbose logging.
-     */
-    public disableVerbose(): void {
-        this.verbose = false;
-    }
-
-    /**
-     * Checks whether verbose logging is enabled.
-     * @returns `true` if verbose logging is enabled, otherwise `false`.
-     */
-    public isVerboseEnabled(): boolean {
-        return this.verbose;
-    }
 
     /**
      * Formats an error message for logging.
      * Combines a base message with additional error details if available.
-     * 
+     *
      * @param message - The base error message.
      * @param error - Additional error information, such as an Error object.
      * @returns A formatted string combining the message and error details.
