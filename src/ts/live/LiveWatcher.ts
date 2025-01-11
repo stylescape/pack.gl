@@ -43,14 +43,14 @@ export class LiveWatcher extends AbstractProcess {
      * change is detected.
      */
     constructor(
-        // private pathsToWatch: string[], 
-        // private ignoredPaths: RegExp, 
+        // private pathsToWatch: string[],
+        // private ignoredPaths: RegExp,
         onChange: (filePath: string) => void,
     ) {
         super();
 
         // Retrieve live reload configuration from ConfigStore
-        const liveReloadOptions = ConfigStore.getInstance().get<OptionsInterface["liveReload"]>("options.liveReload") || {};
+        const liveReloadOptions = ConfigStore.getInstance().get<OptionsInterface["live"]>("options.live") || {};
 
         this.pathsToWatch = liveReloadOptions.watchPaths ?? ["src/**/*", "config/**/*", "pack.yaml"];
         this.ignoredPaths = liveReloadOptions.ignoredPaths ?? ["node_modules"];
