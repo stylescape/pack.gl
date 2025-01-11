@@ -121,7 +121,7 @@ export class VersionWriteAction extends Action {
      * Replaces a version string in a file for a specific key.
      * This method reads the file, replaces the version for the key, and
      * writes the updated content back to the file.
-     * 
+     *
      * @param filePath - The file path where the version should be replaced.
      * @param version - The new version string to replace in the file.
      * @param key - The key prefix that identifies the version line (e.g.,
