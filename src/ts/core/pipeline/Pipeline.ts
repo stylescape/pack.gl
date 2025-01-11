@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import { AbstractProcess } from "../abstract/AbstractProcess";
 import { ConfigInterface } from "../../interface/ConfigInterface";
+import { AbstractProcess } from "../abstract/AbstractProcess";
 import { Stage } from "./Stage";
 
 
@@ -65,7 +65,7 @@ export class Pipeline extends AbstractProcess {
      * handling, and execution control.
      */
     async run(): Promise<void> {
-        
+
         this.logInfo("Starting pipeline execution...");
 
         // Track stages that have been completed
@@ -119,7 +119,7 @@ export class Pipeline extends AbstractProcess {
             stagePromise.finally(() => executingStages.delete(stagePromise));
 
             // Enforce concurrency limit
-            if (executingStages.size >= maxConcurrentStages) {
+            if (executingStages.size >= (maxConcurrentStages as number)) {
                 // Wait until at least one stage completes
                 await Promise.race(executingStages);
             }
