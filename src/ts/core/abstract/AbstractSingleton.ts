@@ -21,7 +21,7 @@ export abstract class AbstractSingleton<T extends AbstractSingleton<T>> {
     /**
      * Retrieves the singleton instance of the derived class.
      * If no instance exists, it initializes one.
-     * 
+     *
      * @returns The singleton instance.
      */
     public static getInstance<T extends AbstractSingleton<T>>(this: new () => T): T {

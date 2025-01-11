@@ -29,7 +29,7 @@ export interface ActionInterface {
      * Implementations of this method should perform the main logic of the
      * action, such as building, testing, linting, packaging, or other
      * custom-defined processes.
-     * 
+     *
      * @param options - A structured set of options specific to the action's
      * configuration. Implementations are responsible for validating and
      * applying these options. Example configurations might include:
@@ -46,7 +46,7 @@ export interface ActionInterface {
      * Validates the provided options before execution.
      * This method can be used to check the integrity and correctness of the
      * options object, ensuring that required fields are present and valid.
-     * 
+     *
      * @param options - The options to validate, ensuring they meet the
      * action's specific requirements.
      * @returns A boolean indicating whether the options are valid. Throws an
@@ -60,7 +60,7 @@ export interface ActionInterface {
      * Provides a summary or description of the action.
      * This can be used for logging, debugging, or documentation purposes to
      * describe what the action does.
-     * 
+     *
      * @returns A string description of the action.
      */
     describe?(): string;
@@ -69,7 +69,7 @@ export interface ActionInterface {
      * Optional cleanup logic to execute after the main action completes.
      * Implementations can use this for teardown tasks, like removing
      * temporary files or restoring the state altered during execution.
-     * 
+     *
      * @returns A promise that resolves after cleanup is complete.
      */
     cleanup?(): Promise<void>;

@@ -49,7 +49,7 @@ export interface ConfigInterface {
      * before execution. This can be used to ensure that the pipeline meets
      * certain criteria or standards before running, catching potential
      * configuration errors early.
-     * 
+     *
      * @param config - The full configuration object to validate.
      * @returns A boolean indicating whether the configuration is valid, or
      *      throws an error if validation fails.

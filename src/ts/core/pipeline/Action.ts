@@ -2,9 +2,9 @@
 // Import
 // ============================================================================
 
-import { AbstractProcess } from "../abstract/AbstractProcess";
 import { ActionInterface } from "../../interface/ActionInterface";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
+import { AbstractProcess } from "../abstract/AbstractProcess";
 
 
 // ============================================================================
@@ -49,7 +49,7 @@ export abstract class Action extends AbstractProcess implements ActionInterface 
      * Provides a basic validation mechanism for action options.
      * Derived classes can override this method to implement specific
      * validation logic.
-     * 
+     *
      * @param options - The options to validate, ensuring they meet the
      * action"s specific requirements.
      * @returns A boolean indicating whether the options are valid. Default
@@ -67,7 +67,7 @@ export abstract class Action extends AbstractProcess implements ActionInterface 
      * Abstract method that must be implemented by derived classes to perform
      * the action"s main logic.
      * This method is invoked during the step execution process.
-     * 
+     *
      * @param options - A structured set of options specific to the action's
      * configuration.
      * @returns A Promise that resolves when the action completes successfully,
@@ -81,7 +81,7 @@ export abstract class Action extends AbstractProcess implements ActionInterface 
      * Provides a summary or description of the action.
      * This method can be overridden by derived classes to provide more
      * specific details about the action.
-     * 
+     *
      * @returns A string description of the action.
      */
     describe(): string {
@@ -92,7 +92,7 @@ export abstract class Action extends AbstractProcess implements ActionInterface 
      * Logs an error encountered during the execution of the action.
      * This utility method ensures consistent error logging across all derived
      * actions.
-     * 
+     *
      * @param message - The error message to log.
      * @param error - The optional error object to log for additional details.
      */

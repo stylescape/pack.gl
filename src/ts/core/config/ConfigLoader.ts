@@ -50,9 +50,9 @@ export class ConfigLoader extends AbstractProcess {
         super();
         if (configPath) {
             this.configPath = path.resolve(process.cwd(), configPath);
-            this.logInfo(`Custom configuration path set: ${this.configPath}`);
+            this.logDebug(`Custom configuration path set: ${this.configPath}`);
         } else {
-            this.logInfo("ConfigLoader initialized without custom path.");
+            this.logDebug("ConfigLoader initialized without custom path.");
         }
     }
 
@@ -70,8 +70,8 @@ export class ConfigLoader extends AbstractProcess {
             ? [configPath]
             : this.defaultFilenames;
 
-        this.logInfo(`Current working directory: ${process.cwd()}`);
-        this.logInfo("Searching for configuration files...");
+        this.logDebug(`Current working directory: ${process.cwd()}`);
+        this.logDebug("Searching for configuration files...");
 
         for (const fileName of searchPaths) {
             const resolvedPath = path.resolve(process.cwd(), fileName);
@@ -80,7 +80,7 @@ export class ConfigLoader extends AbstractProcess {
             try {
                 await fs.promises.access(resolvedPath, fs.constants.F_OK | fs.constants.R_OK);
                 this.configPath = resolvedPath;
-                this.logInfo(`Configuration file found: ${resolvedPath}`);
+                this.logDebug(`Configuration file found: ${resolvedPath}`);
                 return;
             } catch (error) {
                 this.logDebug(`File not accessible: ${resolvedPath}`);
@@ -103,12 +103,12 @@ export class ConfigLoader extends AbstractProcess {
         }
 
         try {
-            this.logInfo(`Loading configuration from: ${this.configPath}`);
+            this.logDebug(`Loading configuration from: ${this.configPath}`);
             const fileContents = await fs.promises.readFile(this.configPath, "utf8");
             const config = yaml.load(fileContents) as ConfigInterface;
 
             this.validateConfig(config);
-            this.logInfo(`Successfully loaded configuration from: ${this.configPath}`);
+            this.logDebug(`Successfully loaded configuration from: ${this.configPath}`);
             return config;
         } catch (error) {
             this.logError("Failed to load configuration.", error);
@@ -126,6 +126,6 @@ export class ConfigLoader extends AbstractProcess {
         if (!Array.isArray(config.stages)) {
             throw new Error("Invalid configuration: 'stages' must be an array.");
         }
-        this.logInfo("Configuration structure validated successfully.");
+        this.logDebug("Configuration structure validated successfully.");
     }
 }

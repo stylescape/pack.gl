@@ -2,10 +2,10 @@
 // Import
 // ============================================================================
 
-import { AbstractValidator } from "../abstract/AbstractValidator";
 import { StepInterface } from "../../interface/StepInterface";
-import { ActionValidator } from "./ActionValidator";
 import { StepOptionsInterface } from "../../interface/StepOptionsInterface";
+import { AbstractValidator } from "../abstract/AbstractValidator";
+import { ActionValidator } from "./ActionValidator";
 
 
 // ============================================================================
@@ -44,7 +44,7 @@ export class StepValidator extends AbstractValidator<StepInterface> {
 
     /**
      * Validates an entire step object.
-     * 
+     *
      * @param step - The step object to validate.
      * @throws Error if the step or any of its properties are invalid.
      */
@@ -62,7 +62,7 @@ export class StepValidator extends AbstractValidator<StepInterface> {
 
     /**
      * Validates a specific property of a step.
-     * 
+     *
      * @param key - The property key to validate (e.g., "name", "action").
      * @param value - The property value to validate.
      * @throws Error if validation fails.
@@ -92,7 +92,7 @@ export class StepValidator extends AbstractValidator<StepInterface> {
     /**
      * Validates the step name.
      * Ensures it is a non-empty string.
-     * 
+     *
      * @param name - The step name to validate.
      * @throws Error if the name is invalid.
      */
@@ -109,7 +109,7 @@ export class StepValidator extends AbstractValidator<StepInterface> {
     /**
      * Validates the action object of the step.
      * Uses `ActionValidator` to validate the action's `name`.
-     * 
+     *
      * @param action - The action object to validate.
      * @throws Error if the action is invalid.
      */
@@ -135,14 +135,14 @@ export class StepValidator extends AbstractValidator<StepInterface> {
         }
     }
 
-    
+
 
 
 
     /**
      * Validates the step options.
      * Ensures options conform to `StepOptionsInterface`.
-     * 
+     *
      * @param options - The options object to validate.
      * @throws Error if the options are invalid.
      */

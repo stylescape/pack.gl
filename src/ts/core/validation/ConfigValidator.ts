@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import { AbstractValidator } from "../abstract/AbstractValidator";
 import { ConfigInterface } from "../../interface/ConfigInterface";
+import { AbstractValidator } from "../abstract/AbstractValidator";
 import { StageValidator } from "./StageValidator";
 
 
@@ -54,7 +54,7 @@ export class ConfigValidator extends AbstractValidator<ConfigInterface> {
 
     /**
      * Validates a specific property of the configuration object.
-     * 
+     *
      * @param key - The key of the property to validate.
      * @param value - The value of the property to validate.
      * @throws Error if validation fails.
@@ -82,7 +82,7 @@ export class ConfigValidator extends AbstractValidator<ConfigInterface> {
 
     /**
      * Validates the stages in the configuration.
-     * 
+     *
      * @param stages - The stages to validate.
      * @throws Error if validation fails.
      */

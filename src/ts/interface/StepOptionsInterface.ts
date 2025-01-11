@@ -30,11 +30,11 @@ export interface StepOptionsInterface {
      * A flexible map of key-value pairs representing configuration settings
      * specific to the step. Each action can define its own expected structure
      * for these options, enabling fine-grained control.
-     * 
+     *
      * Examples:
      * - Build step: `{ minify: true, target: 'es6', sourceMap: false }`
      * - Test step: `{ framework: 'jest', coverage: true, timeout: 3000 }`
-     * 
+     *
      * This generic structure ensures compatibility with a wide range of use cases.
      */
     // [key: string]: unknown; // Generic key-value pairs to support diverse options.
@@ -46,7 +46,7 @@ export interface StepOptionsInterface {
  * Recommendations for Extending StepOptionsInterface:
  * - For specific actions, extend `StepOptionsInterface` to add detailed types
  *   and enforce stricter validation.
- * 
+ *
  * Example:
  * ```typescript
  * export interface BuildStepOptions extends StepOptionsInterface {
@@ -55,6 +55,6 @@ export interface StepOptionsInterface {
  *     sourceMap?: boolean;
  * }
  * ```
- * 
+ *
  * This approach ensures type safety while maintaining flexibility for general steps.
  */

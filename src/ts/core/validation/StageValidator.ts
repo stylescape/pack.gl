@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import { AbstractValidator } from "../abstract/AbstractValidator";
 import { StageInterface } from "../../interface/StageInterface";
+import { AbstractValidator } from "../abstract/AbstractValidator";
 import { StepValidator } from "./StepValidator";
 
 
@@ -112,7 +112,7 @@ export class StageValidator extends AbstractValidator<StageInterface> {
 
     /**
      * Validates the stage dependencies.
-     * 
+     *
      * @param dependencies - The dependencies to validate.
      * @throws Error if any dependency is invalid.
      */
@@ -135,7 +135,7 @@ export class StageValidator extends AbstractValidator<StageInterface> {
 
     /**
      * Validates the steps within the stage.
-     * 
+     *
      * @param steps - The steps array to validate.
      * @throws Error if any step is invalid.
      */

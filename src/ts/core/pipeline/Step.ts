@@ -2,9 +2,9 @@
 // Import
 // ============================================================================
 
-import { AbstractProcess } from "../abstract/AbstractProcess";
 import { ActionInterface } from "../../interface/ActionInterface";
 import { StepInterface } from "../../interface/StepInterface";
+import { AbstractProcess } from "../abstract/AbstractProcess";
 import { ActionRegistry } from "./ActionRegistry";
 
 
@@ -66,7 +66,7 @@ export class Step extends AbstractProcess {
         this.options = step.options;
 
         this.logInfo(
-            `Step "${this.name}" initialized with 
+            `Step "${this.name}" initialized with
             action "${step.action.constructor.name}".`
         );
     }

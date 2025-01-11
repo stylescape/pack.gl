@@ -13,7 +13,7 @@ import { AbstractProcess } from "../abstract/AbstractProcess";
  * AbstractValidator provides a base class for validation.
  * Extends AbstractProcess for consistent logging and validation utility
  * methods.
- * Subclasses should implement the specific `validateProperty` method for 
+ * Subclasses should implement the specific `validateProperty` method for
  * custom validation logic.
  */
 export abstract class AbstractValidator<T> extends AbstractProcess {
@@ -62,7 +62,7 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
     /**
      * Validates a specific property of the object.
      * Subclasses must implement this method to provide specific validation logic.
-     * 
+     *
      * @param key - The key of the property being validated.
      * @param value - The value of the property being validated.
      */
@@ -77,7 +77,7 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
 
     /**
      * Validates a numeric value.
-     * 
+     *
      * @param key - The key being validated.
      * @param value - The numeric value to validate.
      * @throws Error if the value is not a non-negative number.
@@ -99,7 +99,7 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
 
     /**
      * Validates a boolean value.
-     * 
+     *
      * @param key - The key being validated.
      * @param value - The boolean value to validate.
      * @throws Error if the value is not a boolean.
@@ -121,7 +121,7 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
 
     /**
      * Validates a string value.
-     * 
+     *
      * @param key - The key being validated.
      * @param value - The string value to validate.
      * @throws Error if the value is not a non-empty string.
@@ -143,7 +143,7 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
 
     /**
      * Validates an object value.
-     * 
+     *
      * @param key - The key being validated.
      * @param value - The object value to validate.
      * @throws Error if the value is not a valid object.
@@ -185,7 +185,7 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
 
     /**
      * Throws a standardized validation error.
-     * 
+     *
      * @param key - The key being validated.
      * @param value - The invalid value.
      * @param message - Additional error message.
@@ -197,8 +197,8 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
         message: string
     ): void {
         const errorMessage = `
-            Validation failed for "${String(key)}" 
-            with value "${JSON.stringify(value)}". 
+            Validation failed for "${String(key)}"
+            with value "${JSON.stringify(value)}".
             ${message}
         `;
         this.logError(errorMessage);

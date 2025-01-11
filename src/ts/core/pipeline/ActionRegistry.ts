@@ -4,10 +4,10 @@
 
 import { readdirSync } from "fs";
 import { join } from "path";
-import { AbstractProcess } from "../abstract/AbstractProcess";
+import { coreActions } from "../../actions/CoreActions";
 import { ActionInterface } from "../../interface/ActionInterface";
 import { ActionPlugin } from "../../interface/ActionPlugin";
-import { coreActions } from "../../actions/CoreActions";
+import { AbstractProcess } from "../abstract/AbstractProcess";
 
 
 // ============================================================================
@@ -60,7 +60,7 @@ export class ActionRegistry extends AbstractProcess {
     /**
      * Initializes the singleton instance of ActionRegistry.
      * Should only be called once during application startup.
-     * 
+     *
      * @throws Error if the registry has already been initialized.
      */
     public static initialize(): void {
@@ -75,7 +75,7 @@ export class ActionRegistry extends AbstractProcess {
     /**
      * Retrieves the singleton instance of ActionRegistry, initializing it if
      * necessary.
-     * 
+     *
      * @returns The ActionRegistry instance.
      */
     public static getInstance(): ActionRegistry {
@@ -100,7 +100,7 @@ export class ActionRegistry extends AbstractProcess {
 
     /**
      * Registers a new action in the registry.
-     * 
+     *
      * @param actionClass - The class implementing `ActionInterface`.
      * @throws Error if the action name is already registered or missing.
      */
@@ -129,7 +129,7 @@ export class ActionRegistry extends AbstractProcess {
      * Retrieves a step action class from the registry.
      * This method looks up an action by name and returns the corresponding
      * class that implements the ActionInterface.
-     * 
+     *
      * @param name - The name of the action to retrieve.
      * @returns The action class constructor if found, or undefined if no such
      *  action is registered.
@@ -143,17 +143,17 @@ export class ActionRegistry extends AbstractProcess {
             this.logWarn(`Invalid action name requested: "${name}".`);
             return undefined;
         }
-    
+
         // Retrieve the action from the registry
         const action = this.registry.get(name);
-    
+
         // Log a warning if the action is not found
         if (!action) {
             this.logWarn(`Action "${name}" not found in the registry.`);
         } else {
             this.logDebug(`Retrieved action "${name}" from the registry.`);
         }
-    
+
         return action;
     }
 
@@ -161,7 +161,7 @@ export class ActionRegistry extends AbstractProcess {
      * Lists all registered step actions.
      * Provides a utility to view currently registered actions, useful for
      * debugging and validation.
-     * 
+     *
      * @returns An array of registered action names.
      */
     public listRegisteredActions(): string[] {

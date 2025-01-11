@@ -40,7 +40,7 @@ async function gl_installer() {
         'icon.gl',
         'loop.gl',
     ];
-    
+
     try {
         logger.header('Install .gl libraries');
         for (const pkg of packages) {

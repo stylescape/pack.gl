@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import { AbstractProcess } from "../abstract/AbstractProcess";
 import { StageInterface } from "../../interface/StageInterface";
+import { AbstractProcess } from "../abstract/AbstractProcess";
 import { Step } from "./Step";
 
 
@@ -89,8 +89,8 @@ export class Stage extends AbstractProcess {
             throw error;
         }
     }
-    
-    
+
+
     /**
      * Resolves dependencies by ensuring all required stages have completed.
      * @param completedStages - A set of completed stage names used for
