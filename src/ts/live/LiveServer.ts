@@ -2,11 +2,11 @@
 // Import
 // ============================================================================
 
-import path from "path";
-import { Server } from "http";
-import { WebSocketServer, WebSocket } from "ws";
-import express, { Request, Response, NextFunction } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import rateLimit from "express-rate-limit";
+import { Server } from "http";
+import path from "path";
+import { WebSocket, WebSocketServer } from "ws";
 import { AbstractProcess } from "../core/abstract/AbstractProcess";
 import { ConfigStore } from "../core/config/ConfigStore";
 import { OptionsInterface } from "../interface/OptionsInterface";
@@ -83,14 +83,13 @@ export class LiveServer extends AbstractProcess {
     //  * @param port - The port on which the server will listen.
      */
     constructor(
-        // private port: number
     ) {
 
         super();
 
         const configStore = ConfigStore.getInstance();
 
-        const liveReloadOptions = configStore.get<OptionsInterface["liveReload"]>("options.liveReload") || {};
+        const liveReloadOptions = configStore.get<OptionsInterface["live"]>("options.live") || {};
 
         // Extract and apply live reload options with defaults
         this.port = liveReloadOptions.port || 3000;
@@ -244,7 +243,7 @@ export class LiveServer extends AbstractProcess {
             this.injectLiveReloadScript.bind(this)
         );
 
-        
+
 
     }
 
