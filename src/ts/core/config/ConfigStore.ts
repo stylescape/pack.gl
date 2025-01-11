@@ -42,7 +42,7 @@ export class ConfigStore extends AbstractProcess {
     private constructor() {
         super();
         this.config = defaultConfig;
-        this.logInfo("ConfigStore initialized with default configuration.");
+        this.logDebug("ConfigStore initialized with default configuration.");
     }
 
     // Static Methods
@@ -108,7 +108,7 @@ export class ConfigStore extends AbstractProcess {
         }
 
         current[keys[keys.length - 1]] = value;
-        this.logInfo(`Set configuration key "${key}" to: ${JSON.stringify(value)}`);
+        this.logDebug(`Set configuration key "${key}" to: ${JSON.stringify(value)}`);
     }
 
 
@@ -120,7 +120,7 @@ export class ConfigStore extends AbstractProcess {
      */
     public merge(newConfig: Partial<ConfigInterface>): void {
         this.config = this.deepMerge(this.config, newConfig);
-        this.logInfo(
+        this.logDebug(
             "Configuration successfully merged."
         );
     }
