@@ -5,16 +5,9 @@
 import { AbstractProcess } from "./core/abstract/AbstractProcess";
 import { ConfigStore } from "./core/config/ConfigStore";
 import { ActionRegistry } from "./core/pipeline/ActionRegistry";
-import { Pipeline } from "./core/pipeline/Pipeline";
 import { PipelineManager } from "./core/pipeline/PipelineManager";
 import { LiveServer } from "./live/LiveServer";
 import { LiveWatcher } from "./live/LiveWatcher";
-
-
-// ============================================================================
-// Constants
-// ============================================================================
-
 
 // ============================================================================
 // Class
@@ -25,11 +18,6 @@ import { LiveWatcher } from "./live/LiveWatcher";
  * It manages the pipeline execution, configuration loading, and live reload.
  */
 export class Pack extends AbstractProcess {
-
-    // Parameters
-    // ========================================================================
-
-
     // Constructor
     // ========================================================================
 
@@ -41,7 +29,6 @@ export class Pack extends AbstractProcess {
         this.logDebug("Pack initialized.");
     }
 
-
     // Methods
     // ========================================================================
 
@@ -50,41 +37,32 @@ export class Pack extends AbstractProcess {
      *
      * This method orchestrates the execution of the Pack pipeline, starting
      * from initializing the ActionRegistry, loading configuration settings,
-     * running the defined pipeline stages, and optionally enabling live reload
-     * for real-time updates. It is the main entry point for the Pack process.
+     * running the pipeline stages through the `PipelineManager`, and
+     * optionally enabling live reload for real-time updates.
      *
-     * Workflow steps:
-     * 1. Initializes the ActionRegistry to register available actions.
-     * 2. Runs the pipeline using the loaded configuration.
-     * 3. Enables live reload functionality if configured in the settings.
-     *
-     * Error Handling:
-     * - If any step in the workflow encounters an error, it is logged and the
-     *   application exits gracefully.
-     *
-     * @returns {Promise<void>} A promise that resolves when the workflow
-     * completes successfully.
-     *
+     * @returns {Promise<void>} Resolves when the workflow completes successfully.
      * @example
      * const pack = new Pack();
      * pack.run().then(() => console.log("Pipeline execution complete."));
-     *
-     * @throws {Error} If an unhandled exception occurs during any workflow
-     * step.
      */
     public async run(): Promise<void> {
-
-        this.logInfo("Starting pipeline...");
+        this.logInfo("Starting Pack workflow...");
 
         try {
             // Initialize the ActionRegistry with available actions
             this.initializeActionRegistry();
-            await this.runPipeline();
 
-            if (ConfigStore.getInstance().get<boolean>("options.live.enabled")) {
-                this.setupLiveReload();
+            // Create and run the PipelineManager
+            const liveReloadEnabled = ConfigStore.getInstance().get<boolean>("options.live.enabled");
+            const liveReloadServer = liveReloadEnabled ? new LiveServer() : null;
+
+            const pipelineManager = new PipelineManager(liveReloadServer!);
+            await pipelineManager.runPipeline();
+
+            // Setup live reload if enabled
+            if (liveReloadEnabled) {
+                this.setupLiveReload(pipelineManager, liveReloadServer!);
             }
-
         } catch (error) {
             this.handleError(error);
         }
@@ -101,70 +79,32 @@ export class Pack extends AbstractProcess {
     }
 
     /**
-     * Runs the pipeline with the provided configuration.
-     */
-    private async runPipeline(): Promise<void> {
-        const config = ConfigStore.getInstance().getConfig();
-
-        if (!config.stages || !Array.isArray(config.stages)) {
-            throw new Error(
-                "Invalid configuration format. Ensure 'stages' is an array."
-            );
-        }
-
-        this.logInfo("Initializing pipeline...");
-        const pipeline = new Pipeline(config);
-
-        try {
-            await pipeline.run();
-            this.logInfo("Pipeline execution finished successfully.");
-        } catch (error) {
-            this.logError("Error during pipeline execution.", error);
-            throw error;
-        }
-
-    }
-
-    /**
-     * Handles errors occurring during the execution of the Pack workflow.
-     *
-     * @param error - The error object to log and handle.
-     */
-    private handleError(error: unknown): void {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        this.logError(`An error occurred: ${errorMessage}`, error);
-        process.exit(1);
-    }
-
-    /**
      * Sets up live reload functionality.
      * Monitors file changes and restarts the pipeline when updates are detected.
+     *
+     * @param pipelineManager - The manager responsible for the pipeline process.
+     * @param liveReloadServer - The server for live reload connections.
      */
-    private setupLiveReload(): void {
-
+    private setupLiveReload(
+        pipelineManager: PipelineManager,
+        liveReloadServer: LiveServer
+    ): void {
         this.logInfo("Enabling live reload functionality...");
 
-        const liveReloadServer = new LiveServer();
-        const pipelineManager = new PipelineManager(liveReloadServer);
-
         new LiveWatcher((filePath) => {
-                this.logInfo(`Detected change in: ${filePath}. Restarting pipeline...`);
+            this.logInfo(`Detected change in: ${filePath}. Restarting pipeline...`);
             pipelineManager.restartPipelineWithDelay(500);
         });
 
         pipelineManager.restartPipeline();
-
         this.registerShutdownHandlers(pipelineManager, liveReloadServer);
-
-        // process.on("SIGINT", () => this.handleShutdown(pipelineManager, liveReloadServer));
-        // process.on("SIGTERM", () => this.handleShutdown(pipelineManager, liveReloadServer));
     }
 
     /**
      * Registers handlers for graceful shutdown signals.
      *
      * @param pipelineManager - The manager responsible for the pipeline process.
-     * @param liveReloadServer - The server responsible for live reload connections.
+     * @param liveReloadServer - The server for live reload connections.
      */
     private registerShutdownHandlers(
         pipelineManager: PipelineManager,
@@ -177,10 +117,8 @@ export class Pack extends AbstractProcess {
     /**
      * Handles graceful shutdown of the pipeline and live reload server.
      *
-     * @param pipelineManager - The manager responsible for the pipeline
-     * process.
-     * @param liveReloadServer - The server responsible for live reload
-     * connections.
+     * @param pipelineManager - The manager responsible for the pipeline process.
+     * @param liveReloadServer - The server for live reload connections.
      */
     private async handleShutdown(
         pipelineManager: PipelineManager,
@@ -199,4 +137,14 @@ export class Pack extends AbstractProcess {
         }
     }
 
+    /**
+     * Handles errors occurring during the execution of the Pack workflow.
+     *
+     * @param error - The error object to log and handle.
+     */
+    private handleError(error: unknown): void {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        this.logError(`An error occurred: ${errorMessage}`, error);
+        process.exit(1);
+    }
 }
