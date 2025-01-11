@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import { AbstractProcess } from "../abstract/AbstractProcess";
 import { ConfigInterface } from "../../interface/ConfigInterface";
+import { AbstractProcess } from "../abstract/AbstractProcess";
 import { defaultConfig } from "./defaultConfig";
 
 
@@ -21,28 +21,37 @@ export class ConfigStore extends AbstractProcess {
     // Parameters
     // ========================================================================
 
+    /**
+     * Singleton instance of the ConfigStore.
+     */
     private static instance: ConfigStore | null = null;
+
+    /**
+     * The current configuration stored in the ConfigStore.
+     */
     private config: ConfigInterface;
-    // private config: ConfigInterface | null = null;
 
 
     // Constructor
     // ========================================================================
 
     /**
-     * Private constructor to enforce singleton.
-     * Initializes the store with an empty configuration.
+     * Private constructor to enforce the singleton pattern.
+     * Initializes the store with the default configuration.
      */
     private constructor() {
         super();
-        // this.config = { stages: [] };
         this.config = defaultConfig;
-        this.logInfo("ConfigStore initialized.");
+        this.logInfo("ConfigStore initialized with default configuration.");
     }
+
+    // Static Methods
+    // ========================================================================
 
     /**
      * Retrieves the singleton instance of ConfigStore, initializing it if
      * necessary.
+     * @returns The singleton instance of ConfigStore.
      */
     public static getInstance(): ConfigStore {
         if (!ConfigStore.instance) {
@@ -51,10 +60,14 @@ export class ConfigStore extends AbstractProcess {
         return ConfigStore.instance;
     }
 
+
+    // Instance Methods
+    // ========================================================================
+
     /**
      * Retrieves a value from the configuration by key.
      * Supports nested keys using dot notation (e.g., "options.logLevel").
-     * 
+     *
      * @param key - The key of the configuration to retrieve.
      * @returns The configuration value or undefined if not found.
      */
@@ -69,13 +82,16 @@ export class ConfigStore extends AbstractProcess {
             current = current[k];
         }
 
+        this.logDebug(
+            `Configuration key "${key}" retrieved with value: ${JSON.stringify(current)}`
+        );
         return current as T;
     }
 
     /**
      * Sets a value in the configuration by key.
      * Supports nested keys using dot notation (e.g., "options.logLevel").
-     * 
+     *
      * @param key - The key of the configuration to set.
      * @param value - The value to set.
      */
@@ -99,7 +115,7 @@ export class ConfigStore extends AbstractProcess {
     /**
      * Merges the provided configuration into the existing configuration.
      * Uses a deep merge strategy to combine objects and overwrite primitives.
-     * 
+     *
      * @param newConfig - The new configuration to merge.
      */
     public merge(newConfig: Partial<ConfigInterface>): void {
@@ -111,7 +127,7 @@ export class ConfigStore extends AbstractProcess {
 
     /**
      * Retrieves the current configuration.
-     * 
+     *
      * @returns The current configuration object.
      */
     public getConfig(): ConfigInterface {
@@ -128,7 +144,7 @@ export class ConfigStore extends AbstractProcess {
 
     /**
      * Deeply merges two objects.
-     * 
+     *
      * @param target - The target object to merge into.
      * @param source - The source object to merge from.
      * @returns The merged object.
@@ -151,86 +167,5 @@ export class ConfigStore extends AbstractProcess {
 
         return target;
     }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // /**
-    //  * Loads the configuration, combining default, file-based, and CLI-provided options.
-    //  * @param cliOptions - Options provided via CLI arguments.
-    //  */
-    // public async loadConfig(cliOptions: Record<string, unknown> = {}): Promise<ConfigInterface> {
-    //     if (this.config) {
-    //         this.logDebug("Returning cached configuration.");
-    //         return this.config;
-    //     }
-
-    //     const fileConfig = await this.loadFileConfig();
-    //     this.config = {
-    //         ...defaultConfig,
-    //         ...fileConfig,
-    //         options: {
-    //             ...defaultConfig.options,
-    //             ...fileConfig?.options,
-    //             ...cliOptions,
-    //         },
-    //     };
-
-    //     this.logInfo("Configuration successfully loaded and merged.");
-    //     return this.config;
-    // }
-
-    // /**
-    //  * Retrieves the cached configuration.
-    //  */
-    // public getConfig(): ConfigInterface {
-    //     if (!this.config) {
-    //         throw new Error("Configuration has not been loaded. Call `loadConfig()` first.");
-    //     }
-    //     return this.config;
-    // }
-
-
-
-
-    // /**
-    //  * Finds the configuration file path based on CLI override or default filenames.
-    //  */
-    // private async findConfigPath(): Promise<string | null> {
-    //     const possibleFiles = ["pack.yaml", "pack.yml"];
-
-    //     for (const fileName of possibleFiles) {
-    //         const resolvedPath = path.resolve(process.cwd(), fileName);
-    //         try {
-    //             await fs.access(resolvedPath);
-    //             return resolvedPath;
-    //         } catch {
-    //             continue;
-    //         }
-    //     }
-
-    //     return null;
-    // }
-
-    /**
-     * Validates the structure of the configuration object.
-     */
-//     private validateConfig(config: ConfigInterface): void {
-//         if (!Array.isArray(config.stages)) {
-//             this.logError("Invalid configuration format: 'stages' must be an array.");
-//             throw new Error("Invalid configuration format: 'stages' must be an array.");
-//         }
-//     }
-
-// }
