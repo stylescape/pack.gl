@@ -4,10 +4,10 @@
 // Imports
 // ============================================================================
 
-import { Pack } from "./pack";
 import { ArgumentParser } from "./cli/ArgumentParser";
-import { ConfigStore } from "./core/config/ConfigStore";
 import { ConfigLoader } from "./core/config/ConfigLoader";
+import { ConfigStore } from "./core/config/ConfigStore";
+import { Pack } from "./pack";
 
 
 // ============================================================================
@@ -27,18 +27,19 @@ import { ConfigLoader } from "./core/config/ConfigLoader";
         const cliOptions = parser.getAllFlags();
         // console.log(cliOptions)
 
+        // Initialize ConfigStore
+        const configStore = ConfigStore.getInstance();
 
         // Initialize ConfigStore and load configuration
-        const configStore = ConfigStore.getInstance();
-        const configLoader = await new ConfigLoader();
+        const configLoader = new ConfigLoader();
         await configLoader.initialize()
         const fileConfig = await configLoader.loadConfig();
+
+        // Merge Configs
         // configStore.print()
         configStore.merge(fileConfig); // Merge file-based config
-        // console.log(fileConfig)
         // configStore.print()
         configStore.merge({ options: cliOptions }); // Merge CLI options
-        // console.log(cliOptions)
         // configStore.print()
 
         // Create a Pack instance and execute the workflow
