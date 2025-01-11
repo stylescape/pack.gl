@@ -78,7 +78,7 @@ export abstract class AbstractProcess {
      * Logs an error message with the originating class name as context.
      * Handles any type of error and ensures consistent error reporting.
      * Use this for logging critical issues or exceptions.
-     * 
+     *
      * @param message - A custom message providing additional context for
      * the error.
      * @param error - (Optional) The error to log. Can be a string, an Error
@@ -95,7 +95,7 @@ export abstract class AbstractProcess {
     /**
      * Formats an error message for logging.
      * Combines a custom message with additional error details if available.
-     * 
+     *
      * @param message - The base error message.
      * @param error - Additional error information, such as an Error object.
      * @returns A formatted string combining the message and error details.
@@ -117,13 +117,13 @@ export abstract class AbstractProcess {
     /**
      * Logs a success message with the originating class name as context.
      * Use this to indicate successful completion of a process or step.
-     * 
+     *
      * @param message - The success message to log.
      */
     protected logSuccess(
         message: string
     ): void {
-        this.logger.logSuccess(this.constructor.name, message);
+        this.logger.logInfo(this.constructor.name, message);
     }
 
 }
