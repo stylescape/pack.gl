@@ -18,7 +18,8 @@ stages:
           files:
             - path: "./CITATION.cff"
               key: "version: "
-            - path: "./VERSION.txt" # Defaults to "version:"
+            - path: "./VERSION" # Defaults to "version:"
+              key: "v"
 
 # options:
 #   verbose: true
@@ -26,7 +27,8 @@ stages:
 options:
   mode: development
   live:
-    enabled: true
+    # enabled: true
+    enabled: false
     port: 3000
     root: public
     watchPaths:
