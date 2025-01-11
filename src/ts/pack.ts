@@ -47,9 +47,30 @@ export class Pack extends AbstractProcess {
 
     /**
      * Executes the Pack workflow.
-     * This includes initializing the ActionRegistry, loading the
-     * configuration, running the pipeline, and optionally enabling
-     * live reload.
+     *
+     * This method orchestrates the execution of the Pack pipeline, starting
+     * from initializing the ActionRegistry, loading configuration settings,
+     * running the defined pipeline stages, and optionally enabling live reload
+     * for real-time updates. It is the main entry point for the Pack process.
+     *
+     * Workflow steps:
+     * 1. Initializes the ActionRegistry to register available actions.
+     * 2. Runs the pipeline using the loaded configuration.
+     * 3. Enables live reload functionality if configured in the settings.
+     *
+     * Error Handling:
+     * - If any step in the workflow encounters an error, it is logged and the
+     *   application exits gracefully.
+     *
+     * @returns {Promise<void>} A promise that resolves when the workflow
+     * completes successfully.
+     *
+     * @example
+     * const pack = new Pack();
+     * pack.run().then(() => console.log("Pipeline execution complete."));
+     *
+     * @throws {Error} If an unhandled exception occurs during any workflow
+     * step.
      */
     public async run(): Promise<void> {
 
