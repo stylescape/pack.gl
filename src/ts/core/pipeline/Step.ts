@@ -47,8 +47,7 @@ export class Step extends AbstractProcess {
 
         // Resolve the action class from the registry using the action name
         const actionRegistry = ActionRegistry.getInstance();
-        console.log(step.action)
-        console.log(step.action.name)
+        // console.log(step.action)
         // const ActionClass = actionRegistry.getAction(step.action.name);
         const ActionClass = actionRegistry.getAction(String(step.action));
         if (!ActionClass) {
@@ -66,8 +65,7 @@ export class Step extends AbstractProcess {
         this.options = step.options;
 
         this.logInfo(
-            `Step "${this.name}" initialized with
-            action "${step.action.constructor.name}".`
+            `Step "${this.name}" initialized with action "${step.action.constructor.name}".`
         );
     }
 
@@ -79,7 +77,9 @@ export class Step extends AbstractProcess {
      * Executes the step by invoking its action's execute method.
      */
     async execute(): Promise<void> {
+
         this.logInfo(`Executing step: ${this.name}`);
+        
         try {
             // Validate options if the action provides a validation method
             if (typeof this.action.validateOptions === "function") {
@@ -96,6 +96,7 @@ export class Step extends AbstractProcess {
             this.logInfo(
                 `Step "${this.name}" completed successfully.`
             );
+
         } catch (error) {
             this.logError(
                 `Error executing step "${this.name}": ${error}`,
