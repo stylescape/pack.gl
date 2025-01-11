@@ -2,11 +2,12 @@
 // Import
 // ============================================================================
 
-import path from "path";
 import fs from "fs";
 import yaml from "js-yaml";
+import path from "path";
 import { ConfigInterface } from "../../interface/ConfigInterface";
 import { AbstractProcess } from "../abstract/AbstractProcess";
+
 
 // ============================================================================
 // Class
@@ -26,6 +27,14 @@ export class ConfigLoader extends AbstractProcess {
      * Resolved path to the configuration file, if found.
      */
     private configPath: string | null = null;
+
+    /**
+     * Default filenames to search for configuration files.
+     */
+    private readonly defaultFilenames = [
+        "pack.yaml",
+        "pack.yml"
+    ];
 
     // Constructor
     // ========================================================================
@@ -59,7 +68,7 @@ export class ConfigLoader extends AbstractProcess {
     public async initialize(configPath?: string): Promise<void> {
         const searchPaths = configPath
             ? [configPath]
-            : ["pack.yaml", "pack.yml"];
+            : this.defaultFilenames;
 
         this.logInfo(`Current working directory: ${process.cwd()}`);
         this.logInfo("Searching for configuration files...");
