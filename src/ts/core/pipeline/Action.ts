@@ -89,22 +89,6 @@ export abstract class Action extends AbstractProcess implements ActionInterface 
     }
 
     /**
-     * Logs an error encountered during the execution of the action.
-     * This utility method ensures consistent error logging across all derived
-     * actions.
-     *
-     * @param message - The error message to log.
-     * @param error - The optional error object to log for additional details.
-     */
-    protected logError(message: string, error?: unknown): void {
-        if (error instanceof Error) {
-            this.logError(`${message}: ${error.message}`, error);
-        } else {
-            this.logError(message);
-        }
-    }
-
-    /**
      * Logs a message indicating the start of the action's execution.
      * Useful for tracking progress in pipelines with multiple steps.
      */
