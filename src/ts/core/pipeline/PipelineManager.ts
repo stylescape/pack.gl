@@ -2,10 +2,10 @@
 // Import
 // ============================================================================
 
-import { AbstractProcess } from "../abstract/AbstractProcess";
-import { spawn, ChildProcess } from "child_process";
-import { LiveServer } from "../../live/LiveServer";
+import { ChildProcess, spawn } from "child_process";
 import path from "path";
+import { LiveServer } from "../../live/LiveServer";
+import { AbstractProcess } from "../abstract/AbstractProcess";
 
 
 // ============================================================================
@@ -21,7 +21,15 @@ export class PipelineManager extends AbstractProcess {
     // Parameters
     // ========================================================================
 
+    /**
+     * The current instance of the pipeline process.
+     */
     private pipelineProcess: ChildProcess | null = null;
+
+    /**
+     * Flag to prevent overlapping restarts.
+     */
+    private isRestarting: boolean = false;
 
 
     // Constructor
@@ -29,6 +37,7 @@ export class PipelineManager extends AbstractProcess {
 
     /**
      * Initializes the PipelineManager with a LiveServer instance.
+     *
      * @param liveServer - The LiveServer instance to notify when the
      * pipeline restarts.
      */
@@ -48,19 +57,28 @@ export class PipelineManager extends AbstractProcess {
      * Notifies connected clients via the LiveServer after restarting.
      */
     public restartPipeline(): void {
+        if (this.isRestarting) {
+            this.logWarn("Pipeline restart already in progress. Skipping...");
+            return;
+        }
+
+        this.isRestarting = true;
+
         if (this.pipelineProcess) {
             this.logInfo("Stopping current pipeline process...");
             this.stopPipeline();
         }
 
         this.logInfo("Starting pipeline...");
-
         const scriptPath = path.resolve(process.cwd(), "dist/js/cli.js");
 
         this.pipelineProcess = spawn("node", [scriptPath], { stdio: "inherit" });
 
         this.attachProcessListeners();
+
+        this.isRestarting = false;
     }
+
 
     /**
      * Attaches event listeners to the pipeline process for logging and
