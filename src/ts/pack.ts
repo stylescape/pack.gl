@@ -3,12 +3,12 @@
 // ============================================================================
 
 import { AbstractProcess } from "./core/abstract/AbstractProcess";
-import { PipelineManager } from "./core/pipeline/PipelineManager";
+import { ConfigStore } from "./core/config/ConfigStore";
+import { ActionRegistry } from "./core/pipeline/ActionRegistry";
 import { Pipeline } from "./core/pipeline/Pipeline";
+import { PipelineManager } from "./core/pipeline/PipelineManager";
 import { LiveServer } from "./live/LiveServer";
 import { LiveWatcher } from "./live/LiveWatcher";
-import { ActionRegistry } from "./core/pipeline/ActionRegistry";
-import { ConfigStore } from "./core/config/ConfigStore";
 
 
 // ============================================================================
@@ -33,6 +33,14 @@ export class Pack extends AbstractProcess {
     // Constructor
     // ========================================================================
 
+    /**
+     * Constructs the Pack class instance and initializes necessary components.
+     */
+    constructor() {
+        super();
+        this.logDebug("Pack initialized.");
+    }
+
 
     // Methods
     // ========================================================================
@@ -45,17 +53,17 @@ export class Pack extends AbstractProcess {
      */
     public async run(): Promise<void> {
 
-        const mode = ConfigStore.getInstance().get<string>("options.mode") || "none";
-
-        this.logInfo(`Starting pipeline in ${mode} mode...`);
+        this.logInfo("Starting pipeline...");
 
         try {
+            // Initialize the ActionRegistry with available actions
             this.initializeActionRegistry();
             await this.runPipeline();
 
-            if (ConfigStore.getInstance().get<boolean>("options.live")) {
+            if (ConfigStore.getInstance().get<boolean>("options.live.enabled")) {
                 this.setupLiveReload();
             }
+
         } catch (error) {
             this.handleError(error);
         }
@@ -76,6 +84,7 @@ export class Pack extends AbstractProcess {
      */
     private async runPipeline(): Promise<void> {
         const config = ConfigStore.getInstance().getConfig();
+
         if (!config.stages || !Array.isArray(config.stages)) {
             throw new Error(
                 "Invalid configuration format. Ensure 'stages' is an array."
@@ -84,8 +93,15 @@ export class Pack extends AbstractProcess {
 
         this.logInfo("Initializing pipeline...");
         const pipeline = new Pipeline(config);
-        await pipeline.run();
-        this.logInfo("Pipeline execution finished successfully.");
+
+        try {
+            await pipeline.run();
+            this.logInfo("Pipeline execution finished successfully.");
+        } catch (error) {
+            this.logError("Error during pipeline execution.", error);
+            throw error;
+        }
+
     }
 
     /**
@@ -117,6 +133,22 @@ export class Pack extends AbstractProcess {
 
         pipelineManager.restartPipeline();
 
+        this.registerShutdownHandlers(pipelineManager, liveReloadServer);
+
+        // process.on("SIGINT", () => this.handleShutdown(pipelineManager, liveReloadServer));
+        // process.on("SIGTERM", () => this.handleShutdown(pipelineManager, liveReloadServer));
+    }
+
+    /**
+     * Registers handlers for graceful shutdown signals.
+     *
+     * @param pipelineManager - The manager responsible for the pipeline process.
+     * @param liveReloadServer - The server responsible for live reload connections.
+     */
+    private registerShutdownHandlers(
+        pipelineManager: PipelineManager,
+        liveReloadServer: LiveServer
+    ): void {
         process.on("SIGINT", () => this.handleShutdown(pipelineManager, liveReloadServer));
         process.on("SIGTERM", () => this.handleShutdown(pipelineManager, liveReloadServer));
     }
@@ -134,6 +166,7 @@ export class Pack extends AbstractProcess {
         liveReloadServer: LiveServer
     ): Promise<void> {
         this.logInfo("Shutdown signal received. Shutting down...");
+
         try {
             await pipelineManager.stopPipeline();
             await liveReloadServer.shutdown();
@@ -144,4 +177,5 @@ export class Pack extends AbstractProcess {
             process.exit(0);
         }
     }
+
 }
