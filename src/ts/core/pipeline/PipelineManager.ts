@@ -6,7 +6,8 @@ import { ChildProcess, spawn } from "child_process";
 import path from "path";
 import { LiveServer } from "../../live/LiveServer";
 import { AbstractProcess } from "../abstract/AbstractProcess";
-
+import { ConfigStore } from "../config/ConfigStore";
+import { Pipeline } from "./Pipeline";
 
 // ============================================================================
 // Class
@@ -17,7 +18,6 @@ import { AbstractProcess } from "../abstract/AbstractProcess";
  * LiveServer for client notifications upon pipeline events.
  */
 export class PipelineManager extends AbstractProcess {
-
     // Parameters
     // ========================================================================
 
@@ -31,7 +31,6 @@ export class PipelineManager extends AbstractProcess {
      */
     private isRestarting: boolean = false;
 
-
     // Constructor
     // ========================================================================
 
@@ -41,16 +40,39 @@ export class PipelineManager extends AbstractProcess {
      * @param liveServer - The LiveServer instance to notify when the
      * pipeline restarts.
      */
-    constructor(
-        private liveServer: LiveServer
-    ) {
+    constructor(private liveServer?: LiveServer) {
         super();
         this.logInfo("PipelineManager initialized.");
     }
 
-
     // Methods
     // ========================================================================
+
+    /**
+     * Runs the pipeline using the configuration from the `ConfigStore`.
+     * This method executes the pipeline stages directly, bypassing the CLI.
+     */
+    public async runPipeline(): Promise<void> {
+        const config = ConfigStore.getInstance().getConfig();
+
+        if (!config.stages || !Array.isArray(config.stages)) {
+            throw new Error("Invalid configuration: 'stages' must be an array.");
+        }
+
+        this.logInfo("Initializing pipeline...");
+        const pipeline = new Pipeline(config);
+
+        try {
+
+            await pipeline.run();
+
+            this.logInfo("Pipeline execution finished successfully.");
+            this.liveServer?.reloadClients();
+        } catch (error) {
+            this.logError("Error during pipeline execution.", error);
+            throw error;
+        }
+    }
 
     /**
      * Restarts the pipeline process, stopping any currently running process.
@@ -79,7 +101,6 @@ export class PipelineManager extends AbstractProcess {
         this.isRestarting = false;
     }
 
-
     /**
      * Attaches event listeners to the pipeline process for logging and
      * notification purposes.
@@ -89,33 +110,22 @@ export class PipelineManager extends AbstractProcess {
 
         this.pipelineProcess.on("close", (code) => {
             if (code !== 0) {
-                this.logError(
-                    `Pipeline process exited with code ${code}`
-                );
+                this.logError(`Pipeline process exited with code ${code}`);
             } else {
-                this.logInfo(
-                    "Pipeline process exited successfully."
-                );
+                this.logInfo("Pipeline process exited successfully.");
             }
-            this.liveServer.reloadClients();
+            this.liveServer?.reloadClients();
         });
 
         this.pipelineProcess.on("error", (error) => {
-            this.logError(
-                "Error starting pipeline process.",
-                error
-            );
+            this.logError("Error starting pipeline process.", error);
         });
 
         this.pipelineProcess.on("exit", (code, signal) => {
             if (signal) {
-                this.logWarn(
-                    `Pipeline process was terminated with signal: ${signal}`
-                );
+                this.logWarn(`Pipeline process was terminated with signal: ${signal}`);
             } else {
-                this.logInfo(
-                    `Pipeline process exited with code: ${code}`
-                );
+                this.logInfo(`Pipeline process exited with code: ${code}`);
             }
         });
     }
@@ -149,10 +159,7 @@ export class PipelineManager extends AbstractProcess {
      * @param delay - The delay in milliseconds before restarting the pipeline.
      */
     public restartPipelineWithDelay(delay: number = 1000): void {
-        this.logInfo(
-            `Delaying pipeline restart by ${delay} milliseconds...`
-        );
+        this.logInfo(`Delaying pipeline restart by ${delay} milliseconds...`);
         setTimeout(() => this.restartPipeline(), delay);
     }
-
 }
