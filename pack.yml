@@ -20,10 +20,21 @@ stages:
               key: "version: "
             - path: "./VERSION.txt" # Defaults to "version:"
 
+# options:
+#   verbose: true
+
 options:
-  verbose: true
-
-
+  mode: development
+  live:
+    enabled: true
+    port: 3000
+    root: public
+    watchPaths:
+      - src/**
+      - config/**
+    ignoredPaths:
+      - node_modules/**
+  logLevel: debug
 # Global options applicable to the entire pipeline
 # globalOptions:
 #   logLevel: info           # Log level for the pipeline (verbose, info, warn, error)
