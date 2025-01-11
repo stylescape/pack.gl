@@ -22,7 +22,14 @@ export class ArgumentParser extends AbstractProcess {
     // Parameters
     // ========================================================================
 
+    /**
+     * Command-line arguments to parse, excluding the Node.js and script path.
+     */
     private args: string[];
+
+    /**
+     * Instance of OptionsValidator for validating parsed arguments.
+     */
     private validator: OptionsValidator;
 
 
@@ -39,14 +46,15 @@ export class ArgumentParser extends AbstractProcess {
         // args: string[] = process.argv.slice(2)
     ) {
         super();
-        this.args = process.argv.slice(2); // Skip Node.js and script path
+        // Skip Node.js and script path
+        this.args = process.argv.slice(2);
 
         // console.log(process.argv.slice(2))
 
         // this.args = args;
         this.validator = new OptionsValidator();
-        this.logInfo("ArgumentParser initialized with arguments.");
-        
+        this.logDebug("ArgumentParser initialized with arguments.");
+
     }
 
 
@@ -54,7 +62,8 @@ export class ArgumentParser extends AbstractProcess {
     // ========================================================================
 
     /**
-     * Retrieves the value of a specific option from the CLI arguments, with validation.
+     * Retrieves the value of a specific option from the CLI arguments, with
+     * validation.
      *
      * @param key - The name of the option (matches keys in OptionsInterface).
      * @param options - Additional options:
@@ -72,8 +81,11 @@ export class ArgumentParser extends AbstractProcess {
 
         if (value !== undefined) {
             // Create a partial object to validate the specific key-value pair
-            const partialOption = { [key]: value } as Partial<OptionsInterface>;
-            this.validator.validate(partialOption); // Validate the key-value pair
+            const partialOption = {
+                [key]: value
+            } as Partial<OptionsInterface>;
+            // Validate the key-value pair
+            this.validator.validate(partialOption);
         }
 
         this.logInfo(`Retrieved option "${key}" with value: ${value}`);
@@ -98,12 +110,16 @@ export class ArgumentParser extends AbstractProcess {
     /**
      * Parses all CLI arguments into a key-value object.
      * Flags are treated as boolean if not followed by a value.
-     * 
+     *
      * Example:
      * --live --mode development => { live: true, mode: "development" }
+     *
+     * @returns A key-value object of all parsed CLI arguments.
      */
     public getAllFlags(): Record<string, string | boolean> {
+
         const flags: Record<string, string | boolean> = {};
+
         for (let i = 0; i < this.args.length; i++) {
             const arg = this.args[i];
             if (arg.startsWith("--")) {
@@ -111,22 +127,29 @@ export class ArgumentParser extends AbstractProcess {
                 const nextArg = this.args[i + 1];
                 if (nextArg && !nextArg.startsWith("--")) {
                     flags[key] = nextArg;
-                    i++; // Skip the next argument since it's a value
+                    // Skip the next argument since it's a value
+                    i++;
                 } else {
-                    flags[key] = true; // Flag with no value is treated as boolean true
+                    // Flag with no value is treated as boolean true
+                    flags[key] = true;
                 }
             }
         }
+
         return flags;
     }
 
     /**
      * Retrieves a specific flag value.
+     *
      * @param key - The flag name to retrieve.
      * @param defaultValue - The default value if the flag is not present.
      * @returns The value of the flag or the default value.
      */
-    public getFlag(key: string, defaultValue: string | boolean = false): string | boolean {
+    public getFlag(
+        key: string,
+        defaultValue: string | boolean = false
+    ): string | boolean {
         const flags = this.getAllFlags();
         return flags[key] ?? defaultValue;
     }
