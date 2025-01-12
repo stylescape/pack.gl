@@ -4,7 +4,6 @@
 
 import { StepInterface } from "./StepInterface";
 
-
 // ============================================================================
 // Interfaces
 // ============================================================================
@@ -17,7 +16,6 @@ import { StepInterface } from "./StepInterface";
  * actions within the pipeline.
  */
 export interface StageInterface {
-
     /**
      * A unique identifier for the stage, used for logging, tracking, and
      * reporting purposes. The name should be descriptive enough to clearly
@@ -74,7 +72,7 @@ export interface StageInterface {
      * - `'normal'`: Default execution priority.
      * - `'high'`: Higher execution priority.
      */
-    priority?: 'low' | 'normal' | 'high';
+    priority?: "low" | "normal" | "high";
 
     /**
      * Optional tags to attach metadata or labels to the stage. Tags can be
@@ -95,5 +93,4 @@ export interface StageInterface {
         before?: () => Promise<void> | void;
         after?: () => Promise<void> | void;
     };
-
 }

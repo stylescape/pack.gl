@@ -4,7 +4,6 @@
  * and integration with external systems.
  */
 export interface MetadataInterface {
-
     /**
      * A human-readable name for the pipeline.
      * Used for identification and reporting purposes.
@@ -103,5 +102,4 @@ export interface MetadataInterface {
      * @example ["local", "CI/CD", "staging", "production"]
      */
     environments?: string[];
-
 }

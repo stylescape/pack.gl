@@ -4,7 +4,6 @@
 
 import { AbstractProcess } from "../abstract/AbstractProcess";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -17,11 +16,8 @@ import { AbstractProcess } from "../abstract/AbstractProcess";
  * custom validation logic.
  */
 export abstract class AbstractValidator<T> extends AbstractProcess {
-
-
     // Parameters
     // ========================================================================
-
 
     // Constructor
     // ========================================================================
@@ -29,7 +25,6 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
     constructor() {
         super();
     }
-
 
     // Abstract Methods
     // ========================================================================
@@ -39,20 +34,14 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
      * @param target - The object to validate.
      * @throws Error if validation fails for any property.
      */
-    public validate(
-        target: T
-    ): void {
-
+    public validate(target: T): void {
         if (!target || typeof target !== "object") {
             throw new Error("Target must be a valid object.");
         }
 
         for (const key in target) {
             if (Object.prototype.hasOwnProperty.call(target, key)) {
-                this.validateProperty(
-                    key as keyof T,
-                    target[key as keyof T]
-                );
+                this.validateProperty(key as keyof T, target[key as keyof T]);
             }
         }
 
@@ -68,9 +57,8 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
      */
     protected abstract validateProperty<K extends keyof T>(
         key: K,
-        value: T[K]
+        value: T[K],
     ): void;
-
 
     // Validation Methods
     // ========================================================================
@@ -82,17 +70,12 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
      * @param value - The numeric value to validate.
      * @throws Error if the value is not a non-negative number.
      */
-    protected validateNumber<K extends keyof T>(
-        key: K,
-        value: T[K]
-    ): void {
-        if (
-            typeof value !== "number" || value < 0
-        ) {
+    protected validateNumber<K extends keyof T>(key: K, value: T[K]): void {
+        if (typeof value !== "number" || value < 0) {
             this.throwValidationError(
                 key,
                 value,
-                "Must be a non-negative number."
+                "Must be a non-negative number.",
             );
         }
     }
@@ -104,18 +87,9 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
      * @param value - The boolean value to validate.
      * @throws Error if the value is not a boolean.
      */
-    protected validateBoolean<K extends keyof T>(
-        key: K,
-        value: T[K]
-    ): void {
-        if (
-            typeof value !== "boolean"
-        ) {
-            this.throwValidationError(
-                key,
-                value,
-                "Must be a boolean."
-            );
+    protected validateBoolean<K extends keyof T>(key: K, value: T[K]): void {
+        if (typeof value !== "boolean") {
+            this.throwValidationError(key, value, "Must be a boolean.");
         }
     }
 
@@ -126,17 +100,12 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
      * @param value - The string value to validate.
      * @throws Error if the value is not a non-empty string.
      */
-    protected validateString<K extends keyof T>(
-        key: K,
-        value: T[K]
-    ): void {
-        if (
-            typeof value !== "string" || value.trim() === ""
-        ) {
+    protected validateString<K extends keyof T>(key: K, value: T[K]): void {
+        if (typeof value !== "string" || value.trim() === "") {
             this.throwValidationError(
                 key,
                 value,
-                "Must be a non-empty string."
+                "Must be a non-empty string.",
             );
         }
     }
@@ -148,21 +117,15 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
      * @param value - The object value to validate.
      * @throws Error if the value is not a valid object.
      */
-    protected validateObject<K extends keyof T>(
-        key: K,
-        value: T[K]
-    ): void {
+    protected validateObject<K extends keyof T>(key: K, value: T[K]): void {
         if (
-            typeof value !== "object" || value === null || Array.isArray(value)
+            typeof value !== "object" ||
+            value === null ||
+            Array.isArray(value)
         ) {
-            this.throwValidationError(
-                key,
-                value,
-                "Must be a valid object."
-            );
+            this.throwValidationError(key, value, "Must be a valid object.");
         }
     }
-
 
     // Utility Methods
     // ========================================================================
@@ -172,10 +135,7 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
      * @param key - The property key.
      * @param value - The value of the property.
      */
-    protected logValidationSuccess(
-        key: keyof T,
-        value: T[keyof T]
-    ): void {
+    protected logValidationSuccess(key: keyof T, value: T[keyof T]): void {
         const message = `
             Validation successful for property "${String(key)}"
             with value: ${JSON.stringify(value)}
@@ -194,7 +154,7 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
     protected throwValidationError<K extends keyof T>(
         key: K,
         value: T[K],
-        message: string
+        message: string,
     ): void {
         const errorMessage = `
             Validation failed for "${String(key)}"
@@ -204,5 +164,4 @@ export abstract class AbstractValidator<T> extends AbstractProcess {
         this.logError(errorMessage);
         throw new Error(errorMessage);
     }
-
 }

@@ -4,7 +4,6 @@
 
 import { ESLint } from "eslint";
 
-
 // ============================================================================
 // Classes
 // ============================================================================
@@ -15,13 +14,11 @@ import { ESLint } from "eslint";
  * linting of TypeScript files within a given project root directory.
  */
 class CodeLinter {
-
     // Parameters
     // ========================================================================
 
     private eslint: ESLint;
     private projectRoot: string;
-
 
     // Constructor
     // ========================================================================
@@ -29,7 +26,7 @@ class CodeLinter {
     /**
      * Initializes a new instance of the CodeLinter class with a specified
      * project root.
-     * 
+     *
      * @param projectRoot The root directory of the project where linting will
      * be performed.
      */
@@ -38,14 +35,13 @@ class CodeLinter {
         this.eslint = new ESLint({ cwd: projectRoot });
     }
 
-
     // Methods
     // ========================================================================
 
     /**
      * Runs ESLint on the specified files or directories and fixes fixable
      * issues.
-     * 
+     *
      * @param targetFiles Array of file or directory paths to lint.
      * @returns A promise that resolves with the linting results, including
      * any fixes applied.
@@ -62,7 +58,6 @@ class CodeLinter {
             console.log(resultText);
 
             return results;
-
         } catch (error) {
             console.error("Error occurred while linting:", error);
             throw error;
@@ -70,13 +65,11 @@ class CodeLinter {
     }
 }
 
-
 // ============================================================================
 // Export
 // ============================================================================
 
 export default CodeLinter;
-
 
 // ============================================================================
 // Example

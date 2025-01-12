@@ -7,7 +7,6 @@ import path from "path";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types";
 
-
 // ============================================================================
 // Classes
 // ============================================================================
@@ -18,8 +17,6 @@ import { ActionOptionsType } from "../../types";
  * based on a specified key and pattern.
  */
 export class VersionWriteAction extends Action {
-
-
     // Methods
     // ========================================================================
 
@@ -32,11 +29,10 @@ export class VersionWriteAction extends Action {
      * replaced in all specified files, or rejects with an error if the
      * action fails.
      */
-    async execute(
-        options: ActionOptionsType
-    ): Promise<void> {
-
-        const files = options.files as { path: string; key?: string }[] | undefined;
+    async execute(options: ActionOptionsType): Promise<void> {
+        const files = options.files as
+            | { path: string; key?: string }[]
+            | undefined;
         let version = options.version as string | undefined;
 
         if (!files) {
@@ -48,7 +44,7 @@ export class VersionWriteAction extends Action {
             version = await this.getVersionFromPackageJson();
             if (!version) {
                 throw new Error(
-                    `Version is not provided in options and could not be retrieved from package.json.`
+                    `Version is not provided in options and could not be retrieved from package.json.`,
                 );
             }
         }
@@ -62,17 +58,17 @@ export class VersionWriteAction extends Action {
                     this.replaceVersionInFile(
                         filePath,
                         version!,
-                        key || "version:"
-                    )
-                )
+                        key || "version:",
+                    ),
+                ),
             );
             this.logInfo(
-                `Version "${version}" replaced successfully in all specified files.`
+                `Version "${version}" replaced successfully in all specified files.`,
             );
         } catch (error) {
             this.logError(
                 `Failed to replace version in one or more files.`,
-                error
+                error,
             );
             throw error;
         }
@@ -88,30 +84,28 @@ export class VersionWriteAction extends Action {
         try {
             const packageJsonPath = path.resolve(
                 process.cwd(),
-                "package.json"
+                "package.json",
             );
             const packageJsonContent = await fs.readFile(
                 packageJsonPath,
-                "utf8"
+                "utf8",
             );
             const packageJson = JSON.parse(packageJsonContent);
             const version = packageJson.version;
 
             if (version && /^\d+\.\d+\.\d+$/.test(version)) {
                 this.logInfo(
-                    `Version "${version}" retrieved from package.json.`
+                    `Version "${version}" retrieved from package.json.`,
                 );
                 return version;
             } else {
-                this.logWarn(
-                    `Invalid or missing version in package.json.`
-                );
+                this.logWarn(`Invalid or missing version in package.json.`);
                 return undefined;
             }
         } catch (error) {
             this.logError(
                 `Error reading package.json for version retrieval.`,
-                error
+                error,
             );
             return undefined;
         }
@@ -133,7 +127,7 @@ export class VersionWriteAction extends Action {
     private async replaceVersionInFile(
         filePath: string,
         version: string,
-        key: string
+        key: string,
     ): Promise<void> {
         try {
             const content = await fs.readFile(filePath, "utf8");
@@ -149,12 +143,12 @@ export class VersionWriteAction extends Action {
 
             await fs.writeFile(filePath, updatedLines.join("\n"), "utf8");
             this.logInfo(
-                `Version replaced in file "${filePath}" for key "${key}".`
+                `Version replaced in file "${filePath}" for key "${key}".`,
             );
         } catch (error) {
             throw new Error(
                 `Error replacing version in file "${filePath}":
-                ${(error as Error).message}`
+                ${(error as Error).message}`,
             );
         }
     }
@@ -168,7 +162,7 @@ export class VersionWriteAction extends Action {
             Replaces a version string in one or more specified files based on
             a key and pattern. Can retrieve the version from package.json or
             set it manually.
-            `
+            `;
         return description;
     }
 }

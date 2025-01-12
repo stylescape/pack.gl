@@ -4,10 +4,7 @@
 
 import fs from "fs/promises";
 import path from "path";
-import packageConfig from "../../actions/PackageManagerAction/package.config.js"
-
-
-
+import packageConfig from "../../actions/PackageManagerAction/package.config.js";
 
 // ============================================================================
 // Classes
@@ -19,7 +16,6 @@ import packageConfig from "../../actions/PackageManagerAction/package.config.js"
  * the setup of Node.js projects or managing configurations dynamically.
  */
 class PackageCreator {
-
     // Parameters
     // ========================================================================
 
@@ -30,13 +26,12 @@ class PackageCreator {
     public config: Record<string, any>;
     // private config: ts.CompilerOptions;
     // private config: { [key: symbol]: any};
- 
+
     /**
      * Default configuration sourced from an external configuration file.
      */
     // private static defaultConfig: any = packageConfig;
     private static defaultConfig: Record<string, any> = packageConfig;
-
 
     // Constructor
     // ========================================================================
@@ -44,7 +39,7 @@ class PackageCreator {
     /**
      * Constructs an instance with merged default and custom configuration
      * settings for package.json.
-     * 
+     *
      * @param customConfig Custom settings to override or augment the default
      * package configuration.
      */
@@ -67,13 +62,12 @@ class PackageCreator {
             bin: customConfig.bin,
             dependencies: customConfig.dependencies,
             exports: customConfig.exports,
-        }
-         this.config = {
-             ...PackageCreator.defaultConfig,
-             ...newConfig
-         };
-     }
-    
+        };
+        this.config = {
+            ...PackageCreator.defaultConfig,
+            ...newConfig,
+        };
+    }
 
     // Methods
     // ========================================================================
@@ -82,35 +76,23 @@ class PackageCreator {
      * Creates a package.json file with the stored configuration in the
      * specified directory. If the directory does not exist, it will be
      * created.
-     * 
+     *
      * @param outputDir The directory where the package.json will be created.
      * @returns A promise that resolves when the file has been successfully
      *  written.
      */
-    async createPackageJson(
-        outputDir: string
-    ): Promise<void> {
+    async createPackageJson(outputDir: string): Promise<void> {
+        const filePath = path.join(outputDir, "package.json");
 
-        const filePath = path.join(
-            outputDir,
-            "package.json"
-        );
-
-        const data = JSON.stringify(
-            this.config,
-            null,
-            2
-        );
+        const data = JSON.stringify(this.config, null, 2);
 
         try {
-
             // Ensure the output directory exists
             await this.ensureDirectoryExists(outputDir);
 
             // Write the package.json file
             await fs.writeFile(filePath, data, "utf-8");
             console.log(`package.json created at ${filePath}`);
-
         } catch (error) {
             console.error(`Error creating package.json: ${error}`);
             throw error;
@@ -120,7 +102,7 @@ class PackageCreator {
     /**
      * Ensures the specified directory exists. If it does not, it will be
      * created.
-     * 
+     *
      * @param dirPath The path of the directory to verify or create.
      */
     private async ensureDirectoryExists(dirPath: string): Promise<void> {
@@ -129,25 +111,21 @@ class PackageCreator {
         } catch (error) {
             // Check if error is an instance of NodeJS.ErrnoException
             if (
-                error instanceof Error && (
-                    error as NodeJS.ErrnoException
-                ).code !== "EEXIST"
+                error instanceof Error &&
+                (error as NodeJS.ErrnoException).code !== "EEXIST"
             ) {
                 // Rethrow if it"s not a "directory exists" error
                 throw error;
             }
         }
     }
-    
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default PackageCreator;
-
 
 // ============================================================================
 // Example

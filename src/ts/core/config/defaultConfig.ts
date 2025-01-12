@@ -4,7 +4,6 @@
 
 import { ConfigInterface } from "../../interface/ConfigInterface";
 
-
 // ============================================================================
 // Constants
 // ============================================================================
@@ -13,7 +12,6 @@ import { ConfigInterface } from "../../interface/ConfigInterface";
  * Default configuration for the pack.gl pipeline.
  */
 export const defaultConfig: ConfigInterface = {
-
     metadata: {
         /**
          * The name of the pipeline for identification and reporting.
@@ -67,20 +65,12 @@ export const defaultConfig: ConfigInterface = {
         /**
          * Dependencies or related systems required by the pipeline configuration.
          */
-        dependencies: [
-            "Node.js >=14.0",
-            "Docker >=20.10",
-        ],
+        dependencies: ["Node.js >=14.0", "Docker >=20.10"],
 
         /**
          * Environments where the pipeline is intended to run.
          */
-        environments: [
-            "local",
-            "CI/CD",
-            "staging",
-            "production",
-        ],
+        environments: ["local", "CI/CD", "staging", "production"],
     },
 
     options: {
@@ -161,5 +151,4 @@ export const defaultConfig: ConfigInterface = {
      * Users can define and add their own stages.
      */
     stages: [],
-
 };

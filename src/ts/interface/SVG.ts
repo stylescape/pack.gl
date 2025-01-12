@@ -11,7 +11,6 @@
 //     // ... other Svg properties
 // }
 
-
 /**
  * Represents the metadata associated with an SVG graphic.
  */
@@ -68,17 +67,18 @@ const exampleSvg: Svg = {
         name: "Example SVG",
         creator: "Example Creator",
         description: "A sample SVG file",
-        license: "MIT"
+        license: "MIT",
     },
     source: '<svg width="100" height="100">...</svg>',
     width: 100,
     height: 100,
     viewBox: "0 0 100 100",
-    paths: [{
-        d: "M10 10 H 90 V 90 H 10 L 10 10",
-        fill: "none",
-        stroke: "black",
-        strokeWidth: 2
-    }]
-
+    paths: [
+        {
+            d: "M10 10 H 90 V 90 H 10 L 10 10",
+            fill: "none",
+            stroke: "black",
+            strokeWidth: 2,
+        },
+    ],
 };

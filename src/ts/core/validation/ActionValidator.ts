@@ -5,7 +5,6 @@
 import { AbstractValidator } from "../abstract/AbstractValidator";
 import { ActionRegistry } from "../pipeline/ActionRegistry";
 
-
 // ============================================================================
 // Types
 // ============================================================================
@@ -15,7 +14,6 @@ import { ActionRegistry } from "../pipeline/ActionRegistry";
  */
 type ActionValidationKeys = "action";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -24,13 +22,13 @@ type ActionValidationKeys = "action";
  * Validates actions by ensuring they are registered in the `ActionRegistry`.
  * Extends `AbstractValidator` for consistent validation and logging.
  */
-export class ActionValidator extends AbstractValidator<Record<ActionValidationKeys, string>> {
-
+export class ActionValidator extends AbstractValidator<
+    Record<ActionValidationKeys, string>
+> {
     // Parameters
     // ========================================================================
 
     private actionRegistry: ActionRegistry;
-
 
     // Constructor
     // ========================================================================
@@ -40,7 +38,6 @@ export class ActionValidator extends AbstractValidator<Record<ActionValidationKe
         this.actionRegistry = ActionRegistry.getInstance();
         this.logInfo("ActionValidator initialized.");
     }
-
 
     // Methods
     // ========================================================================
@@ -59,7 +56,7 @@ export class ActionValidator extends AbstractValidator<Record<ActionValidationKe
             this.throwValidationError(
                 "action",
                 action,
-                "Action name must be a non-empty string."
+                "Action name must be a non-empty string.",
             );
         }
 
@@ -69,7 +66,7 @@ export class ActionValidator extends AbstractValidator<Record<ActionValidationKe
             this.throwValidationError(
                 "action",
                 action,
-                `Action "${action}" is not registered in the ActionRegistry.`
+                `Action "${action}" is not registered in the ActionRegistry.`,
             );
         }
 
@@ -84,17 +81,16 @@ export class ActionValidator extends AbstractValidator<Record<ActionValidationKe
      * @param value - The value of the property to validate.
      * @throws Error if the validation fails.
      */
-    protected validateProperty<K extends keyof Record<ActionValidationKeys, string>>(
-        key: K,
-        value: Record<ActionValidationKeys, string>[K]
-    ): void {
+    protected validateProperty<
+        K extends keyof Record<ActionValidationKeys, string>,
+    >(key: K, value: Record<ActionValidationKeys, string>[K]): void {
         if (key === "action") {
             this.validate({ action: value });
         } else {
             this.throwValidationError(
                 key,
                 value,
-                `Unknown property key: "${String(key)}".`
+                `Unknown property key: "${String(key)}".`,
             );
         }
     }

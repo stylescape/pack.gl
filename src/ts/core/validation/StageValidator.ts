@@ -6,7 +6,6 @@ import { StageInterface } from "../../interface/StageInterface";
 import { AbstractValidator } from "../abstract/AbstractValidator";
 import { StepValidator } from "./StepValidator";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -16,14 +15,11 @@ import { StepValidator } from "./StepValidator";
  * It validates the stage properties, dependencies, and steps for correctness.
  */
 export class StageValidator extends AbstractValidator<StageInterface> {
-
-
     // Parameters
     // ========================================================================
 
     private stageNames: Set<string>;
     private stepValidator: StepValidator;
-
 
     // Constructor
     // ========================================================================
@@ -55,7 +51,9 @@ export class StageValidator extends AbstractValidator<StageInterface> {
 
             this.logInfo(`Stage "${stage.name}" validated successfully.`);
         } catch (error) {
-            this.logError(`Validation failed for stage "${stage.name}": ${(error as Error).message}`);
+            this.logError(
+                `Validation failed for stage "${stage.name}": ${(error as Error).message}`,
+            );
             throw error;
         }
     }
@@ -69,7 +67,7 @@ export class StageValidator extends AbstractValidator<StageInterface> {
      */
     public validateProperty<K extends keyof StageInterface>(
         key: K,
-        value: StageInterface[K]
+        value: StageInterface[K],
     ): void {
         switch (key) {
             case "name":
@@ -85,7 +83,11 @@ export class StageValidator extends AbstractValidator<StageInterface> {
                 break;
 
             default:
-                this.throwValidationError(key, value, "Unknown property provided for validation.");
+                this.throwValidationError(
+                    key,
+                    value,
+                    "Unknown property provided for validation.",
+                );
         }
 
         // Log validation success with the property name and value
@@ -100,11 +102,19 @@ export class StageValidator extends AbstractValidator<StageInterface> {
      */
     private validateName(name: string): void {
         if (!name || typeof name !== "string") {
-            this.throwValidationError("name", name, "Stage must have a valid 'name' property.");
+            this.throwValidationError(
+                "name",
+                name,
+                "Stage must have a valid 'name' property.",
+            );
         }
 
         if (this.stageNames.has(name)) {
-            this.throwValidationError("name", name, `Duplicate stage name found: "${name}".`);
+            this.throwValidationError(
+                "name",
+                name,
+                `Duplicate stage name found: "${name}".`,
+            );
         }
 
         this.stageNames.add(name);
@@ -126,12 +136,11 @@ export class StageValidator extends AbstractValidator<StageInterface> {
                 this.throwValidationError(
                     "dependsOn",
                     [dependency], // Wrap dependency in an array to match the expected type
-                    `Undefined dependency: "${dependency}". Ensure it references a valid stage.`
+                    `Undefined dependency: "${dependency}". Ensure it references a valid stage.`,
                 );
             }
         });
     }
-
 
     /**
      * Validates the steps within the stage.
@@ -144,7 +153,7 @@ export class StageValidator extends AbstractValidator<StageInterface> {
             this.throwValidationError(
                 "steps",
                 steps,
-                "Each stage must contain at least one step."
+                "Each stage must contain at least one step.",
             );
         }
 
@@ -154,7 +163,7 @@ export class StageValidator extends AbstractValidator<StageInterface> {
                 this.throwValidationError(
                     "steps",
                     steps, // Pass the full steps array for context
-                    `Duplicate step name found in stage: "${step.name}".`
+                    `Duplicate step name found in stage: "${step.name}".`,
                 );
             }
             stepNames.add(step.name);
@@ -163,5 +172,4 @@ export class StageValidator extends AbstractValidator<StageInterface> {
             this.stepValidator.validate(step);
         });
     }
-
 }

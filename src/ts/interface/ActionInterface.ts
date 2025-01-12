@@ -4,7 +4,6 @@
 
 import { ActionOptionsType } from "../types/ActionOptionsType";
 
-
 // ============================================================================
 // Interfaces
 // ============================================================================
@@ -16,7 +15,6 @@ import { ActionOptionsType } from "../types/ActionOptionsType";
  * behaviors within different stages.
  */
 export interface ActionInterface {
-
     /**
      * A unique name identifying the action.
      * This property is used for logging, registration in the ActionRegistry,
@@ -38,9 +36,7 @@ export interface ActionInterface {
      * @returns A Promise that resolves when the action completes successfully,
      * or rejects with an error if the action fails.
      */
-    execute(
-        options: ActionOptionsType
-    ): Promise<void>;
+    execute(options: ActionOptionsType): Promise<void>;
 
     /**
      * Validates the provided options before execution.
@@ -52,9 +48,7 @@ export interface ActionInterface {
      * @returns A boolean indicating whether the options are valid. Throws an
      * error or returns false if validation fails.
      */
-    validateOptions?(
-        options: ActionOptionsType
-    ): boolean;
+    validateOptions?(options: ActionOptionsType): boolean;
 
     /**
      * Provides a summary or description of the action.
@@ -73,5 +67,4 @@ export interface ActionInterface {
      * @returns A promise that resolves after cleanup is complete.
      */
     cleanup?(): Promise<void>;
-
 }

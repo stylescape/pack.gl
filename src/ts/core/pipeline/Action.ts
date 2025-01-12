@@ -6,7 +6,6 @@ import { ActionInterface } from "../../interface/ActionInterface";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
 import { AbstractProcess } from "../abstract/AbstractProcess";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -17,8 +16,10 @@ import { AbstractProcess } from "../abstract/AbstractProcess";
  * methods for derived action classes, making it easier to implement and
  * integrate custom behaviors like `BuildAction`, `LintAction`, and more.
  */
-export abstract class Action extends AbstractProcess implements ActionInterface {
-
+export abstract class Action
+    extends AbstractProcess
+    implements ActionInterface
+{
     // Parameters
     // ========================================================================
 
@@ -41,7 +42,6 @@ export abstract class Action extends AbstractProcess implements ActionInterface 
         super();
     }
 
-
     // Methods
     // ========================================================================
 
@@ -55,9 +55,7 @@ export abstract class Action extends AbstractProcess implements ActionInterface 
      * @returns A boolean indicating whether the options are valid. Default
      * implementation always returns true.
      */
-    validateOptions(
-        options: ActionOptionsType
-    ): boolean {
+    validateOptions(options: ActionOptionsType): boolean {
         // Default validation: always returns true, can be overridden in
         // derived classes
         return true;
@@ -73,9 +71,7 @@ export abstract class Action extends AbstractProcess implements ActionInterface 
      * @returns A Promise that resolves when the action completes successfully,
      * or rejects with an error if the action fails.
      */
-    abstract execute(
-        options: ActionOptionsType
-    ): Promise<void>;
+    abstract execute(options: ActionOptionsType): Promise<void>;
 
     /**
      * Provides a summary or description of the action.
@@ -102,5 +98,4 @@ export abstract class Action extends AbstractProcess implements ActionInterface 
     protected logSuccess(): void {
         this.logInfo(`Successfully completed action: ${this.name}`);
     }
-
 }

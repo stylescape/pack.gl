@@ -6,7 +6,6 @@ import { MetadataInterface } from "./MetadataInterface";
 import { OptionsInterface } from "./OptionsInterface";
 import { StageInterface } from "./StageInterface";
 
-
 // ============================================================================
 // Interfaces
 // ============================================================================
@@ -18,7 +17,6 @@ import { StageInterface } from "./StageInterface";
  * and optional metadata.
  */
 export interface ConfigInterface {
-
     /**
      * Optional metadata that provides additional context or descriptive
      * information about the pipeline configuration. This can include the
@@ -43,7 +41,6 @@ export interface ConfigInterface {
      */
     stages: StageInterface[];
 
-
     /**
      * An optional function or set of rules for validating the configuration
      * before execution. This can be used to ensure that the pipeline meets
@@ -54,8 +51,5 @@ export interface ConfigInterface {
      * @returns A boolean indicating whether the configuration is valid, or
      *      throws an error if validation fails.
      */
-    validateConfig?(
-        config: ConfigInterface
-    ): boolean;
-
+    validateConfig?(config: ConfigInterface): boolean;
 }

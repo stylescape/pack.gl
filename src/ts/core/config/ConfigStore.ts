@@ -6,7 +6,6 @@ import { ConfigInterface } from "../../interface/ConfigInterface";
 import { AbstractProcess } from "../abstract/AbstractProcess";
 import { defaultConfig } from "./defaultConfig";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -17,7 +16,6 @@ import { defaultConfig } from "./defaultConfig";
  * It prioritizes CLI arguments over configuration file values.
  */
 export class ConfigStore extends AbstractProcess {
-
     // Parameters
     // ========================================================================
 
@@ -30,7 +28,6 @@ export class ConfigStore extends AbstractProcess {
      * The current configuration stored in the ConfigStore.
      */
     private config: ConfigInterface;
-
 
     // Constructor
     // ========================================================================
@@ -60,7 +57,6 @@ export class ConfigStore extends AbstractProcess {
         return ConfigStore.instance;
     }
 
-
     // Instance Methods
     // ========================================================================
 
@@ -83,7 +79,7 @@ export class ConfigStore extends AbstractProcess {
         }
 
         this.logDebug(
-            `Configuration key "${key}" retrieved with value: ${JSON.stringify(current)}`
+            `Configuration key "${key}" retrieved with value: ${JSON.stringify(current)}`,
         );
         return current as T;
     }
@@ -108,9 +104,10 @@ export class ConfigStore extends AbstractProcess {
         }
 
         current[keys[keys.length - 1]] = value;
-        this.logDebug(`Set configuration key "${key}" to: ${JSON.stringify(value)}`);
+        this.logDebug(
+            `Set configuration key "${key}" to: ${JSON.stringify(value)}`,
+        );
     }
-
 
     /**
      * Merges the provided configuration into the existing configuration.
@@ -120,9 +117,7 @@ export class ConfigStore extends AbstractProcess {
      */
     public merge(newConfig: Partial<ConfigInterface>): void {
         this.config = this.deepMerge(this.config, newConfig);
-        this.logDebug(
-            "Configuration successfully merged."
-        );
+        this.logDebug("Configuration successfully merged.");
     }
 
     /**
@@ -155,7 +150,11 @@ export class ConfigStore extends AbstractProcess {
         }
 
         for (const key of Object.keys(source)) {
-            if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
+            if (
+                source[key] &&
+                typeof source[key] === "object" &&
+                !Array.isArray(source[key])
+            ) {
                 if (!target[key] || typeof target[key] !== "object") {
                     target[key] = {};
                 }
@@ -167,5 +166,4 @@ export class ConfigStore extends AbstractProcess {
 
         return target;
     }
-
 }

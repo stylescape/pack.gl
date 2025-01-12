@@ -5,7 +5,6 @@
 import fs from "fs";
 import path from "path";
 
-
 // ============================================================================
 // Classes
 // ============================================================================
@@ -16,15 +15,12 @@ import path from "path";
  * for applications requiring file management capabilities, such as backup
  * systems or content management systems.
  */
- class FileCopier {
-
+class FileCopier {
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -44,7 +40,7 @@ import path from "path";
      */
     async copyFileToDirectory(
         srcFile: string,
-        destDir: string
+        destDir: string,
     ): Promise<void> {
         try {
             const fileName = path.basename(srcFile);
@@ -56,16 +52,13 @@ import path from "path";
             throw error;
         }
     }
-
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default FileCopier;
-
 
 // ============================================================================
 // Example

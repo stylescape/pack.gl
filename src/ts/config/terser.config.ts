@@ -2,7 +2,6 @@
 // Import
 // ============================================================================
 
-
 // ============================================================================
 // Constants
 // ============================================================================
@@ -10,8 +9,6 @@
 // https://terser.org/docs/api-reference/
 
 const terserConfig = {
-
-
     parse: {
         // parse options
     },
@@ -19,7 +16,7 @@ const terserConfig = {
         // compress options
         drop_console: true, // Remove console.log statements
         drop_debugger: true, // Remove debugger statements
-        pure_funcs: ['console.info', 'console.debug', 'console.warn'], // Remove specific console functions
+        pure_funcs: ["console.info", "console.debug", "console.warn"], // Remove specific console functions
 
         // defaults (default: true) -- Pass false to disable most default enabled compress transforms. Useful when you only want to enable a few compress options while disabling the rest.
 
@@ -140,9 +137,7 @@ const terserConfig = {
         // unsafe_undefined (default: false) -- substitute void 0 if there is a variable named undefined in scope (variable name will be mangled, typically reduced to a single character)
 
         // unused (default: true) -- drop unreferenced functions and variables (simple direct variable assignments do not count as references unless set to "keep_assign")
-
-
-   },
+    },
     mangle: {
         // mangle options
         // Mangle names for obfuscation and size reduction
@@ -173,9 +168,7 @@ const terserConfig = {
     nameCache: null, // or specify a name cache object
     safari10: false,
     toplevel: true, // Enable top-level variable and function name mangling
-
 };
-
 
 // ============================================================================
 // Export

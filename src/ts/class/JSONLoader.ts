@@ -1,13 +1,9 @@
-// class/JSONLoader.ts
-
-
 // ============================================================================
 // Import
 // ============================================================================
 
 import { promises as fs } from "fs";
 import path from "path";
-
 
 // ============================================================================
 // Classes
@@ -19,14 +15,11 @@ import path from "path";
  * data storage, or inter-process communication involves JSON files.
  */
 class JSONLoader {
-
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -44,7 +37,7 @@ class JSONLoader {
      */
     async loadJSON<T>(filePath: string): Promise<T> {
         try {
-            const data = await fs.readFile(filePath, "utf8");
+            const data : string = await fs.readFile(filePath,  "utf8");
             return JSON.parse(data) as T;
         } catch (error) {
             console.error(`Error reading JSON file: ${filePath}`, error);
@@ -65,20 +58,20 @@ class JSONLoader {
      */
     async loadJSONFromDirectory<T>(dirPath: string): Promise<T[]> {
         try {
-            const files = await fs.readdir(dirPath);
-            const jsonFiles = files.filter(file => file.endsWith(".json"));
+            const files = await fs.readdir(path:dirPath);
+            const jsonFiles = files.filter((file) => file.endsWith(".json"));
 
             const jsonData = await Promise.all(
-                jsonFiles.map(file =>
-                    this.loadJSON<T>(path.join(dirPath, file))
-                )
+                jsonFiles.map((file) =>
+                    this.loadJSON<T>(path.join(dirPath, file)),
+                ),
             );
 
             return jsonData;
         } catch (error) {
             console.error(
                 `Error reading JSON files from directory: ${dirPath}`,
-                error
+                error,
             );
             throw error;
         }
@@ -98,13 +91,11 @@ class JSONLoader {
     }
 }
 
-
 // ============================================================================
 // Export
 // ============================================================================
 
 export default JSONLoader;
-
 
 // ============================================================================
 // Example

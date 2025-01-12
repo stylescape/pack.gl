@@ -1,18 +1,14 @@
 // class/StylizedLogger.ts
 
-
-
 // ============================================================================
 // Import
 // ============================================================================
-
 
 // ============================================================================
 // Classes
 // ============================================================================
 
 class StylizedLogger {
-
     // Parameters
     // ========================================================================
 
@@ -31,7 +27,7 @@ class StylizedLogger {
             blue: "\x1b[34m",
             magenta: "\x1b[35m",
             cyan: "\x1b[36m",
-            white: "\x1b[37m"
+            white: "\x1b[37m",
         },
         bg: {
             black: "\x1b[40m",
@@ -41,14 +37,12 @@ class StylizedLogger {
             blue: "\x1b[44m",
             magenta: "\x1b[45m",
             cyan: "\x1b[46m",
-            white: "\x1b[47m"
-        }
+            white: "\x1b[47m",
+        },
     };
-
 
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -62,11 +56,11 @@ class StylizedLogger {
     log(
         message: string,
         fgColor: keyof typeof this.styles.fg,
-        bgColor: keyof typeof this.styles.bg = "black"
+        bgColor: keyof typeof this.styles.bg = "black",
     ): void {
         console.log(
             `${this.styles.fg[fgColor]}${this.styles.bg[bgColor]}%s${this.styles.reset}`,
-            message
+            message,
         );
     }
 
@@ -95,13 +89,11 @@ class StylizedLogger {
     }
 }
 
-
 // ============================================================================
 // Export
 // ============================================================================
 
 export default StylizedLogger;
-
 
 // ============================================================================
 // Example

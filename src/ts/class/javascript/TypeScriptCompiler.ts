@@ -2,18 +2,15 @@
 // Import
 // ============================================================================
 
-import ts from "typescript";
 import path from "path";
-import tsConfig from "../../config/ts.config.js"
-import fs from "fs";
-
+import ts from "typescript";
+import tsConfig from "../../config/ts.config.js";
 
 // ============================================================================
 // Types
 // ============================================================================
 
 // type CompilerOptions = ts.CompilerOptions | Record<string, unknown>;
-
 
 // ============================================================================
 // Classes
@@ -26,7 +23,6 @@ import fs from "fs";
  * needing to automate their TypeScript to JavaScript builds.
  */
 class TypeScriptCompiler {
-
     // Parameters
     // ========================================================================
 
@@ -37,13 +33,11 @@ class TypeScriptCompiler {
     private config: ts.CompilerOptions;
     // private parsedConfig: ts.ParsedCommandLine;
 
-
     /**
      * Default configuration for the TypeScript compiler.
      */
     private static defaultConfig: any = tsConfig;
     // private static defaultConfig: ts.CompilerOptions = tsConfig;
-
 
     // Constructor
     // ========================================================================
@@ -60,7 +54,7 @@ class TypeScriptCompiler {
     ) {
         this.config = {
             ...TypeScriptCompiler.defaultConfig,
-            ...customConfig
+            ...customConfig,
         };
     }
     // /**
@@ -72,7 +66,6 @@ class TypeScriptCompiler {
     // constructor(configFilePath: string, customConfig: Partial<ts.CompilerOptions> = {}) {
     //     this.parsedConfig = this.loadConfig(configFilePath, customConfig);
     // }
-
 
     // Methods
     // ========================================================================
@@ -86,24 +79,18 @@ class TypeScriptCompiler {
      */
     private loadConfig(
         configFilePath: string,
-        customConfig: Partial<ts.CompilerOptions>
+        customConfig: Partial<ts.CompilerOptions>,
     ): ts.ParsedCommandLine {
-
         // Read the config file
-        const configFile = ts.readConfigFile(
-            configFilePath,
-            ts.sys.readFile
-        );
+        const configFile = ts.readConfigFile(configFilePath, ts.sys.readFile);
 
         // Check if there was an error reading the config file
         if (configFile.error) {
             const error = ts.flattenDiagnosticMessageText(
                 configFile.error.messageText,
-                "\n"
+                "\n",
             );
-            throw new Error(
-                `Error reading tsconfig.json: ${error}`
-            );
+            throw new Error(`Error reading tsconfig.json: ${error}`);
         }
 
         // Parse the config file content
@@ -111,14 +98,19 @@ class TypeScriptCompiler {
             configFile.config,
             ts.sys,
             path.dirname(configFilePath),
-            customConfig
+            customConfig,
         );
 
         // Check if there were errors during parsing
         if (configParseResult.errors.length > 0) {
-            const errors = configParseResult.errors.map(diagnostic =>
-                ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")
-            ).join("\n");
+            const errors = configParseResult.errors
+                .map((diagnostic) =>
+                    ts.flattenDiagnosticMessageText(
+                        diagnostic.messageText,
+                        "\n",
+                    ),
+                )
+                .join("\n");
             throw new Error(`Error parsing tsconfig.json: ${errors}`);
         }
 
@@ -139,7 +131,6 @@ class TypeScriptCompiler {
         // customOptions: ts.CompilerOptions = {}
     ): Promise<void> {
         return new Promise((resolve, reject) => {
-
             // Merge default options with custom options
             const options: ts.CompilerOptions = {
                 module: ts.ModuleKind.CommonJS,
@@ -150,42 +141,39 @@ class TypeScriptCompiler {
             };
 
             // Create a TypeScript compiler host
-            const host = ts.createCompilerHost(
-                options
-            );
+            const host = ts.createCompilerHost(options);
 
             // Create a program with the specified files and options
-            const program = ts.createProgram(
-                filePaths,
-                options,
-                host
-            );
-            
+            const program = ts.createProgram(filePaths, options, host);
+
             // Emit the compiled JavaScript files
             const emitResult = program.emit();
 
             // Check for compilation errors
-            const allDiagnostics = ts.getPreEmitDiagnostics(
-                program
-            ).concat(emitResult.diagnostics);
+            const allDiagnostics = ts
+                .getPreEmitDiagnostics(program)
+                .concat(emitResult.diagnostics);
 
-            allDiagnostics.forEach(diagnostic => {
+            allDiagnostics.forEach((diagnostic) => {
                 // Handle and print diagnostics
                 if (diagnostic.file) {
-                    const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
+                    const { line, character } =
+                        diagnostic.file.getLineAndCharacterOfPosition(
+                            diagnostic.start!,
+                        );
                     const message = ts.flattenDiagnosticMessageText(
                         diagnostic.messageText,
-                        "\n"
+                        "\n",
                     );
                     console.error(
-                        `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`
+                        `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`,
                     );
                 } else {
                     console.error(
                         ts.flattenDiagnosticMessageText(
                             diagnostic.messageText,
-                            "\n"
-                        )
+                            "\n",
+                        ),
                     );
                 }
             });
@@ -200,16 +188,13 @@ class TypeScriptCompiler {
             }
         });
     }
-
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default TypeScriptCompiler;
-
 
 // ============================================================================
 // Example
@@ -225,35 +210,7 @@ export default TypeScriptCompiler;
 //     .then(() => console.log("Compilation successful"))
 //     .catch(error => console.error("Compilation errors:", error));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // class TypeScriptCompiler {
-
 
 //     /**
 //      * Initializes a new instance of the TypeScriptCompiler with optional

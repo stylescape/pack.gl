@@ -5,8 +5,8 @@
 import chokidar, { FSWatcher } from "chokidar";
 import { AbstractProcess } from "../core/abstract/AbstractProcess";
 import { ConfigStore } from "../core/config/ConfigStore";
+import { LiveOptionsInterface } from "../interface";
 import { OptionsInterface } from "../interface/OptionsInterface";
-
 
 // ============================================================================
 // Class
@@ -18,7 +18,6 @@ import { OptionsInterface } from "../interface/OptionsInterface";
  * trigger appropriate callbacks.
  */
 export class LiveWatcher extends AbstractProcess {
-
     // Parameters
     // ========================================================================
 
@@ -50,9 +49,16 @@ export class LiveWatcher extends AbstractProcess {
         super();
 
         // Retrieve live reload configuration from ConfigStore
-        const liveReloadOptions = ConfigStore.getInstance().get<OptionsInterface["live"]>("options.live") || {};
+        const liveReloadOptions: LiveOptionsInterface =
+            ConfigStore.getInstance().get<OptionsInterface["live"]>(
+                "options.live",
+            ) || {};
 
-        this.pathsToWatch = liveReloadOptions.watchPaths ?? ["src/**/*", "config/**/*", "pack.yaml"];
+        this.pathsToWatch = liveReloadOptions.watchPaths ?? [
+            "src/**/*",
+            "config/**/*",
+            "pack.yaml",
+        ];
         this.ignoredPaths = liveReloadOptions.ignoredPaths ?? ["node_modules"];
 
         this.onChange = onChange;
@@ -73,27 +79,22 @@ export class LiveWatcher extends AbstractProcess {
         this.watcher
             .on("ready", () => {
                 this.logInfo(
-                    "File watching is active. Waiting for changes..."
+                    "File watching is active. Waiting for changes...",
                 );
             })
             .on("change", (filePath) => {
-                this.logInfo(
-                    `File changed: ${filePath}`
-                );
+                this.logInfo(`File changed: ${filePath}`);
                 try {
                     this.onChange(filePath);
                 } catch (error) {
                     this.logError(
                         `Error handling file change for ${filePath}:`,
-                        error
+                        error,
                     );
                 }
             })
             .on("error", (error) => {
-                this.logError(
-                    "Watcher encountered an error:",
-                    error
-                );
+                this.logError("Watcher encountered an error:", error);
             });
     }
 
@@ -108,21 +109,18 @@ export class LiveWatcher extends AbstractProcess {
         }
 
         this.logInfo("Starting file watcher...");
-        this.watcher = chokidar.watch(
-            this.pathsToWatch,
-            {
-                ignored: this.ignoredPaths,
-                persistent: true,
-                // Prevents initial "add" events on startup
-                ignoreInitial: true,
-                awaitWriteFinish: {
-                    // Polling interval to check for file stability
-                    pollInterval: 100,
-                    // Waits for file to finish writing
-                    stabilityThreshold: 100,
-                },
-            }
-        );
+        this.watcher = chokidar.watch(this.pathsToWatch, {
+            ignored: this.ignoredPaths,
+            persistent: true,
+            // Prevents initial "add" events on startup
+            ignoreInitial: true,
+            awaitWriteFinish: {
+                // Polling interval to check for file stability
+                pollInterval: 100,
+                // Waits for file to finish writing
+                stabilityThreshold: 100,
+            },
+        });
 
         this.setupWatchers();
     }
@@ -149,5 +147,4 @@ export class LiveWatcher extends AbstractProcess {
         await this.stopWatching();
         this.startWatching();
     }
-
 }

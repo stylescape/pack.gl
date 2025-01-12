@@ -3,9 +3,8 @@
 // ============================================================================
 
 // @ts-ignore: Implicit any type for sassdoc module
-import sassdoc from "sassdoc";
 import path from "path";
-
+import sassdoc from "sassdoc";
 
 // ============================================================================
 // Classes
@@ -17,14 +16,11 @@ import path from "path";
  * generation process.
  */
 class SassDocGenerator {
-
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -43,14 +39,14 @@ class SassDocGenerator {
     public async generateDocumentation(
         sourcePaths: string[],
         destDir: string,
-        options: sassdoc.Options = {}
+        options: sassdoc.Options = {},
     ): Promise<void> {
         try {
             // Merge custom options with default options
             const config: sassdoc.Options = {
                 dest: path.resolve(destDir),
                 verbose: true,
-                ...options
+                ...options,
             };
             console.log(`SASS`);
 
@@ -58,25 +54,23 @@ class SassDocGenerator {
             await sassdoc(sourcePaths, config);
 
             console.log(
-                `SASS documentation successfully generated at: ${config.dest}`
+                `SASS documentation successfully generated at: ${config.dest}`,
             );
         } catch (error) {
             console.error(
                 "An error occurred while generating SASS documentation:",
-                error
+                error,
             );
             throw error;
         }
     }
 }
 
-
 // ============================================================================
 // Exports
 // ============================================================================
 
 export default SassDocGenerator;
-
 
 // ============================================================================
 // Example Usage

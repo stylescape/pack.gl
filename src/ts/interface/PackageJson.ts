@@ -4,7 +4,6 @@
 
 // import { Record, string, optional, array, union } from 'runtypes';
 
-
 // ============================================================================
 // Interfaces
 // ============================================================================
@@ -16,7 +15,6 @@
  * fields as needed.
  */
 export interface PackageJson {
-
     // The name of the package.
     name: string;
 
@@ -48,11 +46,13 @@ export interface PackageJson {
     keywords?: string[];
 
     // The author of the package.
-    author?: string | {
-        name: string;
-        email?: string;
-        url?: string;
-    };
+    author?:
+        | string
+        | {
+              name: string;
+              email?: string;
+              url?: string;
+          };
 
     // The license under which the package is provided.
     license?: string;
@@ -85,17 +85,22 @@ export interface PackageJson {
     types?: string;
 
     // Other contributors to the package.
-    contributors?: Array<string | {
-        name: string;
-        email?: string;
-        url?: string;
-    }>;
+    contributors?: Array<
+        | string
+        | {
+              name: string;
+              email?: string;
+              url?: string;
+          }
+    >;
 
     // Funding information for the package.
-    funding?: string | {
-        type: string;
-        url: string;
-    };
+    funding?:
+        | string
+        | {
+              type: string;
+              url: string;
+          };
 
     // An array of file patterns included in the package.
     files?: string[];
@@ -134,9 +139,11 @@ export interface PackageJson {
     resolutions?: Record<string, string>;
 
     // Workspace configuration for managing multiple packages.
-    workspaces?: string[] | {
-      packages: string[];
-    };
+    workspaces?:
+        | string[]
+        | {
+              packages: string[];
+          };
 
     // ESLint configuration embedded in package.json.
     eslintConfig?: Record<string, any>;
@@ -161,5 +168,4 @@ export interface PackageJson {
 
     // Specify CPU architecture compatibility.
     cpu?: string[];
-
 }

@@ -6,7 +6,6 @@ import { ConfigInterface } from "../../interface/ConfigInterface";
 import { AbstractProcess } from "../abstract/AbstractProcess";
 import { Stage } from "./Stage";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -18,8 +17,6 @@ import { Stage } from "./Stage";
  * pipeline behavior.
  */
 export class Pipeline extends AbstractProcess {
-
-
     // Parameters
     // ========================================================================
 
@@ -33,7 +30,6 @@ export class Pipeline extends AbstractProcess {
      */
     private options?: ConfigInterface["options"];
 
-
     // Constructor
     // ========================================================================
 
@@ -44,17 +40,12 @@ export class Pipeline extends AbstractProcess {
      * @param config - The configuration object defining the stages, steps,
      * and global options for the pipeline.
      */
-    constructor(
-        private config: ConfigInterface
-    ) {
+    constructor(private config: ConfigInterface) {
         super();
-        this.stages = config.stages.map(
-            stage => new Stage(stage)
-        );
+        this.stages = config.stages.map((stage) => new Stage(stage));
         this.options = config.options;
         this.logInfo("Pipeline instance created.");
     }
-
 
     // Methods
     // ========================================================================
@@ -66,7 +57,6 @@ export class Pipeline extends AbstractProcess {
      * handling, and execution control.
      */
     async run(): Promise<void> {
-
         this.logInfo("Starting pipeline execution...");
 
         // Track stages that have been completed
@@ -74,19 +64,16 @@ export class Pipeline extends AbstractProcess {
 
         // Run stages with dependency management and parallel execution control
         try {
-
             this.logDebug("Pipeline execution started with debug logging.");
 
             // Execute all stages with concurrency control
-            const stagePromises = this.stages.map(
-                stage => stage.execute(completedStages)
+            const stagePromises = this.stages.map((stage) =>
+                stage.execute(completedStages),
             );
             await this.runWithConcurrencyControl(stagePromises);
 
             this.logInfo("Pipeline execution completed successfully.");
-
         } catch (error) {
-
             this.logError("Pipeline execution failed:", error);
 
             // Halt pipeline if configured to do so on failure
@@ -97,7 +84,6 @@ export class Pipeline extends AbstractProcess {
                 this.logWarn("Continuing pipeline execution despite errors.");
             }
         }
-
     }
 
     /**
@@ -108,9 +94,10 @@ export class Pipeline extends AbstractProcess {
      * executions.
      */
     private async runWithConcurrencyControl(
-        stagePromises: Promise<void>[]
+        stagePromises: Promise<void>[],
     ): Promise<void> {
-        const maxConcurrentStages = this.options?.maxConcurrentStages || stagePromises.length;
+        const maxConcurrentStages =
+            this.options?.maxConcurrentStages || stagePromises.length;
 
         // Process stages with a concurrency limit
         const executingStages = new Set<Promise<void>>();
@@ -131,5 +118,4 @@ export class Pipeline extends AbstractProcess {
         // Wait for all remaining stages to complete
         await Promise.all(executingStages);
     }
-
 }

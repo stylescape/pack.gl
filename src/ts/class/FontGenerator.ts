@@ -1,6 +1,5 @@
 // class/FontGenerator.ts
 
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -10,10 +9,8 @@ import {
     // FontAssetType,
     // OtherAssetType,
     RunnerOptions,
-    // RunnerOptionalOptions,
 } from "fantasticon";
-import fantasticonConfig from "../config/fantasticon.config.js"
-
+import fantasticonConfig from "../config/fantasticon.config.js";
 
 // ============================================================================
 // Classes
@@ -26,7 +23,6 @@ import fantasticonConfig from "../config/fantasticon.config.js"
  * font generation process via configuration options.
  */
 class FontGenerator {
-
     // Parameters
     // ========================================================================
 
@@ -34,14 +30,13 @@ class FontGenerator {
      *  Configuration for the TypeScript compiler.
      */
     //  private config: any;
-     private config: RunnerOptions;
+    private config: RunnerOptions;
 
     /**
      * Default configuration derived from an external configuration file.
      */
     //  private static defaultConfig: any = fantasticonConfig;
-     private static defaultConfig: RunnerOptions = fantasticonConfig;
- 
+    private static defaultConfig: RunnerOptions = fantasticonConfig;
 
     // Constructor
     // ========================================================================
@@ -49,7 +44,7 @@ class FontGenerator {
     /**
      * Constructs an instance of FontGenerator, merging default configuration
      * with optional custom settings.
-     * 
+     *
      * @param {RunnerOptions} customConfig Optional custom configuration to
      * override the defaults.
      */
@@ -57,12 +52,11 @@ class FontGenerator {
         // customConfig: any = {},
         customConfig: Partial<RunnerOptions> = {},
     ) {
-         this.config = {
-             ...FontGenerator.defaultConfig,
-             ...customConfig
-         };
-     }
-
+        this.config = {
+            ...FontGenerator.defaultConfig,
+            ...customConfig,
+        };
+    }
 
     // Methods
     // ========================================================================
@@ -70,7 +64,7 @@ class FontGenerator {
     /**
      * Generates font assets from SVG icons located in the specified source
      * directory, and outputs them to the specified output directory.
-     * 
+     *
      * @param {string} sourceDirectory The directory containing SVG files to
      * be converted.
      * @param {string} outputDirectory The directory where the generated font
@@ -83,14 +77,13 @@ class FontGenerator {
         outputDiectory: string,
         options?: {},
     ) {
-
         const config: RunnerOptions = {
             ...this.config,
             // RunnerMandatoryOptions
             inputDir: sourceDirectory, // (required)
             outputDir: outputDiectory, // (required)
 
-            ...options
+            ...options,
         };
 
         try {
@@ -99,17 +92,14 @@ class FontGenerator {
         } catch (error) {
             console.error("Error generating fonts:", error);
         }
-
     }
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default FontGenerator;
-
 
 // ============================================================================
 // Example

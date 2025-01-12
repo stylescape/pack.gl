@@ -2,15 +2,14 @@
 // Import
 // ============================================================================
 
-import * as sass from "sass";
-import postcss from "postcss";
 import { promises as fs } from "fs";
 import path from "path";
+import postcss from "postcss";
+import * as sass from "sass";
 import { NodePackageImporter } from "sass"; // Update this path based on the actual source of NodePackageImporter
 
-import postcssConfigExpanded from "../../config/postcss.config.expanded.js";
 import postcssConfigCompressed from "../../config/postcss.config.compressed.js";
-
+import postcssConfigExpanded from "../../config/postcss.config.expanded.js";
 
 // ============================================================================
 // Classes
@@ -22,14 +21,11 @@ import postcssConfigCompressed from "../../config/postcss.config.compressed.js";
  * expanded or compressed CSS, making it flexible for different environments.
  */
 class StyleProcessor {
-
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -40,15 +36,15 @@ class StyleProcessor {
      * @param styleOption The style option, either "expanded" or "compressed".
      * @returns Processed CSS string.
      */
-    async processPostCSS(
-        css: string,
-        styleOption: "expanded" | "compressed"
-    ) {
-        const config = styleOption === "expanded" ? postcssConfigExpanded : postcssConfigCompressed;
-        const result = await postcss(config.plugins).process(
-            css,
-            { from: undefined, map: { inline: false } }
-        );
+    async processPostCSS(css: string, styleOption: "expanded" | "compressed") {
+        const config =
+            styleOption === "expanded"
+                ? postcssConfigExpanded
+                : postcssConfigCompressed;
+        const result = await postcss(config.plugins).process(css, {
+            from: undefined,
+            map: { inline: false },
+        });
         return result.css;
     }
 
@@ -73,7 +69,7 @@ class StyleProcessor {
             }
         }
     }
-    
+
     /**
      * Compiles SCSS to CSS and processes it using PostCSS.
      * @param inputFile Path to the input SCSS file.
@@ -84,7 +80,7 @@ class StyleProcessor {
     async processStyles(
         inputFile: string,
         outputFile: string,
-        styleOption: "expanded" | "compressed"
+        styleOption: "expanded" | "compressed",
     ) {
         try {
             // Ensure the output directory exists
@@ -92,20 +88,15 @@ class StyleProcessor {
             await this.ensureDirectoryExists(outputDir);
 
             // Compile SCSS to CSS
-            const result = await sass.compileAsync(
-                inputFile,
-                { 
-                    style: styleOption,
-                    importers: [
-                        new NodePackageImporter()
-                    ],
-                }
-            );
+            const result = await sass.compileAsync(inputFile, {
+                style: styleOption,
+                importers: [new NodePackageImporter()],
+            });
 
             // Process the compiled CSS with PostCSS
             const processedCss = await this.processPostCSS(
                 result.css,
-                styleOption
+                styleOption,
             );
 
             // Write the processed CSS to a file
@@ -113,7 +104,6 @@ class StyleProcessor {
 
             // Optionally handle source maps
             // ...
-
         } catch (err) {
             console.error(`Error processing styles from ${inputFile}:`, err);
             // Re-throw the error for further handling if necessary
@@ -122,13 +112,11 @@ class StyleProcessor {
     }
 }
 
-
 // ============================================================================
 // Export
 // ============================================================================
 
 export default StyleProcessor;
-
 
 // ============================================================================
 // Example

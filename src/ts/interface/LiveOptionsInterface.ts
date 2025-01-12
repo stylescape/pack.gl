@@ -4,7 +4,6 @@
  * development.
  */
 export interface LiveOptionsInterface {
-
     /**
      * Enables or disables the live reload feature.
      * - `true`: Live reload is enabled, and the server will listen for changes.
@@ -44,5 +43,4 @@ export interface LiveOptionsInterface {
      * ignore directories or files that do not need to trigger reloads
      */
     ignoredPaths?: string[];
-
 }

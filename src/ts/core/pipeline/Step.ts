@@ -7,7 +7,6 @@ import { StepInterface } from "../../interface/StepInterface";
 import { AbstractProcess } from "../abstract/AbstractProcess";
 import { ActionRegistry } from "./ActionRegistry";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -18,14 +17,12 @@ import { ActionRegistry } from "./ActionRegistry";
  * with each step.
  */
 export class Step extends AbstractProcess {
-
     // Parameters
     // ========================================================================
 
     private name: string;
     private action: ActionInterface;
     private options?: Record<string, any>;
-
 
     // Constructor
     // ========================================================================
@@ -39,9 +36,7 @@ export class Step extends AbstractProcess {
      * @throws Error if the specified action is not registered in the action
      * registry.
      */
-    constructor(
-        step: StepInterface
-    ) {
+    constructor(step: StepInterface) {
         super();
         this.name = step.name;
 
@@ -54,21 +49,19 @@ export class Step extends AbstractProcess {
             let msg = `
                 Unknown action "${step.action}" for step "${this.name}".
                 Ensure the action is registered in the registry.
-                `
+                `;
             this.logError(msg);
             throw new Error(msg);
         }
-
 
         // Initialize the action with the specific class from the registry
         this.action = new ActionClass();
         this.options = step.options;
 
         this.logInfo(
-            `Step "${this.name}" initialized with action "${step.action.constructor.name}".`
+            `Step "${this.name}" initialized with action "${step.action.constructor.name}".`,
         );
     }
-
 
     // Methods
     // ========================================================================
@@ -77,14 +70,13 @@ export class Step extends AbstractProcess {
      * Executes the step by invoking its action's execute method.
      */
     async execute(): Promise<void> {
-
         this.logInfo(`Executing step: ${this.name}`);
-        
+
         try {
             // Validate options if the action provides a validation method
             if (typeof this.action.validateOptions === "function") {
                 const isValid = this.action.validateOptions(
-                    this.options || {}
+                    this.options || {},
                 );
                 if (!isValid) {
                     throw new Error(`Invalid options for step: ${this.name}`);
@@ -93,16 +85,12 @@ export class Step extends AbstractProcess {
 
             // Execute the action with the provided options
             await this.action.execute(this.options || {});
-            this.logInfo(
-                `Step "${this.name}" completed successfully.`
-            );
-
+            this.logInfo(`Step "${this.name}" completed successfully.`);
         } catch (error) {
             this.logError(
                 `Error executing step "${this.name}": ${error}`,
-                error
+                error,
             );
         }
     }
-
 }

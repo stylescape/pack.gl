@@ -2,11 +2,10 @@
 // Import
 // ============================================================================
 
-import path from "path";
 import { promises as fs } from "fs";
+import path from "path";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types";
-
 
 // ============================================================================
 // Classes
@@ -18,14 +17,11 @@ import { ActionOptionsType } from "../../types";
  * for efficient handling.
  */
 export class DirectoryCopyAction extends Action {
-
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -42,9 +38,7 @@ export class DirectoryCopyAction extends Action {
         const destDir = options.destDir as string;
 
         if (!srcDir || !destDir) {
-            throw new Error(
-                "Missing required options: srcDir or destDir."
-            );
+            throw new Error("Missing required options: srcDir or destDir.");
         }
 
         this.logInfo(`Copying files from ${srcDir} to ${destDir}`);
@@ -52,11 +46,11 @@ export class DirectoryCopyAction extends Action {
         try {
             await this.copyFiles(srcDir, destDir);
             this.logInfo(
-                `Files copied successfully from ${srcDir} to ${destDir}`
+                `Files copied successfully from ${srcDir} to ${destDir}`,
             );
         } catch (error) {
             this.logError(
-                `Error copying files from ${srcDir} to ${destDir}: ${error}`
+                `Error copying files from ${srcDir} to ${destDir}: ${error}`,
             );
             throw error;
         }
@@ -66,27 +60,22 @@ export class DirectoryCopyAction extends Action {
      * Asynchronously copies all files and subdirectories from the source
      * directory to the destination directory. If the destination directory
      * does not exist, it will be created.
-     * 
+     *
      * @param srcDir - The path of the source directory.
      * @param destDir - The path of the destination directory.
      * @throws {Error} If any file or directory could not be copied.
      */
-    private async copyFiles(
-        srcDir: string,
-        destDir: string
-    ): Promise<void> {
-
+    private async copyFiles(srcDir: string, destDir: string): Promise<void> {
         const resolvedSrcDir = path.resolve(srcDir);
         const resolvedDestDir = path.resolve(destDir);
-        
+
         try {
             await this.recursiveCopy(resolvedSrcDir, resolvedDestDir);
         } catch (error) {
             throw new Error(
-                `Failed to copy from ${resolvedSrcDir} to ${resolvedDestDir}: ${error}`
+                `Failed to copy from ${resolvedSrcDir} to ${resolvedDestDir}: ${error}`,
             );
         }
-
     }
 
     /**
@@ -94,15 +83,14 @@ export class DirectoryCopyAction extends Action {
      * destination directory.
      * This method creates the destination directory if it does not exist and
      * recursively copies all nested files and directories.
-     * 
+     *
      * @param srcDir - Source directory.
      * @param destDir - Destination directory.
      */
     private async recursiveCopy(
         srcDir: string,
-        destDir: string
+        destDir: string,
     ): Promise<void> {
-
         await fs.mkdir(destDir, { recursive: true });
         const entries = await fs.readdir(srcDir, { withFileTypes: true });
 
@@ -127,9 +115,7 @@ export class DirectoryCopyAction extends Action {
     describe(): string {
         return "Copies all files and subdirectories from one directory to another, including handling of nested directories.";
     }
-
 }
-
 
 // ============================================================================
 // Export

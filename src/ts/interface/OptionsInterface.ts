@@ -5,7 +5,6 @@
 import { LiveOptionsInterface } from "./LiveOptionsInterface";
 import { PipelineOptionsInterface } from "./PipelineOptionsInterface";
 
-
 // ============================================================================
 // Interfaces
 // ============================================================================
@@ -16,8 +15,6 @@ import { PipelineOptionsInterface } from "./PipelineOptionsInterface";
  * that affect how all stages and steps within the pipeline operate.
  */
 export interface OptionsInterface {
-
-
     /**
      * Configuration settings for live reload functionality, enabling
      * real-time updates during development.
@@ -58,5 +55,4 @@ export interface OptionsInterface {
      * Additional properties can be included dynamically.
      */
     [key: string]: unknown;
-
 }

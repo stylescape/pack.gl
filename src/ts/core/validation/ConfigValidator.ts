@@ -6,7 +6,6 @@ import { ConfigInterface } from "../../interface/ConfigInterface";
 import { AbstractValidator } from "../abstract/AbstractValidator";
 import { StageValidator } from "./StageValidator";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -15,12 +14,10 @@ import { StageValidator } from "./StageValidator";
  * Validates the overall configuration, including stages and global options.
  */
 export class ConfigValidator extends AbstractValidator<ConfigInterface> {
-
     // Parameters
     // ========================================================================
 
     private stageValidator: StageValidator;
-
 
     // Constructor
     // ========================================================================
@@ -45,7 +42,10 @@ export class ConfigValidator extends AbstractValidator<ConfigInterface> {
         // Validate each property of the configuration
         for (const key in config) {
             if (Object.prototype.hasOwnProperty.call(config, key)) {
-                this.validateProperty(key as keyof ConfigInterface, config[key as keyof ConfigInterface]);
+                this.validateProperty(
+                    key as keyof ConfigInterface,
+                    config[key as keyof ConfigInterface],
+                );
             }
         }
 
@@ -61,20 +61,28 @@ export class ConfigValidator extends AbstractValidator<ConfigInterface> {
      */
     protected validateProperty<K extends keyof ConfigInterface>(
         key: K,
-        value: ConfigInterface[K]
+        value: ConfigInterface[K],
     ): void {
         switch (key) {
             case "stages":
                 if (Array.isArray(value)) {
                     this.validateStages(value); // Validate only if it's an array
                 } else {
-                    this.throwValidationError(key, value, "'stages' must be an array.");
+                    this.throwValidationError(
+                        key,
+                        value,
+                        "'stages' must be an array.",
+                    );
                 }
                 break;
 
             default:
                 // Add validation for other properties if needed
-                this.throwValidationError(key, value, `Unknown or unsupported configuration property: "${String(key)}".`);
+                this.throwValidationError(
+                    key,
+                    value,
+                    `Unknown or unsupported configuration property: "${String(key)}".`,
+                );
         }
 
         this.logValidationSuccess(key, value);
@@ -86,13 +94,10 @@ export class ConfigValidator extends AbstractValidator<ConfigInterface> {
      * @param stages - The stages to validate.
      * @throws Error if validation fails.
      */
-    private validateStages(
-        stages: ConfigInterface["stages"]
-    ): void {
+    private validateStages(stages: ConfigInterface["stages"]): void {
         for (const stage of stages) {
             // Validate each stage
             this.stageValidator.validate(stage);
         }
     }
-
 }

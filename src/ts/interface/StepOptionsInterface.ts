@@ -10,7 +10,6 @@
  * the packaging pipeline.
  */
 export interface StepOptionsInterface {
-
     /**
      * An optional description of the step, useful for logging, debugging, and
      * reporting. This provides additional context about the step's purpose and
@@ -38,9 +37,7 @@ export interface StepOptionsInterface {
      * This generic structure ensures compatibility with a wide range of use cases.
      */
     // [key: string]: unknown; // Generic key-value pairs to support diverse options.
-
 }
-
 
 /**
  * Recommendations for Extending StepOptionsInterface:

@@ -2,18 +2,17 @@
 // Import
 // ============================================================================
 
-import path from "path";
 import { promises as fs } from "fs";
-import * as sass from "sass";
+import path from "path";
 import postcss from "postcss";
+import * as sass from "sass";
 
 import { Action } from "../../core/pipeline/Action.js";
 import { ActionOptionsType } from "../../types/ActionOptionsType.js";
 
 // Assuming the PostCSS configurations are available at the given paths
-import postcssConfigExpanded from "../../config/postcss.config.expanded.js";
 import postcssConfigCompressed from "../../config/postcss.config.compressed.js";
-
+import postcssConfigExpanded from "../../config/postcss.config.expanded.js";
 
 // ============================================================================
 // Classes
@@ -25,14 +24,11 @@ import postcssConfigCompressed from "../../config/postcss.config.compressed.js";
  * expanded and compressed output styles based on the provided configuration.
  */
 export class StyleProcessingAction extends Action {
-
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -44,22 +40,19 @@ export class StyleProcessingAction extends Action {
      * @returns A Promise that resolves when the styles are processed
      * successfully, or rejects with an error if the action fails.
      */
-    async execute(
-        options: ActionOptionsType
-    ): Promise<void> {
-
+    async execute(options: ActionOptionsType): Promise<void> {
         const inputFile = options.inputFile as string;
         const outputFile = options.outputFile as string;
         const styleOption = options.styleOption as "expanded" | "compressed";
 
         if (!inputFile || !outputFile || !styleOption) {
             throw new Error(
-                "Missing required options: inputFile, outputFile, or styleOption."
+                "Missing required options: inputFile, outputFile, or styleOption.",
             );
         }
 
         this.logInfo(
-            `Processing styles from ${inputFile} to ${outputFile} with ${styleOption} style.`
+            `Processing styles from ${inputFile} to ${outputFile} with ${styleOption} style.`,
         );
 
         try {
@@ -68,33 +61,26 @@ export class StyleProcessingAction extends Action {
             await this.ensureDirectoryExists(outputDir);
 
             // Compile SCSS to CSS
-            const result = await sass.compileAsync(inputFile, { 
+            const result = await sass.compileAsync(inputFile, {
                 style: styleOption,
-                importers: [
-                    new sass.NodePackageImporter(),
-                ],
+                importers: [new sass.NodePackageImporter()],
             });
 
             // Process the compiled CSS with PostCSS
             const processedCss = await this.processPostCSS(
                 result.css,
-                styleOption
+                styleOption,
             );
 
             // Write the processed CSS to a file
-            await fs.writeFile(
-                outputFile,
-                processedCss,
-                "utf-8"
-            );
+            await fs.writeFile(outputFile, processedCss, "utf-8");
 
             this.logInfo(
-                `Styles processed successfully from ${inputFile} to ${outputFile}.`
+                `Styles processed successfully from ${inputFile} to ${outputFile}.`,
             );
-
         } catch (error) {
             this.logError(
-                `Error processing styles from ${inputFile}: ${error}`
+                `Error processing styles from ${inputFile}: ${error}`,
             );
             throw error;
         }
@@ -108,11 +94,16 @@ export class StyleProcessingAction extends Action {
      */
     private async processPostCSS(
         css: string,
-        styleOption: "expanded" | "compressed"
+        styleOption: "expanded" | "compressed",
     ): Promise<string> {
-
-        const config = styleOption === "expanded" ? postcssConfigExpanded : postcssConfigCompressed;
-        const result = await postcss(config.plugins).process(css, { from: undefined, map: { inline: false } });
+        const config =
+            styleOption === "expanded"
+                ? postcssConfigExpanded
+                : postcssConfigCompressed;
+        const result = await postcss(config.plugins).process(css, {
+            from: undefined,
+            map: { inline: false },
+        });
         return result.css;
     }
 
@@ -143,7 +134,6 @@ export class StyleProcessingAction extends Action {
         return "Processes SCSS files into CSS, applying PostCSS transformations for expanded or compressed outputs.";
     }
 }
-
 
 // ============================================================================
 // Export

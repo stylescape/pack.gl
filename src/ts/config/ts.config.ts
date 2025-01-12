@@ -2,8 +2,7 @@
 // Import
 // ============================================================================
 
-import ts from 'typescript';
-
+import ts from "typescript";
 
 // ============================================================================
 // Constants
@@ -11,10 +10,7 @@ import ts from 'typescript';
 
 // const tsConfig: ts.CompilerOptions = {
 const tsConfig = {
-
-
     // Visit https://aka.ms/tsconfig.json to read more about this file
-
 
     // Projects
     // ========================================================================
@@ -25,7 +21,6 @@ const tsConfig = {
     // disableSourceOfProjectReferenceRedirect: true,       // boolean      // Disable preferring source files instead of declaration files when referencing composite projects
     // disableSolutionSearching: true,                      // boolean      // Opt a project out of multi-project reference checking when editing.
     // disableReferencedProjectLoad: true,                  // boolean      // Reduce the number of projects loaded automatically by TypeScript.
-  
 
     // Language and Environment
     // ========================================================================
@@ -48,7 +43,6 @@ const tsConfig = {
     // JSON = 100,
     // Latest = 99,\
 
-
     lib: ["lib.es2015.d.ts", "lib.dom.d.ts"],
     // lib: ['ES2015', 'DOM'], // Use correct enum values for lib options
     // lib: ["esnext", "es2017`", "ES2015", "dom"],           // Specify a set of bundled library declaration files that describe the target runtime environment.
@@ -63,12 +57,11 @@ const tsConfig = {
     // reactNamespace: "",                                // Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.
     // noLib: true,                                       // Disable including any library files, including the default lib.d.ts.
     // useDefineForClassFields: true,                      // Emit ECMAScript-standard-compliant class fields.
-  
 
     // Modules
     // ========================================================================
 
-        // module?: ModuleKind;
+    // module?: ModuleKind;
     // moduleResolution?: ModuleResolutionKind;
     // moduleSuffixes?: string[];
     // moduleDetection?: ModuleDetectionKind;
@@ -92,9 +85,8 @@ const tsConfig = {
     // ],
     // types: [],                                         // Specify type package names to be included without being referenced in a source file.
     // allowUmdGlobalAccess: true,                        // Allow accessing UMD globals from modules.
-    resolveJsonModule: true,                           // Enable importing .json files
+    resolveJsonModule: true, // Enable importing .json files
     // noResolve: true,                                   // Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project.
-
 
     // JavaScript Support
     // ========================================================================
@@ -103,14 +95,13 @@ const tsConfig = {
     // checkJs: false                                        // Enable error reporting in type-checked JavaScript files.,
     // maxNodeModuleJsDepth: 1,                           // Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.
 
-
     // Emit
     // ========================================================================
 
     declaration: true, // Enables generation of .d.ts files
 
     //   "declaration: true,                                 // Generate .d.ts files from TypeScript and JavaScript files in your project.
-//   "declarationMap: true,                              // Create sourcemaps for d.ts files.
+    //   "declarationMap: true,                              // Create sourcemaps for d.ts files.
     // emitDeclarationOnly: true,                         // Only output d.ts files and not JavaScript files.
     // sourceMap: true,                                      // Create source map files for emitted JavaScript files.
     // outFile: "./",                                     // Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.
@@ -135,23 +126,21 @@ const tsConfig = {
     // declarationDir: "./",                              // Specify the output directory for generated declaration files.
     // preserveValueImports: true,                        // Preserve unused imported values in the JavaScript output that would otherwise be removed.
 
-
     // Interop Constraints
     // ========================================================================
 
     // isolatedModules: true,                             // Ensure that each file can be safely transpiled without relying on other imports.
-    allowSyntheticDefaultImports: true,                   // Allow 'import x from y' when a module doesn't have a default export.
+    allowSyntheticDefaultImports: true, // Allow 'import x from y' when a module doesn't have a default export.
     // Enables compatibility with Babel imports
-    esModuleInterop: true,                                // Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.
+    esModuleInterop: true, // Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.
     // preserveSymlinks: true,                            // Disable resolving symlinks to their realpath. This correlates to the same flag in node.
     // forceConsistentCasingInFileNames: true,            // Ensure that casing is correct in imports.
     forceConsistentCasingInFileNames: true, // Disallow inconsistently-cased references
 
-
     // Type Checking
     // ========================================================================
 
-    strict: true,                                          // Enable all strict type-checking options.,
+    strict: true, // Enable all strict type-checking options.,
     // noImplicitAny: true,                                  // Enable error reporting for expressions and declarations with an implied `any` type..
     // strictNullChecks: true,                               // When type checking, take into account `null` and `undefined`.
     // strictFunctionTypes: true,                            // When assigning functions, check to ensure parameters and the return values are subtype-compatible.
@@ -171,15 +160,13 @@ const tsConfig = {
     // allowUnusedLabels: true,                           // Disable error reporting for unused labels.
     // allowUnreachableCode: true,                        // Disable error reporting for unreachable code.
 
-
     // Completeness
     // ========================================================================
 
     // skipDefaultLibCheck: true,                         // Skip type checking .d.ts files that are included with TypeScript.
     // Skip type checking of declaration files
-    skipLibCheck: true,                                    // Skip type checking all .d.ts files.
-  
-    
+    skipLibCheck: true, // Skip type checking all .d.ts files.
+
     // Other
     // ========================================================================
     // allowImportingTsExtensions?: boolean;
@@ -285,7 +272,6 @@ const tsConfig = {
     // useDefineForClassFields?: boolean;
     // [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
 };
-
 
 // ============================================================================
 // Export

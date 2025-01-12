@@ -2,10 +2,9 @@
 // Import
 // ============================================================================
 
-import DirectoryCreator from "../ts/class/directory/DirectoryCreator";
 import fs from "fs/promises";
 import path from "path";
-
+import DirectoryCreator from "../ts/class/directory/DirectoryCreator";
 
 // ============================================================================
 // Tests
@@ -44,7 +43,7 @@ describe("DirectoryCreator", () => {
             const dirPath = path.join(basePath, dir);
             const exists = await fs.stat(dirPath).then(
                 () => true,
-                () => false
+                () => false,
             );
             expect(exists).toBe(true);
         }
@@ -52,14 +51,14 @@ describe("DirectoryCreator", () => {
 
     it("should not throw an error if the base directory already exists", async () => {
         await expect(
-            directoryCreator.createDirectories(basePath, directories)
+            directoryCreator.createDirectories(basePath, directories),
         ).resolves.not.toThrow();
 
         for (const dir of directories) {
             const dirPath = path.join(basePath, dir);
             const exists = await fs.stat(dirPath).then(
                 () => true,
-                () => false
+                () => false,
             );
             expect(exists).toBe(true);
         }
@@ -67,12 +66,12 @@ describe("DirectoryCreator", () => {
 
     it("should handle empty directories array gracefully", async () => {
         await expect(
-            directoryCreator.createDirectories(basePath, [])
+            directoryCreator.createDirectories(basePath, []),
         ).resolves.not.toThrow();
 
         const baseExists = await fs.stat(basePath).then(
             () => true,
-            () => false
+            () => false,
         );
         expect(baseExists).toBe(true);
     });

@@ -2,11 +2,10 @@
 // Import
 // ============================================================================
 
-import sharp from "sharp";
-import { JSDOM } from "jsdom";
 import fs from "fs";
+import { JSDOM } from "jsdom";
 import path from "path";
-
+import sharp from "sharp";
 
 // ============================================================================
 // Classes
@@ -18,14 +17,11 @@ import path from "path";
  * SVG elements.
  */
 class SvgToPngConverter {
-
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -45,10 +41,9 @@ class SvgToPngConverter {
         svgContent: string,
         outputPath: string,
         width?: number,
-        height?: number
+        height?: number,
     ): Promise<void> {
         try {
-
             // Ensure the output directory exists
             const outputDir = path.dirname(outputPath);
             if (!fs.existsSync(outputDir)) {
@@ -73,30 +68,26 @@ class SvgToPngConverter {
 
             // Serialize the updated SVG content
             const updatedSvgContent = svgElement.outerHTML;
-            
+
             // Convert SVG to PNG using Sharp
-            const pngBuffer = await sharp(
-                Buffer.from(updatedSvgContent)
-            ).png().toBuffer();
+            const pngBuffer = await sharp(Buffer.from(updatedSvgContent))
+                .png()
+                .toBuffer();
             await sharp(pngBuffer).toFile(outputPath);
 
             console.log(`PNG file has been saved to ${outputPath}`);
-
         } catch (error) {
             console.error(`Error converting SVG to PNG: ${error}`);
             throw error;
         }
     }
-
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default SvgToPngConverter;
-
 
 // ============================================================================
 // Example

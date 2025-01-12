@@ -5,7 +5,6 @@
 import { OptionsInterface } from "../../interface/OptionsInterface";
 import { AbstractValidator } from "../abstract/AbstractValidator";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -15,22 +14,17 @@ import { AbstractValidator } from "../abstract/AbstractValidator";
  * Extends AbstractValidator for consistent validation and logging.
  */
 export class OptionsValidator extends AbstractValidator<OptionsInterface> {
-
     // Parameters
     // ========================================================================
 
     /**
      * A runtime mapping of enumerated options for validation.
      */
-    private static allowedValues: Partial<Record<keyof OptionsInterface, unknown[]>> = {
-        logLevel: [
-            "debug",
-            "info",
-            "warn",
-            "error",
-           ],
+    private static allowedValues: Partial<
+        Record<keyof OptionsInterface, unknown[]>
+    > = {
+        logLevel: ["debug", "info", "warn", "error"],
     };
-
 
     // Constructor
     // ========================================================================
@@ -39,7 +33,6 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
         super();
         this.logDebug("OptionsValidator initialized.");
     }
-
 
     // Methods
     // ========================================================================
@@ -53,13 +46,13 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
      */
     protected validateProperty<K extends keyof OptionsInterface>(
         key: K,
-        value: OptionsInterface[K]
+        value: OptionsInterface[K],
     ): void {
         if (value === undefined) {
             this.throwValidationError(
                 key,
                 value,
-                `Option "${String(key)}" cannot be undefined.`
+                `Option "${String(key)}" cannot be undefined.`,
             );
             return;
         }
@@ -69,7 +62,7 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
             this.throwValidationError(
                 key,
                 value,
-                `Invalid value "${value}" for option "${String(key)}". Allowed values are: ${allowedValues.join(", ")}.`
+                `Invalid value "${value}" for option "${String(key)}". Allowed values are: ${allowedValues.join(", ")}.`,
             );
             return;
         }
@@ -87,7 +80,7 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
      */
     private validateByType<K extends keyof OptionsInterface>(
         key: K,
-        value: OptionsInterface[K]
+        value: OptionsInterface[K],
     ): void {
         switch (key) {
             case "stepTimeout":
@@ -98,7 +91,7 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
                     this.throwValidationError(
                         key,
                         value,
-                        "Must be a non-negative number."
+                        "Must be a non-negative number.",
                     );
                 }
                 break;
@@ -108,7 +101,11 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
                 if (this.isValidObject(value)) {
                     this.validateObject(key, value);
                 } else {
-                    this.throwValidationError(key, value, "Must be a valid object.");
+                    this.throwValidationError(
+                        key,
+                        value,
+                        "Must be a valid object.",
+                    );
                 }
                 break;
 
@@ -120,7 +117,11 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
                 if (typeof value === "string" && value.trim() !== "") {
                     this.validateString(key, value);
                 } else {
-                    this.throwValidationError(key, value, "Must be a non-empty string.");
+                    this.throwValidationError(
+                        key,
+                        value,
+                        "Must be a non-empty string.",
+                    );
                 }
         }
     }
@@ -136,17 +137,29 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
             this.throwValidationError(
                 "live.port",
                 value.port,
-                "Port must be a number between 1 and 65535."
+                "Port must be a number between 1 and 65535.",
             );
         }
         if (value?.root && typeof value.root !== "string") {
-            this.throwValidationError("live.root", value.root, "Root must be a valid string path.");
+            this.throwValidationError(
+                "live.root",
+                value.root,
+                "Root must be a valid string path.",
+            );
         }
         if (value?.watchPaths && !Array.isArray(value.watchPaths)) {
-            this.throwValidationError("live.watchPaths", value.watchPaths, "Must be an array of paths.");
+            this.throwValidationError(
+                "live.watchPaths",
+                value.watchPaths,
+                "Must be an array of paths.",
+            );
         }
         if (value?.ignoredPaths && !Array.isArray(value.ignoredPaths)) {
-            this.throwValidationError("live.ignoredPaths", value.ignoredPaths, "Must be an array of paths.");
+            this.throwValidationError(
+                "live.ignoredPaths",
+                value.ignoredPaths,
+                "Must be an array of paths.",
+            );
         }
     }
 
@@ -157,6 +170,10 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
      * @returns True if the value is an object and not null or an array.
      */
     private isValidObject(value: unknown): value is Record<string, unknown> {
-        return typeof value === "object" && value !== null && !Array.isArray(value);
+        return (
+            typeof value === "object" &&
+            value !== null &&
+            !Array.isArray(value)
+        );
     }
 }

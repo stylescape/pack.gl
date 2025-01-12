@@ -56,14 +56,15 @@ export class PipelineManager extends AbstractProcess {
         const config = ConfigStore.getInstance().getConfig();
 
         if (!config.stages || !Array.isArray(config.stages)) {
-            throw new Error("Invalid configuration: 'stages' must be an array.");
+            throw new Error(
+                "Invalid configuration: 'stages' must be an array.",
+            );
         }
 
         this.logInfo("Initializing pipeline...");
         const pipeline = new Pipeline(config);
 
         try {
-
             await pipeline.run();
 
             this.logInfo("Pipeline execution finished successfully.");
@@ -94,7 +95,9 @@ export class PipelineManager extends AbstractProcess {
         this.logInfo("Starting pipeline...");
         const scriptPath = path.resolve(process.cwd(), "dist/js/cli.js");
 
-        this.pipelineProcess = spawn("node", [scriptPath], { stdio: "inherit" });
+        this.pipelineProcess = spawn("node", [scriptPath], {
+            stdio: "inherit",
+        });
 
         this.attachProcessListeners();
 
@@ -123,7 +126,9 @@ export class PipelineManager extends AbstractProcess {
 
         this.pipelineProcess.on("exit", (code, signal) => {
             if (signal) {
-                this.logWarn(`Pipeline process was terminated with signal: ${signal}`);
+                this.logWarn(
+                    `Pipeline process was terminated with signal: ${signal}`,
+                );
             } else {
                 this.logInfo(`Pipeline process exited with code: ${code}`);
             }

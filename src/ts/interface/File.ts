@@ -8,7 +8,6 @@
  * that include both the file path and its source content.
  */
 export interface File {
-
     /**
      * The full path to the file.
      * This should include the complete directory path and the file name with
@@ -22,5 +21,4 @@ export interface File {
      * text.
      */
     source: string;
-
 }

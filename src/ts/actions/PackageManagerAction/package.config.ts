@@ -48,7 +48,7 @@ const packageConfig = {
         "svg/**/*.svg",
         "tex/**/*.tex",
         "ts/**/*.ts",
-        "!.DS_Store"
+        "!.DS_Store",
     ],
     // exports: {
     //     ".": {
@@ -85,9 +85,7 @@ const packageConfig = {
     //     type: string;
     //     url: string;
     // };
-
-
-}
+};
 
 // ============================================================================
 // Export

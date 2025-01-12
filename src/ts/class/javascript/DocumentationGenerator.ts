@@ -23,8 +23,6 @@ const execFileAsync = util.promisify(execFile);
  * and the specific documentation generation command to be used.
  */
 class DocumentationGenerator {
-
-
     // Parameters
     // ========================================================================
 
@@ -32,13 +30,12 @@ class DocumentationGenerator {
     private outputPath: string;
     private generatorCommand: string;
 
-
     // Constructor
     // ========================================================================
 
     /**
      * Initializes a new instance of the DocumentationGenerator.
-     * 
+     *
      * @param sourcePath - Path to the source files for which documentation
      * should be generated.
      * @param outputPath - Path where the generated documentation will be
@@ -49,13 +46,12 @@ class DocumentationGenerator {
     constructor(
         sourcePath: string,
         outputPath: string,
-        generatorCommand: string
+        generatorCommand: string,
     ) {
         this.sourcePath = sourcePath;
         this.outputPath = outputPath;
         this.generatorCommand = generatorCommand;
     }
-
 
     // Methods
     // ========================================================================
@@ -64,25 +60,20 @@ class DocumentationGenerator {
      * Executes the documentation generation process using the specified
      * command-line tool. Handles both the execution of the command and the
      * management of output, including logging and error reporting.
-     * 
+     *
      * @returns A promise that resolves when documentation generation is
      * successfully completed, or rejects with an error if the process fails.
      */
     async generate(): Promise<void> {
         try {
             // Prepare command arguments safely
-            const args = [
-                "-c",
-                this.sourcePath,
-                "-o",
-                this.outputPath
-            ];
+            const args = ["-c", this.sourcePath, "-o", this.outputPath];
 
             // Execute the documentation generation command safely without
             // shell interpolation
             const { stdout, stderr } = await execFileAsync(
                 this.generatorCommand,
-                args
+                args,
             );
 
             if (stderr) {
@@ -90,13 +81,11 @@ class DocumentationGenerator {
             }
 
             console.log(stdout);
-            console.log(
-                "Documentation generated successfully."
-            );
+            console.log("Documentation generated successfully.");
         } catch (error) {
             console.error(
                 "Error occurred while generating documentation:",
-                error
+                error,
             );
             throw error;
         }

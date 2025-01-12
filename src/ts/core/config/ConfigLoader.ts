@@ -8,7 +8,6 @@ import path from "path";
 import { ConfigInterface } from "../../interface/ConfigInterface";
 import { AbstractProcess } from "../abstract/AbstractProcess";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -31,10 +30,7 @@ export class ConfigLoader extends AbstractProcess {
     /**
      * Default filenames to search for configuration files.
      */
-    private readonly defaultFilenames = [
-        "pack.yaml",
-        "pack.yml"
-    ];
+    private readonly defaultFilenames = ["pack.yaml", "pack.yml"];
 
     // Constructor
     // ========================================================================
@@ -66,9 +62,7 @@ export class ConfigLoader extends AbstractProcess {
      * @param configPath - Optional custom configuration file path.
      */
     public async initialize(configPath?: string): Promise<void> {
-        const searchPaths = configPath
-            ? [configPath]
-            : this.defaultFilenames;
+        const searchPaths = configPath ? [configPath] : this.defaultFilenames;
 
         this.logDebug(`Current working directory: ${process.cwd()}`);
         this.logDebug("Searching for configuration files...");
@@ -78,7 +72,10 @@ export class ConfigLoader extends AbstractProcess {
             this.logDebug(`Checking: ${resolvedPath}`);
 
             try {
-                await fs.promises.access(resolvedPath, fs.constants.F_OK | fs.constants.R_OK);
+                await fs.promises.access(
+                    resolvedPath,
+                    fs.constants.F_OK | fs.constants.R_OK,
+                );
                 this.configPath = resolvedPath;
                 this.logDebug(`Configuration file found: ${resolvedPath}`);
                 return;
@@ -87,7 +84,9 @@ export class ConfigLoader extends AbstractProcess {
             }
         }
 
-        this.logWarn("No configuration file found. Proceeding with default settings.");
+        this.logWarn(
+            "No configuration file found. Proceeding with default settings.",
+        );
     }
 
     /**
@@ -98,21 +97,30 @@ export class ConfigLoader extends AbstractProcess {
      */
     public async loadConfig(): Promise<ConfigInterface> {
         if (!this.configPath) {
-            this.logWarn("No configuration file found. Using default configuration.");
+            this.logWarn(
+                "No configuration file found. Using default configuration.",
+            );
             return { stages: [] };
         }
 
         try {
             this.logDebug(`Loading configuration from: ${this.configPath}`);
-            const fileContents = await fs.promises.readFile(this.configPath, "utf8");
+            const fileContents = await fs.promises.readFile(
+                this.configPath,
+                "utf8",
+            );
             const config = yaml.load(fileContents) as ConfigInterface;
 
             this.validateConfig(config);
-            this.logDebug(`Successfully loaded configuration from: ${this.configPath}`);
+            this.logDebug(
+                `Successfully loaded configuration from: ${this.configPath}`,
+            );
             return config;
         } catch (error) {
             this.logError("Failed to load configuration.", error);
-            throw new Error(`Failed to load configuration: ${(error as Error).message}`);
+            throw new Error(
+                `Failed to load configuration: ${(error as Error).message}`,
+            );
         }
     }
 
@@ -124,7 +132,9 @@ export class ConfigLoader extends AbstractProcess {
      */
     private validateConfig(config: ConfigInterface): void {
         if (!Array.isArray(config.stages)) {
-            throw new Error("Invalid configuration: 'stages' must be an array.");
+            throw new Error(
+                "Invalid configuration: 'stages' must be an array.",
+            );
         }
         this.logDebug("Configuration structure validated successfully.");
     }

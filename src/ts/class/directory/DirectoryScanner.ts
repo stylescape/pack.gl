@@ -5,7 +5,6 @@
 import fs from "fs/promises";
 import path from "path";
 
-
 // ============================================================================
 // Classes
 // ============================================================================
@@ -16,14 +15,11 @@ import path from "path";
  * process files dynamically or monitor directory changes.
  */
 class DirectoryScanner {
-
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -44,16 +40,18 @@ class DirectoryScanner {
      */
     async scanDirectory(
         dirPath: string,
-        recursive: boolean = false
+        recursive: boolean = false,
     ): Promise<string[]> {
         try {
             const entries = await fs.readdir(dirPath, { withFileTypes: true });
-            const files = await Promise.all(entries.map(async (entry) => {
-                const resolvedPath = path.resolve(dirPath, entry.name);
-                return entry.isDirectory() && recursive
-                    ? this.scanDirectory(resolvedPath, true)
-                    : resolvedPath;
-            }));
+            const files = await Promise.all(
+                entries.map(async (entry) => {
+                    const resolvedPath = path.resolve(dirPath, entry.name);
+                    return entry.isDirectory() && recursive
+                        ? this.scanDirectory(resolvedPath, true)
+                        : resolvedPath;
+                }),
+            );
 
             return files.flat();
         } catch (error) {
@@ -61,16 +59,13 @@ class DirectoryScanner {
             throw error;
         }
     }
-
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default DirectoryScanner;
-
 
 // ============================================================================
 // Example

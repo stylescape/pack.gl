@@ -1,6 +1,5 @@
 // class/TestRunner.ts
 
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -9,7 +8,6 @@ import { exec } from "child_process";
 import util from "util";
 
 const execAsync = util.promisify(exec);
-
 
 // ============================================================================
 // Classes
@@ -20,12 +18,10 @@ const execAsync = util.promisify(exec);
  * executing shell commands for testing by providing a wrapper around the child_process module.
  */
 class TestRunner {
-
     // Parameters
     // ========================================================================
 
     private testCommand: string;
-
 
     // Constructor
     // ========================================================================
@@ -37,7 +33,6 @@ class TestRunner {
     constructor(testCommand: string) {
         this.testCommand = testCommand;
     }
-
 
     // Methods
     // ========================================================================
@@ -52,7 +47,7 @@ class TestRunner {
     async runTests(): Promise<string> {
         try {
             const { stdout, stderr } = await execAsync(this.testCommand);
-            
+
             if (stderr) {
                 throw new Error(stderr);
             }
@@ -63,16 +58,13 @@ class TestRunner {
             throw error;
         }
     }
-
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default TestRunner;
-
 
 // ============================================================================
 // Example

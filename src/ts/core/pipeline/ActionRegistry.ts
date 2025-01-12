@@ -9,7 +9,6 @@ import { ActionInterface } from "../../interface/ActionInterface";
 import { ActionPlugin } from "../../interface/ActionPlugin";
 import { AbstractProcess } from "../abstract/AbstractProcess";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -21,7 +20,6 @@ import { AbstractProcess } from "../abstract/AbstractProcess";
  * developer integrations.
  */
 export class ActionRegistry extends AbstractProcess {
-
     // Parameters
     // ========================================================================
 
@@ -34,7 +32,6 @@ export class ActionRegistry extends AbstractProcess {
      * Map to store registered actions
      */
     private registry: Map<string, new () => ActionInterface>;
-
 
     // Constructor
     // ========================================================================
@@ -53,7 +50,6 @@ export class ActionRegistry extends AbstractProcess {
         this.logInfo("ActionRegistry initialized.");
     }
 
-
     // Singleton Methods
     // ========================================================================
 
@@ -65,9 +61,7 @@ export class ActionRegistry extends AbstractProcess {
      */
     public static initialize(): void {
         if (ActionRegistry.instance) {
-            throw new Error(
-                "ActionRegistry has already been initialized."
-            );
+            throw new Error("ActionRegistry has already been initialized.");
         }
         ActionRegistry.instance = new ActionRegistry();
     }
@@ -94,7 +88,6 @@ export class ActionRegistry extends AbstractProcess {
         ActionRegistry.instance = null;
     }
 
-
     // Instance Methods
     // ========================================================================
 
@@ -104,20 +97,18 @@ export class ActionRegistry extends AbstractProcess {
      * @param actionClass - The class implementing `ActionInterface`.
      * @throws Error if the action name is already registered or missing.
      */
-    public registerAction(
-        actionClass: new () => ActionInterface
-    ): void {
+    public registerAction(actionClass: new () => ActionInterface): void {
         const actionInstance = new actionClass();
         const name = actionInstance.name;
 
         if (!name || typeof name !== "string") {
             throw new Error(
-                `[ActionRegistry] Action class must have a valid 'name' property.`
+                `[ActionRegistry] Action class must have a valid 'name' property.`,
             );
         }
         if (this.registry.has(name)) {
             throw new Error(
-                `[ActionRegistry] Action "${name}" is already registered.`
+                `[ActionRegistry] Action "${name}" is already registered.`,
             );
         }
 
@@ -134,10 +125,7 @@ export class ActionRegistry extends AbstractProcess {
      * @returns The action class constructor if found, or undefined if no such
      *  action is registered.
      */
-    public getAction(
-        name: string
-    ): (new () => ActionInterface) | undefined {
-
+    public getAction(name: string): (new () => ActionInterface) | undefined {
         // Validate the input name
         if (!name || typeof name !== "string") {
             this.logWarn(`Invalid action name requested: "${name}".`);
@@ -197,10 +185,13 @@ export class ActionRegistry extends AbstractProcess {
                     const pluginPath = join(nodeModulesPath, dir.name);
                     const plugin: ActionPlugin = require(pluginPath).default;
 
-                    if (plugin && typeof plugin.registerActions === "function") {
+                    if (
+                        plugin &&
+                        typeof plugin.registerActions === "function"
+                    ) {
                         const actions = plugin.registerActions();
                         for (const [name, actionClass] of Object.entries(
-                            actions
+                            actions,
                         )) {
                             this.registerAction(actionClass);
                         }
@@ -222,5 +213,4 @@ export class ActionRegistry extends AbstractProcess {
         this.registry.clear();
         this.logInfo("Registry cleared.");
     }
-
 }

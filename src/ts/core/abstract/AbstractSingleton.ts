@@ -7,13 +7,14 @@
  * It ensures that only one instance of the derived class can exist.
  */
 export abstract class AbstractSingleton<T extends AbstractSingleton<T>> {
-
     private static _instances = new Map<string, AbstractSingleton<any>>();
 
     protected constructor() {
         const className = this.constructor.name;
         if (AbstractSingleton._instances.has(className)) {
-            throw new Error(`${className} is a singleton and has already been instantiated.`);
+            throw new Error(
+                `${className} is a singleton and has already been instantiated.`,
+            );
         }
         AbstractSingleton._instances.set(className, this);
     }
@@ -24,7 +25,9 @@ export abstract class AbstractSingleton<T extends AbstractSingleton<T>> {
      *
      * @returns The singleton instance.
      */
-    public static getInstance<T extends AbstractSingleton<T>>(this: new () => T): T {
+    public static getInstance<T extends AbstractSingleton<T>>(
+        this: new () => T,
+    ): T {
         const className = this.name;
         if (!AbstractSingleton._instances.has(className)) {
             AbstractSingleton._instances.set(className, new this());
@@ -35,7 +38,9 @@ export abstract class AbstractSingleton<T extends AbstractSingleton<T>> {
     /**
      * Clears the singleton instance, useful for testing or resetting state.
      */
-    public static clearInstance<T extends AbstractSingleton<T>>(this: new () => T): void {
+    public static clearInstance<T extends AbstractSingleton<T>>(
+        this: new () => T,
+    ): void {
         AbstractSingleton._instances.delete(this.name);
     }
 }

@@ -1,12 +1,10 @@
 // class/NpmCommandRunner.ts
 
-
 // ============================================================================
 // Import
 // ============================================================================
 
 import { exec } from "child_process";
-
 
 // ============================================================================
 // Classes
@@ -19,26 +17,23 @@ import { exec } from "child_process";
  * updating dependencies.
  */
 class NpmCommandRunner {
-
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
 
     /**
      * Executes a given npm command and handles its output or errors.
-     * 
+     *
      * @param command The npm command to be executed, such as "install",
      * "update", or a custom script.
      * @returns A promise that resolves with the standard output of the
      * command, or rejects with an error message.
-     * 
+     *
      * @example
      * // Example usage:
      * const runner = new NpmCommandRunner();
@@ -61,16 +56,13 @@ class NpmCommandRunner {
             });
         });
     }
-
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default NpmCommandRunner;
-
 
 // ============================================================================
 // Example

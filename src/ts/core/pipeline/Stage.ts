@@ -6,7 +6,6 @@ import { StageInterface } from "../../interface/StageInterface";
 import { AbstractProcess } from "../abstract/AbstractProcess";
 import { Step } from "./Step";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -18,15 +17,12 @@ import { Step } from "./Step";
  * managed before execution.
  */
 export class Stage extends AbstractProcess {
-
-
     // Parameters
     // ========================================================================
 
     private name: string;
     private steps: Step[];
     private dependsOn?: string[];
-
 
     // Constructor
     // ========================================================================
@@ -39,18 +35,16 @@ export class Stage extends AbstractProcess {
     constructor(stage: StageInterface) {
         super(); // Initialize logging
         this.name = stage.name;
-        this.steps = stage.steps.map(step => new Step(step));
+        this.steps = stage.steps.map((step) => new Step(step));
         this.dependsOn = stage.dependsOn;
 
         this.logInfo(
-            `Stage "${this.name}" initialized with ${this.steps.length} steps.`
+            `Stage "${this.name}" initialized with ${this.steps.length} steps.`,
         );
     }
 
-
     // Methods
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -64,7 +58,6 @@ export class Stage extends AbstractProcess {
      * @throws Error if any step within the stage fails.
      */
     async execute(completedStages: Set<string>): Promise<void> {
-
         // Handle dependencies before executing the stage
         if (this.dependsOn) {
             await this.resolveDependencies(completedStages);
@@ -82,14 +75,13 @@ export class Stage extends AbstractProcess {
         } catch (error) {
             this.logError(
                 `Error executing stage "${this.name}": ${error}`,
-                error
+                error,
             );
             // Propagate the error to halt pipeline or manage based on
             // global settings
             throw error;
         }
     }
-
 
     /**
      * Resolves dependencies by ensuring all required stages have completed.
@@ -98,25 +90,20 @@ export class Stage extends AbstractProcess {
      * @returns A promise that resolves once all dependencies are met.
      */
     private async resolveDependencies(
-        completedStages: Set<string>
+        completedStages: Set<string>,
     ): Promise<void> {
         if (!this.dependsOn) return;
 
         this.logInfo(
             `Stage "${this.name}" is waiting for
-            dependencies:${this.dependsOn.join(", ")}`
+            dependencies:${this.dependsOn.join(", ")}`,
         );
         await Promise.all(
-            this.dependsOn.map(
-                dep => this.waitForStageCompletion(
-                    dep,
-                    completedStages
-                )
-            )
+            this.dependsOn.map((dep) =>
+                this.waitForStageCompletion(dep, completedStages),
+            ),
         );
-        this.logInfo(
-            `All dependencies resolved for stage: "${this.name}"`
-        );
+        this.logInfo(`All dependencies resolved for stage: "${this.name}"`);
     }
 
     /**
@@ -130,16 +117,15 @@ export class Stage extends AbstractProcess {
      */
     private async waitForStageCompletion(
         stageName: string,
-        completedStages: Set<string>
+        completedStages: Set<string>,
     ): Promise<void> {
         while (!completedStages.has(stageName)) {
-            await new Promise(
-                resolve => setTimeout(
+            await new Promise((resolve) =>
+                setTimeout(
                     resolve,
-                    100 // Polling interval to check completion status
-                )
+                    100, // Polling interval to check completion status
+                ),
             );
         }
     }
-
 }

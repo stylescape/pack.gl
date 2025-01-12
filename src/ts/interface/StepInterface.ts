@@ -5,7 +5,6 @@
 import { ActionInterface } from "./ActionInterface";
 import { StepOptionsInterface } from "./StepOptionsInterface";
 
-
 // ============================================================================
 // Interfaces
 // ============================================================================
@@ -17,7 +16,6 @@ import { StepOptionsInterface } from "./StepOptionsInterface";
  * sequence within their respective stages.
  */
 export interface StepInterface {
-
     /**
      * A unique identifier for the step, used for logging, debugging, and
      * reporting. This name should be descriptive and clearly indicate the
@@ -43,7 +41,6 @@ export interface StepInterface {
      * environments.
      */
     options?: StepOptionsInterface;
-
 
     /**
      * An optional flag to enable or disable this step dynamically.
@@ -83,5 +80,4 @@ export interface StepInterface {
         before?: () => Promise<void> | void;
         after?: () => Promise<void> | void;
     };
-
 }

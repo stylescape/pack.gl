@@ -11,10 +11,20 @@ describe("ArgumentParser", () => {
 
     describe("Initialization", () => {
         it("should initialize with default arguments", () => {
-            process.argv = ["node", "script.js", "--live", "--mode", "development"];
+            process.argv = [
+                "node",
+                "script.js",
+                "--live",
+                "--mode",
+                "development",
+            ];
             const parser = new ArgumentParser();
             expect(parser).toBeDefined();
-            expect(parser["args"]).toEqual(["--live", "--mode", "development"]);
+            expect(parser["args"]).toEqual([
+                "--live",
+                "--mode",
+                "development",
+            ]);
         });
     });
 
@@ -37,7 +47,9 @@ describe("ArgumentParser", () => {
             process.argv = ["node", "script.js", "--mode", "development"];
             const parser = new ArgumentParser();
             parser.getOption("mode");
-            expect(OptionsValidator.prototype.validate).toHaveBeenCalledWith({ mode: "development" });
+            expect(OptionsValidator.prototype.validate).toHaveBeenCalledWith({
+                mode: "development",
+            });
         });
     });
 
@@ -59,7 +71,13 @@ describe("ArgumentParser", () => {
 
     describe("getAllFlags", () => {
         it("should parse all CLI arguments into a key-value object", () => {
-            process.argv = ["node", "script.js", "--live", "--mode", "development"];
+            process.argv = [
+                "node",
+                "script.js",
+                "--live",
+                "--mode",
+                "development",
+            ];
             const parser = new ArgumentParser();
             const flags = parser.getAllFlags();
             expect(flags).toEqual({

@@ -54,7 +54,8 @@ export interface PipelineOptionsInterface {
      * - `retries`: Number of retry attempts before marking a step as failed.
      * - `delay`: Time in milliseconds between retry attempts.
      *
-     * This allows automatic retries for temporary failures, improving pipeline robustness.
+     * This allows automatic retries for temporary failures, improving
+     * pipeline robustness.
      *
      * @default { retries: 0, delay: 0 }
      * @example { retries: 3, delay: 1000 }

@@ -4,7 +4,6 @@
 
 import { Logger } from "../../logger/Logger";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -15,7 +14,6 @@ import { Logger } from "../../logger/Logger";
  * ensures logging consistency across the application.
  */
 export abstract class AbstractProcess {
-
     // Parameters
     // ========================================================================
 
@@ -23,7 +21,6 @@ export abstract class AbstractProcess {
      * Logger instance for handling log messages.
      */
     protected readonly logger: Logger;
-
 
     // Constructor
     // ========================================================================
@@ -37,7 +34,6 @@ export abstract class AbstractProcess {
         this.logger = Logger.getInstance();
     }
 
-
     // Logging Methods
     // ========================================================================
 
@@ -46,20 +42,15 @@ export abstract class AbstractProcess {
      * Use this for standard informational messages.
      * @param message - The message to log.
      */
-    protected logInfo(
-        message: string
-    ): void {
+    protected logInfo(message: string): void {
         this.logger.logInfo(this.constructor.name, message);
     }
-
 
     /**
      * Logs a debug message with the originating class name as context.
      * @param message - The debug message to log.
      */
-    protected logDebug(
-        message: string
-    ): void {
+    protected logDebug(message: string): void {
         this.logger.logDebug(this.constructor.name, message);
     }
 
@@ -68,9 +59,7 @@ export abstract class AbstractProcess {
      * Use this to highlight potential issues that are non-critical.
      * @param message - The warning message to log.
      */
-    protected logWarn(
-        message: string
-    ): void {
+    protected logWarn(message: string): void {
         this.logger.logWarn(this.constructor.name, message);
     }
 
@@ -84,10 +73,7 @@ export abstract class AbstractProcess {
      * @param error - (Optional) The error to log. Can be a string, an Error
      * object, or other types.
      */
-    protected logError(
-        message: string,
-        error?: unknown
-    ): void {
+    protected logError(message: string, error?: unknown): void {
         const errorMessage = this.formatError(message, error);
         this.logger.logError(this.constructor.name, errorMessage);
     }
@@ -100,10 +86,7 @@ export abstract class AbstractProcess {
      * @param error - Additional error information, such as an Error object.
      * @returns A formatted string combining the message and error details.
      */
-    private formatError(
-        message: string,
-        error?: unknown
-    ): string {
+    private formatError(message: string, error?: unknown): string {
         if (error instanceof Error) {
             return `${message}: ${error.message}`;
         } else if (typeof error === "string") {
@@ -120,10 +103,7 @@ export abstract class AbstractProcess {
      *
      * @param message - The success message to log.
      */
-    protected logSuccess(
-        message: string
-    ): void {
+    protected logSuccess(message: string): void {
         this.logger.logInfo(this.constructor.name, message);
     }
-
 }

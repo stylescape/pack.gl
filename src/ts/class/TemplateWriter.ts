@@ -1,15 +1,13 @@
 // class/TemplateWriter.ts
 
-
 // ============================================================================
 // Import
 // ============================================================================
 
 import { mkdir, writeFile } from "fs/promises";
-import path from "path";
 import nunjucks from "nunjucks";
-import nunjucksConfig from "../config/nunjucks.config.js"
-
+import path from "path";
+import nunjucksConfig from "../config/nunjucks.config.js";
 
 // ============================================================================
 // Classes
@@ -22,7 +20,6 @@ import nunjucksConfig from "../config/nunjucks.config.js"
  * templates, web pages, or configuration files.
  */
 class TemplateWriter {
-
     // Parameters
     // ========================================================================
 
@@ -41,7 +38,6 @@ class TemplateWriter {
     // private static defaultConfig: any = nunjucksConfig;
     private static defaultConfig: Record<string, any> = nunjucksConfig;
 
-
     // Constructor
     // ========================================================================
 
@@ -53,25 +49,21 @@ class TemplateWriter {
      * all templates.
      * @param {object} customConfig Custom configuration settings for Nunjucks.
      */
-     constructor(
+    constructor(
         // templatesDir: string,
         // context: {},
         // customConfig: any = {},
         templatesDir: string,
         context: Record<string, any> = {},
-        customConfig: Record<string, any> = {}
+        customConfig: Record<string, any> = {},
     ) {
         this.context = context;
         this.config = {
             ...TemplateWriter.defaultConfig,
-            ...customConfig
+            ...customConfig,
         };
-        nunjucks.configure(
-            templatesDir,
-            this.config,
-        );
+        nunjucks.configure(templatesDir, this.config);
     }
-
 
     // Methods
     // ========================================================================
@@ -84,10 +76,7 @@ class TemplateWriter {
      */
     async generateTemplate(template: string): Promise<string> {
         try {
-            return nunjucks.render(
-                template,
-                this.context,
-            );
+            return nunjucks.render(template, this.context);
         } catch (error) {
             console.error(`Error generating template: ${error}`);
             // throw error;
@@ -114,10 +103,7 @@ class TemplateWriter {
      * be written.
      * @throws {Error} If there is an error in writing the file.
      */
-     async generateToFile(
-        template: string,
-        outputFile: string
-    ): Promise<void> {
+    async generateToFile(template: string, outputFile: string): Promise<void> {
         try {
             const content = await this.generateTemplate(template);
             const dir = path.dirname(outputFile);
@@ -131,15 +117,12 @@ class TemplateWriter {
             await writeFile(outputFile, content, "utf-8");
 
             console.log(`File written to ${outputFile}`);
-
         } catch (error) {
             console.error(`Error writing to file: ${error}`);
             throw new Error("File writing failed");
         }
     }
-
 }
-
 
 // ============================================================================
 // Export
@@ -147,11 +130,9 @@ class TemplateWriter {
 
 export default TemplateWriter;
 
-
 // ============================================================================
 // Example
 // ============================================================================
-
 
 // import TemplateWriter from "./TemplateWriter";
 

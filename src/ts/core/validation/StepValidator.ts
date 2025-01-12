@@ -7,7 +7,6 @@ import { StepOptionsInterface } from "../../interface/StepOptionsInterface";
 import { AbstractValidator } from "../abstract/AbstractValidator";
 import { ActionValidator } from "./ActionValidator";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -18,12 +17,10 @@ import { ActionValidator } from "./ActionValidator";
  * actions are valid.
  */
 export class StepValidator extends AbstractValidator<StepInterface> {
-
     // Parameters
     // ========================================================================
 
     private actionValidator: ActionValidator;
-
 
     // Constructor
     // ========================================================================
@@ -37,7 +34,6 @@ export class StepValidator extends AbstractValidator<StepInterface> {
         this.actionValidator = new ActionValidator();
         this.logInfo("StepValidator initialized.");
     }
-
 
     // Methods
     // ========================================================================
@@ -69,7 +65,7 @@ export class StepValidator extends AbstractValidator<StepInterface> {
      */
     public validateProperty<K extends keyof StepInterface>(
         key: K,
-        value: StepInterface[K]
+        value: StepInterface[K],
     ): void {
         switch (key) {
             case "name":
@@ -82,7 +78,7 @@ export class StepValidator extends AbstractValidator<StepInterface> {
                 this.throwValidationError(
                     key,
                     value,
-                    "Unknown key provided for validation."
+                    "Unknown key provided for validation.",
                 );
         }
 
@@ -101,7 +97,7 @@ export class StepValidator extends AbstractValidator<StepInterface> {
             this.throwValidationError(
                 "name",
                 name,
-                "Each step must have a valid, non-empty 'name' property."
+                "Each step must have a valid, non-empty 'name' property.",
             );
         }
     }
@@ -115,12 +111,14 @@ export class StepValidator extends AbstractValidator<StepInterface> {
      */
     private validateActions(action: StepInterface["action"]): void {
         if (
-            !action || typeof action.name !== "string" || action.name.trim() === ""
+            !action ||
+            typeof action.name !== "string" ||
+            action.name.trim() === ""
         ) {
             this.throwValidationError(
                 "action",
                 action,
-                "Each step must have a valid 'action' object with a non-empty 'name' property."
+                "Each step must have a valid 'action' object with a non-empty 'name' property.",
             );
         }
 
@@ -130,14 +128,10 @@ export class StepValidator extends AbstractValidator<StepInterface> {
             this.throwValidationError(
                 "action",
                 action,
-                (error as Error).message
+                (error as Error).message,
             );
         }
     }
-
-
-
-
 
     /**
      * Validates the step options.
@@ -152,15 +146,18 @@ export class StepValidator extends AbstractValidator<StepInterface> {
             this.throwValidationError(
                 "options",
                 options,
-                "Step options must be a valid object or undefined, but 'null' was provided."
+                "Step options must be a valid object or undefined, but 'null' was provided.",
             );
         }
 
-        if (options && (typeof options !== "object" || Array.isArray(options))) {
+        if (
+            options &&
+            (typeof options !== "object" || Array.isArray(options))
+        ) {
             this.throwValidationError(
                 "options",
                 options,
-                "Step options must be a valid object conforming to StepOptionsInterface."
+                "Step options must be a valid object conforming to StepOptionsInterface.",
             );
         }
 
@@ -173,17 +170,20 @@ export class StepValidator extends AbstractValidator<StepInterface> {
                             this.throwValidationError(
                                 "options",
                                 value,
-                                `Invalid value for "description": must be a string.`
+                                `Invalid value for "description": must be a string.`,
                             );
                         }
                         break;
 
                     case "enabled":
-                        if (value !== undefined && typeof value !== "boolean") {
+                        if (
+                            value !== undefined &&
+                            typeof value !== "boolean"
+                        ) {
                             this.throwValidationError(
                                 "options",
                                 value,
-                                `Invalid value for "enabled": must be a boolean.`
+                                `Invalid value for "enabled": must be a boolean.`,
                             );
                         }
                         break;
@@ -191,7 +191,7 @@ export class StepValidator extends AbstractValidator<StepInterface> {
                     default:
                         // For additional custom keys, you can implement further checks
                         this.logInfo(
-                            `Validating additional key "${key}" with value "${value}".`
+                            `Validating additional key "${key}" with value "${value}".`,
                         );
                         break;
                 }
@@ -200,6 +200,4 @@ export class StepValidator extends AbstractValidator<StepInterface> {
 
         this.logInfo("Step options validated successfully.");
     }
-
-
 }

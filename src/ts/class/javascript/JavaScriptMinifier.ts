@@ -2,10 +2,9 @@
 // Import
 // ============================================================================
 
-import { minify } from "terser";
 import { promises as fs } from "fs";
-import terserConfig from "../../config/terser.config.js"
-
+import { minify } from "terser";
+import terserConfig from "../../config/terser.config.js";
 
 // ============================================================================
 // Classes
@@ -18,7 +17,6 @@ import terserConfig from "../../config/terser.config.js"
  * size.
  */
 class JavaScriptMinifier {
-
     // Parameters
     // ========================================================================
 
@@ -26,13 +24,12 @@ class JavaScriptMinifier {
      * Configuration for the Terser minification process.
      */
     private config: any;
- 
+
     /**
      * Default configuration for the Terser minification, loaded from an
      * external configuration file.
      */
     private static defaultConfig: any = terserConfig;
- 
 
     // Constructor
     // ========================================================================
@@ -40,26 +37,23 @@ class JavaScriptMinifier {
     /**
      * Constructs an instance with merged configuration of default and
      * optionally provided custom settings.
-     * 
+     *
      * @param {any} customConfig Optional. Custom configuration object to
      * override or extend the default Terser options.
      */
-    constructor(
-        customConfig: any = {},
-    ) {
+    constructor(customConfig: any = {}) {
         this.config = {
             ...JavaScriptMinifier.defaultConfig,
-            ...customConfig
+            ...customConfig,
         };
     }
-
 
     // Methods
     // ========================================================================
 
     /**
      * Minifies a JavaScript file using the configured Terser settings.
-     * 
+     *
      * @param {string} inputPath Path to the input JavaScript file.
      * @param {string} outputPath Path where the minified file will be saved.
      * @returns {Promise<void>} A promise that resolves when the minification
@@ -73,9 +67,7 @@ class JavaScriptMinifier {
         outputPath: string,
         // options: object = {}
     ): Promise<void> {
-
         try {
-
             // Read the input file
             const inputCode = await fs.readFile(inputPath, "utf8");
 
@@ -88,17 +80,15 @@ class JavaScriptMinifier {
             } else {
                 throw new Error("Minification resulted in empty output.");
             }
-
         } catch (error) {
             console.error(
-                `Error minifying JavaScript file ${inputPath}:`, error
+                `Error minifying JavaScript file ${inputPath}:`,
+                error,
             );
             throw error;
         }
     }
-
 }
-
 
 // ============================================================================
 // Export
@@ -106,11 +96,9 @@ class JavaScriptMinifier {
 
 export default JavaScriptMinifier;
 
-
 // ============================================================================
 // Example
 // ============================================================================
-
 
 // import JavaScriptMinifier from "./JavaScriptMinifier";
 

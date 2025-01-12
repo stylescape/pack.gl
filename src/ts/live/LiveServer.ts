@@ -9,8 +9,8 @@ import path from "path";
 import { WebSocket, WebSocketServer } from "ws";
 import { AbstractProcess } from "../core/abstract/AbstractProcess";
 import { ConfigStore } from "../core/config/ConfigStore";
+import { LiveOptionsInterface } from "../interface";
 import { OptionsInterface } from "../interface/OptionsInterface";
-
 
 // ============================================================================
 // Class
@@ -22,7 +22,6 @@ import { OptionsInterface } from "../interface/OptionsInterface";
  * connections to enable live reload capabilities.
  */
 export class LiveServer extends AbstractProcess {
-
     // Parameters
     // ========================================================================
 
@@ -74,7 +73,6 @@ export class LiveServer extends AbstractProcess {
      */
     private ignoredPaths: string[];
 
-
     // Constructor
     // ========================================================================
 
@@ -82,37 +80,30 @@ export class LiveServer extends AbstractProcess {
      * Initializes the LiveServer.
     //  * @param port - The port on which the server will listen.
      */
-    constructor(
-    ) {
-
+    constructor() {
         super();
 
         const configStore = ConfigStore.getInstance();
 
-        const liveReloadOptions = configStore.get<OptionsInterface["live"]>("options.live") || {};
+        const liveReloadOptions: LiveOptionsInterface =
+            configStore.get<OptionsInterface["live"]>("options.live") || {};
 
         // Extract and apply live reload options with defaults
         this.port = liveReloadOptions.port || 3000;
         this.root = path.resolve(
             process.cwd(),
-            liveReloadOptions.root || "public"
+            liveReloadOptions.root || "public",
         );
         this.watchPaths = (
             liveReloadOptions.watchPaths || [
                 "src/**/*",
                 "config/**/*",
-                "pack.yaml"
+                "pack.yaml",
             ]
-        ).map((p) =>
-            path.resolve(process.cwd(), p)
-        );
+        ).map((p: string) => path.resolve(process.cwd(), p));
         this.ignoredPaths = (
-            liveReloadOptions.ignoredPaths || [
-                "node_modules"
-            ]
-        ).map((p) =>
-            path.resolve(process.cwd(), p)
-        );
+            liveReloadOptions.ignoredPaths || ["node_modules"]
+        ).map((p: string) => path.resolve(process.cwd(), p));
 
         // Log initialization details
         this.logInitializationDetails();
@@ -121,13 +112,11 @@ export class LiveServer extends AbstractProcess {
         // this.initializeServer();
 
         // Start the HTTP server
-        this.server = this.app.listen(
-            this.port, () => {
-                this.logInfo(
-                    `Live Server running at http://localhost:${this.port}`
-                );
-            }
-        );
+        this.server = this.app.listen(this.port, () => {
+            this.logInfo(
+                `Live Server running at http://localhost:${this.port}`,
+            );
+        });
 
         // Initialize WebSocket server
         this.wss = new WebSocketServer({ server: this.server });
@@ -140,9 +129,7 @@ export class LiveServer extends AbstractProcess {
 
         // Set up middleware
         this.setupMiddleware();
-
     }
-
 
     // Methods
     // ========================================================================
@@ -152,13 +139,11 @@ export class LiveServer extends AbstractProcess {
      */
     private initializeServer(): void {
         // Start the HTTP server
-        this.server = this.app.listen(
-            this.port, () => {
-                this.logInfo(
-                    `Live Server running at http://localhost:${this.port}`
-                );
-            }
-        );
+        this.server = this.app.listen(this.port, () => {
+            this.logInfo(
+                `Live Server running at http://localhost:${this.port}`,
+            );
+        });
 
         // Initialize WebSocket server
         this.wss = new WebSocketServer({ server: this.server });
@@ -188,33 +173,23 @@ export class LiveServer extends AbstractProcess {
      * Sets up WebSocket handlers to manage client connections.
      */
     private setupWebSocketHandlers(): void {
-
         this.wss.on("connection", (ws: WebSocket) => {
-
-            this.logInfo(
-                "New WebSocket connection established."
-            );
+            this.logInfo("New WebSocket connection established.");
             this.clients.add(ws);
 
             ws.on("message", (message) => {
                 this.logInfo(
-                    `WebSocket message received: ${message.toString()}`
+                    `WebSocket message received: ${message.toString()}`,
                 );
             });
             ws.on("close", () => {
-                this.logInfo(
-                    "WebSocket connection closed.",
-                );
+                this.logInfo("WebSocket connection closed.");
                 this.clients.delete(ws);
             });
             ws.on("error", (error) => {
-                console.error(
-                    "WebSocket encountered an error:",
-                    error
-                );
+                console.error("WebSocket encountered an error:", error);
                 this.clients.delete(ws);
             });
-
         });
     }
 
@@ -223,28 +198,16 @@ export class LiveServer extends AbstractProcess {
      * reload script into HTML files.
      */
     private setupMiddleware(): void {
-
         // Securely serve static files from the "public" directory
         // const publicPath = path.resolve(
         //     __dirname,
         //     "public"
         // );
-        this.logInfo(
-            `Resolved public directory: ${this.root}`
-        );
-        this.logInfo(
-            `Serving static files from: ${this.root}`
-        );
-        this.app.use(
-            express.static(this.root)
-        );
+        this.logInfo(`Resolved public directory: ${this.root}`);
+        this.logInfo(`Serving static files from: ${this.root}`);
+        this.app.use(express.static(this.root));
         // Middleware to inject the live reload script into HTML files
-        this.app.use(
-            this.injectLiveReloadScript.bind(this)
-        );
-
-
-
+        this.app.use(this.injectLiveReloadScript.bind(this));
     }
 
     /**
@@ -258,13 +221,13 @@ export class LiveServer extends AbstractProcess {
     private injectLiveReloadScript(
         req: Request,
         res: Response,
-        next: NextFunction
+        next: NextFunction,
     ): void {
         if (req.url.endsWith(".html")) {
             const sanitizedPath = path.join(
                 path.resolve(__dirname, "public"),
                 // Prevent directory traversal
-                path.normalize(req.url).replace(/^(\.\.(\/|\\|$))+/g, "")
+                path.normalize(req.url).replace(/^(\.\.(\/|\\|$))+/g, ""),
             );
 
             res.sendFile(sanitizedPath, (err) => {
@@ -281,7 +244,7 @@ export class LiveServer extends AbstractProcess {
                                     window.location.reload();
                                 }
                             };
-                        </script>`
+                        </script>`,
                     );
                     res.end();
                 }
@@ -295,16 +258,13 @@ export class LiveServer extends AbstractProcess {
      * Sends a reload signal to all connected WebSocket clients.
      */
     public reloadClients(): void {
-
         this.logInfo("Reloading all connected clients...");
 
-        this.clients.forEach(
-            client => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send("reload");
-                }
+        this.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send("reload");
             }
-        );
+        });
     }
 
     /**
@@ -320,17 +280,15 @@ export class LiveServer extends AbstractProcess {
             this.server.close((err) => {
                 if (err) {
                     if (
-                        this.isErrnoException(err) && err.code === "ERR_SERVER_NOT_RUNNING"
+                        this.isErrnoException(err) &&
+                        err.code === "ERR_SERVER_NOT_RUNNING"
                     ) {
                         this.logWarn(
-                            "Server is not running, skipping shutdown."
+                            "Server is not running, skipping shutdown.",
                         );
                         resolve();
                     } else {
-                        this.logError(
-                            "Error shutting down server:",
-                            err
-                        );
+                        this.logError("Error shutting down server:", err);
                         reject(err);
                     }
                 } else {
@@ -339,9 +297,7 @@ export class LiveServer extends AbstractProcess {
             });
         });
 
-        this.logInfo(
-            "Live Reload Server has been shut down."
-        );
+        this.logInfo("Live Reload Server has been shut down.");
     }
 
     /**
@@ -349,10 +305,7 @@ export class LiveServer extends AbstractProcess {
      * @param error - The error to check.
      * @returns True if the error has a `code` property.
      */
-    private isErrnoException(
-        error: unknown
-    ): error is NodeJS.ErrnoException {
+    private isErrnoException(error: unknown): error is NodeJS.ErrnoException {
         return typeof error === "object" && error !== null && "code" in error;
     }
-
 }

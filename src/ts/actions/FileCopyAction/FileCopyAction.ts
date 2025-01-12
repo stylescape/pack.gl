@@ -2,11 +2,10 @@
 // Import
 // ============================================================================
 
-import { Action } from "../../core/pipeline/Action";
-import { ActionOptionsType } from "../../types/ActionOptionsType";
 import fs from "fs";
 import path from "path";
-
+import { Action } from "../../core/pipeline/Action";
+import { ActionOptionsType } from "../../types/ActionOptionsType";
 
 // ============================================================================
 // Classes
@@ -19,14 +18,11 @@ import path from "path";
  * replaced if necessary.
  */
 export class FileCopyAction extends Action {
-
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -38,17 +34,12 @@ export class FileCopyAction extends Action {
      * @returns A Promise that resolves when the file has been successfully
      * copied, or rejects with an error if the action fails.
      */
-    async execute(
-        options: ActionOptionsType
-    ): Promise<void> {
-
+    async execute(options: ActionOptionsType): Promise<void> {
         const srcFile = options.srcFile as string;
         const destDir = options.destDir as string;
 
         if (!srcFile || !destDir) {
-            throw new Error(
-                "Missing required options: srcFile or destDir."
-            );
+            throw new Error("Missing required options: srcFile or destDir.");
         }
 
         this.logInfo(`Copying file from ${srcFile} to ${destDir}.`);
@@ -56,11 +47,11 @@ export class FileCopyAction extends Action {
         try {
             await this.copyFileToDirectory(srcFile, destDir);
             this.logInfo(
-                `File copied successfully from ${srcFile} to ${destDir}.`
+                `File copied successfully from ${srcFile} to ${destDir}.`,
             );
         } catch (error) {
             this.logError(
-                `Error copying file from ${srcFile} to ${destDir}: ${error}`
+                `Error copying file from ${srcFile} to ${destDir}: ${error}`,
             );
             throw error;
         }
@@ -70,7 +61,7 @@ export class FileCopyAction extends Action {
      * Copies a file from a specified source to a destination directory.
      * Handles file path resolution and ensures the destination directory
      * exists.
-     * 
+     *
      * @param srcFile - The path of the source file to be copied.
      * @param destDir - The destination directory where the file should
      * be placed.
@@ -81,7 +72,7 @@ export class FileCopyAction extends Action {
      */
     private async copyFileToDirectory(
         srcFile: string,
-        destDir: string
+        destDir: string,
     ): Promise<void> {
         try {
             // Ensure the destination directory exists
@@ -126,7 +117,6 @@ export class FileCopyAction extends Action {
         return "Copies a file from a source location to a destination directory, ensuring directories exist and handling errors gracefully.";
     }
 }
-
 
 // ============================================================================
 // Export

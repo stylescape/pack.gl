@@ -3,8 +3,6 @@
 // ============================================================================
 
 import fs from "fs";
-import path from "path";
-
 
 // ============================================================================
 // Classes
@@ -16,15 +14,12 @@ import path from "path";
  * includes comprehensive error management to address
  * potential issues such as file accessibility or conflicts.
  */
- class FileRenamer {
-
+class FileRenamer {
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -33,7 +28,7 @@ import path from "path";
      * Renames a file from its current path to a new path. This operation is
      * atomic on most file systems, which means it is either completed fully
      * or not done at all, preventing partial updates.
-     * 
+     *
      * @param srcPath The current path of the file to be renamed.
      * @param targetPath The new path where the file will be renamed.
      * @returns A Promise that resolves when the file has been successfully
@@ -41,10 +36,7 @@ import path from "path";
      * @throws {Error} Errors could include "ENOENT" if the source file does
      * not exist, or "EACCES" if permission is denied.
      */
-    async renameFile(
-        srcPath: string,
-        targetPath: string
-    ): Promise<void> {
+    async renameFile(srcPath: string, targetPath: string): Promise<void> {
         try {
             await fs.promises.rename(srcPath, targetPath);
             console.log(`File renamed from ${srcPath} to ${targetPath}`);
@@ -53,16 +45,13 @@ import path from "path";
             throw error;
         }
     }
-
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default FileRenamer;
-
 
 // ============================================================================
 // Example
@@ -77,4 +66,3 @@ export default FileRenamer;
 // renamer.renameFile(srcPath, targetPath)
 //     .then(() => console.log("File successfully renamed."))
 //     .catch(error => console.error("Failed to rename file:", error));
-

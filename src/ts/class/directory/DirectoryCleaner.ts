@@ -3,9 +3,8 @@
 // ============================================================================
 
 // import { promises as fsPromises } from "fs";
-import path from "path";
 import fs from "fs";
-
+import path from "path";
 
 // ============================================================================
 // Classes
@@ -17,14 +16,11 @@ import fs from "fs";
  * This includes all files and subdirectories contained within.
  */
 class DirectoryCleaner {
-
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -41,12 +37,14 @@ class DirectoryCleaner {
      */
     public cleanDirectory(dirPath: string): void {
         if (fs.existsSync(dirPath)) {
-            fs.readdirSync(dirPath).forEach(file => {
+            fs.readdirSync(dirPath).forEach((file) => {
                 const curPath = path.join(dirPath, file);
 
-                if (fs.lstatSync(curPath).isDirectory()) { // Recurse
+                if (fs.lstatSync(curPath).isDirectory()) {
+                    // Recurse
                     this.cleanDirectory(curPath);
-                } else { // Delete file
+                } else {
+                    // Delete file
                     fs.unlinkSync(curPath);
                 }
             });
@@ -56,13 +54,11 @@ class DirectoryCleaner {
     }
 }
 
-
 // ============================================================================
 // Export
 // ============================================================================
 
 export default DirectoryCleaner;
-
 
 // ============================================================================
 // Example

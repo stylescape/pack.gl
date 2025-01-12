@@ -1,7 +1,5 @@
 // class/NodemonServer.ts
 
-
-
 // ============================================================================
 // Import
 // ============================================================================
@@ -63,16 +61,15 @@
 //     "start": "nodemon --watch src --ext ts,js,json --exec ts-node src/index.ts"
 // }
 
-
 // ============================================================================
 // Example
 // ============================================================================
 
 /**
  * Usage Example:
- * 
+ *
  * import CustomServer from "./CustomServer";
- * 
+ *
  * const server = new CustomServer();
  * server.listen(3000); // Listen on port 3000
  */

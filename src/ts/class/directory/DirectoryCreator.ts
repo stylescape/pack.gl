@@ -5,7 +5,6 @@
 import { promises as fsPromises } from "fs";
 import path from "path";
 
-
 // ============================================================================
 // Classes
 // ============================================================================
@@ -16,15 +15,12 @@ import path from "path";
  * ensuring that necessary directory structures are in place for file
  * operations.
  */
- class DirectoryCreator {
-
+class DirectoryCreator {
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -47,7 +43,7 @@ import path from "path";
      */
     async createDirectories(
         basePath: string,
-        directories: string[]
+        directories: string[],
     ): Promise<void> {
         try {
             for (const dir of directories) {
@@ -62,13 +58,11 @@ import path from "path";
     }
 }
 
-
 // ============================================================================
 // Export
 // ============================================================================
 
 export default DirectoryCreator;
-
 
 // ============================================================================
 // Example

@@ -2,12 +2,11 @@
 // Import
 // ============================================================================
 
-import path from "path";
 import fs from "fs/promises";
+import path from "path";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType.js";
 import packageConfig from "./package.config.js";
-
 
 // ============================================================================
 // Classes
@@ -32,7 +31,7 @@ export class PackageManagerAction extends Action {
 
         if (!packageJsonPath && !outputDir) {
             throw new Error(
-                "Either 'packageJsonPath' or 'outputDir' must be specified."
+                "Either 'packageJsonPath' or 'outputDir' must be specified.",
             );
         }
 
@@ -52,7 +51,9 @@ export class PackageManagerAction extends Action {
      * @returns A Promise that resolves to the parsed JSON object from the file.
      * @throws {Error} Throws an error if the file cannot be found or the content is not valid JSON.
      */
-    private async readPackageJson(packageJsonPath: string): Promise<Record<string, unknown>> {
+    private async readPackageJson(
+        packageJsonPath: string,
+    ): Promise<Record<string, unknown>> {
         const fullPath = path.resolve(packageJsonPath);
 
         try {
@@ -62,11 +63,17 @@ export class PackageManagerAction extends Action {
             return parsedContent;
         } catch (error: any) {
             if (error.code === "ENOENT") {
-                throw new Error(`File not found at ${fullPath}. Please ensure the path is correct.`);
+                throw new Error(
+                    `File not found at ${fullPath}. Please ensure the path is correct.`,
+                );
             } else if (error.name === "SyntaxError") {
-                throw new Error(`Invalid JSON in ${fullPath}: ${error.message}`);
+                throw new Error(
+                    `Invalid JSON in ${fullPath}: ${error.message}`,
+                );
             } else {
-                throw new Error(`Unexpected error while reading ${fullPath}: ${error.message}`);
+                throw new Error(
+                    `Unexpected error while reading ${fullPath}: ${error.message}`,
+                );
             }
         }
     }
@@ -79,7 +86,10 @@ export class PackageManagerAction extends Action {
      * @returns A Promise that resolves when the file has been successfully created.
      * @throws {Error} Throws an error if the directory cannot be created or the file cannot be written.
      */
-    private async createPackageJson(outputDir: string, customConfig: Record<string, any>): Promise<void> {
+    private async createPackageJson(
+        outputDir: string,
+        customConfig: Record<string, any>,
+    ): Promise<void> {
         const filePath = path.join(outputDir, "package.json");
         const config = { ...packageConfig, ...customConfig };
         const data = JSON.stringify(config, null, 2);

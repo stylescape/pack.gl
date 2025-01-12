@@ -2,9 +2,8 @@
 // Import
 // ============================================================================
 
-import autoprefixer from 'autoprefixer'; // Handles CSS vendor prefixing automatically
-import cssnano from 'cssnano'; // A PostCSS plugin for CSS minimization
-
+import autoprefixer from "autoprefixer"; // Handles CSS vendor prefixing automatically
+import cssnano from "cssnano"; // A PostCSS plugin for CSS minimization
 
 // ============================================================================
 // Constants
@@ -18,12 +17,12 @@ import cssnano from 'cssnano'; // A PostCSS plugin for CSS minimization
 const postcssConfigCompressed = {
     plugins: [
         autoprefixer, // Automatically adds vendor prefixes to CSS rules
-        cssnano({     // Compresses CSS output
-            preset: 'default' // Uses the default settings for compression
+        cssnano({
+            // Compresses CSS output
+            preset: "default", // Uses the default settings for compression
         }),
-    ]
+    ],
 };
-
 
 // ============================================================================
 // Export

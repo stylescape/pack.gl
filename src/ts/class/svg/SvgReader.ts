@@ -4,7 +4,6 @@
 
 import { promises as fs } from "fs";
 
-
 // ============================================================================
 // Classes
 // ============================================================================
@@ -16,14 +15,11 @@ import { promises as fs } from "fs";
  * systems.
  */
 class SvgReader {
-
     // Parameters
     // ========================================================================
 
-
     // Constructor
     // ========================================================================
-
 
     // Methods
     // ========================================================================
@@ -32,7 +28,7 @@ class SvgReader {
      * Reads the content of an SVG file asynchronously.
      * This method is useful for applications that need to load and manipulate
      * SVG graphics, perhaps for rendering or further processing.
-     * 
+     *
      * @param filePath The path to the SVG file.
      * @returns A promise that resolves to the content of the SVG file as a
      * string.
@@ -48,16 +44,13 @@ class SvgReader {
             throw error; // Rethrow the error for further handling if necessary
         }
     }
-
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default SvgReader;
-
 
 // ============================================================================
 // Example

@@ -3,11 +3,9 @@
 // ============================================================================
 
 import * as fs from "fs/promises";
-import * as path from "path";
 import * as glob from "glob";
-import SVGO from "svgo";
-import { loadConfig } from "svgo";
-
+import * as path from "path";
+import SVGO, { loadConfig } from "svgo";
 
 // ============================================================================
 // Classes
@@ -19,10 +17,8 @@ import { loadConfig } from "svgo";
  * using SVGO, and then outputs them as TypeScript files and JSON indexes.
  */
 class SvgPackager {
-
     // Parameters
     // ========================================================================
-
 
     // Constructor
     // ========================================================================
@@ -31,10 +27,7 @@ class SvgPackager {
      * Constructor for SvgPackager class.
      * Optionally accepts configurations or dependencies.
      */
-    constructor(
-        private svgoConfigPath: string
-    ) {}
-
+    constructor(private svgoConfigPath: string) {}
 
     // Methods
     // ========================================================================
@@ -52,7 +45,6 @@ class SvgPackager {
         ts_output_directory: string,
         json_output_directory: string,
     ): Promise<void> {
-
         const iconNames: string[] = [];
 
         try {
@@ -61,10 +53,9 @@ class SvgPackager {
             const svgFiles = glob.sync(`${inputDirectory}/**/*.svg`);
 
             for (const file of svgFiles) {
-
                 // console.log(`Processing file: ${file}`);
                 const iconName = this.sanitizeFileName(
-                    path.basename(file, ".svg")
+                    path.basename(file, ".svg"),
                 );
                 iconNames.push(iconName);
 
@@ -74,14 +65,14 @@ class SvgPackager {
                 // const optimizedSvg = await this.optimizeSvg(file, svgContent);
 
                 // svgo will always add a final newline when in pretty mode
-                const resultSvg = optimizedSvg.trim()
+                const resultSvg = optimizedSvg.trim();
 
                 // Write the optimized SVG file
                 await this.writeSvgFile(
                     // file,
                     iconName,
                     resultSvg,
-                    outputDirectory
+                    outputDirectory,
                 );
 
                 // Write the optimized TypeScript file
@@ -89,19 +80,14 @@ class SvgPackager {
                     // file,
                     iconName,
                     resultSvg,
-                    ts_output_directory
+                    ts_output_directory,
                 );
-
             }
 
-            await this.writeIconsJson(
-                iconNames,
-                json_output_directory
-            );
+            await this.writeIconsJson(iconNames, json_output_directory);
             console.log(
-                `Successfully processed ${svgFiles.length} SVG files.`
+                `Successfully processed ${svgFiles.length} SVG files.`,
             );
-
         } catch (error) {
             console.error("Error processing SVG files:", error);
             throw error;
@@ -123,9 +109,7 @@ class SvgPackager {
     //         throw error;
     //     }
     // }
-    private async readSvgFile(
-        filePath: string
-    ): Promise<string> {
+    private async readSvgFile(filePath: string): Promise<string> {
         return fs.readFile(filePath, "utf8");
     }
 
@@ -145,18 +129,10 @@ class SvgPackager {
     private async writeFiles(
         iconName: string,
         svgContent: string,
-        outputDirectory: string
+        outputDirectory: string,
     ): Promise<void> {
-        await this.writeSvgFile(
-            iconName,
-            svgContent,
-            outputDirectory
-        );
-        await this.writeTypeScriptFile(
-            iconName,
-            svgContent,
-            outputDirectory
-        );
+        await this.writeSvgFile(iconName, svgContent, outputDirectory);
+        await this.writeTypeScriptFile(iconName, svgContent, outputDirectory);
     }
 
     /**
@@ -170,7 +146,7 @@ class SvgPackager {
     // ): Promise<string> {
 
     //     try {
-            
+
     //         const config = await loadConfig(
     //             path.join(__dirname, "../config/svgo.config.js")
     //         )
@@ -217,7 +193,7 @@ class SvgPackager {
     private async writeTypeScriptFile(
         iconName: string,
         svgContent: string,
-        outputDirectory: string
+        outputDirectory: string,
     ): Promise<void> {
         const tsContent = `export const icon_${iconName} = \`${svgContent}\`;\n`;
         const outputPath = path.join(outputDirectory, `${iconName}.ts`);
@@ -226,7 +202,7 @@ class SvgPackager {
 
     /**
      * Writes the SVG content to a file.
-     * 
+     *
      * @param filePath The original file path of the SVG.
      * @param svgContent The SVG content to be written.
      * @param outputDirectory The directory to output the SVG file.
@@ -249,7 +225,7 @@ class SvgPackager {
     private async writeSvgFile(
         iconName: string,
         svgContent: string,
-        outputDirectory: string
+        outputDirectory: string,
     ): Promise<void> {
         const outputPath = path.join(outputDirectory, `${iconName}.svg`);
         await fs.writeFile(outputPath, svgContent);
@@ -260,41 +236,32 @@ class SvgPackager {
      * This method creates a JSON file that lists all icon names which have
      * been processed, making it easier to reference or index these icons in
      * other parts of an application.
-     * 
+     *
      * @param iconNames An array of strings containing the names of the icons.
      * @param outputDirectory The directory where the JSON file will be saved.
      */
     private async writeIconsJson(
         iconNames: string[],
-        outputDirectory: string
+        outputDirectory: string,
     ): Promise<void> {
-
         try {
             const jsonContent = JSON.stringify(iconNames, null, 2);
             const outputPath = path.join(outputDirectory, "icons.json");
             // await fs_extra.outputFile(outputPath, jsonContent);
             await fs.writeFile(outputPath, jsonContent);
-            console.log(
-                "Icons JSON file created successfully"
-            );
+            console.log("Icons JSON file created successfully");
         } catch (error) {
-            console.error(
-                "Error writing icons JSON file:",
-                error
-            );
+            console.error("Error writing icons JSON file:", error);
             throw error;
         }
     }
-    
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default SvgPackager;
-
 
 // ============================================================================
 // Example
