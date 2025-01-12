@@ -144,12 +144,44 @@ export class ConfigStore extends AbstractProcess {
      * @param source - The source object to merge from.
      * @returns The merged object.
      */
+    // private deepMerge(target: any, source: any): any {
+    //     if (typeof target !== "object" || target === null) {
+    //         return source;
+    //     }
+
+    //     for (const key of Object.keys(source)) {
+    //         if (
+    //             source[key] &&
+    //             typeof source[key] === "object" &&
+    //             !Array.isArray(source[key])
+    //         ) {
+    //             if (!target[key] || typeof target[key] !== "object") {
+    //                 target[key] = {};
+    //             }
+    //             target[key] = this.deepMerge(target[key], source[key]);
+    //         } else {
+    //             target[key] = source[key];
+    //         }
+    //     }
+
+    //     return target;
+    // }
     private deepMerge(target: any, source: any): any {
         if (typeof target !== "object" || target === null) {
             return source;
         }
 
         for (const key of Object.keys(source)) {
+            // Prevent prototype pollution
+            if (
+                key === "__proto__" ||
+                key === "constructor" ||
+                key === "prototype"
+            ) {
+                this.logWarn(`Skipping potentially unsafe key: "${key}"`);
+                continue;
+            }
+
             if (
                 source[key] &&
                 typeof source[key] === "object" &&
