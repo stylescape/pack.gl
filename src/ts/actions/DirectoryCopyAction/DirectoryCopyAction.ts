@@ -66,8 +66,8 @@ export class DirectoryCopyAction extends Action {
      * @throws {Error} If any file or directory could not be copied.
      */
     private async copyFiles(srcDir: string, destDir: string): Promise<void> {
-        const resolvedSrcDir = path.resolve(srcDir);
-        const resolvedDestDir = path.resolve(destDir);
+        const resolvedSrcDir: string = path.resolve(srcDir);
+        const resolvedDestDir: string = path.resolve(destDir);
 
         try {
             await this.recursiveCopy(resolvedSrcDir, resolvedDestDir);
