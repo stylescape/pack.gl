@@ -14,7 +14,9 @@ import { LiveServer } from "../../ts/live/LiveServer";
 jest.mock("path", () => ({
     ...jest.requireActual("path"),
     resolve: jest.fn((...args: string[]) => {
-        const resolvedPath = args.includes("public") ? "/mocked/public" : args.join("/");
+        const resolvedPath = args.includes("public")
+            ? "/mocked/public"
+            : args.join("/");
         console.debug("[Mock Path] Resolved Path:", resolvedPath);
         return resolvedPath;
     }),
@@ -47,9 +49,11 @@ describe("LiveServer", () => {
     const mockedPublicPath = "/mocked/public";
 
     beforeAll(() => {
-        server = new LiveServer(port);
+        server = new LiveServer();
 
-        jest.spyOn(fs, "existsSync").mockImplementation((filePath) => filePath === `${mockedPublicPath}/index.html`);
+        jest.spyOn(fs, "existsSync").mockImplementation(
+            (filePath) => filePath === `${mockedPublicPath}/index.html`,
+        );
         jest.spyOn(fs, "readFileSync").mockImplementation((filePath) => {
             if (filePath === `${mockedPublicPath}/index.html`) {
                 return "<html><body>Mocked HTML File</body></html>";
@@ -97,11 +101,16 @@ describe("LiveServer", () => {
     test("should broadcast reload signal to connected clients", (done) => {
         const ws = new WebSocket(`ws://localhost:${port}`);
         ws.on("open", () => {
-            console.debug("[Test] WebSocket Connection Opened - Broadcasting Reload");
+            console.debug(
+                "[Test] WebSocket Connection Opened - Broadcasting Reload",
+            );
             server.reloadClients();
         });
         ws.on("message", (message) => {
-            console.debug("[Test] WebSocket Received Message:", message.toString());
+            console.debug(
+                "[Test] WebSocket Received Message:",
+                message.toString(),
+            );
             expect(message.toString()).toBe("reload");
             ws.close();
         });
@@ -112,7 +121,9 @@ describe("LiveServer", () => {
     });
 
     test("should sanitize file paths to prevent directory traversal", async () => {
-        const response = await request(`http://localhost:${port}`).get("/../../etc/passwd");
+        const response = await request(`http://localhost:${port}`).get(
+            "/../../etc/passwd",
+        );
 
         console.debug("[Test] Path Sanitization - Status:", response.status);
         console.debug("[Test] Path Sanitization - Text:", response.text);
