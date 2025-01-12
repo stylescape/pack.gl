@@ -2,7 +2,7 @@
     "editor.fontLigatures": false,                      // Disable font ligatures for better readability
     "editor.formatOnSave": true,                        // Automatically format files on save
     "editor.formatOnPaste": true,                       // Automatically format code when pasting
-    "editor.wordWrap": "on",                            // Enable word wrapping for better visibility
+    "editor.wordWrap": "off",                            // Enable word wrapping for better visibility
     "editor.defaultFormatter": "esbenp.prettier-vscode", // Set Prettier as the default formatter
     "editor.tabSize": 4,                                // Set tab size to 4 spaces for better readability
     "editor.detectIndentation": false,                  // Ensure consistent indentation
