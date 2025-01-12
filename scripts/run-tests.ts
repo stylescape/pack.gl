@@ -1,19 +1,33 @@
+// ============================================================================
+// Import
+// ============================================================================
+
 import { exec } from "child_process";
-import { promisify } from "util";
-import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
+import { promisify } from "util";
+
+// ============================================================================
+// Constants
+// ============================================================================
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
 const execAsync = promisify(exec);
 
-async function runTests() {
+// ============================================================================
+// Functions
+// ============================================================================
+
+async function runTests(): Promise<void> {
     try {
         console.log("Running tests...");
 
         // Resolve paths
-        const jestConfigPath = resolve(__dirname, "../jest.config.cjs");
+        const jestConfigPath: string = resolve(
+            __dirname,
+            "../jest.config.cjs",
+        );
 
         // Run Jest
         const command = `npx jest --config ${jestConfigPath}`;
@@ -28,5 +42,9 @@ async function runTests() {
         console.error("Error running tests:", error);
     }
 }
+
+// ============================================================================
+// Main
+// ============================================================================
 
 runTests();
