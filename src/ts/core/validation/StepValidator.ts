@@ -123,7 +123,7 @@ export class StepValidator extends AbstractValidator<StepInterface> {
         }
 
         try {
-            this.actionValidator.validate(action.name); // Validate the action name
+            this.actionValidator.validate({ action: action.name }); // Validate the action name
         } catch (error) {
             this.throwValidationError(
                 "action",
