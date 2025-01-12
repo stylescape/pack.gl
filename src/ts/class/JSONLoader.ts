@@ -37,7 +37,7 @@ class JSONLoader {
      */
     async loadJSON<T>(filePath: string): Promise<T> {
         try {
-            const data : string = await fs.readFile(filePath,  "utf8");
+            const data: string = await fs.readFile(filePath, "utf8");
             return JSON.parse(data) as T;
         } catch (error) {
             console.error(`Error reading JSON file: ${filePath}`, error);
@@ -58,7 +58,7 @@ class JSONLoader {
      */
     async loadJSONFromDirectory<T>(dirPath: string): Promise<T[]> {
         try {
-            const files = await fs.readdir(path:dirPath);
+            const files = await fs.readdir(dirPath);
             const jsonFiles = files.filter((file) => file.endsWith(".json"));
 
             const jsonData = await Promise.all(
