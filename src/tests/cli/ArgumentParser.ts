@@ -1,5 +1,5 @@
-import { OptionsValidator } from "../../core/validation/OptionsValidator";
 import { ArgumentParser } from "../../ts/cli/ArgumentParser";
+import { OptionsValidator } from "../../ts/core/validation/OptionsValidator";
 
 // Mock OptionsValidator to avoid actual validation
 jest.mock("../core/validation/OptionsValidator");
