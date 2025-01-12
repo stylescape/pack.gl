@@ -1,26 +1,6 @@
 {
 
-    // Eslint
-    // ========================================================================
 
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "html",
-        "vue"
-    ],
-    "eslint.options": {
-        "extensions": [
-            ".js",
-            ".jsx",
-            ".ts",
-            ".tsx",
-            ".html",
-            ".vue"
-        ] // ESLint validation for additional file types
-    },
 
     // Git
     // ========================================================================
@@ -988,7 +968,78 @@
     "prettier.useEditorConfig": true,
     "prettier.useTabs": false,
     "prettier.vueIndentScriptAndStyle": false,
-    "prettier.withNodeModules": false
+    "prettier.withNodeModules": false,
 
+    // Eslint
+    // ========================================================================
+
+
+
+    "eslint.codeAction.disableRuleComment": {
+        "enable": true,
+        "location": "separateLine",
+        "commentStyle": "line"
+    },
+    "eslint.codeActionsOnSave.mode": "all",
+    "eslint.codeActionsOnSave.rules": null,
+    "eslint.debug": true,
+    "eslint.enable": true,
+    "eslint.execArgv": null,
+    "eslint.format.enable": true,
+    "eslint.ignoreUntitled": false,
+    "eslint.lintTask.enable": false,
+    "eslint.lintTask.options": ".",
+    // "eslint.nodeEnv": "",
+    // "eslint.nodePath": "",
+    // "eslint.notebooks.rules.customizations": [],
+    "eslint.onIgnoredFiles": "off",
+    "eslint.options": {
+        "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx",
+            ".html",
+            ".vue"
+        ] // ESLint validation for additional file types
+    },
+    "eslint.probe": [
+        "astro",
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "html",
+        "mdx",
+        "vue",
+        "markdown",
+        "json",
+        "jsonc"
+    ],
+    "eslint.problems.shortenToSingleLine": false,
+    "eslint.quiet": false,
+    // "eslint.rules.customizations": [],
+    "eslint.run": "onType",
+    "eslint.runtime": "",
+    "eslint.timeBudget.onFixes": {
+        "warn": 3000,
+        "error": 6000
+    },
+    "eslint.timeBudget.onValidation": {
+        "warn": 4000,
+        "error": 8000
+    },
+    "eslint.trace.server": "off",
+    "eslint.useESLintClass": false,
+    "eslint.useFlatConfig": false,
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "html",
+        "vue"
+    ],
+    "eslint.workingDirectories": [],
 
 }
