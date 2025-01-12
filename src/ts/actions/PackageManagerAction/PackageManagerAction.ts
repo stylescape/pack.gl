@@ -23,8 +23,10 @@ export class PackageManagerAction extends Action {
      *
      * @param options - The options specific to package management, including
      * `packageJsonPath`, `outputDir`, and `customConfig`.
-     * @returns A Promise that resolves when the action is completed successfully.
-     * @throws {Error} Throws an error if neither `packageJsonPath` nor `outputDir` is provided.
+     * @returns A Promise that resolves when the action is completed
+     * successfully.
+     * @throws {Error} Throws an error if neither `packageJsonPath` nor
+     * `outputDir` is provided.
      */
     async execute(options: ActionOptionsType): Promise<void> {
         const { packageJsonPath, outputDir, customConfig = {} } = options;
@@ -48,8 +50,10 @@ export class PackageManagerAction extends Action {
      * Reads and parses the `package.json` file located at the specified path.
      *
      * @param packageJsonPath - The path to the `package.json` file.
-     * @returns A Promise that resolves to the parsed JSON object from the file.
-     * @throws {Error} Throws an error if the file cannot be found or the content is not valid JSON.
+     * @returns A Promise that resolves to the parsed JSON object from the
+     * file.
+     * @throws {Error} Throws an error if the file cannot be found or the
+     * content is not valid JSON.
      */
     private async readPackageJson(
         packageJsonPath: string,
@@ -79,12 +83,17 @@ export class PackageManagerAction extends Action {
     }
 
     /**
-     * Creates a `package.json` file with merged configuration in the specified directory.
+     * Creates a `package.json` file with merged configuration in the
+     * specified directory.
      *
-     * @param outputDir - The directory where the `package.json` will be created.
-     * @param customConfig - Custom settings to override or augment the default configuration.
-     * @returns A Promise that resolves when the file has been successfully created.
-     * @throws {Error} Throws an error if the directory cannot be created or the file cannot be written.
+     * @param outputDir - The directory where the `package.json` will be
+     * created.
+     * @param customConfig - Custom settings to override or augment the
+     * default configuration.
+     * @returns A Promise that resolves when the file has been successfully
+     * created.
+     * @throws {Error} Throws an error if the directory cannot be created or
+     * the file cannot be written.
      */
     private async createPackageJson(
         outputDir: string,
