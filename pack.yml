@@ -20,11 +20,6 @@ options:
         ignoredPaths:
             - node_modules/**
     logLevel: debug
-    # Global options applicable to the entire pipeline
-    # globalOptions:
-    #   logLevel: info           # Log level for the pipeline (verbose, info, warn, error)
-    #   stepTimeout: 30000       # Timeout for each step in milliseconds
-
 
 
 # =============================================================================
@@ -49,26 +44,14 @@ stages:
                 options:
                     dirPath: "./dist"  # Path to the directory to be cleaned
 
-
-
-    # # Main
-    # # =========================================================================
-    # -
-    #     name: Main
-    #     description: "Main."
-
-    #     steps:
-
             # Dirs Clean
             # -----------------------------------------------------------------
-
             -   name: ProcessMainStyles
                 action: StyleProcessingAction
                 options:
                     inputFile: "./src/scss/index.scss"
                     outputFile: "./dist/styles/main.css"
                     styleOption: "compressed"
-
             -
                 name: ProcessAdditionalStyles
                 action: StyleProcessingAction
@@ -77,19 +60,8 @@ stages:
                     outputFile: "./dist/styles/additional.css"
                     styleOption: "expanded"
 
-
-
-    # # Postprocessing
-    # # =========================================================================
-    # -
-    #     name: Postprocessing
-    #     description: "After starting a new build."
-
-    #     steps:
-
             # Copy Files
             # -----------------------------------------------------------------
-
             -
                 name: CopyLICENSE
                 action: FileCopyAction
@@ -102,6 +74,7 @@ stages:
                 options:
                     srcFile: "./README.md"
                     destDir: "./dist"
+
             # Copy Dirs
             # -----------------------------------------------------------------
             -
@@ -138,4 +111,3 @@ stages:
                         key: "version: "
                     -   path: "./VERSION"
                         key: "v"
-
