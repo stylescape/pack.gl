@@ -7,6 +7,7 @@ import path from "path";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types";
 
+
 // ============================================================================
 // Classes
 // ============================================================================
@@ -17,11 +18,7 @@ import { ActionOptionsType } from "../../types";
  * for efficient handling.
  */
 export class DirectoryCopyAction extends Action {
-    // Parameters
-    // ========================================================================
 
-    // Constructor
-    // ========================================================================
 
     // Methods
     // ========================================================================
