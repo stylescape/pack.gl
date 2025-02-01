@@ -1,0 +1,14 @@
+# =============================================================================
+# Pack Configuration for Documentation Generation
+# =============================================================================
+
+stages:
+  - name: Generate Documentation
+    steps:
+      - name: Build Documentation
+        action: DocumentationAction
+        options:
+          generatorCommand: "jsdoc"
+          sourcePath: "./src"
+          outputPath: "./docs"
+          configPath: "./jsdoc.json"
