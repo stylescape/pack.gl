@@ -96,9 +96,16 @@ stages:
                 name: Package.json
                 action: PackageManagerAction
                 options:
-                    # Path to the existing package.json file to read
-                    packageJsonPath: "./package.json" # not going well
+                    packageJsonPath: "./package.json"
                     outputDir: "./dist"
+                    fields:
+                        - name
+                        - version
+                        - dependencies
+                        - description
+                        - keywords
+                        - license
+                        - homepage
 
             # Replace Version
             # -----------------------------------------------------------------
