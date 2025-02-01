@@ -8,6 +8,7 @@ import path from "path";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
 
+
 // ============================================================================
 // Classes
 // ============================================================================
@@ -18,6 +19,7 @@ import { ActionOptionsType } from "../../types/ActionOptionsType";
  * directories that match specified glob patterns.
  */
 export class DirectoryCleanAction extends Action {
+
     // Methods
     // ========================================================================
 
@@ -112,6 +114,7 @@ export class DirectoryCleanAction extends Action {
         `;
         return description;
     }
+
 }
 
 // ============================================================================
