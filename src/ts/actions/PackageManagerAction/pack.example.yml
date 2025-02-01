@@ -1,6 +1,6 @@
 # pack.yml
 
-# ============================================================================ 
+# ============================================================================
 # Pack Configuration
 # ============================================================================
 
@@ -32,3 +32,29 @@ pipeline:
                 express: "^4.18.2"
               devDependencies:
                 typescript: "^4.9.5"
+
+
+# =============================================================================
+# Pack Configuration for PackageManagerAction
+# =============================================================================
+
+stages:
+  - name: Package Management
+    steps:
+      - name: Generate package.json
+        action: PackageManagerAction
+        options:
+          packageJsonPath: "./existing/package.json"  # Path to the existing package.json
+          outputDir: "./dist"  # Where to write the new package.json
+          fields:
+            - name
+            - version
+            - dependencies
+            - scripts
+          customConfig:
+            private: true
+            scripts:
+              start: "node index.js"
+              build: "npm run build"
+            devDependencies:
+              typescript: "^5.0.0"
