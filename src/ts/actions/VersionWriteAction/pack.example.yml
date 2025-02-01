@@ -1,0 +1,22 @@
+# pack.yml
+
+stages:
+  - name: WriteVersion
+    description: "Write version information to a file."
+
+    steps:
+      - name: ReplaceVersionInFiles  # A descriptive name for the step
+        action: VersionWriteAction   # Specifies the action to execute
+        options:
+          # The version string to set in the files.
+          # You can set this explicitly or omit it to fetch from `package.json`.
+          version: "2.0.0"  # If omitted, the action will retrieve the version from `package.json`.
+
+          # List of files to update with the version.
+          # Each file in the list can optionally provide a key to locate the version.
+          files:
+            - path: "./CITATION.cff"  # File path to update
+              key: "version:"         # Optional: Only replace version after this key (strict matching)
+            - path: "./VERSION.txt"   # Updates the version wherever `x.x.x` is found
+            - path: "./README.md"     # Updates inline version patterns (e.g., "v1.0.0")
+            - path: "./CHANGELOG.md"  # Useful for replacing top-level semantic version mentions
