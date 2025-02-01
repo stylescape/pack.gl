@@ -1,0 +1,17 @@
+# =============================================================================
+# Pack Configuration for Directory Structure Setup
+# =============================================================================
+
+stages:
+  - name: Setup Directories
+    steps:
+      - name: Ensure Project Structure
+        action: DirectoryCreatorAction
+        options:
+          basePath: "./project"
+          directories:
+            - "src"
+            - "src/assets"
+            - "src/components"
+            - "docs"
+            - "build"
