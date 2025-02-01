@@ -77,18 +77,35 @@ stages:
 
             # Copy Dirs
             # -----------------------------------------------------------------
-            -
-                name: CopySrcSCSS
-                action: DirectoryCopyAction
-                options:
-                    srcDir: "./src/scss"
-                    destDir: "./dist/scss"
+            # -
+            #     name: CopySrcSCSS
+            #     action: DirectoryCopyAction
+            #     options:
+            #         srcDir: "./src/scss"
+            #         destDir: "./dist/scss"
             -
                 name: CopySrcTS
                 action: DirectoryCopyAction
                 options:
                     srcDir: "./src/ts"
                     destDir: "./dist/ts"
+
+            # Compile TS to JS
+            # -----------------------------------------------------------------
+
+            -
+                name: Compile TS to JS
+                action: TypeScriptCompilerAction
+                options:
+                    tsConfigPath: "./tsconfig.json"
+                    filePaths:
+                        - "src/ts/index.ts"
+                        # - "src/utils.ts"
+                    outputDir: "./dist/js"
+                    compilerOptions:
+                        target: "ES2020"
+                        module: "CommonJS"
+
 
             # Package.json
             # -----------------------------------------------------------------
