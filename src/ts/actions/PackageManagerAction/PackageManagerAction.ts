@@ -14,50 +14,46 @@ import packageConfig from "./package.config.js";
 
 /**
  * PackageManagerAction handles reading, validating, and creating `package.json`
- * files, supporting custom configurations and merging with default settings.
+ * files, supporting custom configurations and merging with selected fields.
  */
 export class PackageManagerAction extends Action {
     /**
      * Executes the package management action.
-     * Reads or creates a `package.json` file based on the provided options.
+     * Reads an existing `package.json`, extracts selected fields, and writes a new one.
      *
-     * @param options - The options specific to package management, including
-     * `packageJsonPath`, `outputDir`, and `customConfig`.
-     * @returns A Promise that resolves when the action is completed
-     * successfully.
-     * @throws {Error} Throws an error if neither `packageJsonPath` nor
-     * `outputDir` is provided.
+     * @param options - Options specifying input path, output directory, and fields to export.
+     * @returns A Promise that resolves when the action is completed successfully.
+     * @throws {Error} Throws an error if neither `packageJsonPath` nor `outputDir` is provided.
      */
     async execute(options: ActionOptionsType): Promise<void> {
-        const { packageJsonPath, outputDir, customConfig = {} } = options;
+        const {
+            packageJsonPath,
+            outputDir,
+            fields = [], // Specify which fields to copy
+            customConfig = {},
+        } = options;
 
-        if (!packageJsonPath && !outputDir) {
-            throw new Error(
-                "Either 'packageJsonPath' or 'outputDir' must be specified.",
-            );
+        if (!packageJsonPath) {
+            throw new Error("The 'packageJsonPath' option is required.");
+        }
+        if (!outputDir) {
+            throw new Error("The 'outputDir' option is required.");
         }
 
-        if (packageJsonPath) {
-            await this.readPackageJson(packageJsonPath);
-        }
+        const existingConfig = await this.readPackageJson(packageJsonPath);
+        const filteredConfig = this.filterFields(existingConfig, fields);
 
-        if (outputDir) {
-            await this.createPackageJson(outputDir, customConfig);
-        }
+        await this.createPackageJson(outputDir, filteredConfig, customConfig);
     }
 
     /**
-     * Reads and parses the `package.json` file located at the specified path.
+     * Reads and parses an existing `package.json`.
      *
-     * @param packageJsonPath - The path to the `package.json` file.
-     * @returns A Promise that resolves to the parsed JSON object from the
-     * file.
-     * @throws {Error} Throws an error if the file cannot be found or the
-     * content is not valid JSON.
+     * @param packageJsonPath - Path to the `package.json` file.
+     * @returns Parsed JSON object.
+     * @throws {Error} If the file does not exist or contains invalid JSON.
      */
-    private async readPackageJson(
-        packageJsonPath: string,
-    ): Promise<Record<string, unknown>> {
+    private async readPackageJson(packageJsonPath: string): Promise<Record<string, unknown>> {
         const fullPath = path.resolve(packageJsonPath);
 
         try {
@@ -67,41 +63,57 @@ export class PackageManagerAction extends Action {
             return parsedContent;
         } catch (error: any) {
             if (error.code === "ENOENT") {
-                throw new Error(
-                    `File not found at ${fullPath}. Please ensure the path is correct.`,
-                );
+                throw new Error(`File not found at ${fullPath}. Please ensure the path is correct.`);
             } else if (error.name === "SyntaxError") {
-                throw new Error(
-                    `Invalid JSON in ${fullPath}: ${error.message}`,
-                );
+                throw new Error(`Invalid JSON in ${fullPath}: ${error.message}`);
             } else {
-                throw new Error(
-                    `Unexpected error while reading ${fullPath}: ${error.message}`,
-                );
+                throw new Error(`Unexpected error while reading ${fullPath}: ${error.message}`);
             }
         }
     }
 
     /**
-     * Creates a `package.json` file with merged configuration in the
-     * specified directory.
+     * Filters specified fields from a `package.json` object.
      *
-     * @param outputDir - The directory where the `package.json` will be
-     * created.
-     * @param customConfig - Custom settings to override or augment the
-     * default configuration.
-     * @returns A Promise that resolves when the file has been successfully
-     * created.
-     * @throws {Error} Throws an error if the directory cannot be created or
-     * the file cannot be written.
+     * @param config - The original package.json object.
+     * @param fields - List of fields to extract.
+     * @returns A new object containing only the selected fields.
+     */
+    private filterFields(config: Record<string, unknown>, fields: string[]): Record<string, unknown> {
+        if (!fields.length) {
+            return config; // If no fields are specified, return the full config.
+        }
+
+        const filteredConfig: Record<string, unknown> = {};
+        for (const field of fields) {
+            if (config[field] !== undefined) {
+                filteredConfig[field] = config[field];
+            }
+        }
+
+        this.logInfo(`Filtered package.json fields: ${JSON.stringify(filteredConfig, null, 2)}`);
+        return filteredConfig;
+    }
+
+    /**
+     * Creates a `package.json` file with selected fields and custom overrides.
+     *
+     * @param outputDir - Directory where the new `package.json` will be created.
+     * @param filteredConfig - The filtered package.json fields.
+     * @param customConfig - Custom overrides to apply.
+     * @returns A Promise that resolves when the file has been successfully created.
+     * @throws {Error} If the file cannot be written.
      */
     private async createPackageJson(
         outputDir: string,
+        filteredConfig: Record<string, any>,
         customConfig: Record<string, any>,
     ): Promise<void> {
         const filePath = path.join(outputDir, "package.json");
-        const config = { ...packageConfig, ...customConfig };
-        const data = JSON.stringify(config, null, 2);
+
+        // Merge default settings with filtered config and custom overrides
+        const finalConfig = { ...packageConfig, ...filteredConfig, ...customConfig };
+        const data = JSON.stringify(finalConfig, null, 2);
 
         try {
             await this.ensureDirectoryExists(outputDir);
@@ -118,7 +130,7 @@ export class PackageManagerAction extends Action {
      *
      * @param dirPath - The path of the directory to verify or create.
      * @returns A Promise that resolves once the directory is verified or created.
-     * @throws {Error} Throws an error if the directory cannot be created.
+     * @throws {Error} If the directory cannot be created.
      */
     private async ensureDirectoryExists(dirPath: string): Promise<void> {
         try {
@@ -136,7 +148,7 @@ export class PackageManagerAction extends Action {
      * @returns A string description of the action.
      */
     describe(): string {
-        return "Manages package.json files by reading existing configurations or creating new ones with merged settings.";
+        return "Reads an existing package.json, extracts selected fields, and creates a new one.";
     }
 }
 
