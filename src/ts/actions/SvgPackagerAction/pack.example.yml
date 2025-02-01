@@ -1,0 +1,15 @@
+# =============================================================================
+# Pack Configuration for SVG Processing
+# =============================================================================
+
+stages:
+  - name: Process SVG Files
+    steps:
+      - name: Optimize & Export SVGs
+        action: SvgPackagerAction
+        options:
+          svgoConfigPath: "./config/svgo.config.js"
+          inputDirectory: "src/icons"
+          outputDirectory: "dist/icons"
+          tsOutputDirectory: "dist/ts"
+          jsonOutputDirectory: "dist"
