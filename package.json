@@ -1,7 +1,7 @@
 {
     "name": "pack.gl",
     "description": "Package Builder.",
-    "version": "0.1.24",
+    "version": "0.1.25",
     "config": {
         "version_short": "0.1"
     },
@@ -46,7 +46,8 @@
         "format": "npx prettier --write .",
         "lint": "eslint 'src/**/*.ts' || true",
         "prettify": "prettier --write 'src/**/*.ts'",
-        "build": "npm run build-compile && npm run build-process",
+        "build": "npm run build-compile && npm run build-process && npm run test-cli-live",
+        "build2": "npm run build-compile && npm run build-process",
         "build-compile": "tsc -p bin/tsconfig.json",
         "build-process": "node bin/js/index.js",
         "build-tsc": "tsc -p ./tsconfig.json",
