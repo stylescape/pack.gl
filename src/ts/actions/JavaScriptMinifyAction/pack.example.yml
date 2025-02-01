@@ -1,0 +1,12 @@
+# =============================================================================
+# Pack Configuration for JavaScript Minification
+# =============================================================================
+
+stages:
+  - name: Optimize Assets
+    steps:
+      - name: Minify JavaScript
+        action: JavaScriptMinifyAction
+        options:
+          inputPath: "./src/app.js"
+          outputPath: "./dist/app.min.js"
