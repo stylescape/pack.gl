@@ -15,7 +15,7 @@ import { ActionOptionsType } from "../../types/ActionOptionsType";
  * DirectoryCreatorAction ensures that specified directory structures
  * exist within a base path. It creates missing directories recursively.
  */
-export class DirectoryCreatorAction extends Action {
+export class DirectoryCreateAction extends Action {
     /**
      * Executes the directory creation action.
      *
@@ -32,13 +32,20 @@ export class DirectoryCreatorAction extends Action {
             );
         }
 
-        this.logInfo(`Ensuring directory structure under base path: ${basePath}`);
+        this.logInfo(
+            `Ensuring directory structure under base path: ${basePath}`
+        );
 
         try {
             await this.createDirectories(basePath, directories);
-            this.logInfo("All specified directories have been created successfully.");
+            this.logInfo(
+                "All specified directories have been created successfully."
+            );
         } catch (error) {
-            this.logError("Failed to create directories.", error);
+            this.logError(
+                "Failed to create directories.",
+                error
+            );
             throw error;
         }
     }
@@ -50,7 +57,10 @@ export class DirectoryCreatorAction extends Action {
      * @param directories - An array of relative paths for directories to create.
      * @returns A Promise that resolves when all directories exist.
      */
-    private async createDirectories(basePath: string, directories: string[]): Promise<void> {
+    private async createDirectories(
+        basePath: string,
+        directories: string[]
+    ): Promise<void> {
         for (const dir of directories) {
             const dirPath = path.join(basePath, dir);
             try {
