@@ -1,0 +1,12 @@
+# =============================================================================
+# Pack Configuration for File Renaming
+# =============================================================================
+
+stages:
+  - name: File Operations
+    steps:
+      - name: Rename README File
+        action: FileRenameAction
+        options:
+          srcPath: "./README_old.md"
+          targetPath: "./README.md"
