@@ -2,13 +2,22 @@
 // Import
 // ============================================================================
 
-import { DirectoryCleanAction } from "../actions/DirectoryCleanAction/DirectoryCleanAction";
-import { DirectoryCopyAction } from "../actions/DirectoryCopyAction/DirectoryCopyAction";
-import { FileCopyAction } from "../actions/FileCopyAction/FileCopyAction";
-import { PackageManagerAction } from "../actions/PackageManagerAction/PackageManagerAction";
-import { StyleProcessingAction } from "../actions/StyleProcessingAction/StyleProcessingAction";
-import { VersionWriteAction } from "../actions/VersionWriterAction/VersionWriterAction";
+import { DirectoryCleanAction } from "../actions/DirectoryCleanAction";
+import { DirectoryCopyAction } from "../actions/DirectoryCopyAction";
+import { DirectoryCreateAction } from "../actions/DirectoryCreateAction";
+
+import { FileCopyAction } from "../actions/FileCopyAction";
+
+import { PackageManagerAction } from "../actions/PackageManagerAction";
+
+import { StyleProcessingAction } from "../actions/StyleProcessingAction";
+
+import { VersionWriteAction } from "../actions/VersionWriteAction";
+
+
+
 import { ActionInterface } from "../interface/ActionInterface";
+
 
 // ============================================================================
 // Core Actions
@@ -21,6 +30,7 @@ import { ActionInterface } from "../interface/ActionInterface";
 export const coreActions: Record<string, new () => ActionInterface> = {
     [new DirectoryCleanAction().name]: DirectoryCleanAction,
     [new DirectoryCopyAction().name]: DirectoryCopyAction,
+    [new DirectoryCreateAction().name]: DirectoryCreateAction,
     [new FileCopyAction().name]: FileCopyAction,
     [new PackageManagerAction().name]: PackageManagerAction,
     [new StyleProcessingAction().name]: StyleProcessingAction,
