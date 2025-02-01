@@ -2,7 +2,7 @@
     <img src="https://raw.githubusercontent.com/stylescape/pack.gl/master/res/logo/kist.png" width="20%" height="20%" alt="Stylescape Logo">
 </p>
 <h1 align="center" style='border-bottom: none;'>pack.gl</h1>
-<h3 align="center">Package Pipeline Manager</h3>
+<h3 align="center">Package Pipeline Processor</h3>
 
 <br/>
 
