@@ -7,6 +7,7 @@ import ts from "typescript";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
 
+
 // ============================================================================
 // Classes
 // ============================================================================
@@ -18,6 +19,11 @@ import { ActionOptionsType } from "../../types/ActionOptionsType";
  * to configure the compilation process.
  */
 export class TypeScriptCompilerAction extends Action {
+
+
+    // Methods
+    // ========================================================================
+
     /**
      * Executes the TypeScript compilation action.
      *
@@ -41,7 +47,10 @@ export class TypeScriptCompilerAction extends Action {
                 throw new Error("No TypeScript files provided for compilation.");
             }
 
-            const tsOptions = await this.loadTsConfig(tsConfigPath, compilerOptions);
+            const tsOptions = await this.loadTsConfig(
+                tsConfigPath,
+                compilerOptions
+            );
             await this.compile(filePaths, outputDir, tsOptions);
         } catch (error) {
             this.logError("TypeScript compilation failed", error);
@@ -69,7 +78,9 @@ export class TypeScriptCompilerAction extends Action {
                 ...customOptions,
             };
         } catch (error) {
-            this.logWarn(`Could not read tsconfig.json from ${tsConfigPath}, using defaults.`);
+            this.logWarn(
+                `Could not read tsconfig.json from ${tsConfigPath}, using defaults.`
+            );
             return {
                 module: ts.ModuleKind.CommonJS,
                 target: ts.ScriptTarget.ESNext,
