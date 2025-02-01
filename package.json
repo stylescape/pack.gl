@@ -52,6 +52,7 @@
         "build-tsc": "tsc -p ./tsconfig.json",
         "test-cli": "node dist/js/cli.js",
         "test-cli-live": "node dist/js/cli.js $*",
+        "test-dev": "npm run build && npm run test-cli-live",
         "test": "node --loader ts-node/esm scripts/run-tests.ts"
     },
     "dependencies": {
