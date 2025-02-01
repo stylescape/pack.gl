@@ -1,0 +1,15 @@
+# =============================================================================
+# Pack Configuration for ESLint Linting
+# =============================================================================
+
+stages:
+  - name: Code Quality Check
+    steps:
+      - name: Lint TypeScript Files
+        action: LintAction
+        options:
+          targetFiles:
+            - "src/**/*.ts"
+            - "tests/**/*.ts"
+          fix: true
+          configPath: ".eslintrc.json"
