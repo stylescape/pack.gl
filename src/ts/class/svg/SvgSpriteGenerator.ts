@@ -2,10 +2,10 @@
 // Import
 // ============================================================================
 
-import svgSprite from "svg-sprite";
 import fs from "fs";
 import path from "path";
-import svgspriteConfig from "../../config/svgsprite.config.js"
+import svgSprite from "svg-sprite";
+import svgspriteConfig from "../../config/svgsprite.config.js";
 
 
 // ============================================================================
@@ -34,7 +34,7 @@ class SvgSpriteGenerator {
      */
     private static defaultConfig: svgSprite.Config = svgspriteConfig;
      // private static defaultConfig: CompilerOptions = tsConfig;
- 
+
 
     // Constructor
     // ========================================================================
