@@ -1,0 +1,16 @@
+# =============================================================================
+# Pack Configuration for SASS Documentation Generation
+# =============================================================================
+
+stages:
+  - name: Generate SASS Documentation
+    steps:
+      - name: Build SASS Documentation
+        action: SassDocAction
+        options:
+          sourcePaths:
+            - "src/styles"
+          outputPath: "docs/sass"
+          sassdocOptions:
+            verbose: true
+            display: detailed
