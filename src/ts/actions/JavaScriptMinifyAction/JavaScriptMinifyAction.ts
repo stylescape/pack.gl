@@ -4,7 +4,7 @@
 
 import { promises as fs } from "fs";
 import path from "path";
-import { minify } from "terser";
+import { minify, MinifyOptions } from "terser";
 import terserConfig from "../../config/terser.config.js";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
@@ -51,6 +51,7 @@ export class JavaScriptMinifyAction extends Action {
      * @param customConfig - Custom Terser configuration.
      * @returns A Promise that resolves when the minification is complete.
      */
+
     private async minifyFile(
         inputPath: string,
         outputPath: string,
@@ -60,11 +61,19 @@ export class JavaScriptMinifyAction extends Action {
             const resolvedInputPath = path.resolve(inputPath);
             const resolvedOutputPath = path.resolve(outputPath);
 
-            // Read the JavaScript file
+            // Read JavaScript file
             const inputCode = await fs.readFile(resolvedInputPath, "utf8");
 
-            // Minify using Terser with merged configuration
-            const result = await minify(inputCode, { ...terserConfig, ...customConfig });
+            // Merge Terser configuration with explicit type casting
+            const terserOptions: MinifyOptions = {
+                ...terserConfig,
+                ...customConfig,
+                ecma: terserConfig.ecma as MinifyOptions["ecma"], // Ensure ecma is correctly typed
+                nameCache: terserConfig.nameCache ?? undefined,  // Ensure nameCache is undefined if null
+            };
+
+            // Minify using Terser
+            const result = await minify(inputCode, terserOptions);
 
             if (!result.code) {
                 throw new Error("Minification resulted in empty output.");

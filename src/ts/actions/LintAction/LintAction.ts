@@ -17,13 +17,11 @@ import { ActionOptionsType } from "../../types/ActionOptionsType";
 export class LintAction extends Action {
     private eslint: ESLint;
 
-    /**
-     * Executes the linting process on the specified files or directories.
-     *
-     * @param options - The options containing target files, whether to fix issues, and custom ESLint config.
-     * @returns A Promise that resolves when the linting process is complete.
-     * @throws {Error} If linting fails due to configuration issues or file reading problems.
-     */
+    constructor() {
+        super(); // Call the parent class constructor
+        this.eslint = new ESLint({}); // Initialize ESLint with default config
+    }
+
     async execute(options: ActionOptionsType): Promise<void> {
         const { targetFiles = ["src/**/*.ts"], fix = false, configPath = ".eslintrc.js" } = options;
 
@@ -34,15 +32,14 @@ export class LintAction extends Action {
         this.logInfo(`Starting ESLint on: ${targetFiles.join(", ")}`);
 
         try {
+            // Update ESLint instance with correct configuration
             this.eslint = new ESLint({ fix, overrideConfigFile: configPath });
             const results = await this.eslint.lintFiles(targetFiles);
 
-            // Apply fixes if enabled
             if (fix) {
                 await ESLint.outputFixes(results);
             }
 
-            // Format and output results
             const formatter = await this.eslint.loadFormatter("stylish");
             console.log(formatter.format(results));
 
@@ -52,6 +49,8 @@ export class LintAction extends Action {
             throw error;
         }
     }
+
+
 
     /**
      * Provides a description of the action.

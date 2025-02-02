@@ -3,16 +3,16 @@
 // ============================================================================
 
 // Import necessary modules and classes
-import path from "path";
 import {
     DirectoryCleaner,
     DirectoryCopier,
     FileCopier,
     PackageCreator,
-    VersionWriter,
     StylizedLogger,
+    VersionWriter,
     readPackageJson,
 } from "pack.gl";
+import path from "path";
 import TypeScriptCompiler from "./javascript/TypeScriptCompiler.js";
 
 // ============================================================================
@@ -90,7 +90,7 @@ async function main() {
 
         // Copy Dirs
         // --------------------------------------------------------------------
-        
+
         const directoryCopier = new DirectoryCopier();
         await directoryCopier.recursiveCopy(
             CONFIG.path.ts_input,

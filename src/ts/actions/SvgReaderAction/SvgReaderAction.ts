@@ -16,7 +16,7 @@ import { ActionOptionsType } from "../../types/ActionOptionsType";
  * making them available for further processing in the pipeline.
  */
 export class SvgReaderAction extends Action {
-
+    private svgContent: string = "";
 
     // Methods
     // ========================================================================
@@ -24,9 +24,9 @@ export class SvgReaderAction extends Action {
     /**
      * Executes the SVG reading action.
      * @param options - The options specifying the SVG file path.
-     * @returns A Promise that resolves with the content of the SVG file.
+     * @returns A Promise that resolves when the SVG file is successfully read.
      */
-    async execute(options: ActionOptionsType): Promise<string> {
+    async execute(options: ActionOptionsType): Promise<void> {
         const { filePath } = options;
 
         if (!filePath) {
@@ -36,9 +36,8 @@ export class SvgReaderAction extends Action {
         this.logInfo(`Reading SVG file: ${filePath}`);
 
         try {
-            const content = await this.readSvg(filePath);
+            this.svgContent = await this.readSvg(filePath);
             this.logInfo(`Successfully read SVG file: ${filePath}`);
-            return content;
         } catch (error) {
             this.logError(`Error reading SVG file: ${filePath}`, error);
             throw error;
@@ -55,11 +54,19 @@ export class SvgReaderAction extends Action {
     }
 
     /**
+     * Retrieves the last read SVG content.
+     * @returns The last read SVG content.
+     */
+    getSvgContent(): string {
+        return this.svgContent;
+    }
+
+    /**
      * Provides a description of the action.
      * @returns A string description of the action.
      */
     describe(): string {
-        return "Reads an SVG file and returns its content for further processing.";
+        return "Reads an SVG file and stores its content for further processing.";
     }
 }
 

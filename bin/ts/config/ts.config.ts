@@ -25,7 +25,7 @@ const tsConfig = {
     // disableSourceOfProjectReferenceRedirect: true,       // boolean      // Disable preferring source files instead of declaration files when referencing composite projects
     // disableSolutionSearching: true,                      // boolean      // Opt a project out of multi-project reference checking when editing.
     // disableReferencedProjectLoad: true,                  // boolean      // Reduce the number of projects loaded automatically by TypeScript.
-  
+
 
     // Language and Environment
     // ========================================================================
@@ -63,7 +63,7 @@ const tsConfig = {
     // reactNamespace: "",                                // Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.
     // noLib: true,                                       // Disable including any library files, including the default lib.d.ts.
     // useDefineForClassFields: true,                      // Emit ECMAScript-standard-compliant class fields.
-  
+
 
     // Modules
     // ========================================================================
@@ -178,8 +178,8 @@ const tsConfig = {
     // skipDefaultLibCheck: true,                         // Skip type checking .d.ts files that are included with TypeScript.
     // Skip type checking of declaration files
     skipLibCheck: true,                                    // Skip type checking all .d.ts files.
-  
-    
+
+
     // Other
     // ========================================================================
     // allowImportingTsExtensions?: boolean;

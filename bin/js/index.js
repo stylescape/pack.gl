@@ -1,6 +1,6 @@
-import { __awaiter, __generator } from "tslib";
+import { DirectoryCleaner, DirectoryCopier, FileCopier, PackageCreator, StylizedLogger, VersionWriter, readPackageJson, } from "pack.gl";
 import path from "path";
-import { DirectoryCleaner, DirectoryCopier, FileCopier, PackageCreator, VersionWriter, StylizedLogger, readPackageJson, } from "pack.gl";
+import { __awaiter, __generator } from "tslib";
 import TypeScriptCompiler from "./javascript/TypeScriptCompiler.js";
 var CONFIG = {
     path: {
