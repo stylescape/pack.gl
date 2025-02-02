@@ -25,10 +25,10 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/stylescape/pack.gl.git"
+        "url": "git+https://github.com/getkist/pack.gl.git"
     },
     "bugs": {
-        "url": "https://github.com/stylescape/pack.gl/issues"
+        "url": "https://github.com/getkist/pack.gl/issues"
     },
     "funding": [
         {
@@ -105,7 +105,7 @@
         "@types/ws": "^8.5.12",
         "jest": "^29.7.0",
         "mocha": "^11.0.1",
-        "pack.gl": "0.1.2",
+        "pack.gl": "0.1.28",
         "supertest": "^7.0.0",
         "ts-jest": "^29.2.5",
         "ts-node": "^10.9.2",
