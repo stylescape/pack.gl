@@ -3,6 +3,7 @@
 // ============================================================================
 
 import { execFile } from "child_process";
+import path from "path";
 import util from "util";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
@@ -18,8 +19,9 @@ const execFileAsync = util.promisify(execFile);
 // ============================================================================
 
 /**
- * DocumentationAction automates the generation of documentation for software projects.
- * This action allows specifying a documentation generator, source paths, and output locations.
+ * DocumentationAction automates the generation of documentation for software
+ * projects. This action allows specifying a documentation generator, source
+ * paths, and output locations.
  */
 export class DocumentationAction extends Action {
     /**
@@ -41,11 +43,20 @@ export class DocumentationAction extends Action {
             throw new Error("Invalid options: 'generatorCommand' must be specified.");
         }
 
+        const resolvedSourcePath = path.resolve(sourcePath);
+        const resolvedOutputPath = path.resolve(outputPath);
+        const resolvedConfigPath = configPath ? path.resolve(configPath) : null;
+
         this.logInfo(`Generating documentation with ${generatorCommand}...`);
+        this.logDebug(`Source Path: ${resolvedSourcePath}`);
+        this.logDebug(`Output Path: ${resolvedOutputPath}`);
+        if (resolvedConfigPath) this.logDebug(`Config Path: ${resolvedConfigPath}`);
 
         try {
             // Construct command arguments
-            const args = configPath ? ["-c", configPath, "-d", outputPath] : [sourcePath, "-d", outputPath];
+            const args = resolvedConfigPath
+                ? ["-c", resolvedConfigPath, "-d", resolvedOutputPath]
+                : [resolvedSourcePath, "-d", resolvedOutputPath];
 
             // Execute documentation generation command safely
             const { stdout, stderr } = await execFileAsync(generatorCommand, args);
@@ -56,10 +67,10 @@ export class DocumentationAction extends Action {
             }
 
             this.logInfo(stdout);
-            this.logInfo("Documentation generated successfully.");
-        } catch (error) {
+            this.logInfo(`Documentation successfully generated at: ${resolvedOutputPath}`);
+        } catch (error: any) {
             this.logError("Error occurred while generating documentation.", error);
-            throw error;
+            throw new Error(`Documentation generation failed: ${error.message}`);
         }
     }
 
