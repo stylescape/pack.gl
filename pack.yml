@@ -44,21 +44,21 @@ stages:
                 options:
                     dirPath: "./dist"  # Path to the directory to be cleaned
 
-            # Dirs Clean
+            # Process Styles
             # -----------------------------------------------------------------
-            -   name: ProcessMainStyles
-                action: StyleProcessingAction
-                options:
-                    inputFile: "./src/scss/index.scss"
-                    outputFile: "./dist/styles/main.css"
-                    styleOption: "compressed"
-            -
-                name: ProcessAdditionalStyles
-                action: StyleProcessingAction
-                options:
-                    inputFile: "./src/scss/index.scss"
-                    outputFile: "./dist/styles/additional.css"
-                    styleOption: "expanded"
+            # -   name: ProcessMainStyles
+            #     action: StyleProcessingAction
+            #     options:
+            #         inputFile: "./src/scss/index.scss"
+            #         outputFile: "./dist/styles/main.css"
+            #         styleOption: "compressed"
+            # -
+            #     name: ProcessAdditionalStyles
+            #     action: StyleProcessingAction
+            #     options:
+            #         inputFile: "./src/scss/index.scss"
+            #         outputFile: "./dist/styles/additional.css"
+            #         styleOption: "expanded"
 
             # Copy Files
             # -----------------------------------------------------------------
@@ -118,6 +118,7 @@ stages:
                     fields:
                         - name
                         - version
+                        - bin
                         - dependencies
                         - description
                         - keywords
