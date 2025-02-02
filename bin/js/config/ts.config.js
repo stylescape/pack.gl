@@ -1,5 +1,5 @@
 import ts from "typescript";
-var tsConfig = {
+const tsConfig = {
     target: ts.ScriptTarget.ES2015,
     lib: ["lib.es2015.d.ts", "lib.dom.d.ts"],
     module: ts.ModuleKind.CommonJS,
