@@ -53,7 +53,9 @@ export class PackageManagerAction extends Action {
      * @returns Parsed JSON object.
      * @throws {Error} If the file does not exist or contains invalid JSON.
      */
-    private async readPackageJson(packageJsonPath: string): Promise<Record<string, unknown>> {
+    private async readPackageJson(
+        packageJsonPath: string,
+    ): Promise<Record<string, unknown>> {
         const fullPath = path.resolve(packageJsonPath);
 
         try {
@@ -63,11 +65,17 @@ export class PackageManagerAction extends Action {
             return parsedContent;
         } catch (error: any) {
             if (error.code === "ENOENT") {
-                throw new Error(`File not found at ${fullPath}. Please ensure the path is correct.`);
+                throw new Error(
+                    `File not found at ${fullPath}. Please ensure the path is correct.`,
+                );
             } else if (error.name === "SyntaxError") {
-                throw new Error(`Invalid JSON in ${fullPath}: ${error.message}`);
+                throw new Error(
+                    `Invalid JSON in ${fullPath}: ${error.message}`,
+                );
             } else {
-                throw new Error(`Unexpected error while reading ${fullPath}: ${error.message}`);
+                throw new Error(
+                    `Unexpected error while reading ${fullPath}: ${error.message}`,
+                );
             }
         }
     }
@@ -79,7 +87,10 @@ export class PackageManagerAction extends Action {
      * @param fields - List of fields to extract.
      * @returns A new object containing only the selected fields.
      */
-    private filterFields(config: Record<string, unknown>, fields: string[]): Record<string, unknown> {
+    private filterFields(
+        config: Record<string, unknown>,
+        fields: string[],
+    ): Record<string, unknown> {
         if (!fields.length) {
             return config; // If no fields are specified, return the full config.
         }
@@ -91,7 +102,9 @@ export class PackageManagerAction extends Action {
             }
         }
 
-        this.logInfo(`Filtered package.json fields: ${JSON.stringify(filteredConfig, null, 2)}`);
+        this.logInfo(
+            `Filtered package.json fields: ${JSON.stringify(filteredConfig, null, 2)}`,
+        );
         return filteredConfig;
     }
 
@@ -112,7 +125,11 @@ export class PackageManagerAction extends Action {
         const filePath = path.join(outputDir, "package.json");
 
         // Merge default settings with filtered config and custom overrides
-        const finalConfig = { ...packageConfig, ...filteredConfig, ...customConfig };
+        const finalConfig = {
+            ...packageConfig,
+            ...filteredConfig,
+            ...customConfig,
+        };
         const data = JSON.stringify(finalConfig, null, 2);
 
         try {

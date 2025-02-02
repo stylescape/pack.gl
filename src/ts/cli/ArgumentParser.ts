@@ -6,7 +6,6 @@ import { AbstractProcess } from "../core/abstract/AbstractProcess";
 import { OptionsValidator } from "../core/validation/OptionsValidator";
 import { OptionsInterface } from "../interface/OptionsInterface";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -17,8 +16,6 @@ import { OptionsInterface } from "../interface/OptionsInterface";
  * Extends AbstractProcess for consistent logging.
  */
 export class ArgumentParser extends AbstractProcess {
-
-
     // Parameters
     // ========================================================================
 
@@ -32,7 +29,6 @@ export class ArgumentParser extends AbstractProcess {
      */
     private validator: OptionsValidator;
 
-
     // Constructor
     // ========================================================================
 
@@ -42,9 +38,8 @@ export class ArgumentParser extends AbstractProcess {
      *
      * @param args - Command-line arguments. Defaults to `process.argv.slice(2)`.
      */
-    constructor(
-        // args: string[] = process.argv.slice(2)
-    ) {
+    constructor() // args: string[] = process.argv.slice(2)
+    {
         super();
         // Skip Node.js and script path
         this.args = process.argv.slice(2);
@@ -54,9 +49,7 @@ export class ArgumentParser extends AbstractProcess {
         // this.args = args;
         this.validator = new OptionsValidator();
         this.logDebug("ArgumentParser initialized with arguments.");
-
     }
-
 
     // Methods
     // ========================================================================
@@ -73,16 +66,19 @@ export class ArgumentParser extends AbstractProcess {
      */
     public getOption<K extends keyof OptionsInterface>(
         key: K,
-        options?: { default?: OptionsInterface[K] }
+        options?: { default?: OptionsInterface[K] },
     ): OptionsInterface[K] | undefined {
         const flag = `--${key}`;
         const flagIndex = this.args.findIndex((arg) => arg === flag);
-        const value = flagIndex !== -1 && this.args[flagIndex + 1] ? this.args[flagIndex + 1] : options?.default;
+        const value =
+            flagIndex !== -1 && this.args[flagIndex + 1]
+                ? this.args[flagIndex + 1]
+                : options?.default;
 
         if (value !== undefined) {
             // Create a partial object to validate the specific key-value pair
             const partialOption = {
-                [key]: value
+                [key]: value,
             } as Partial<OptionsInterface>;
             // Validate the key-value pair
             this.validator.validate(partialOption);
@@ -102,7 +98,7 @@ export class ArgumentParser extends AbstractProcess {
         const flag = `--${key}`;
         const exists = this.args.includes(flag);
         this.logInfo(
-            `Flag "${flag}" is ${exists ? "present" : "not present"}.`
+            `Flag "${flag}" is ${exists ? "present" : "not present"}.`,
         );
         return exists;
     }
@@ -117,7 +113,6 @@ export class ArgumentParser extends AbstractProcess {
      * @returns A key-value object of all parsed CLI arguments.
      */
     public getAllFlags(): Record<string, string | boolean> {
-
         const flags: Record<string, string | boolean> = {};
 
         for (let i = 0; i < this.args.length; i++) {
@@ -148,10 +143,9 @@ export class ArgumentParser extends AbstractProcess {
      */
     public getFlag(
         key: string,
-        defaultValue: string | boolean = false
+        defaultValue: string | boolean = false,
     ): string | boolean {
         const flags = this.getAllFlags();
         return flags[key] ?? defaultValue;
     }
-
 }

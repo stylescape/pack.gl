@@ -2,9 +2,8 @@
 // Import
 // ============================================================================
 
-import NpmCommandRunner from '../class/NpmCommandRunner.js';
-import StylizedLogger from '../class/StylizedLogger.js';
-
+import NpmCommandRunner from "../class/NpmCommandRunner.js";
+import StylizedLogger from "../class/StylizedLogger.js";
 
 // ============================================================================
 // Constants
@@ -12,7 +11,6 @@ import StylizedLogger from '../class/StylizedLogger.js';
 
 const runner = new NpmCommandRunner();
 const logger = new StylizedLogger();
-
 
 // ============================================================================
 // Functions
@@ -28,41 +26,37 @@ const logger = new StylizedLogger();
  * development dependency.
  */
 async function gl_installer() {
-
     const packages = [
-        'pack.gl',
-        'unit.gl',
-        'hue.gl',
-        'page.gl',
-        'grid.gl',
-        'block.gl',
-        'deep.gl',
-        'icon.gl',
-        'loop.gl',
+        "pack.gl",
+        "unit.gl",
+        "hue.gl",
+        "page.gl",
+        "grid.gl",
+        "block.gl",
+        "deep.gl",
+        "icon.gl",
+        "loop.gl",
     ];
 
     try {
-        logger.header('Install .gl libraries');
+        logger.header("Install .gl libraries");
         for (const pkg of packages) {
             logger.body(`Running npm install for ${pkg}...`);
             const output = await runner.runCommand(
-                `install ${pkg}@latest --save-dev`
+                `install ${pkg}@latest --save-dev`,
             );
             logger.body(output);
         }
     } catch (error) {
-        console.error('An error occurred:', error);
+        console.error("An error occurred:", error);
     }
-
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default gl_installer;
-
 
 // ============================================================================
 // Example

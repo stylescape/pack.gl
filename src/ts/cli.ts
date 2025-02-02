@@ -9,7 +9,6 @@ import { ConfigLoader } from "./core/config/ConfigLoader";
 import { ConfigStore } from "./core/config/ConfigStore";
 import { Pack } from "./pack";
 
-
 // ============================================================================
 // Main Entry Point
 // ============================================================================
@@ -32,7 +31,7 @@ import { Pack } from "./pack";
 
         // Initialize ConfigStore and load configuration
         const configLoader = new ConfigLoader();
-        await configLoader.initialize()
+        await configLoader.initialize();
         const fileConfig = await configLoader.loadConfig();
 
         // Merge Configs
@@ -45,7 +44,6 @@ import { Pack } from "./pack";
         // Create a Pack instance and execute the workflow
         const pack = new Pack();
         await pack.run();
-
     } catch (error) {
         console.error(`[CLI] An unexpected error occurred:`, error);
         process.exit(1);

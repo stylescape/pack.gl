@@ -3,7 +3,6 @@
  * These styles are used to format log messages with colors and effects.
  */
 export enum LoggerStyles {
-
     // Reset and Effects
     Reset = "\x1b[0m",
     Bold = "\x1b[1m",
@@ -26,5 +25,4 @@ export enum LoggerStyles {
     BgMagenta = "\x1b[45m",
     BgCyan = "\x1b[46m",
     BgGray = "\x1b[100m",
-
 }

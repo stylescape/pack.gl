@@ -27,7 +27,9 @@ export class FileRenameAction extends Action {
         const { srcPath, targetPath } = options;
 
         if (!srcPath || !targetPath) {
-            throw new Error("Invalid options: 'srcPath' and 'targetPath' are required.");
+            throw new Error(
+                "Invalid options: 'srcPath' and 'targetPath' are required.",
+            );
         }
 
         this.logInfo(`Renaming file: ${srcPath} → ${targetPath}`);
@@ -48,15 +50,23 @@ export class FileRenameAction extends Action {
      * @param targetPath - The new file path.
      * @returns A Promise that resolves once the file is successfully renamed.
      */
-    private async renameFile(srcPath: string, targetPath: string): Promise<void> {
+    private async renameFile(
+        srcPath: string,
+        targetPath: string,
+    ): Promise<void> {
         try {
             const resolvedSrcPath = path.resolve(srcPath);
             const resolvedTargetPath = path.resolve(targetPath);
 
             await fsPromises.rename(resolvedSrcPath, resolvedTargetPath);
-            this.logDebug(`File renamed: ${resolvedSrcPath} → ${resolvedTargetPath}`);
+            this.logDebug(
+                `File renamed: ${resolvedSrcPath} → ${resolvedTargetPath}`,
+            );
         } catch (error) {
-            this.logError(`Error renaming file: ${srcPath} → ${targetPath}`, error);
+            this.logError(
+                `Error renaming file: ${srcPath} → ${targetPath}`,
+                error,
+            );
             throw error;
         }
     }

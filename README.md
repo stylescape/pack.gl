@@ -54,13 +54,13 @@ To install `kist`, use npm or yarn:
 
 ### NPM
 
-``` bash
+```bash
 npm install kist --save-dev
 ```
 
 ### Yarn
 
-``` bash
+```bash
 yarn add kist --dev
 ```
 
@@ -70,26 +70,26 @@ yarn add kist --dev
 
 1. Clone the Repository:
 
-    ``` sh
+    ```sh
     git clone <https://github.com/getkist/kist.git>
     cd kist
     ```
 
 2. Install Dependencies:
 
-    ``` sh
+    ```sh
     npm install
     ```
 
 3. Build the Project:
 
-    ``` sh
+    ```sh
     npm run build
     ```
 
 4. Link the CLI Globally:
 
-    ``` sh
+    ```sh
     npm link
     ```
 
@@ -101,7 +101,7 @@ yarn add kist --dev
 
 Run the pipeline defined in your pack.yaml file:
 
-``` sh
+```sh
 pack
 ```
 
@@ -109,7 +109,7 @@ pack
 
 Run the pipeline with live reload enabled:
 
-``` sh
+```sh
 pack --live
 ```
 
@@ -119,7 +119,7 @@ pack --live
 
 The pipeline configuration is defined in a pack.yaml file located in the root of your project. Here’s an example:
 
-``` sh
+```sh
 stages:
 
 - name: build
@@ -150,7 +150,7 @@ Stage and Step Structure
 
 Compile the TypeScript files into JavaScript:
 
-``` sh
+```sh
 npm run build-tsc
 ```
 
@@ -158,7 +158,7 @@ npm run build-tsc
 
 Run ESLint to check for code issues:
 
-``` sh
+```sh
 npm run lint
 ```
 
@@ -166,7 +166,7 @@ npm run lint
 
 Run all tests in the src/tests directory:
 
-``` sh
+```sh
 npm run test
 ```
 
@@ -174,7 +174,7 @@ npm run test
 
 To enable live reload during development, add the --live flag:
 
-``` sh
+```sh
 pack --live
 ```
 
@@ -182,7 +182,7 @@ pack --live
 
 ## Folder Structure
 
-``` sh
+```sh
 kist/
 ├── src/
 │   ├── core/           # Core pipeline logic
@@ -223,7 +223,7 @@ kist supports plugin-based actions. Default actions include:
 
 Custom actions can be implemented and registered as plugins.
 
-``` mermaid
+```mermaid
 graph TD
     subgraph Pipeline
         Stage1[Stage 1]

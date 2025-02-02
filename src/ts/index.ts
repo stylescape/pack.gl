@@ -34,11 +34,10 @@ import DocumentationGenerator from "./class/javascript/DocumentationGenerator.js
 import CodeLinter from "./class/javascript/CodeLinter.js";
 import JSONLoader from "./class/JSONLoader.js";
 
-
 // Import | Internal Functions
 import gl_installer from "./utils/gl_installer";
 import cleanDirectory from "./utils/clean_directory";
-import readPackageJson from "./utils/readPackageJson.js"
+import readPackageJson from "./utils/readPackageJson.js";
 
 import * as cli from "./cli.js";
 
@@ -78,8 +77,6 @@ export {
     SvgSpriteGenerator,
     SvgPackager,
 };
-
-
 
 // Utility Functions
 export { gl_installer, cleanDirectory, readPackageJson };

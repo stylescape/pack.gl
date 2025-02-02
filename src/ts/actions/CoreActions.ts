@@ -8,13 +8,11 @@ import { DirectoryCreateAction } from "../actions/DirectoryCreateAction";
 
 import { DocumentationAction } from "../actions/DocumentationAction";
 
-
 import { FileCopyAction } from "../actions/FileCopyAction";
 import { FileRenameAction } from "../actions/FileRenameAction";
 
 import { JavaScriptMinifyAction } from "../actions/JavaScriptMinifyAction";
 import { LintAction } from "../actions/LintAction";
-
 
 import { PackageManagerAction } from "../actions/PackageManagerAction";
 
@@ -25,16 +23,11 @@ import { SvgReaderAction } from "../actions/SvgReaderAction";
 import { SvgSpriteAction } from "../actions/SvgSpriteAction";
 import { SvgToPngAction } from "../actions/SvgToPngAction";
 
-
-
 import { TypeScriptCompilerAction } from "../actions/TypeScriptCompilerAction";
 
 import { VersionWriteAction } from "../actions/VersionWriteAction";
 
-
-
 import { ActionInterface } from "../interface/ActionInterface";
-
 
 // ============================================================================
 // Core Actions
@@ -45,7 +38,6 @@ import { ActionInterface } from "../interface/ActionInterface";
  * Automatically derives names from the action classes.
  */
 export const coreActions: Record<string, new () => ActionInterface> = {
-
     [new DirectoryCleanAction().name]: DirectoryCleanAction,
     [new DirectoryCopyAction().name]: DirectoryCopyAction,
     [new DirectoryCreateAction().name]: DirectoryCreateAction,
@@ -68,8 +60,5 @@ export const coreActions: Record<string, new () => ActionInterface> = {
 
     [new TypeScriptCompilerAction().name]: TypeScriptCompilerAction,
 
-
-
     [new VersionWriteAction().name]: VersionWriteAction,
-
 };

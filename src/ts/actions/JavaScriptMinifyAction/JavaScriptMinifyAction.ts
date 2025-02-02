@@ -29,10 +29,14 @@ export class JavaScriptMinifyAction extends Action {
         const { inputPath, outputPath, customConfig = {} } = options;
 
         if (!inputPath || !outputPath) {
-            throw new Error("Invalid options: 'inputPath' and 'outputPath' are required.");
+            throw new Error(
+                "Invalid options: 'inputPath' and 'outputPath' are required.",
+            );
         }
 
-        this.logInfo(`Minifying JavaScript file: ${inputPath} → ${outputPath}`);
+        this.logInfo(
+            `Minifying JavaScript file: ${inputPath} → ${outputPath}`,
+        );
 
         try {
             await this.minifyFile(inputPath, outputPath, customConfig);
@@ -69,7 +73,7 @@ export class JavaScriptMinifyAction extends Action {
                 ...terserConfig,
                 ...customConfig,
                 ecma: terserConfig.ecma as MinifyOptions["ecma"], // Ensure ecma is correctly typed
-                nameCache: terserConfig.nameCache ?? undefined,  // Ensure nameCache is undefined if null
+                nameCache: terserConfig.nameCache ?? undefined, // Ensure nameCache is undefined if null
             };
 
             // Minify using Terser
@@ -82,9 +86,14 @@ export class JavaScriptMinifyAction extends Action {
             // Write minified file
             await fs.writeFile(resolvedOutputPath, result.code, "utf8");
 
-            this.logDebug(`Minified JavaScript file saved to ${resolvedOutputPath}`);
+            this.logDebug(
+                `Minified JavaScript file saved to ${resolvedOutputPath}`,
+            );
         } catch (error) {
-            this.logError(`Error minifying JavaScript file: ${inputPath}`, error);
+            this.logError(
+                `Error minifying JavaScript file: ${inputPath}`,
+                error,
+            );
             throw error;
         }
     }

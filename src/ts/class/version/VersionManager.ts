@@ -6,13 +6,11 @@ import semver from "semver";
 import { exec } from "child_process";
 import util from "util";
 
-
 // ============================================================================
 // Constants
 // ============================================================================
 
 const execAsync = util.promisify(exec);
-
 
 // ============================================================================
 // Classes
@@ -24,19 +22,17 @@ const execAsync = util.promisify(exec);
  * in source control.
  */
 class VersionManager {
-
     // Parameters
     // ========================================================================
 
     private currentVersion: string;
-
 
     // Constructor
     // ========================================================================
 
     /**
      * Initializes the version manager with a valid semantic version.
-     * 
+     *
      * @param {string} currentVersion - The current semantic version.
      * @throws {Error} If the initial version is not a valid semantic version.
      */
@@ -47,13 +43,12 @@ class VersionManager {
         this.currentVersion = currentVersion;
     }
 
-
     // Methods
     // ========================================================================
 
     /**
      * Updates the current version based on the specified release type.
-     * 
+     *
      * @param {semver.ReleaseType} releaseType - The type of version update
      *  (major, minor, patch).
      * @returns {Promise<string>} The new version.
@@ -62,9 +57,7 @@ class VersionManager {
     async updateVersion(releaseType: semver.ReleaseType): Promise<string> {
         const newVersion = semver.inc(this.currentVersion, releaseType);
         if (!newVersion) {
-            throw new Error(
-                "Version increment failed"
-            );
+            throw new Error("Version increment failed");
         }
         this.currentVersion = newVersion;
         return newVersion;
@@ -92,7 +85,7 @@ class VersionManager {
     /**
      * Creates a new Git tag for the current version and pushes it to the
      * remote repository.
-     * 
+     *
      * @throws {Error} If creating or pushing the tag fails.
      */
     async createGitTag() {
@@ -107,13 +100,11 @@ class VersionManager {
     }
 }
 
-
 // ============================================================================
 // Exports
 // ============================================================================
 
 export default VersionManager;
-
 
 // ============================================================================
 // Example

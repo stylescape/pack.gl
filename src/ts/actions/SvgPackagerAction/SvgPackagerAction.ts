@@ -19,8 +19,6 @@ import { ActionOptionsType } from "../../types/ActionOptionsType";
  * and then outputs them as TypeScript files and JSON indexes.
  */
 export class SvgPackagerAction extends Action {
-
-
     // Methods
     // ========================================================================
 
@@ -45,19 +43,29 @@ export class SvgPackagerAction extends Action {
             const svgFiles = glob.sync(`${inputDirectory}/**/*.svg`);
 
             for (const file of svgFiles) {
-                const iconName = this.sanitizeFileName(path.basename(file, ".svg"));
+                const iconName = this.sanitizeFileName(
+                    path.basename(file, ".svg"),
+                );
                 iconNames.push(iconName);
 
                 const svgContent = await this.readSvgFile(file);
-                const optimizedSvg = await this.optimizeSvg(svgoConfigPath, svgContent);
+                const optimizedSvg = await this.optimizeSvg(
+                    svgoConfigPath,
+                    svgContent,
+                );
 
                 await this.writeFiles(
-                    iconName, optimizedSvg, outputDirectory, tsOutputDirectory
+                    iconName,
+                    optimizedSvg,
+                    outputDirectory,
+                    tsOutputDirectory,
                 );
             }
 
             await this.writeIconsJson(iconNames, jsonOutputDirectory);
-            this.logInfo(`Successfully processed ${svgFiles.length} SVG files.`);
+            this.logInfo(
+                `Successfully processed ${svgFiles.length} SVG files.`,
+            );
         } catch (error) {
             this.logError("Error processing SVG files.", error);
             throw error;
@@ -88,7 +96,10 @@ export class SvgPackagerAction extends Action {
      * @param svgContent The raw SVG content.
      * @returns The optimized SVG content.
      */
-    private async optimizeSvg(svgoConfigPath: string, svgContent: string): Promise<string> {
+    private async optimizeSvg(
+        svgoConfigPath: string,
+        svgContent: string,
+    ): Promise<string> {
         const config = await loadConfig(svgoConfigPath);
         const result = await SVGO.optimize(svgContent, { ...config });
         return result.data.trim();
@@ -105,10 +116,14 @@ export class SvgPackagerAction extends Action {
         iconName: string,
         svgContent: string,
         outputDirectory: string,
-        tsOutputDirectory: string
+        tsOutputDirectory: string,
     ): Promise<void> {
         await this.writeSvgFile(iconName, svgContent, outputDirectory);
-        await this.writeTypeScriptFile(iconName, svgContent, tsOutputDirectory);
+        await this.writeTypeScriptFile(
+            iconName,
+            svgContent,
+            tsOutputDirectory,
+        );
     }
 
     /**
@@ -117,7 +132,11 @@ export class SvgPackagerAction extends Action {
      * @param svgContent The SVG content to be written.
      * @param outputDirectory The directory to output the SVG file.
      */
-    private async writeSvgFile(iconName: string, svgContent: string, outputDirectory: string): Promise<void> {
+    private async writeSvgFile(
+        iconName: string,
+        svgContent: string,
+        outputDirectory: string,
+    ): Promise<void> {
         const outputPath = path.join(outputDirectory, `${iconName}.svg`);
         await fs.writeFile(outputPath, svgContent);
     }
@@ -128,7 +147,11 @@ export class SvgPackagerAction extends Action {
      * @param svgContent The optimized SVG content.
      * @param tsOutputDirectory The directory for TypeScript output.
      */
-    private async writeTypeScriptFile(iconName: string, svgContent: string, tsOutputDirectory: string): Promise<void> {
+    private async writeTypeScriptFile(
+        iconName: string,
+        svgContent: string,
+        tsOutputDirectory: string,
+    ): Promise<void> {
         const tsContent = `export const icon_${iconName} = \`${svgContent}\`;\n`;
         const outputPath = path.join(tsOutputDirectory, `${iconName}.ts`);
         await fs.writeFile(outputPath, tsContent);
@@ -139,7 +162,10 @@ export class SvgPackagerAction extends Action {
      * @param iconNames An array of processed icon names.
      * @param jsonOutputDirectory The directory to output the JSON file.
      */
-    private async writeIconsJson(iconNames: string[], jsonOutputDirectory: string): Promise<void> {
+    private async writeIconsJson(
+        iconNames: string[],
+        jsonOutputDirectory: string,
+    ): Promise<void> {
         const jsonContent = JSON.stringify(iconNames, null, 2);
         const outputPath = path.join(jsonOutputDirectory, "icons.json");
         await fs.writeFile(outputPath, jsonContent);

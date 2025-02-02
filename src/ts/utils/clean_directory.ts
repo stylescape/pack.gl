@@ -5,7 +5,6 @@
 import DirectoryCleaner from "../class/directory/DirectoryCleaner.js";
 import StylizedLogger from "../class/StylizedLogger.js";
 
-
 // ============================================================================
 // Constants
 // ============================================================================
@@ -13,7 +12,6 @@ import StylizedLogger from "../class/StylizedLogger.js";
 // Create instances of DirectoryCleaner and StylizedLogger
 const directoryCleaner = new DirectoryCleaner();
 const logger = new StylizedLogger();
-
 
 // ============================================================================
 // Functions
@@ -37,13 +35,11 @@ async function cleanDirectory(directoryPath: string): Promise<void> {
     }
 }
 
-
 // ============================================================================
 // Export
 // ============================================================================
 
 export default cleanDirectory;
-
 
 // ============================================================================
 // Example

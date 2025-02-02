@@ -18,7 +18,6 @@ import { ActionOptionsType } from "../../types/ActionOptionsType";
  * making it more efficient to manage and use SVG assets in web applications.
  */
 export class SvgSpriteAction extends Action {
-
     // Parameters
     // ========================================================================
 
@@ -49,15 +48,12 @@ export class SvgSpriteAction extends Action {
      * Executes the SVG sprite generation process.
      * @param options - Options including source directory and output directory.
      */
-    async execute(
-        options: ActionOptionsType
-    ): Promise<void> {
-
+    async execute(options: ActionOptionsType): Promise<void> {
         const { sourceDir, outputDir } = options;
 
         if (!sourceDir || !outputDir) {
             throw new Error(
-                "Both 'sourceDir' and 'outputDir' must be specified."
+                "Both 'sourceDir' and 'outputDir' must be specified.",
             );
         }
 
@@ -79,9 +75,8 @@ export class SvgSpriteAction extends Action {
      */
     private async generateSprite(
         sourceDir: string,
-        outputDir: string
+        outputDir: string,
     ): Promise<void> {
-
         const files = fs.readdirSync(sourceDir);
         const sprite = new svgSprite(this.config);
 
@@ -102,15 +97,14 @@ export class SvgSpriteAction extends Action {
                 for (const resource in result[mode]) {
                     const outputPath = path.resolve(
                         outputDir,
-                        result[mode][resource].path
+                        result[mode][resource].path,
                     );
-                    fs.mkdirSync(
-                        path.dirname(outputPath),
-                        { recursive: true }
-                    );
+                    fs.mkdirSync(path.dirname(outputPath), {
+                        recursive: true,
+                    });
                     fs.writeFileSync(
                         outputPath,
-                        result[mode][resource].contents
+                        result[mode][resource].contents,
                     );
                 }
             }

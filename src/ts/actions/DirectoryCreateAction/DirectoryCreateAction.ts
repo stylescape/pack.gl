@@ -28,24 +28,21 @@ export class DirectoryCreateAction extends Action {
 
         if (!basePath || !directories || !Array.isArray(directories)) {
             throw new Error(
-                "Invalid options: 'basePath' (string) and 'directories' (array) are required."
+                "Invalid options: 'basePath' (string) and 'directories' (array) are required.",
             );
         }
 
         this.logInfo(
-            `Ensuring directory structure under base path: ${basePath}`
+            `Ensuring directory structure under base path: ${basePath}`,
         );
 
         try {
             await this.createDirectories(basePath, directories);
             this.logInfo(
-                "All specified directories have been created successfully."
+                "All specified directories have been created successfully.",
             );
         } catch (error) {
-            this.logError(
-                "Failed to create directories.",
-                error
-            );
+            this.logError("Failed to create directories.", error);
             throw error;
         }
     }
@@ -59,7 +56,7 @@ export class DirectoryCreateAction extends Action {
      */
     private async createDirectories(
         basePath: string,
-        directories: string[]
+        directories: string[],
     ): Promise<void> {
         for (const dir of directories) {
             const dirPath = path.join(basePath, dir);

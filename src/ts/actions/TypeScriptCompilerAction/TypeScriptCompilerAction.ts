@@ -26,24 +26,38 @@ export class TypeScriptCompilerAction extends Action {
         const { tsconfigPath = "tsconfig.json" } = options;
         const resolvedTsconfigPath = path.resolve(tsconfigPath);
 
-        this.logInfo(`Compiling TypeScript using configuration: ${resolvedTsconfigPath}`);
+        this.logInfo(
+            `Compiling TypeScript using configuration: ${resolvedTsconfigPath}`,
+        );
 
         try {
             // **Properly Parse tsconfig.json**
-            const parsedConfig = this.loadAndParseTsConfig(resolvedTsconfigPath);
+            const parsedConfig = this.loadAndParseTsConfig(
+                resolvedTsconfigPath,
+            );
 
             // **Create a TypeScript Program**
-            const program = ts.createProgram(parsedConfig.fileNames, parsedConfig.options);
+            const program = ts.createProgram(
+                parsedConfig.fileNames,
+                parsedConfig.options,
+            );
             const emitResult = program.emit();
 
             // **Collect Diagnostics**
-            const allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+            const allDiagnostics = ts
+                .getPreEmitDiagnostics(program)
+                .concat(emitResult.diagnostics);
             if (allDiagnostics.length > 0) {
                 allDiagnostics.forEach((diagnostic) => {
-                    const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
+                    const message = ts.flattenDiagnosticMessageText(
+                        diagnostic.messageText,
+                        "\n",
+                    );
                     this.logError(`TypeScript Error: ${message}`);
                 });
-                throw new Error("TypeScript compilation failed due to errors.");
+                throw new Error(
+                    "TypeScript compilation failed due to errors.",
+                );
             }
 
             this.logInfo("TypeScript compilation completed successfully.");
@@ -65,7 +79,7 @@ export class TypeScriptCompilerAction extends Action {
 
         if (configFile.error) {
             throw new Error(
-                `Error reading tsconfig.json: ${ts.flattenDiagnosticMessageText(configFile.error.messageText, "\n")}`
+                `Error reading tsconfig.json: ${ts.flattenDiagnosticMessageText(configFile.error.messageText, "\n")}`,
             );
         }
 
@@ -73,14 +87,19 @@ export class TypeScriptCompilerAction extends Action {
         const parsedConfig = ts.parseJsonConfigFileContent(
             configFile.config,
             ts.sys,
-            path.dirname(tsconfigPath)
+            path.dirname(tsconfigPath),
         );
 
         if (parsedConfig.errors.length > 0) {
             throw new Error(
                 `Error parsing tsconfig.json: ${parsedConfig.errors
-                    .map((diag) => ts.flattenDiagnosticMessageText(diag.messageText, "\n"))
-                    .join("\n")}`
+                    .map((diag) =>
+                        ts.flattenDiagnosticMessageText(
+                            diag.messageText,
+                            "\n",
+                        ),
+                    )
+                    .join("\n")}`,
             );
         }
 

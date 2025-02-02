@@ -53,8 +53,12 @@ export class Pack extends AbstractProcess {
             this.initializeActionRegistry();
 
             // Create and run the PipelineManager
-            const liveReloadEnabled = ConfigStore.getInstance().get<boolean>("options.live.enabled");
-            const liveReloadServer = liveReloadEnabled ? new LiveServer() : null;
+            const liveReloadEnabled = ConfigStore.getInstance().get<boolean>(
+                "options.live.enabled",
+            );
+            const liveReloadServer = liveReloadEnabled
+                ? new LiveServer()
+                : null;
 
             const pipelineManager = new PipelineManager(liveReloadServer!);
             await pipelineManager.runPipeline();
@@ -87,12 +91,14 @@ export class Pack extends AbstractProcess {
      */
     private setupLiveReload(
         pipelineManager: PipelineManager,
-        liveReloadServer: LiveServer
+        liveReloadServer: LiveServer,
     ): void {
         this.logInfo("Enabling live reload functionality...");
 
         new LiveWatcher((filePath) => {
-            this.logInfo(`Detected change in: ${filePath}. Restarting pipeline...`);
+            this.logInfo(
+                `Detected change in: ${filePath}. Restarting pipeline...`,
+            );
             pipelineManager.restartPipelineWithDelay(500);
         });
 
@@ -108,10 +114,14 @@ export class Pack extends AbstractProcess {
      */
     private registerShutdownHandlers(
         pipelineManager: PipelineManager,
-        liveReloadServer: LiveServer
+        liveReloadServer: LiveServer,
     ): void {
-        process.on("SIGINT", () => this.handleShutdown(pipelineManager, liveReloadServer));
-        process.on("SIGTERM", () => this.handleShutdown(pipelineManager, liveReloadServer));
+        process.on("SIGINT", () =>
+            this.handleShutdown(pipelineManager, liveReloadServer),
+        );
+        process.on("SIGTERM", () =>
+            this.handleShutdown(pipelineManager, liveReloadServer),
+        );
     }
 
     /**
@@ -122,7 +132,7 @@ export class Pack extends AbstractProcess {
      */
     private async handleShutdown(
         pipelineManager: PipelineManager,
-        liveReloadServer: LiveServer
+        liveReloadServer: LiveServer,
     ): Promise<void> {
         this.logInfo("Shutdown signal received. Shutting down...");
 
@@ -143,7 +153,8 @@ export class Pack extends AbstractProcess {
      * @param error - The error object to log and handle.
      */
     private handleError(error: unknown): void {
-        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorMessage =
+            error instanceof Error ? error.message : String(error);
         this.logError(`An error occurred: ${errorMessage}`, error);
         process.exit(1);
     }

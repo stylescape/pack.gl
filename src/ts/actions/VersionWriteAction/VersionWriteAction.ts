@@ -7,7 +7,6 @@ import path from "path";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types";
 
-
 // ============================================================================
 // Classes
 // ============================================================================
@@ -18,7 +17,6 @@ import { ActionOptionsType } from "../../types";
  * based on a specified key and pattern.
  */
 export class VersionWriteAction extends Action {
-
     // Methods
     // ========================================================================
 
@@ -168,7 +166,6 @@ export class VersionWriteAction extends Action {
         return description;
     }
 }
-
 
 // ============================================================================
 // Export

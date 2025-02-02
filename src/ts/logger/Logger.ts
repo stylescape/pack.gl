@@ -4,7 +4,6 @@
 
 import { LoggerStyles } from "./LoggerStyles";
 
-
 // ============================================================================
 // Class
 // ============================================================================
@@ -15,7 +14,6 @@ import { LoggerStyles } from "./LoggerStyles";
  * application.
  */
 export class Logger {
-
     // Parameters
     // ========================================================================
 
@@ -29,7 +27,6 @@ export class Logger {
      */
     private logLevel: "debug" | "info" | "warn" | "error";
 
-
     // Constructor
     // ========================================================================
 
@@ -38,11 +35,10 @@ export class Logger {
      * @param logLevel - The log level for controlling log output.
      */
     private constructor(
-        logLevel: "debug" | "info" | "warn" | "error" = "info"
+        logLevel: "debug" | "info" | "warn" | "error" = "info",
     ) {
         this.logLevel = logLevel;
     }
-
 
     // Singleton Methods
     // ========================================================================
@@ -55,7 +51,7 @@ export class Logger {
      * @returns The Logger instance.
      */
     public static getInstance(
-        logLevel: "debug" | "info" | "warn" | "error" = "info"
+        logLevel: "debug" | "info" | "warn" | "error" = "info",
     ): Logger {
         if (!Logger.instance) {
             // Default to "info" level if not initialized explicitly
@@ -72,10 +68,8 @@ export class Logger {
         Logger.instance = null;
     }
 
-
     // Logging Methods
     // ========================================================================
-
 
     /**
      * Logs a message with a specific level if it meets the current log level.
@@ -91,11 +85,13 @@ export class Logger {
         context: string,
         message: string,
         fgStyle: LoggerStyles,
-        bgStyle: LoggerStyles = LoggerStyles.Reset
+        bgStyle: LoggerStyles = LoggerStyles.Reset,
     ): void {
         if (this.shouldLog(level)) {
             const formattedMessage = `${fgStyle}${bgStyle}[${level.toUpperCase()}]${LoggerStyles.Reset} [${LoggerStyles.Cyan}${context}${LoggerStyles.Reset}] ${message}`;
-            console[level === "error" ? "error" : level === "warn" ? "warn" : "log"](formattedMessage);
+            console[
+                level === "error" ? "error" : level === "warn" ? "warn" : "log"
+            ](formattedMessage);
         }
     }
 
@@ -139,7 +135,13 @@ export class Logger {
      */
     public logError(context: string, message: string, error?: unknown): void {
         const formattedMessage = this.formatError(message, error);
-        this.log("error", context, formattedMessage, LoggerStyles.Red, LoggerStyles.BgYellow);
+        this.log(
+            "error",
+            context,
+            formattedMessage,
+            LoggerStyles.Red,
+            LoggerStyles.BgYellow,
+        );
     }
 
     /**
@@ -151,7 +153,6 @@ export class Logger {
     public logDebug(context: string, message: string): void {
         this.log("debug", context, message, LoggerStyles.Magenta);
     }
-
 
     // Utility Methods
     // ========================================================================
@@ -165,7 +166,6 @@ export class Logger {
         this.logLevel = level;
     }
 
-
     /**
      * Formats an error message for logging.
      * Combines a base message with additional error details if available.
@@ -174,10 +174,7 @@ export class Logger {
      * @param error - Additional error information, such as an Error object.
      * @returns A formatted string combining the message and error details.
      */
-    private formatError(
-        message: string,
-        error?: unknown
-    ): string {
+    private formatError(message: string, error?: unknown): string {
         if (error instanceof Error) {
             return `${message}: ${error.message}`;
         } else if (typeof error === "string") {
@@ -187,5 +184,4 @@ export class Logger {
         }
         return message;
     }
-
 }

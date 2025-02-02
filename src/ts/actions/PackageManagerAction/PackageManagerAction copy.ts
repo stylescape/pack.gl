@@ -17,7 +17,6 @@ import packageConfig from "./package.config.js";
  * files, supporting custom configurations and merging with default settings.
  */
 export class PackageManagerAction extends Action {
-
     /**
      * Executes the package management action.
      * Reads or creates a `package.json` file based on the provided options.
@@ -30,7 +29,6 @@ export class PackageManagerAction extends Action {
      * `outputDir` is provided.
      */
     async execute(options: ActionOptionsType): Promise<void> {
-
         const { packageJsonPath, outputDir, customConfig = {} } = options;
 
         if (!packageJsonPath && !outputDir) {

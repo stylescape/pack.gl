@@ -7,7 +7,6 @@ import path from "path";
 import svgSprite from "svg-sprite";
 import svgspriteConfig from "../../config/svgsprite.config.js";
 
-
 // ============================================================================
 // Classes
 // ============================================================================
@@ -19,8 +18,6 @@ import svgspriteConfig from "../../config/svgsprite.config.js";
  * in web projects.
  */
 class SvgSpriteGenerator {
-
-
     // Parameters
     // ========================================================================
 
@@ -33,8 +30,7 @@ class SvgSpriteGenerator {
      * Default configuration for the TypeScript compiler.
      */
     private static defaultConfig: svgSprite.Config = svgspriteConfig;
-     // private static defaultConfig: CompilerOptions = tsConfig;
-
+    // private static defaultConfig: CompilerOptions = tsConfig;
 
     // Constructor
     // ========================================================================
@@ -45,15 +41,12 @@ class SvgSpriteGenerator {
      * @param {svgSprite.Config} customConfig - Optional custom configuration
      * object for svg-sprite.
      */
-    constructor(
-         customConfig: svgSprite.Config = {},
-     ) {
-         this.config = {
-             ...SvgSpriteGenerator.defaultConfig,
-             ...customConfig
-         };
-     }
-
+    constructor(customConfig: svgSprite.Config = {}) {
+        this.config = {
+            ...SvgSpriteGenerator.defaultConfig,
+            ...customConfig,
+        };
+    }
 
     // Methods
     // ========================================================================
@@ -69,7 +62,7 @@ class SvgSpriteGenerator {
             const files = fs.readdirSync(sourceDir);
             const sprite = new svgSprite(this.config);
 
-            files.forEach(file => {
+            files.forEach((file) => {
                 if (path.extname(file) === ".svg") {
                     const svgPath = path.resolve(sourceDir, file);
                     const content = fs.readFileSync(svgPath, "utf8");
@@ -86,27 +79,23 @@ class SvgSpriteGenerator {
                     for (const resource in result[mode]) {
                         const outputPath = path.resolve(
                             outputDir,
-                            result[mode][resource].path
+                            result[mode][resource].path,
                         );
-                        fs.mkdirSync(
-                            path.dirname(outputPath),
-                            { recursive: true }
-                        );
+                        fs.mkdirSync(path.dirname(outputPath), {
+                            recursive: true,
+                        });
                         fs.writeFileSync(
                             outputPath,
-                            result[mode][resource].contents
+                            result[mode][resource].contents,
                         );
                     }
                 }
             });
-
         } catch (err) {
             console.error("Error generating SVG sprite:", err);
         }
     }
-
 }
-
 
 // ============================================================================
 // Export
@@ -114,11 +103,9 @@ class SvgSpriteGenerator {
 
 export default SvgSpriteGenerator;
 
-
 // ============================================================================
 // Example
 // ============================================================================
-
 
 // import SvgSpriteGenerator from "./SvgSpriteGenerator";
 

@@ -23,10 +23,16 @@ export class LintAction extends Action {
     }
 
     async execute(options: ActionOptionsType): Promise<void> {
-        const { targetFiles = ["src/**/*.ts"], fix = false, configPath = ".eslintrc.js" } = options;
+        const {
+            targetFiles = ["src/**/*.ts"],
+            fix = false,
+            configPath = ".eslintrc.js",
+        } = options;
 
         if (!targetFiles || targetFiles.length === 0) {
-            throw new Error("Invalid options: 'targetFiles' is required and must contain at least one file or directory.");
+            throw new Error(
+                "Invalid options: 'targetFiles' is required and must contain at least one file or directory.",
+            );
         }
 
         this.logInfo(`Starting ESLint on: ${targetFiles.join(", ")}`);
@@ -49,8 +55,6 @@ export class LintAction extends Action {
             throw error;
         }
     }
-
-
 
     /**
      * Provides a description of the action.

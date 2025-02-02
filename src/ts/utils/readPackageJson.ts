@@ -5,7 +5,6 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-
 // ============================================================================
 // Functions
 // ============================================================================
@@ -23,43 +22,37 @@ import path from "path";
  * content is not valid JSON.
  */
 async function readPackageJson(
-    packageJsonPath: string
+    packageJsonPath: string,
 ): Promise<Record<string, unknown>> {
-
     // Resolves the path to an absolute path
     const fullPath = path.resolve(packageJsonPath);
 
     try {
-        const fileContent = await fs.readFile(
-            fullPath,
-            "utf-8"
-        );
+        const fileContent = await fs.readFile(fullPath, "utf-8");
         return JSON.parse(fileContent);
     } catch (error: any) {
         // Customize error message based on the error type
         if (error.code === "ENOENT") {
             throw new Error(
-                `File not found at ${fullPath}. Please ensure the path is correct.`
+                `File not found at ${fullPath}. Please ensure the path is correct.`,
             );
         } else if (error.name === "SyntaxError") {
             throw new Error(
-                `Failed to parse JSON from ${fullPath}: ${error.message}`
+                `Failed to parse JSON from ${fullPath}: ${error.message}`,
             );
         } else {
             throw new Error(
-                `An unexpected error occurred while reading ${fullPath}: ${error.message}`
+                `An unexpected error occurred while reading ${fullPath}: ${error.message}`,
             );
         }
     }
 }
-
 
 // ============================================================================
 // Export
 // ============================================================================
 
 export default readPackageJson;
-
 
 // ============================================================================
 // Example Usage

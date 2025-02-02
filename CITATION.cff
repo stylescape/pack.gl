@@ -4,12 +4,12 @@ version: 0.1.28
 date-released: 2024-12-22
 url: "https://github.com/getkist/kist"
 message: >-
-  If you use kist, please cite it using
-  the metadata from this file.
+    If you use kist, please cite it using
+    the metadata from this file.
 type: software
 authors:
-  - given-names: Lars Bastiaan
-    family-names: van Vianen
-    email: lars@scape.agency
-    affiliation: Scape Agency
-    orcid: 'https://orcid.org/0000-0002-8790-8630'
+    - given-names: Lars Bastiaan
+      family-names: van Vianen
+      email: lars@scape.agency
+      affiliation: Scape Agency
+      orcid: "https://orcid.org/0000-0002-8790-8630"

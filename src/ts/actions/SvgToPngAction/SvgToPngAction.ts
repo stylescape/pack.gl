@@ -9,7 +9,6 @@ import sharp from "sharp";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
 
-
 // ============================================================================
 // Classes
 // ============================================================================
@@ -19,7 +18,6 @@ import { ActionOptionsType } from "../../types/ActionOptionsType";
  * Uses `sharp` for conversion and `jsdom` for SVG element manipulation.
  */
 export class SvgToPngAction extends Action {
-
     // Methods
     // ========================================================================
 
@@ -33,7 +31,7 @@ export class SvgToPngAction extends Action {
 
         if (!svgContent || !outputPath) {
             throw new Error(
-                "Both 'svgContent' and 'outputPath' must be provided."
+                "Both 'svgContent' and 'outputPath' must be provided.",
             );
         }
 
@@ -94,7 +92,7 @@ export class SvgToPngAction extends Action {
             await sharp(pngBuffer).toFile(outputPath);
         } catch (error) {
             throw new Error(
-                `Error converting SVG to PNG: ${(error as Error).message}`
+                `Error converting SVG to PNG: ${(error as Error).message}`,
             );
         }
     }
