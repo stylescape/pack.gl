@@ -1,29 +1,28 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/stylescape/pack.gl/master/res/logo/kist.png" width="20%" height="20%" alt="Stylescape Logo">
-</p>
-<h1 align="center" style='border-bottom: none;'>KIST</h1>
+    <img src="https://raw.githubusercontent.com/getkist/brand/master/src/logo/kist.png" width="20%" height="20%" alt="kist logo"></p>
+<h1 align="center" style='border-bottom: none;'>kist</h1>
 <h3 align="center">Package Pipeline Processor</h3>
 
 <br/>
 
 <div align="center">
 
-[![Website](https://img.shields.io/website?url=https%3A%2F%2Fwww.pack.gl&up_message=Up&up_color=5e4d34&down_message=Down&down_color=5e4d34&style=flat-square&logo=Firefox&logoColor=FFFFFF&label=Website&labelColor=5e4d34&color=5e4d34)
-](https://www.pack.gl)
-[![NPM Version](https://img.shields.io/npm/v/pack.gl?style=flat-square&logo=npm&logoColor=FFFFFF&label=NPM&labelColor=5e4d34&color=5e4d34&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fpack.gl)](https://www.npmjs.com/package/pack.gl)
-[![devContainer](https://img.shields.io/badge/devContainer-235e4d34?style=flat-square&logo=Docker&logoColor=%23FFFFFF&labelColor=%235e4d34&color=%235e4d34)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/stylescape/pack.gl)
-[![StackBlitz](https://img.shields.io/badge/StackBlitz-235e4d34?style=flat-square&logo=StackBlitz&logoColor=%23FFFFFF&labelColor=%235e4d34&color=%235e4d34)](https://stackblitz.com/github/stylescape/pack.gl/tree/main?file=src%2Findex.html)
-[![GitHub License](https://img.shields.io/github/license/stylescape/pack.gl?style=flat-square&logo=readthedocs&logoColor=FFFFFF&label=&labelColor=%235e4d34&color=%235e4d34&link=LICENSE)](https://github.com/stylescape/pack.gl/blob/main/LICENSE)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fwww.kist&up_message=Up&up_color=5e4d34&down_message=Down&down_color=5e4d34&style=flat-square&logo=Firefox&logoColor=FFFFFF&label=Website&labelColor=5e4d34&color=5e4d34)
+](https://www.kist)
+[![NPM Version](https://img.shields.io/npm/v/kist?style=flat-square&logo=npm&logoColor=FFFFFF&label=NPM&labelColor=5e4d34&color=5e4d34&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fkist)](https://www.npmjs.com/package/kist)
+[![devContainer](https://img.shields.io/badge/devContainer-235e4d34?style=flat-square&logo=Docker&logoColor=%23FFFFFF&labelColor=%235e4d34&color=%235e4d34)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/getkist/kist)
+[![StackBlitz](https://img.shields.io/badge/StackBlitz-235e4d34?style=flat-square&logo=StackBlitz&logoColor=%23FFFFFF&labelColor=%235e4d34&color=%235e4d34)](https://stackblitz.com/github/getkist/kist/tree/main?file=src%2Findex.html)
+[![GitHub License](https://img.shields.io/github/license/getkist/kist?style=flat-square&logo=readthedocs&logoColor=FFFFFF&label=&labelColor=%235e4d34&color=%235e4d34&link=LICENSE)](https://github.com/getkist/kist/blob/main/LICENSE)
 
 </div>
 
 <div align="center">
 
-[![Report a Bug](https://img.shields.io/badge/Report%20a%20Bug-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/stylescape/pack.gl/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=bug_report.yml)
-[![Request a Feature](https://img.shields.io/badge/Request%20a%20Feature-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/stylescape/pack.gl/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=feature_request.yml)
-[![Ask a Question](https://img.shields.io/badge/Ask%20a%20Question-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/stylescape/pack.gl/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=question.yml)
-[![Make a Suggestion](https://img.shields.io/badge/Make%20a%20Suggestion-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/stylescape/pack.gl/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=suggestion.yml)
-[![Start a Discussion](https://img.shields.io/badge/Start%20a%20Discussion-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/stylescape/pack.gl/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=discussion.yml)
+[![Report a Bug](https://img.shields.io/badge/Report%20a%20Bug-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=bug_report.yml)
+[![Request a Feature](https://img.shields.io/badge/Request%20a%20Feature-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=feature_request.yml)
+[![Ask a Question](https://img.shields.io/badge/Ask%20a%20Question-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=question.yml)
+[![Make a Suggestion](https://img.shields.io/badge/Make%20a%20Suggestion-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=suggestion.yml)
+[![Start a Discussion](https://img.shields.io/badge/Start%20a%20Discussion-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=discussion.yml)
 
 </div>
 
@@ -33,9 +32,9 @@
 
 **Package Builder for the `.gl`-libraries of Scape Agency and its affiliates.**
 
-Pack.gl is a highly customizable and efficient package builder designed to streamline software development workflows. It provides a modular framework for managing build pipelines with support for live reload functionality.
+kist is a highly customizable and efficient package builder designed to streamline software development workflows. It provides a modular framework for managing build pipelines with support for live reload functionality.
 
-`pack.gl` is a package builder designed to enhance the efficiency and organization of software development projects. Key to its design philosophy is the adaptability to various development workflows, making it an ideal companion for a range of projects from small-scale personal endeavors to large, complex enterprise applications. `pack.gl` stands not just as a tool but as a partner in the software development journey, enhancing productivity, reducing overhead, and bringing clarity and ease to the package management process.
+`kist` is a package builder designed to enhance the efficiency and organization of software development projects. Key to its design philosophy is the adaptability to various development workflows, making it an ideal companion for a range of projects from small-scale personal endeavors to large, complex enterprise applications. `kist` stands not just as a tool but as a partner in the software development journey, enhancing productivity, reducing overhead, and bringing clarity and ease to the package management process.
 
 ---
 
@@ -51,18 +50,18 @@ Pack.gl is a highly customizable and efficient package builder designed to strea
 
 ## Quickstart
 
-To install `pack.gl`, use npm or yarn:
+To install `kist`, use npm or yarn:
 
 ### NPM
 
 ``` bash
-npm install pack.gl --save-dev
+npm install kist --save-dev
 ```
 
 ### Yarn
 
 ``` bash
-yarn add pack.gl --dev
+yarn add kist --dev
 ```
 
 ---
@@ -72,8 +71,8 @@ yarn add pack.gl --dev
 1. Clone the Repository:
 
     ``` sh
-    git clone <https://github.com/stylescape/pack.gl.git>
-    cd pack.gl
+    git clone <https://github.com/getkist/kist.git>
+    cd kist
     ```
 
 2. Install Dependencies:
@@ -184,7 +183,7 @@ pack --live
 ## Folder Structure
 
 ``` sh
-pack.gl/
+kist/
 ├── src/
 │   ├── core/           # Core pipeline logic
 │   ├── live/           # Live reload server and related components
@@ -216,7 +215,7 @@ The ConfigLoader reads and validates the pipeline configuration from the pack.ya
 
 ### Actions
 
-Pack.gl supports plugin-based actions. Default actions include:
+kist supports plugin-based actions. Default actions include:
 
 - build: Compiles source files.
 - test: Runs tests.
@@ -262,14 +261,14 @@ graph TD
 
 ### Authors
 
-**pack.gl** is an open-source project by **[Scape Agency](https://www.scape.agency "Scape Agency website")**.
+**kist** is an open-source project by **[Scape Agency](https://www.scape.agency "Scape Agency website")**.
 
 #### Scape Agency
 
 Scape Agency is a spatial innovation collective that dreams, discovers and designs the everyday of tomorrow. We blend design thinking with emerging technologies to create a brighter perspective for people and planet. Our products and services naturalise technology in liveable and sustainable –scapes that spark the imagination and inspire future generations.
 
 - website: [scape.agency](https://www.scape.agency "Scape Agency website")
-- github: [github.com/stylescape](https://github.com/stylescape "Scape Agency GitHub")
+- github: [github.com/getkist](https://github.com/getkist "Scape Agency GitHub")
 
 ### Development Resources
 
@@ -293,7 +292,7 @@ Copyright &copy; 2024 [Scape Agency BV](https://www.scape.agency/ "Scape Agency 
 
 #### License
 
-Except as otherwise noted, the code in this repository is licensed under the MIT License. Also see [LICENSE](https://github.com/stylescape/community/blob/master/src/LICENSE). The documentation is licensed under the [Creative Commons Attribution 4.0 International (CC BY 4.0) License](https://creativecommons.org/licenses/by/4.0/).
+Except as otherwise noted, the code in this repository is licensed under the MIT License. Also see [LICENSE](https://github.com/getkist/community/blob/master/src/LICENSE). The documentation is licensed under the [Creative Commons Attribution 4.0 International (CC BY 4.0) License](https://creativecommons.org/licenses/by/4.0/).
 
 #### Disclaimer
 
