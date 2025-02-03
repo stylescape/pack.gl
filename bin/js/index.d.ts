@@ -25,3 +25,7 @@ import JSONLoader from "./class/JSONLoader.js";
 import TestRunner from "./class/TestRunner.js";
 export { DirectoryCleaner, DirectoryCopier, DirectoryCreator, DirectoryScanner, FileCopier, FilenameExtractor, FileRenamer };
 export { CodeLinter, DocumentationGenerator, FontGenerator, JavaScriptMinifier, JSONLoader, NpmCommandRunner, PackageCreator, StyleProcessor, StylizedLogger, SvgPackager, SvgReader, SvgSpriteGenerator, SvgToPngConverter, TemplateWriter, TestRunner, TypeScriptCompiler, VersionManager, VersionWriter };
+import cleanDirectory from "./utils/clean_directory";
+import gl_installer from "./utils/gl_installer";
+import readPackageJson from "./utils/readPackageJson.js";
+export { cleanDirectory, gl_installer, readPackageJson };
