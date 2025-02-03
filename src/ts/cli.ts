@@ -7,15 +7,15 @@
 import { ArgumentParser } from "./cli/ArgumentParser";
 import { ConfigLoader } from "./core/config/ConfigLoader";
 import { ConfigStore } from "./core/config/ConfigStore";
-import { Pack } from "./pack";
+import { Kist } from "./kist";
 
 // ============================================================================
 // Main Entry Point
 // ============================================================================
 
 /**
- * The entry point for the Pack CLI application. Sets up the runtime
- * environment, loads configuration, and invokes the Pack class.
+ * The entry point for the Kist CLI application. Sets up the runtime
+ * environment, loads configuration, and invokes the Kist class.
  */
 (async () => {
     try {
@@ -41,9 +41,9 @@ import { Pack } from "./pack";
         configStore.merge({ options: cliOptions }); // Merge CLI options
         // configStore.print()
 
-        // Create a Pack instance and execute the workflow
-        const pack = new Pack();
-        await pack.run();
+        // Create a Kist instance and execute the workflow
+        const kist = new Kist();
+        await kist.run();
     } catch (error) {
         console.error(`[CLI] An unexpected error occurred:`, error);
         process.exit(1);
