@@ -1,7 +1,7 @@
 {
     "name": "kist",
     "description": "Package Pipeline Processor",
-    "version": "0.1.30",
+    "version": "0.1.31",
     "config": {
         "version_short": "0.1"
     },
