@@ -11,43 +11,25 @@ import { defaultConfig } from "./defaultConfig";
 // ============================================================================
 
 /**
- * ConfigStore is a singleton that loads and manages the application's
- * configuration.
+ * ConfigStore is a singleton that loads and manages the application's configuration.
  * It prioritizes CLI arguments over configuration file values.
  */
 export class ConfigStore extends AbstractProcess {
-    // Parameters
-    // ========================================================================
-
-    /**
-     * Singleton instance of the ConfigStore.
-     */
+    // Singleton instance
     private static instance: ConfigStore | null = null;
 
-    /**
-     * The current configuration stored in the ConfigStore.
-     */
+    // The current configuration stored in the ConfigStore.
     private config: ConfigInterface;
 
-    // Constructor
-    // ========================================================================
-
-    /**
-     * Private constructor to enforce the singleton pattern.
-     * Initializes the store with the default configuration.
-     */
+    // Constructor (Private to enforce Singleton Pattern)
     private constructor() {
         super();
         this.config = defaultConfig;
         this.logDebug("ConfigStore initialized with default configuration.");
     }
 
-    // Static Methods
-    // ========================================================================
-
     /**
-     * Retrieves the singleton instance of ConfigStore, initializing it if
-     * necessary.
+     * Retrieves the singleton instance of ConfigStore.
      * @returns The singleton instance of ConfigStore.
      */
     public static getInstance(): ConfigStore {
@@ -57,12 +39,8 @@ export class ConfigStore extends AbstractProcess {
         return ConfigStore.instance;
     }
 
-    // Instance Methods
-    // ========================================================================
-
     /**
-     * Retrieves a value from the configuration by key.
-     * Supports nested keys using dot notation (e.g., "options.logLevel").
+     * Retrieves a value from the configuration using dot notation.
      *
      * @param key - The key of the configuration to retrieve.
      * @returns The configuration value or undefined if not found.
@@ -78,15 +56,12 @@ export class ConfigStore extends AbstractProcess {
             current = current[k];
         }
 
-        this.logDebug(
-            `Configuration key "${key}" retrieved with value: ${JSON.stringify(current)}`,
-        );
+        this.logDebug(`Configuration key "${key}" retrieved.`);
         return current as T;
     }
 
     /**
-     * Sets a value in the configuration by key.
-     * Supports nested keys using dot notation (e.g., "options.logLevel").
+     * Sets a value in the configuration using dot notation.
      *
      * @param key - The key of the configuration to set.
      * @param value - The value to set.
@@ -97,21 +72,34 @@ export class ConfigStore extends AbstractProcess {
 
         for (let i = 0; i < keys.length - 1; i++) {
             const k = keys[i];
-            if (!current[k] || typeof current[k] !== "object") {
-                current[k] = {};
+
+            // Prevent prototype pollution by blocking reserved keywords
+            if (["__proto__", "constructor", "prototype"].includes(k)) {
+                this.logWarn(`Attempted prototype pollution detected: "${k}"`);
+                return;
+            }
+
+            // Ensure property exists and is an object
+            if (!Object.prototype.hasOwnProperty.call(current, k) || typeof current[k] !== "object") {
+                current[k] = Object.create(null); // Use a null prototype object
             }
             current = current[k];
         }
 
-        current[keys[keys.length - 1]] = value;
-        this.logDebug(
-            `Set configuration key "${key}" to: ${JSON.stringify(value)}`,
-        );
+        const finalKey = keys[keys.length - 1];
+
+        // Prevent prototype pollution at the final assignment
+        if (["__proto__", "constructor", "prototype"].includes(finalKey)) {
+            this.logWarn(`Attempted prototype pollution detected: "${finalKey}"`);
+            return;
+        }
+
+        current[finalKey] = value;
+        this.logDebug(`Set configuration key "${key}" to: ${JSON.stringify(value)}`);
     }
 
     /**
-     * Merges the provided configuration into the existing configuration.
-     * Uses a deep merge strategy to combine objects and overwrite primitives.
+     * Merges the provided configuration into the existing configuration using deep merge.
      *
      * @param newConfig - The new configuration to merge.
      */
@@ -121,51 +109,27 @@ export class ConfigStore extends AbstractProcess {
     }
 
     /**
-     * Retrieves the current configuration.
-     *
-     * @returns The current configuration object.
+     * Retrieves the current configuration object.
+     * @returns The current configuration.
      */
     public getConfig(): ConfigInterface {
         return this.config;
     }
 
     /**
-     * Prints the current configuration to the console in a readable format.
+     * Prints the current configuration to the console.
      */
     public print(): void {
-        console.log("Current Configuration:");
-        console.log(JSON.stringify(this.config, null, 2));
+        console.log("Current Configuration:", JSON.stringify(this.config, null, 2));
     }
 
     /**
-     * Deeply merges two objects.
+     * Deeply merges two objects, preventing prototype pollution.
      *
-     * @param target - The target object to merge into.
-     * @param source - The source object to merge from.
+     * @param target - The target object.
+     * @param source - The source object.
      * @returns The merged object.
      */
-    // private deepMerge(target: any, source: any): any {
-    //     if (typeof target !== "object" || target === null) {
-    //         return source;
-    //     }
-
-    //     for (const key of Object.keys(source)) {
-    //         if (
-    //             source[key] &&
-    //             typeof source[key] === "object" &&
-    //             !Array.isArray(source[key])
-    //         ) {
-    //             if (!target[key] || typeof target[key] !== "object") {
-    //                 target[key] = {};
-    //             }
-    //             target[key] = this.deepMerge(target[key], source[key]);
-    //         } else {
-    //             target[key] = source[key];
-    //         }
-    //     }
-
-    //     return target;
-    // }
     private deepMerge(target: any, source: any): any {
         if (typeof target !== "object" || target === null) {
             return source;
@@ -173,22 +137,14 @@ export class ConfigStore extends AbstractProcess {
 
         for (const key of Object.keys(source)) {
             // Prevent prototype pollution
-            if (
-                key === "__proto__" ||
-                key === "constructor" ||
-                key === "prototype"
-            ) {
-                this.logWarn(`Skipping potentially unsafe key: "${key}"`);
+            if (["__proto__", "constructor", "prototype"].includes(key)) {
+                this.logWarn(`Skipping unsafe key during merge: "${key}"`);
                 continue;
             }
 
-            if (
-                source[key] &&
-                typeof source[key] === "object" &&
-                !Array.isArray(source[key])
-            ) {
-                if (!target[key] || typeof target[key] !== "object") {
-                    target[key] = {};
+            if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
+                if (!Object.prototype.hasOwnProperty.call(target, key) || typeof target[key] !== "object") {
+                    target[key] = Object.create(null);
                 }
                 target[key] = this.deepMerge(target[key], source[key]);
             } else {
