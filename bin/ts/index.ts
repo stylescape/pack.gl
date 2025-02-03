@@ -3,13 +3,13 @@
 // ============================================================================
 
 // Import | Utility Classes
-import DirectoryCleaner from "./class/directory/DirectoryCleaner";
-import DirectoryCopier from "./class/directory/DirectoryCopier";
-import DirectoryCreator from "./class/directory/DirectoryCreator";
-import DirectoryScanner from "./class/directory/DirectoryScanner";
-import FileCopier from "./class/file/FileCopier";
-import FilenameExtractor from "./class/file/FilenameExtractor";
-import FileRenamer from "./class/file/FileRenamer";
+import DirectoryCleaner from "./class/directory/DirectoryCleaner.js";
+import DirectoryCopier from "./class/directory/DirectoryCopier.js";
+import DirectoryCreator from "./class/directory/DirectoryCreator.js";
+import DirectoryScanner from "./class/directory/DirectoryScanner.js";
+import FileCopier from "./class/file/FileCopier.js";
+import FilenameExtractor from "./class/file/FilenameExtractor.js";
+import FileRenamer from "./class/file/FileRenamer.js";
 
 // Import | Internal Classes
 import FontGenerator from "./class/FontGenerator.js";
@@ -82,8 +82,8 @@ export {
     };
 
     // Import | Internal Functions
-    import cleanDirectory from "./utils/clean_directory";
-    import gl_installer from "./utils/gl_installer";
+    import cleanDirectory from "./utils/clean_directory.js";
+    import gl_installer from "./utils/gl_installer.js";
     import readPackageJson from "./utils/readPackageJson.js";
 
 // ============================================================================
