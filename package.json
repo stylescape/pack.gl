@@ -6,8 +6,7 @@
         "version_short": "0.1"
     },
     "keywords": [
-        "pack.gl",
-        "pack",
+        "kist",
         "package",
         "packager",
         "build",
@@ -17,7 +16,7 @@
         "framework",
         "web"
     ],
-    "homepage": "https://www.pack.gl/",
+    "homepage": "https://www.getkist.com/",
     "author": "Lars van Vianen <lars@vianen.com> (https://vianen.com)",
     "contributors": [
         "Scape Agency <info@scape.agency>"
@@ -25,10 +24,10 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/getkist/pack.gl.git"
+        "url": "git+https://github.com/getkist/kist.git"
     },
     "bugs": {
-        "url": "https://github.com/getkist/pack.gl/issues"
+        "url": "https://github.com/getkist/kist/issues"
     },
     "funding": [
         {
@@ -40,7 +39,7 @@
     "type": "module",
     "module": "dist/js/index.js",
     "bin": {
-        "pack.gl": "js/cli.js"
+        "kist": "js/cli.js"
     },
     "scripts": {
         "format": "npx prettier --write .",
