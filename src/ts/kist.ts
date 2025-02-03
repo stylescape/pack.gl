@@ -14,39 +14,39 @@ import { LiveWatcher } from "./live/LiveWatcher";
 // ============================================================================
 
 /**
- * The Pack class encapsulates the pack.gl CLI functionality.
+ * The Kist class encapsulates the kist CLI functionality.
  * It manages the pipeline execution, configuration loading, and live reload.
  */
-export class Pack extends AbstractProcess {
+export class Kist extends AbstractProcess {
     // Constructor
     // ========================================================================
 
     /**
-     * Constructs the Pack class instance and initializes necessary components.
+     * Constructs the Kist class instance and initializes necessary components.
      */
     constructor() {
         super();
-        this.logDebug("Pack initialized.");
+        this.logDebug("Kist initialized.");
     }
 
     // Methods
     // ========================================================================
 
     /**
-     * Executes the Pack workflow.
+     * Executes the Kist workflow.
      *
-     * This method orchestrates the execution of the Pack pipeline, starting
+     * This method orchestrates the execution of the Kist pipeline, starting
      * from initializing the ActionRegistry, loading configuration settings,
      * running the pipeline stages through the `PipelineManager`, and
      * optionally enabling live reload for real-time updates.
      *
      * @returns {Promise<void>} Resolves when the workflow completes successfully.
      * @example
-     * const pack = new Pack();
-     * pack.run().then(() => console.log("Pipeline execution complete."));
+     * const Kist = new Kist();
+     * Kist.run().then(() => console.log("Pipeline execution complete."));
      */
     public async run(): Promise<void> {
-        this.logInfo("Starting Pack workflow...");
+        this.logInfo("Starting Kist workflow...");
 
         try {
             // Initialize the ActionRegistry with available actions
@@ -148,7 +148,7 @@ export class Pack extends AbstractProcess {
     }
 
     /**
-     * Handles errors occurring during the execution of the Pack workflow.
+     * Handles errors occurring during the execution of the Kist workflow.
      *
      * @param error - The error object to log and handle.
      */
