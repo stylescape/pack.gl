@@ -11,33 +11,39 @@ import tseslint from "typescript-eslint";
 // ============================================================================
 
 export default [
-  js.configs.recommended,
-  tseslint.configs.recommended,
+    js.configs.recommended,
+    tseslint.configs.recommended,
 
-  {
-    languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        project: "./tsconfig.json",
-        ecmaVersion: "latest",
-        sourceType: "module",
-      },
+    {
+        languageOptions: {
+            parser: tseslint.parser,
+            parserOptions: {
+                project: "./tsconfig.json",
+                ecmaVersion: "latest",
+                sourceType: "module",
+            },
+        },
+        rules: {
+            "@typescript-eslint/no-unused-vars": "warn",
+            "@typescript-eslint/explicit-function-return-type": "off",
+            "@typescript-eslint/no-explicit-any": "warn",
+
+            "import/order": [
+                "error",
+                { groups: ["builtin", "external", "internal"] },
+            ],
+            "import/no-unresolved": "error",
+
+            "prettier/prettier": [
+                "error",
+                { singleQuote: true, trailingComma: "all" },
+            ],
+
+            "no-console": "warn",
+            "no-debugger": "warn",
+        },
     },
-    rules: {
-      "@typescript-eslint/no-unused-vars": "warn",
-      "@typescript-eslint/explicit-function-return-type": "off",
-      "@typescript-eslint/no-explicit-any": "warn",
 
-      "import/order": ["error", { groups: ["builtin", "external", "internal"] }],
-      "import/no-unresolved": "error",
-
-      "prettier/prettier": ["error", { singleQuote: true, trailingComma: "all" }],
-
-      "no-console": "warn",
-      "no-debugger": "warn",
-    },
-  },
-
-  // Enable Stylelint for SCSS files
-  stylelint,
+    // Enable Stylelint for SCSS files
+    stylelint,
 ];
