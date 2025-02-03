@@ -5,7 +5,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { minify, MinifyOptions } from "terser";
-import terserConfig from "../../config/terser.config.js";
+import terserConfig from "../../../../bin/ts/config/terser.config.js";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
 

@@ -11,8 +11,8 @@ import { Action } from "../../core/pipeline/Action.js";
 import { ActionOptionsType } from "../../types/ActionOptionsType.js";
 
 // Assuming the PostCSS configurations are available at the given paths
-import postcssConfigCompressed from "../../config/postcss.config.compressed.js";
-import postcssConfigExpanded from "../../config/postcss.config.expanded.js";
+import postcssConfigCompressed from "../../../../bin/ts/config/postcss.config.compressed.js";
+import postcssConfigExpanded from "../../../../bin/ts/config/postcss.config.expanded.js";
 
 // ============================================================================
 // Classes

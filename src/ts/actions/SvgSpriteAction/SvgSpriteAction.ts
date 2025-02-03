@@ -5,7 +5,7 @@
 import fs from "fs";
 import path from "path";
 import svgSprite from "svg-sprite";
-import svgspriteConfig from "../../config/svgsprite.config.js";
+import svgspriteConfig from "../../../../bin/ts/config/svgsprite.config.js";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
 
