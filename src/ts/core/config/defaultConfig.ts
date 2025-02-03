@@ -9,14 +9,14 @@ import { ConfigInterface } from "../../interface/ConfigInterface";
 // ============================================================================
 
 /**
- * Default configuration for the pack.gl pipeline.
+ * Default configuration for the kist pipeline.
  */
 export const defaultConfig: ConfigInterface = {
     metadata: {
         /**
          * The name of the pipeline for identification and reporting.
          */
-        name: "pack.gl pipeline",
+        name: "kist pipeline",
 
         /**
          * Semantic version of the pipeline configuration for tracking changes.
@@ -26,7 +26,7 @@ export const defaultConfig: ConfigInterface = {
         /**
          * Detailed description outlining the purpose of the pipeline.
          */
-        description: "A generic pipeline configuration for pack.gl.",
+        description: "A generic pipeline configuration for kist.",
 
         /**
          * The author or owner of the pipeline configuration.
@@ -96,7 +96,7 @@ export const defaultConfig: ConfigInterface = {
             /**
              * Paths to watch for changes.
              */
-            watchPaths: ["src/**/*", "config/**/*", "pack.yaml"],
+            watchPaths: ["src/**/*", "config/**/*", "kist.yaml"],
 
             /**
              * Paths or patterns to ignore while watching.

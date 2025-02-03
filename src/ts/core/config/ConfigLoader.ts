@@ -14,7 +14,7 @@ import { AbstractProcess } from "../abstract/AbstractProcess";
 
 /**
  * ConfigLoader is responsible for loading and parsing configuration files
- * (`pack.yaml` or `pack.yml` by default). It validates the configuration
+ * (`kist.yaml` or `kist.yml` by default). It validates the configuration
  * structure and provides it in a usable format for the pipeline.
  * Extends `AbstractProcess` for consistent logging.
  */
@@ -30,14 +30,14 @@ export class ConfigLoader extends AbstractProcess {
     /**
      * Default filenames to search for configuration files.
      */
-    private readonly defaultFilenames = ["pack.yaml", "pack.yml"];
+    private readonly defaultFilenames = ["kist.yaml", "kist.yml"];
 
     // Constructor
     // ========================================================================
 
     /**
      * Constructs a ConfigLoader instance.
-     * Searches for `pack.yaml` or `pack.yml` in the working directory
+     * Searches for `kist.yaml` or `kist.yml` in the working directory
      * unless a custom path is provided.
      *
      * @param configPath - Optional custom configuration file path.
@@ -57,7 +57,7 @@ export class ConfigLoader extends AbstractProcess {
 
     /**
      * Initializes the loader by locating the configuration file.
-     * Searches for `pack.yaml` or `pack.yml` by default.
+     * Searches for `kist.yaml` or `kist.yml` by default.
      *
      * @param configPath - Optional custom configuration file path.
      */

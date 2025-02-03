@@ -1,11 +1,4 @@
-# pack.yml
 
-# ============================================================================
-# Pack Configuration
-# ============================================================================
-
-# General configuration for the pipeline stages and steps
-pipeline:
   stages:
     - name: Manage Package Files
       steps:
@@ -34,9 +27,6 @@ pipeline:
                 typescript: "^4.9.5"
 
 
-# =============================================================================
-# Pack Configuration for PackageManagerAction
-# =============================================================================
 
 stages:
   - name: Package Management

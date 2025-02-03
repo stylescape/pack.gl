@@ -1,5 +1,3 @@
-# pack.yml
-
 stages:
   - name: CopyBuildArtifacts
     description: "Copy build artifacts from the build directory to the deployment directory."

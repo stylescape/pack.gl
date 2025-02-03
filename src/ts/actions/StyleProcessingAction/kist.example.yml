@@ -1,5 +1,3 @@
-# pack.yml
-
 # Define global options if needed (optional)
 globalOptions:
   logLevel: info

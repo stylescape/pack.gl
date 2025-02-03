@@ -1,7 +1,3 @@
-# =============================================================================
-# Pack Configuration for SASS Documentation Generation
-# =============================================================================
-
 stages:
   - name: Generate SASS Documentation
     steps:

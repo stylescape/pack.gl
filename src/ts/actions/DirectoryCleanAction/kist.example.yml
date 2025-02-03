@@ -1,5 +1,3 @@
-# pack.yml
-
 steps:
   - name: CleanBuildDirStep
     action: DirectoryCleanAction

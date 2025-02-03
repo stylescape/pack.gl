@@ -1,0 +1,8 @@
+stages:
+  - name: Generate SVG Sprite
+    steps:
+      - name: Create Sprite
+        action: SvgSpriteAction
+        options:
+          sourceDir: "src/icons"
+          outputDir: "dist/sprites"

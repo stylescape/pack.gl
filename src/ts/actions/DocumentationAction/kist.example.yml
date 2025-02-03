@@ -1,7 +1,3 @@
-# =============================================================================
-# Pack Configuration for Documentation Generation
-# =============================================================================
-
 stages:
   - name: Generate Documentation
     steps:

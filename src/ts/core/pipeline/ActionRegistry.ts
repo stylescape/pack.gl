@@ -173,7 +173,7 @@ export class ActionRegistry extends AbstractProcess {
         this.logInfo("Discovering external plugins...");
 
         const nodeModulesPath = join(process.cwd(), "node_modules");
-        const pluginPrefix = "@pack/plugin-";
+        const pluginPrefix = "@kist/plugin-";
 
         try {
             const directories = readdirSync(nodeModulesPath, {

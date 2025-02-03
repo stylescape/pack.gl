@@ -1,5 +1,3 @@
-# pack.yml
-
 globalOptions:
   logLevel: info
   stepTimeout: 20000 # Timeout in milliseconds for each step

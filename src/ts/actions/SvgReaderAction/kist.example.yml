@@ -1,0 +1,7 @@
+stages:
+  - name: Read SVG File
+    steps:
+      - name: Load SVG Content
+        action: SvgReaderAction
+        options:
+          filePath: "src/icons/logo.svg"
