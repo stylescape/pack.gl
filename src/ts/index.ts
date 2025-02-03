@@ -3,13 +3,13 @@
 // ============================================================================
 
 // Import | Utility Classes
-import DirectoryScanner from "./class/directory/DirectoryScanner";
 import DirectoryCleaner from "./class/directory/DirectoryCleaner";
 import DirectoryCopier from "./class/directory/DirectoryCopier";
 import DirectoryCreator from "./class/directory/DirectoryCreator";
+import DirectoryScanner from "./class/directory/DirectoryScanner";
 import FileCopier from "./class/file/FileCopier";
-import FileRenamer from "./class/file/FileRenamer";
 import FilenameExtractor from "./class/file/FilenameExtractor";
+import FileRenamer from "./class/file/FileRenamer";
 
 // Import | Internal Classes
 import FontGenerator from "./class/FontGenerator.js";
@@ -18,28 +18,26 @@ import StyleProcessor from "./class/sass/StyleProcessor.js";
 import VersionManager from "./class/version/VersionManager.js";
 import VersionWriter from "./class/version/VersionWriter.js";
 
-import TypeScriptCompiler from "./class/javascript/TypeScriptCompiler.js";
 import JavaScriptMinifier from "./class/javascript/JavaScriptMinifier.js";
+import TypeScriptCompiler from "./class/javascript/TypeScriptCompiler.js";
 import NpmCommandRunner from "./class/NpmCommandRunner.js";
 import StylizedLogger from "./class/StylizedLogger.js";
 import TemplateWriter from "./class/TemplateWriter.js";
 
-import SvgReader from "./class/svg/SvgReader.js";
-import SvgToPngConverter from "./class/svg/SvgToPngConverter.js";
-import SvgSpriteGenerator from "./class/svg/SvgSpriteGenerator.js";
 import SvgPackager from "./class/svg/SvgPackager.js";
+import SvgReader from "./class/svg/SvgReader.js";
+import SvgSpriteGenerator from "./class/svg/SvgSpriteGenerator.js";
+import SvgToPngConverter from "./class/svg/SvgToPngConverter.js";
 
-import TestRunner from "./class/TestRunner.js";
-import DocumentationGenerator from "./class/javascript/DocumentationGenerator.js";
 import CodeLinter from "./class/javascript/CodeLinter.js";
+import DocumentationGenerator from "./class/javascript/DocumentationGenerator.js";
 import JSONLoader from "./class/JSONLoader.js";
+import TestRunner from "./class/TestRunner.js";
 
 // Import | Internal Functions
-import gl_installer from "./utils/gl_installer";
 import cleanDirectory from "./utils/clean_directory";
+import gl_installer from "./utils/gl_installer";
 import readPackageJson from "./utils/readPackageJson.js";
-
-import * as cli from "./cli.js";
 
 // ============================================================================
 // Exports
@@ -47,39 +45,39 @@ import * as cli from "./cli.js";
 
 // Export | Utility Classes
 export {
-    DirectoryScanner,
     DirectoryCleaner,
     DirectoryCopier,
     DirectoryCreator,
+    DirectoryScanner,
     FileCopier,
-    FileRenamer,
     FilenameExtractor,
+    FileRenamer,
 };
 
 // Export | Internal Classes
 export {
+    CodeLinter,
+    DocumentationGenerator,
     FontGenerator,
+    JavaScriptMinifier,
+    JSONLoader,
+    NpmCommandRunner,
     PackageCreator,
     StyleProcessor,
-    VersionWriter,
-    VersionManager,
-    TypeScriptCompiler,
-    JavaScriptMinifier,
-    NpmCommandRunner,
     StylizedLogger,
+    SvgPackager,
+    SvgReader,
+    SvgSpriteGenerator,
+    SvgToPngConverter,
     TemplateWriter,
     TestRunner,
-    DocumentationGenerator,
-    CodeLinter,
-    JSONLoader,
-    SvgReader,
-    SvgToPngConverter,
-    SvgSpriteGenerator,
-    SvgPackager,
+    TypeScriptCompiler,
+    VersionManager,
+    VersionWriter,
 };
 
 // Utility Functions
-export { gl_installer, cleanDirectory, readPackageJson };
+export { cleanDirectory, gl_installer, readPackageJson };
 
 // Core Modules
 // export { Pipeline } from "./core/Pipeline";
@@ -94,7 +92,7 @@ export { gl_installer, cleanDirectory, readPackageJson };
 // export { Action } from "./core/Action";
 
 // Main Function
-export { Pack } from "./pack";
+export { Kist } from "./kist";
 
 // Additional Types
 export * from "./types";
