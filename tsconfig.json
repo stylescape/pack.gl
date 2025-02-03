@@ -120,7 +120,7 @@
         "experimentalSpecifierResolution": "node"
     },
 
-    "include": ["src/ts/**/*.ts", "bin/ts/config/config.ts", "bin/ts/config/fantasticon.config.ts", "bin/ts/config/nunjucks.config.ts", "bin/ts/config/postcss.config.compressed.ts", "bin/ts/config/postcss.config.expanded.ts", "bin/ts/config/svgo.config.ts", "bin/ts/config/svgsprite.config.ts", "bin/ts/config/terser.config.ts"],
+    "include": ["src/ts/**/*.ts", ],
 
     "exclude": [
         "**/*.spec.ts",
