@@ -30,8 +30,6 @@
 
 <br/>
 
-**Package Builder for the `.gl`-libraries of Scape Agency and its affiliates.**
-
 kist is a highly customizable and efficient package builder designed to streamline software development workflows. It provides a modular framework for managing build pipelines with support for live reload functionality.
 
 `kist` is a package builder designed to enhance the efficiency and organization of software development projects. Key to its design philosophy is the adaptability to various development workflows, making it an ideal companion for a range of projects from small-scale personal endeavors to large, complex enterprise applications. `kist` stands not just as a tool but as a partner in the software development journey, enhancing productivity, reducing overhead, and bringing clarity and ease to the package management process.
