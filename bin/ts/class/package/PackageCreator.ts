@@ -4,7 +4,7 @@
 
 import fs from "fs/promises";
 import path from "path";
-import packageConfig from "../../actions/PackageManagerAction/package.config.js";
+import packageConfig from "../../config/package.config.js";
 
 // ============================================================================
 // Classes
