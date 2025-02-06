@@ -1,0 +1,14 @@
+# ============================================================================
+# KIST Configuration for Running an External Script
+# ============================================================================
+
+version: "1.0.0"
+
+pipeline:
+  - name: Run External Script
+    action: RunScriptAction
+    options:
+      scriptPath: "./scripts/generate.js"  # Path to the JavaScript script
+      args:
+        - "--mode=production"
+        - "--verbose"
