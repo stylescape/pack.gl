@@ -1,0 +1,64 @@
+# ============================================================================
+# KIST Configuration for Template Rendering
+# ============================================================================
+
+version: "1.0.0"
+
+# Define the pipeline steps
+pipeline:
+  - name: Render Templates
+    action: TemplateRenderAction
+    options:
+      templatesDir: "./templates"  # Directory containing the Nunjucks templates
+      context:
+        colors:
+          primary: "#ff0000"
+          secondary: "#00ff00"
+        name: "KIST"
+        version: "1.0.0"
+        website: "https://kist.dev"
+      templates:
+        - template: "hue.gl.code-snippets.jinja"
+          outputFile: "./dist/code-snippets/hue.gl.code-snippets"
+        - template: "hue.gl.inkscape.jinja"
+          outputFile: "./dist/inkscape/hue.gl.inkscape"
+        - template: "hue.gl.less.jinja"
+          outputFile: "./dist/less/hue.gl.less"
+        - template: "hue.gl.md.jinja"
+          outputFile: "./dist/md/hue.gl.md"
+        - template: "hue.gl.oco.jinja"
+          outputFile: "./dist/oco/hue.gl.oco"
+        - template: "hue.gl.py.jinja"
+          outputFile: "./dist/py/hue.gl.py"
+        - template: "hue.gl.rcpx.jinja"
+          outputFile: "./dist/rcpx/hue.gl.rcpx"
+        - template: "hue.gl.styl.jinja"
+          outputFile: "./dist/styl/hue.gl.styl"
+        - template: "hue.gl.tex.jinja"
+          outputFile: "./dist/tex/hue.gl.tex"
+
+        # SCSS Templates
+        - template: "hue.gl-rgb-map.scss.jinja"
+          outputFile: "./src/scss/hue/_hue.gl-rgb-map.scss"
+        - template: "hue.gl-rgb-var.scss.jinja"
+          outputFile: "./src/scss/hue/_hue.gl-rgb-var.scss"
+        - template: "hue.gl-hcl-map.scss.jinja"
+          outputFile: "./src/scss/hue/_hue.gl-hcl-map.scss"
+        - template: "hue.gl-hcl-var.scss.jinja"
+          outputFile: "./src/scss/hue/_hue.gl-hcl-var.scss"
+        - template: "hue.gl-hex-map.scss.jinja"
+          outputFile: "./src/scss/hue/_hue.gl-hex-map.scss"
+        - template: "hue.gl-hex-var.scss.jinja"
+          outputFile: "./src/scss/hue/_hue.gl-hex-var.scss"
+
+        # TypeScript Constants
+        - template: "hue.gl-hcl-enum.ts.jinja"
+          outputFile: "./src/ts/constants/hue_hcl.ts"
+        - template: "hue.gl-hex-enum.ts.jinja"
+          outputFile: "./src/ts/constants/hue_hex.ts"
+        - template: "hue.gl-rgb-enum.ts.jinja"
+          outputFile: "./src/ts/constants/hue_rgb.ts"
+
+        # JavaScript Output
+        - template: "hue.gl.js.jinja"
+          outputFile: "./dist/js/hue.gl.js"
