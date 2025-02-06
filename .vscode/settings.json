@@ -1,52 +1,12 @@
 {
 
-    // Eslint
-    // ========================================================================
 
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "html",
-        "vue"
-    ],
-    "eslint.options": {
-        "extensions": [
-            ".js",
-            ".jsx",
-            ".ts",
-            ".tsx",
-            ".html",
-            ".vue"
-        ] // ESLint validation for additional file types
-    },
 
     // Git
     // ========================================================================
 
 
     "git.autofetch": true,                              // Automatically fetch changes from the remote repository
-
-    // Prettier
-    // ========================================================================
-
-    "prettier.requireConfig": true,                     // Require a Prettier config file to run
-    "prettier.trailingComma": "es5",                    // Add trailing commas where valid in ES5 (objects, arrays, etc.)
-    "prettier.arrowParens": "always",                   // Always include parentheses around arrow function parameters
-    "prettier.singleQuote": true,                       // Use single quotes instead of double quotes
-
-
-
-
-
-    // Typescript
-    // ========================================================================
-
-    "typescript.tsdk": "node_modules/typescript/lib",   // Use the TypeScript version from node_modules
-
-
-
 
 
 
@@ -309,11 +269,11 @@
     // Minimap
     // ========================================================================
 
-    "editor.minimap.autohide": true,
+    "editor.minimap.autohide": false,
     "editor.minimap.enabled": true,
     "editor.minimap.maxColumn": 120,
     "editor.minimap.renderCharacters": true,
-    "editor.minimap.scale": 3,
+    "editor.minimap.scale": 2,
     "editor.minimap.sectionHeaderFontSize": 9,
     "editor.minimap.sectionHeaderLetterSpacing": 1,
     "editor.minimap.showMarkSectionHeaders": true,
@@ -391,8 +351,17 @@
     "files.associations": {
         "*.jinja": "jinja",
         "*.njk": "jinja",
+
+        "*.cff": "yaml",
         "*.yml": "yaml",
-        "*.yaml": "yaml"
+        "*.yaml": "yaml",
+        ".prettierrc": "yaml",
+
+        "AUTHORS": "markdown",
+        "CODEOWNERS": "markdown",
+
+        "LICENSE": "plaintext",
+        "VERSION": "plaintext",
     },
     "files.autoGuessEncoding": false,
     "files.autoSave": "off",
@@ -466,7 +435,7 @@
     "window.density.editorTabHeight": "compact",
     "window.title": "${activeEditorShort}${separator}${rootName}${separator}${profileName}",
     "window.titleSeparator": " — ",
-    "window.zoomLevel": -1,
+    "window.zoomLevel": -2,
     "window.zoomPerWindow": true,
 
     // ========================================================================
@@ -807,6 +776,332 @@
         "info": "Information"
     },
 
+    // Typescript
+    // ========================================================================
 
+    "[typescript]": {
+        "editor.formatOnPaste": false, // Disable auto-formatting on paste
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+        "editor.defaultFormatter": "esbenp.prettier-vscode", // Set Prettier as the default formatter
+    },
+
+
+    "javascript.autoClosingTags": true,
+    "javascript.format.enable": true,
+    "javascript.format.insertSpaceAfterCommaDelimiter": true,
+    "javascript.format.insertSpaceAfterConstructor": false,
+    "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": true,
+    "javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": true,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": true,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+    "javascript.format.insertSpaceAfterSemicolonInForStatements": true,
+    "javascript.format.insertSpaceBeforeAndAfterBinaryOperators": true,
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
+    "javascript.format.placeOpenBraceOnNewLineForControlBlocks": false,
+    "javascript.format.placeOpenBraceOnNewLineForFunctions": false,
+    "javascript.format.semicolons": "insert",
+    "javascript.inlayHints.enumMemberValues.enabled": true,
+    "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "javascript.inlayHints.parameterNames.enabled": "all",
+    "javascript.inlayHints.parameterNames.suppressWhenArgumentMatchesName": true,
+    "javascript.inlayHints.parameterTypes.enabled": true,
+    "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "javascript.inlayHints.variableTypes.enabled": true,
+    "javascript.inlayHints.variableTypes.suppressWhenTypeMatchesName": true,
+    // "javascript.preferences.autoImportFileExcludePatterns": [""],
+    // "javascript.preferences.autoImportSpecifierExcludeRegexes": [""],
+    "javascript.preferences.importModuleSpecifier": "project-relative",
+    "javascript.preferences.importModuleSpecifierEnding": "auto",
+    "javascript.preferences.jsxAttributeCompletionStyle": "auto",
+    "javascript.preferences.organizeImports": {
+        "locale": "en"
+    },
+    "javascript.preferences.quoteStyle": "double",
+    "javascript.preferences.renameMatchingJsxTags": true,
+    "javascript.preferences.useAliasesForRenames": true,
+    "javascript.preferGoToSourceDefinition": false,
+    "javascript.referencesCodeLens.enabled": false,
+    "javascript.referencesCodeLens.showOnAllFunctions": false,
+    "javascript.suggest.autoImports": true,
+    "javascript.suggest.classMemberSnippets.enabled": true,
+    "javascript.suggest.completeFunctionCalls": false,
+    "javascript.suggest.completeJSDocs": true,
+    "javascript.suggest.enabled": true,
+    "javascript.suggest.includeAutomaticOptionalChainCompletions": true,
+    "javascript.suggest.includeCompletionsForImportStatements": true,
+    "javascript.suggest.jsdoc.generateReturns": true,
+    "javascript.suggest.names": true,
+    "javascript.suggest.paths": true,
+    "javascript.suggestionActions.enabled": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "javascript.updateImportsOnPaste.enabled": true,
+    "javascript.validate.enable": true,
+
+    "js/ts.implicitProjectConfig.checkJs": false,
+    "js/ts.implicitProjectConfig.experimentalDecorators": false,
+    "js/ts.implicitProjectConfig.module": "ESNext",
+    "js/ts.implicitProjectConfig.strictFunctionTypes": true,
+    "js/ts.implicitProjectConfig.strictNullChecks": true,
+    "js/ts.implicitProjectConfig.target": "ES2022",
+
+    "typescript.autoClosingTags": true,
+    "typescript.check.npmIsInstalled": true,
+    "typescript.disableAutomaticTypeAcquisition": false,
+    "typescript.enablePromptUseWorkspaceTsdk": false,
+    "typescript.experimental.expandableHover": false,
+    "typescript.format.enable": true,
+    "typescript.format.indentSwitchCase": true,
+    "typescript.format.insertSpaceAfterCommaDelimiter": true,
+    "typescript.format.insertSpaceAfterConstructor": false,
+    "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": true,
+    "typescript.format.insertSpaceAfterKeywordsInControlFlowStatements": true,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": true,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+    "typescript.format.insertSpaceAfterSemicolonInForStatements": true,
+    "typescript.format.insertSpaceAfterTypeAssertion": false,
+    "typescript.format.insertSpaceBeforeAndAfterBinaryOperators": true,
+    "typescript.format.insertSpaceBeforeFunctionParenthesis": false,
+    "typescript.format.placeOpenBraceOnNewLineForControlBlocks": false,
+    "typescript.format.placeOpenBraceOnNewLineForFunctions": false,
+    "typescript.format.semicolons": "insert",
+    "typescript.implementationsCodeLens.enabled": false,
+    "typescript.implementationsCodeLens.showOnInterfaceMethods": false,
+    "typescript.inlayHints.enumMemberValues.enabled": true,
+    "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "typescript.inlayHints.parameterNames.enabled": "all",
+    "typescript.inlayHints.parameterNames.suppressWhenArgumentMatchesName": true,
+    "typescript.inlayHints.parameterTypes.enabled": true,
+    "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "typescript.inlayHints.variableTypes.enabled": true,
+    "typescript.locale": "en",
+    // "typescript.preferences.autoImportFileExcludePatterns": [""],
+    // "typescript.preferences.autoImportSpecifierExcludeRegexes": [""],
+    "typescript.preferences.importModuleSpecifier": "project-relative",
+    "typescript.preferences.importModuleSpecifierEnding": "auto",
+    "typescript.preferences.includePackageJsonAutoImports": "auto",
+    "typescript.preferences.jsxAttributeCompletionStyle": "auto",
+    // "typescript.preferences.organizeImports": {"":},
+    "typescript.preferences.preferTypeOnlyAutoImports": false,
+    "typescript.preferences.quoteStyle": "double",
+    "typescript.preferences.renameMatchingJsxTags": true,
+    "typescript.preferences.useAliasesForRenames": true,
+    "typescript.preferGoToSourceDefinition": false,
+    "typescript.referencesCodeLens.enabled": false,
+    "typescript.referencesCodeLens.showOnAllFunctions": false,
+    "typescript.reportStyleChecksAsWarnings": true,
+    "typescript.suggest.autoImports": true,
+    "typescript.suggest.classMemberSnippets.enabled": true,
+    "typescript.suggest.completeFunctionCalls": false,
+    "typescript.suggest.completeJSDocs": true,
+    "typescript.suggest.enabled": true,
+    "typescript.suggest.includeAutomaticOptionalChainCompletions": true,
+    "typescript.suggest.includeCompletionsForImportStatements": true,
+    "typescript.suggest.jsdoc.generateReturns": true,
+    "typescript.suggest.objectLiteralMethodSnippets.enabled": true,
+    "typescript.suggest.paths": true,
+    "typescript.suggestionActions.enabled": true,
+    "typescript.surveys.enabled": true,
+    "typescript.tsc.autoDetect": "on",
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.tsserver.enableRegionDiagnostics": true,
+    "typescript.tsserver.enableTracing": false,
+    "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+    "typescript.tsserver.log": "off",
+    "typescript.tsserver.maxTsServerMemory": 3072,
+    "typescript.tsserver.nodePath": "",
+    "typescript.tsserver.useSyntaxServer": "auto",
+    "typescript.tsserver.watchOptions": "vscode",
+    "typescript.tsserver.web.projectWideIntellisense.enabled": true,
+    "typescript.tsserver.web.projectWideIntellisense.suppressSemanticErrors": false,
+    "typescript.tsserver.web.typeAcquisition.enabled": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnPaste.enabled": true,
+    "typescript.validate.enable": true,
+    "typescript.workspaceSymbols.scope": "allOpenProjects",
+
+    // Prettier
+    // ========================================================================
+
+    "prettier.arrowParens": "always",
+    "prettier.bracketSameLine": false,
+    "prettier.bracketSpacing": true,
+    "prettier.configPath": ".prettierrc",
+    // "prettier.documentSelectors": [""],
+    "prettier.embeddedLanguageFormatting": "auto",
+    "prettier.enable": true,
+    "prettier.enableDebugLogs": false,
+    "prettier.endOfLine": "lf",
+    "prettier.experimentalTernaries": false,
+    "prettier.htmlWhitespaceSensitivity": "css",
+    "prettier.ignorePath": ".prettierignore",
+    "prettier.insertPragma": false,
+    "prettier.jsxSingleQuote": false,
+    "prettier.prettierPath": "./node_modules/prettier",
+    "prettier.printWidth": 79,
+    "prettier.proseWrap": "preserve",
+    "prettier.quoteProps": "as-needed",
+    "prettier.requireConfig": true,
+    "prettier.requirePragma": false,
+    "prettier.resolveGlobalModules": false,
+    "prettier.semi": true,
+    "prettier.singleAttributePerLine": false,
+    "prettier.singleQuote": false,
+    "prettier.tabWidth": 4,
+    "prettier.trailingComma": "all",
+    "prettier.useEditorConfig": true,
+    "prettier.useTabs": false,
+    "prettier.vueIndentScriptAndStyle": false,
+    "prettier.withNodeModules": false,
+
+    // Eslint
+    // ========================================================================
+
+    // "eslint.codeAction.disableRuleComment": {
+    //     "enable": true,
+    //     "location": "separateLine",
+    //     "commentStyle": "line"
+    // },
+    // "eslint.codeActionsOnSave.mode": "all",
+    // "eslint.codeActionsOnSave.rules": null,
+    // "eslint.debug": true,
+    // "eslint.enable": true,
+    // "eslint.execArgv": null,
+    // "eslint.format.enable": true,
+    // "eslint.ignoreUntitled": false,
+    // "eslint.lintTask.enable": false,
+    // "eslint.lintTask.options": ".",
+    // // "eslint.nodeEnv": "",
+    // // "eslint.nodePath": "",
+    // // "eslint.notebooks.rules.customizations": [],
+    // "eslint.onIgnoredFiles": "off",
+    // "eslint.options": {
+    //     "extensions": [
+    //         ".js",
+    //         ".jsx",
+    //         ".ts",
+    //         ".tsx",
+    //         ".html",
+    //         ".vue"
+    //     ]
+    // },
+    // "eslint.probe": [
+    //     "astro",
+    //     "javascript",
+    //     "javascriptreact",
+    //     "typescript",
+    //     "typescriptreact",
+    //     "html",
+    //     "mdx",
+    //     "vue",
+    //     "markdown",
+    //     "json",
+    //     "jsonc"
+    // ],
+    // "eslint.problems.shortenToSingleLine": false,
+    // "eslint.quiet": false,
+    // // "eslint.rules.customizations": [],
+    // "eslint.run": "onType",
+    // "eslint.runtime": "",
+    // "eslint.timeBudget.onFixes": {
+    //     "warn": 3000,
+    //     "error": 6000
+    // },
+    // "eslint.timeBudget.onValidation": {
+    //     "warn": 4000,
+    //     "error": 8000
+    // },
+    // "eslint.trace.server": "off",
+    // "eslint.useESLintClass": false,
+    // "eslint.useFlatConfig": false,
+    // "eslint.validate": [
+    //     "javascript",
+    //     "javascriptreact",
+    //     "typescript",
+    //     "typescriptreact",
+    //     "html",
+    //     "vue"
+    // ],
+    // "eslint.workingDirectories": [],
+
+
+    // SCSS
+    // ========================================================================
+
+    "[scss]": {
+        "editor.formatOnPaste": false,
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+        "editor.defaultFormatter": "sibiraj-s.vscode-scss-formatter",
+    },
+
+    // SCSS  Formatter
+    // ========================================================================
+
+    "scssFormatter.printWidth": 79,
+    "scssFormatter.singleQuote": false,
+    "scssFormatter.trailingComma": "es5",
+
+    // Stylelint
+    // ========================================================================
+
+    "stylelint.codeAction.disableRuleComment": {
+        "location": "separateLine"
+    },
+    "stylelint.config": {},
+    // "stylelint.configBasedir": "",
+    "stylelint.configFile": "stylelint.config.js",
+    "stylelint.ignoreDisables": true,
+    // "stylelint.customSyntax": "",
+    "stylelint.enable": true,
+    "stylelint.packageManager": "npm",
+    "stylelint.reportDescriptionlessDisables": false,
+    "stylelint.reportInvalidScopeDisables": false,
+    "stylelint.reportNeedlessDisables": false,
+    "stylelint.snippet": [
+        "css",
+        "postcss",
+    ],
+    // "stylelint.stylelintPath": ""
+
+
+    // Docker
+    // ========================================================================
+
+    "docker.commands.attach": "${containerCommand} exec -it ${containerId} ${shellCommand}",
+    "docker.commands.build": "${containerCommand} build --pull --rm -f \"${dockerfile}\" -t ${tag} \"${context}\"",
+    "docker.commands.composeDown": [
+        {
+            "label": "Compose Down",
+            "template": "${composeCommand} ${configurationFile} down"
+        }
+    ],
+    "docker.commands.composeUp": [
+        {
+            "label": "Compose Up",
+            "template": "${composeCommand} ${configurationFile} up ${detached} ${build}"
+        }
+    ],
+    "docker.commands.composeUpSubset": [
+        {
+            "label": "Compose Up",
+            "template": "${composeCommand} ${profileList} ${configurationFile} up ${detached} ${build} ${serviceList}"
+        }
+    ],
+    "docker.commands.logs": "${containerCommand} logs --tail 1000 -f ${containerId}",
+    "docker.commands.run": "${containerCommand} run --rm -d ${exposedPorts} ${tag}",
+    "docker.commands.runInteractive": "${containerCommand} run --rm -it ${exposedPorts} ${tag}",
+    "docker.composeCommand": "",
+    "docker.containers.groupBy": "Compose Project Name"
+
+    // ...
 
 }
