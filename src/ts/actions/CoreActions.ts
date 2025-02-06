@@ -15,6 +15,7 @@ import { JavaScriptMinifyAction } from "../actions/JavaScriptMinifyAction";
 import { LintAction } from "../actions/LintAction";
 
 import { PackageManagerAction } from "../actions/PackageManagerAction";
+import { RunScriptAction } from "../actions/RunScriptAction";
 
 import { StyleProcessingAction } from "../actions/StyleProcessingAction";
 
@@ -23,6 +24,7 @@ import { SvgReaderAction } from "../actions/SvgReaderAction";
 import { SvgSpriteAction } from "../actions/SvgSpriteAction";
 import { SvgToPngAction } from "../actions/SvgToPngAction";
 
+import { TemplateRenderAction } from "../actions/TemplateRenderAction";
 import { TypeScriptCompilerAction } from "../actions/TypeScriptCompilerAction";
 
 import { VersionWriteAction } from "../actions/VersionWriteAction";
@@ -51,6 +53,7 @@ export const coreActions: Record<string, new () => ActionInterface> = {
     [new LintAction().name]: LintAction,
 
     [new PackageManagerAction().name]: PackageManagerAction,
+    [new RunScriptAction().name]: RunScriptAction,
     [new StyleProcessingAction().name]: StyleProcessingAction,
 
     [new SvgPackagerAction().name]: SvgPackagerAction,
@@ -58,6 +61,7 @@ export const coreActions: Record<string, new () => ActionInterface> = {
     [new SvgSpriteAction().name]: SvgSpriteAction,
     [new SvgToPngAction().name]: SvgToPngAction,
 
+    [new TemplateRenderAction().name]: TemplateRenderAction,
     [new TypeScriptCompilerAction().name]: TypeScriptCompilerAction,
 
     [new VersionWriteAction().name]: VersionWriteAction,
