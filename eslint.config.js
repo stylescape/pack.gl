@@ -19,7 +19,8 @@ export default [
             parser: tseslint.parser,
             parserOptions: {
                 project: "./tsconfig.json",
-                ecmaVersion: "latest",
+                ecmaVersion: "2021",
+                // ecmaVersion: "latest",
                 sourceType: "module",
             },
         },
