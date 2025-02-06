@@ -42,7 +42,7 @@ stages:
                 name: CleanBuildDirStep
                 action: DirectoryCleanAction
                 options:
-                    dirPath: "./dist"  # Path to the directory to be cleaned
+                    dirPath: "./dist"
 
             # Process Styles
             # -----------------------------------------------------------------
