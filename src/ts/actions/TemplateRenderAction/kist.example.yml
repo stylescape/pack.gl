@@ -2,7 +2,23 @@
 # KIST Configuration for Template Rendering
 # ============================================================================
 
+
 version: "1.0.0"
+
+name: Render All Templates
+actions:
+  - name: RenderTemplates
+    type: TemplateRenderAction
+    options:
+      templatesDir: ./templates
+      outputDir: ./dist
+      renderAllFromDir: true
+      context:
+        name: "kist"
+        version: "1.0.0"
+        author: "Lars van Vianen"
+
+
 
 # Define the pipeline steps
 pipeline:
