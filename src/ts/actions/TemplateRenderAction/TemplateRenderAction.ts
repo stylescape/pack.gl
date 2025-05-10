@@ -3,6 +3,7 @@
 // ============================================================================
 
 import { mkdir, writeFile } from "fs/promises";
+import { glob } from "glob";
 import nunjucks from "nunjucks";
 import path from "path";
 import { Action } from "../../core/pipeline/Action";
@@ -13,81 +14,83 @@ import nunjucksConfig from "./nunjucks.config.js";
 // Classes
 // ============================================================================
 
-/**
- * TemplateRenderAction is responsible for rendering and writing multiple files
- * from Nunjucks templates in a single action. It allows batch generation of
- * output files based on a shared template context.
- */
 export class TemplateRenderAction extends Action {
-    /**
-     * Executes the template rendering process for multiple templates.
-     *
-     * @param options - The options specifying the template directory,
-     * template-output mapping, and rendering context.
-     * @returns A Promise that resolves when all templates have been rendered.
-     * @throws {Error} Throws an error if template processing fails.
-     */
     async execute(options: ActionOptionsType): Promise<void> {
         const {
             templatesDir = "./templates",
+            outputDir = "./dist",
             templates = [],
             context = {},
+            renderAllFromDir = false,
             customConfig = {},
         } = options;
 
-        if (!Array.isArray(templates) || templates.length === 0) {
-            throw new Error(
-                "Invalid options: 'templates' must be an array containing template-output pairs."
-            );
-        }
-
-        this.logInfo(`Rendering ${templates.length} templates...`);
+        const config = { ...nunjucksConfig, ...customConfig };
+        nunjucks.configure(templatesDir, config);
 
         try {
-            // Merge Nunjucks configurations
-            const config = { ...nunjucksConfig, ...customConfig };
-            nunjucks.configure(templatesDir, config);
+            if (renderAllFromDir) {
+                this.logInfo(
+                    `Auto-rendering all templates from ${templatesDir}...`,
+                );
+                const templateFiles = await glob("**/*.jinja", {
+                    cwd: templatesDir,
+                });
 
-            // Render each template and save to its corresponding output path
-            for (const { template, outputFile } of templates) {
-                if (!template || !outputFile) {
+                for (const templateRelPath of templateFiles) {
+                    const outputFile = path.join(
+                        outputDir,
+                        templateRelPath.replace(/\.jinja$/, ""),
+                    );
+                    await this.renderTemplate(
+                        templateRelPath,
+                        outputFile,
+                        context,
+                        templatesDir,
+                    );
+                }
+            } else {
+                if (!Array.isArray(templates) || templates.length === 0) {
                     throw new Error(
-                        `Invalid template entry: ${JSON.stringify({
-                            template,
-                            outputFile,
-                        })}`
+                        "Option 'templates' must be provided if 'renderAllFromDir' is false.",
                     );
                 }
 
-                this.logInfo(`Rendering: ${template} → ${outputFile}`);
-
-                // Render template content
-                const content = nunjucks.render(template, context);
-
-                // Ensure the output directory exists
-                const dir = path.dirname(outputFile);
-                await mkdir(dir, { recursive: true });
-
-                // Write the rendered template to file
-                await writeFile(outputFile, content, "utf-8");
-
-                this.logInfo(`✓ Successfully rendered: ${outputFile}`);
+                for (const { template, outputFile } of templates) {
+                    await this.renderTemplate(
+                        template,
+                        outputFile,
+                        context,
+                        templatesDir,
+                    );
+                }
             }
 
-            this.logInfo("All templates rendered successfully.");
+            this.logInfo("✓ All templates rendered successfully.");
         } catch (error) {
             this.logError("Error rendering templates.", error);
             throw error;
         }
     }
 
-    /**
-     * Provides a description of the action.
-     *
-     * @returns A string description of the action.
-     */
+    private async renderTemplate(
+        template: string,
+        outputFile: string,
+        context: Record<string, any>,
+        templatesDir: string,
+    ): Promise<void> {
+        this.logInfo(`Rendering: ${template} → ${outputFile}`);
+
+        const content = nunjucks.render(template, context);
+        const dir = path.dirname(outputFile);
+        await mkdir(dir, { recursive: true });
+        await writeFile(outputFile, content, "utf-8");
+
+        this.logInfo(`✓ Rendered: ${outputFile}`);
+    }
+
     describe(): string {
-        return "Renders multiple Nunjucks templates into files using a shared context.";
+        return "Renders one or many Nunjucks templates using a shared context. Supports folder-wide auto-rendering.";
     }
 }
 
