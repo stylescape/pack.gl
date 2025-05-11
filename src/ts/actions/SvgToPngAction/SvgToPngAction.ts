@@ -2,7 +2,7 @@
 // Imports
 // ============================================================================
 
-import { render } from "@resvg/resvg-js";
+import { Resvg } from "@resvg/resvg-js";
 import fs from "fs";
 import { JSDOM } from "jsdom";
 import path from "path";
@@ -66,7 +66,7 @@ export class SvgToPngAction extends Action {
                 fs.mkdirSync(outputDir, { recursive: true });
             }
 
-            // Create a JSDOM instance to parse and modify the SVG
+            // Parse SVG and apply width/height
             const dom = new JSDOM(svgContent);
             const svgElement = dom.window.document.querySelector("svg");
 
@@ -74,22 +74,21 @@ export class SvgToPngAction extends Action {
                 throw new Error("Invalid SVG content");
             }
 
-            if (width) {
-                svgElement.setAttribute("width", width.toString());
-            }
+            if (width) svgElement.setAttribute("width", width.toString());
+            if (height) svgElement.setAttribute("height", height.toString());
 
-            if (height) {
-                svgElement.setAttribute("height", height.toString());
-            }
-
-            // Serialize the updated SVG content
             const updatedSvgContent = svgElement.outerHTML;
 
-            // Convert SVG to PNG using resvg
-            const resvg = render(updatedSvgContent);
-            const pngBuffer = resvg.asPng();
+            // Render using Resvg
+            const resvg = new Resvg(updatedSvgContent, {
+                fitTo:
+                    width && height
+                        ? { mode: "width", value: width }
+                        : undefined,
+            });
 
-            // Write to file
+            const pngBuffer = resvg.render().asPng();
+
             fs.writeFileSync(outputPath, pngBuffer);
         } catch (error) {
             throw new Error(

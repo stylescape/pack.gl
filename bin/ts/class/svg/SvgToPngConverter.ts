@@ -2,27 +2,21 @@
 // Import
 // ============================================================================
 
+import { Resvg } from "@resvg/resvg-js";
 import fs from "fs";
 import { JSDOM } from "jsdom";
 import path from "path";
-import sharp from "sharp";
 
 // ============================================================================
 // Classes
 // ============================================================================
 
 /**
- * A utility class for converting SVG images to PNG format. This class uses
- * the `sharp` library for image conversion and `jsdom` to manipulate
+ * A utility class for converting SVG images to PNG format.
+ * This class uses `resvg-js` for image conversion and `jsdom` to manipulate
  * SVG elements.
  */
 class SvgToPngConverter {
-    // Parameters
-    // ========================================================================
-
-    // Constructor
-    // ========================================================================
-
     // Methods
     // ========================================================================
 
@@ -50,7 +44,7 @@ class SvgToPngConverter {
                 fs.mkdirSync(outputDir, { recursive: true });
             }
 
-            // Create a JSDOM instance to parse the SVG
+            // Parse the SVG and optionally modify width and height
             const dom = new JSDOM(svgContent);
             const svgElement = dom.window.document.querySelector("svg");
 
@@ -58,22 +52,16 @@ class SvgToPngConverter {
                 throw new Error("Invalid SVG content");
             }
 
-            if (width) {
-                svgElement.setAttribute("width", width.toString());
-            }
+            if (width) svgElement.setAttribute("width", width.toString());
+            if (height) svgElement.setAttribute("height", height.toString());
 
-            if (height) {
-                svgElement.setAttribute("height", height.toString());
-            }
-
-            // Serialize the updated SVG content
             const updatedSvgContent = svgElement.outerHTML;
 
-            // Convert SVG to PNG using Sharp
-            const pngBuffer = await sharp(Buffer.from(updatedSvgContent))
-                .png()
-                .toBuffer();
-            await sharp(pngBuffer).toFile(outputPath);
+            // Convert SVG to PNG using resvg
+            const resvg = new Resvg(updatedSvgContent);
+            const pngBuffer = resvg.render().asPng();
+
+            fs.writeFileSync(outputPath, pngBuffer);
 
             console.log(`PNG file has been saved to ${outputPath}`);
         } catch (error) {
@@ -96,7 +84,7 @@ export default SvgToPngConverter;
 // import SvgToPngConverter from "./SvgToPngConverter";
 
 // const converter = new SvgToPngConverter();
-// const svgContent = "<svg height="100" width="100">...</svg>";
+// const svgContent = '<svg height="100" width="100">...</svg>';
 // const outputPath = "./output/image.png";
 
 // converter.convert(svgContent, outputPath, 100, 100)
