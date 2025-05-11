@@ -5,6 +5,7 @@
 import fs from "fs";
 import yaml from "js-yaml";
 import path from "path";
+import { ArgumentParser } from "../../cli/ArgumentParser";
 import { ConfigInterface } from "../../interface/ConfigInterface";
 import { AbstractProcess } from "../abstract/AbstractProcess";
 
@@ -13,10 +14,8 @@ import { AbstractProcess } from "../abstract/AbstractProcess";
 // ============================================================================
 
 /**
- * ConfigLoader is responsible for loading and parsing configuration files
- * (`kist.yaml` or `kist.yml` by default). It validates the configuration
- * structure and provides it in a usable format for the pipeline.
- * Extends `AbstractProcess` for consistent logging.
+ * ConfigLoader is responsible for loading and parsing configuration files.
+ * Supports a custom path via `--config`, and falls back to `kist.yaml` or `kist.yml`.
  */
 export class ConfigLoader extends AbstractProcess {
     // Parameters
@@ -35,21 +34,9 @@ export class ConfigLoader extends AbstractProcess {
     // Constructor
     // ========================================================================
 
-    /**
-     * Constructs a ConfigLoader instance.
-     * Searches for `kist.yaml` or `kist.yml` in the working directory
-     * unless a custom path is provided.
-     *
-     * @param configPath - Optional custom configuration file path.
-     */
-    constructor(configPath?: string) {
+    constructor() {
         super();
-        if (configPath) {
-            this.configPath = path.resolve(process.cwd(), configPath);
-            this.logDebug(`Custom configuration path set: ${this.configPath}`);
-        } else {
-            this.logDebug("ConfigLoader initialized without custom path.");
-        }
+        this.logDebug("ConfigLoader initialized.");
     }
 
     // Methods
@@ -57,15 +44,20 @@ export class ConfigLoader extends AbstractProcess {
 
     /**
      * Initializes the loader by locating the configuration file.
-     * Searches for `kist.yaml` or `kist.yml` by default.
-     *
-     * @param configPath - Optional custom configuration file path.
+     * Uses `--config` CLI flag if provided, otherwise defaults.
      */
-    public async initialize(configPath?: string): Promise<void> {
-        const searchPaths = configPath ? [configPath] : this.defaultFilenames;
+    public async initialize(): Promise<void> {
+        const parser = new ArgumentParser();
+        const cliFlags = parser.getAllFlags();
+        const cliPath =
+            typeof cliFlags.config === "string" ? cliFlags.config : undefined;
+
+        const searchPaths = cliPath ? [cliPath] : this.defaultFilenames;
 
         this.logDebug(`Current working directory: ${process.cwd()}`);
-        this.logDebug("Searching for configuration files...");
+        this.logDebug(
+            `Searching for config file${cliPath ? ` from --config=${cliPath}` : ""}...`,
+        );
 
         for (const fileName of searchPaths) {
             const resolvedPath = path.resolve(process.cwd(), fileName);
