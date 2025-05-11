@@ -2,7 +2,8 @@
 // Imports
 // ============================================================================
 
-import { Resvg } from "@resvg/resvg-js";
+import { createCanvas } from "canvas";
+import { Canvg } from "canvg";
 import fs from "fs";
 import { JSDOM } from "jsdom";
 import path from "path";
@@ -10,17 +11,22 @@ import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
 
 // ============================================================================
+// Utilities
+// ============================================================================
+
+function getSafeRenderingContext(canvas: ReturnType<typeof createCanvas>) {
+    return canvas.getContext("2d");
+}
+
+// ============================================================================
 // Classes
 // ============================================================================
 
 /**
  * SvgToPngAction converts SVG content to PNG format.
- * Uses `resvg-js` for conversion and `jsdom` for SVG element manipulation.
+ * Uses `canvg` for conversion and `jsdom` for SVG element manipulation.
  */
 export class SvgToPngAction extends Action {
-    // Methods
-    // ========================================================================
-
     /**
      * Executes the SVG-to-PNG conversion process.
      * @param options - Options including SVG content, output path, width,
@@ -60,13 +66,11 @@ export class SvgToPngAction extends Action {
         height?: number,
     ): Promise<void> {
         try {
-            // Ensure the output directory exists
             const outputDir = path.dirname(outputPath);
             if (!fs.existsSync(outputDir)) {
                 fs.mkdirSync(outputDir, { recursive: true });
             }
 
-            // Parse SVG and apply width/height
             const dom = new JSDOM(svgContent);
             const svgElement = dom.window.document.querySelector("svg");
 
@@ -74,21 +78,25 @@ export class SvgToPngAction extends Action {
                 throw new Error("Invalid SVG content");
             }
 
-            if (width) svgElement.setAttribute("width", width.toString());
-            if (height) svgElement.setAttribute("height", height.toString());
+            const w =
+                width ||
+                parseInt(svgElement.getAttribute("width") || "800", 10);
+            const h =
+                height ||
+                parseInt(svgElement.getAttribute("height") || "600", 10);
+
+            svgElement.setAttribute("width", w.toString());
+            svgElement.setAttribute("height", h.toString());
 
             const updatedSvgContent = svgElement.outerHTML;
 
-            // Render using Resvg
-            const resvg = new Resvg(updatedSvgContent, {
-                fitTo:
-                    width && height
-                        ? { mode: "width", value: width }
-                        : undefined,
-            });
+            const canvas = createCanvas(w, h);
+            const ctx = getSafeRenderingContext(canvas) as unknown as any;
 
-            const pngBuffer = resvg.render().asPng();
+            const canvg = await Canvg.from(ctx, updatedSvgContent);
+            await canvg.render();
 
+            const pngBuffer = canvas.toBuffer("image/png");
             fs.writeFileSync(outputPath, pngBuffer);
         } catch (error) {
             throw new Error(
@@ -102,7 +110,7 @@ export class SvgToPngAction extends Action {
      * @returns A string description of the action.
      */
     describe(): string {
-        return "Converts SVG content to PNG format with optional resizing using resvg-js.";
+        return "Converts SVG content to PNG format with optional resizing using canvg and canvas.";
     }
 }
 

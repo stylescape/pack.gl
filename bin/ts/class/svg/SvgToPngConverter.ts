@@ -2,10 +2,23 @@
 // Import
 // ============================================================================
 
-import { Resvg } from "@resvg/resvg-js";
+import { Canvas, createCanvas } from "canvas";
+import { Canvg } from "canvg";
 import fs from "fs";
 import { JSDOM } from "jsdom";
 import path from "path";
+
+// ============================================================================
+// Utilities
+// ============================================================================
+
+/**
+ * Wraps the canvas.getContext call with a safe cast for canvg compatibility.
+ * Avoids polluting the main logic with unsafe type assertions.
+ */
+function getSafeRenderingContext(canvas: Canvas) {
+    return canvas.getContext("2d");
+}
 
 // ============================================================================
 // Classes
@@ -13,22 +26,18 @@ import path from "path";
 
 /**
  * A utility class for converting SVG images to PNG format.
- * This class uses `resvg-js` for image conversion and `jsdom` to manipulate
- * SVG elements.
+ * This class uses `canvg` and `canvas` for image rendering, and `jsdom`
+ * to manipulate SVG elements.
  */
 class SvgToPngConverter {
-    // Methods
-    // ========================================================================
-
     /**
      * Converts SVG content to a PNG file.
      * Optionally resizes the image to the specified width and height.
      *
-     * @param {string} svgContent The SVG content to be converted.
-     * @param {string} outputPath The filesystem path where the PNG should be
-     * saved.
-     * @param {number} [width] Optional width to resize the resulting PNG.
-     * @param {number} [height] Optional height to resize the resulting PNG.
+     * @param svgContent The SVG content to be converted.
+     * @param outputPath The filesystem path where the PNG should be saved.
+     * @param width Optional width to resize the resulting PNG.
+     * @param height Optional height to resize the resulting PNG.
      * @throws {Error} Throws an error if the conversion process fails.
      */
     async convert(
@@ -38,13 +47,7 @@ class SvgToPngConverter {
         height?: number,
     ): Promise<void> {
         try {
-            // Ensure the output directory exists
-            const outputDir = path.dirname(outputPath);
-            if (!fs.existsSync(outputDir)) {
-                fs.mkdirSync(outputDir, { recursive: true });
-            }
-
-            // Parse the SVG and optionally modify width and height
+            // Parse SVG and optionally update dimensions
             const dom = new JSDOM(svgContent);
             const svgElement = dom.window.document.querySelector("svg");
 
@@ -52,16 +55,33 @@ class SvgToPngConverter {
                 throw new Error("Invalid SVG content");
             }
 
-            if (width) svgElement.setAttribute("width", width.toString());
-            if (height) svgElement.setAttribute("height", height.toString());
+            const w =
+                width ||
+                parseInt(svgElement.getAttribute("width") || "800", 10);
+            const h =
+                height ||
+                parseInt(svgElement.getAttribute("height") || "600", 10);
 
-            const updatedSvgContent = svgElement.outerHTML;
+            svgElement.setAttribute("width", w.toString());
+            svgElement.setAttribute("height", h.toString());
 
-            // Convert SVG to PNG using resvg
-            const resvg = new Resvg(updatedSvgContent);
-            const pngBuffer = resvg.render().asPng();
+            const updatedSvg = svgElement.outerHTML;
 
-            fs.writeFileSync(outputPath, pngBuffer);
+            // Create a canvas and draw the SVG
+            const canvas = createCanvas(w, h);
+            const ctx = getSafeRenderingContext(canvas);
+
+            const canvg = await Canvg.from(ctx as any, updatedSvg);
+            await canvg.render();
+
+            // Ensure output directory exists
+            const outputDir = path.dirname(outputPath);
+            if (!fs.existsSync(outputDir)) {
+                fs.mkdirSync(outputDir, { recursive: true });
+            }
+
+            const buffer = canvas.toBuffer("image/png");
+            fs.writeFileSync(outputPath, buffer);
 
             console.log(`PNG file has been saved to ${outputPath}`);
         } catch (error) {
@@ -76,17 +96,3 @@ class SvgToPngConverter {
 // ============================================================================
 
 export default SvgToPngConverter;
-
-// ============================================================================
-// Example
-// ============================================================================
-
-// import SvgToPngConverter from "./SvgToPngConverter";
-
-// const converter = new SvgToPngConverter();
-// const svgContent = '<svg height="100" width="100">...</svg>';
-// const outputPath = "./output/image.png";
-
-// converter.convert(svgContent, outputPath, 100, 100)
-//     .then(() => console.log("SVG has been successfully converted to PNG."))
-//     .catch(error => console.error("Failed to convert SVG to PNG:", error));
