@@ -2,10 +2,10 @@
 // Imports
 // ============================================================================
 
+import { render } from "@resvg/resvg-js";
 import fs from "fs";
 import { JSDOM } from "jsdom";
 import path from "path";
-import sharp from "sharp";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
 
@@ -15,7 +15,7 @@ import { ActionOptionsType } from "../../types/ActionOptionsType";
 
 /**
  * SvgToPngAction converts SVG content to PNG format.
- * Uses `sharp` for conversion and `jsdom` for SVG element manipulation.
+ * Uses `resvg-js` for conversion and `jsdom` for SVG element manipulation.
  */
 export class SvgToPngAction extends Action {
     // Methods
@@ -66,7 +66,7 @@ export class SvgToPngAction extends Action {
                 fs.mkdirSync(outputDir, { recursive: true });
             }
 
-            // Create a JSDOM instance to parse the SVG
+            // Create a JSDOM instance to parse and modify the SVG
             const dom = new JSDOM(svgContent);
             const svgElement = dom.window.document.querySelector("svg");
 
@@ -85,11 +85,12 @@ export class SvgToPngAction extends Action {
             // Serialize the updated SVG content
             const updatedSvgContent = svgElement.outerHTML;
 
-            // Convert SVG to PNG using Sharp
-            const pngBuffer = await sharp(Buffer.from(updatedSvgContent))
-                .png()
-                .toBuffer();
-            await sharp(pngBuffer).toFile(outputPath);
+            // Convert SVG to PNG using resvg
+            const resvg = render(updatedSvgContent);
+            const pngBuffer = resvg.asPng();
+
+            // Write to file
+            fs.writeFileSync(outputPath, pngBuffer);
         } catch (error) {
             throw new Error(
                 `Error converting SVG to PNG: ${(error as Error).message}`,
@@ -102,7 +103,7 @@ export class SvgToPngAction extends Action {
      * @returns A string description of the action.
      */
     describe(): string {
-        return "Converts SVG content to PNG format with optional resizing.";
+        return "Converts SVG content to PNG format with optional resizing using resvg-js.";
     }
 }
 
