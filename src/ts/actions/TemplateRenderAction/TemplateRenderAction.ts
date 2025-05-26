@@ -2,7 +2,7 @@
 // Imports
 // ============================================================================
 
-import { mkdir, writeFile } from "fs/promises";
+import { mkdir, readFile, writeFile } from "fs/promises";
 import { glob } from "glob";
 import nunjucks from "nunjucks";
 import path from "path";
@@ -21,12 +21,19 @@ export class TemplateRenderAction extends Action {
             outputDir = "./dist",
             templates = [],
             context = {},
+            contextFiles = [],
             renderAllFromDir = false,
             customConfig = {},
         } = options;
 
         const config = { ...nunjucksConfig, ...customConfig };
         nunjucks.configure(templatesDir, config);
+
+        // Load and merge all JSON context files
+        const mergedContext = await this.mergeContextFiles(
+            context,
+            contextFiles,
+        );
 
         try {
             if (renderAllFromDir) {
@@ -45,7 +52,7 @@ export class TemplateRenderAction extends Action {
                     await this.renderTemplate(
                         templateRelPath,
                         outputFile,
-                        context,
+                        mergedContext,
                         templatesDir,
                     );
                 }
@@ -60,7 +67,7 @@ export class TemplateRenderAction extends Action {
                     await this.renderTemplate(
                         template,
                         outputFile,
-                        context,
+                        mergedContext,
                         templatesDir,
                     );
                 }
@@ -89,13 +96,29 @@ export class TemplateRenderAction extends Action {
         this.logInfo(`✓ Rendered: ${outputFile}`);
     }
 
+    private async mergeContextFiles(
+        baseContext: Record<string, any>,
+        files: string[],
+    ): Promise<Record<string, any>> {
+        let merged = { ...baseContext };
+
+        for (const file of files) {
+            try {
+                const content = await readFile(file, "utf-8");
+                const parsed = JSON.parse(content);
+                merged = { ...merged, ...parsed };
+            } catch (error) {
+                this.logWarn(`Skipping context file due to error: ${file}`);
+                this.logError("Context file parsing failed", error);
+            }
+        }
+
+        return merged;
+    }
+
     describe(): string {
-        return "Renders one or many Nunjucks templates using a shared context. Supports folder-wide auto-rendering.";
+        return "Renders one or many Nunjucks templates using a shared context or context files. Supports folder-wide auto-rendering.";
     }
 }
-
-// ============================================================================
-// Export
-// ============================================================================
 
 export default TemplateRenderAction;
