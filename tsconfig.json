@@ -120,7 +120,7 @@
         "experimentalSpecifierResolution": "node"
     },
 
-    "include": ["src/ts/**/*.ts", ],
+    "include": ["src/ts/**/*.ts", "tmp/TemplateRenderAction copy.ts", ],
 
     "exclude": [
         "**/*.spec.ts",
