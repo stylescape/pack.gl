@@ -1,3 +1,21 @@
+# name: Render Templates
+# version: 0.1.0
+
+# pipeline:
+#   - name: Render documentation templates
+#     action: TemplateRenderAction
+#     options:
+#       templatesDir: ./templates
+#       outputDir: ./dist/docs
+#       contextFiles:
+#         - ./context/global.json
+#         - ./context/version.json
+#       templates:
+#         - template: "readme.njk"
+#           outputFile: "./dist/docs/README.md"
+#         - template: "config.njk"
+#           outputFile: "./dist/docs/config.txt"
+
 # ============================================================================
 # KIST Configuration for Template Rendering
 # ============================================================================
