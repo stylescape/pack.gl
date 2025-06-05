@@ -80,7 +80,10 @@ export class ConfigStore extends AbstractProcess {
             }
 
             // Ensure property exists and is an object
-            if (!Object.prototype.hasOwnProperty.call(current, k) || typeof current[k] !== "object") {
+            if (
+                !Object.prototype.hasOwnProperty.call(current, k) ||
+                typeof current[k] !== "object"
+            ) {
                 current[k] = Object.create(null); // Use a null prototype object
             }
             current = current[k];
@@ -90,12 +93,16 @@ export class ConfigStore extends AbstractProcess {
 
         // Prevent prototype pollution at the final assignment
         if (["__proto__", "constructor", "prototype"].includes(finalKey)) {
-            this.logWarn(`Attempted prototype pollution detected: "${finalKey}"`);
+            this.logWarn(
+                `Attempted prototype pollution detected: "${finalKey}"`,
+            );
             return;
         }
 
         current[finalKey] = value;
-        this.logDebug(`Set configuration key "${key}" to: ${JSON.stringify(value)}`);
+        this.logDebug(
+            `Set configuration key "${key}" to: ${JSON.stringify(value)}`,
+        );
     }
 
     /**
@@ -120,7 +127,10 @@ export class ConfigStore extends AbstractProcess {
      * Prints the current configuration to the console.
      */
     public print(): void {
-        console.log("Current Configuration:", JSON.stringify(this.config, null, 2));
+        console.log(
+            "Current Configuration:",
+            JSON.stringify(this.config, null, 2),
+        );
     }
 
     /**
@@ -142,8 +152,15 @@ export class ConfigStore extends AbstractProcess {
                 continue;
             }
 
-            if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
-                if (!Object.prototype.hasOwnProperty.call(target, key) || typeof target[key] !== "object") {
+            if (
+                source[key] &&
+                typeof source[key] === "object" &&
+                !Array.isArray(source[key])
+            ) {
+                if (
+                    !Object.prototype.hasOwnProperty.call(target, key) ||
+                    typeof target[key] !== "object"
+                ) {
                     target[key] = Object.create(null);
                 }
                 target[key] = this.deepMerge(target[key], source[key]);

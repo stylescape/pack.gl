@@ -38,7 +38,8 @@ export class ArgumentParser extends AbstractProcess {
      *
      * @param args - Command-line arguments. Defaults to `process.argv.slice(2)`.
      */
-    constructor() { // args: string[] = process.argv.slice(2)
+    constructor() {
+        // args: string[] = process.argv.slice(2)
         super();
         // Skip Node.js and script path
         this.args = process.argv.slice(2);
