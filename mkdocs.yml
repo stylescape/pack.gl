@@ -1,6 +1,7 @@
 # Project Information
-site_name: pack.gl
-site_url: https://www.pack.gl/
+
+site_name: kist
+site_url: https://www.getkist.com/
 site_description: Framework
 site_author: Scape Agency
 lang: en
@@ -10,7 +11,7 @@ docs_dir: doc
 
 # Repository
 repo_name: 'GitHub'
-repo_url: https://github.com/stylescape/pack.gl/
+repo_url: https://github.com/getkist/kist/
 edit_uri_template: 'docs/{path}'
 
 dev_addr: 127.0.0.1:8888
