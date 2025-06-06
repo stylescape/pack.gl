@@ -73,6 +73,13 @@ export class ConfigLoader extends AbstractProcess {
                 return;
             } catch (error) {
                 this.logDebug(`File not accessible: ${resolvedPath}`);
+
+                // ❗ If user explicitly provided --config and it fails, stop immediately
+                if (cliPath) {
+                    throw new Error(
+                        `Configuration file not found or not accessible: ${resolvedPath}`,
+                    );
+                }
             }
         }
 
@@ -80,6 +87,40 @@ export class ConfigLoader extends AbstractProcess {
             "No configuration file found. Proceeding with default settings.",
         );
     }
+    // public async initialize(): Promise<void> {
+    //     const parser = new ArgumentParser();
+    //     const cliFlags = parser.getAllFlags();
+    //     const cliPath =
+    //         typeof cliFlags.config === "string" ? cliFlags.config : undefined;
+
+    //     const searchPaths = cliPath ? [cliPath] : this.defaultFilenames;
+
+    //     this.logDebug(`Current working directory: ${process.cwd()}`);
+    //     this.logDebug(
+    //         `Searching for config file${cliPath ? ` from --config=${cliPath}` : ""}...`,
+    //     );
+
+    //     for (const fileName of searchPaths) {
+    //         const resolvedPath = path.resolve(process.cwd(), fileName);
+    //         this.logDebug(`Checking: ${resolvedPath}`);
+
+    //         try {
+    //             await fs.promises.access(
+    //                 resolvedPath,
+    //                 fs.constants.F_OK | fs.constants.R_OK,
+    //             );
+    //             this.configPath = resolvedPath;
+    //             this.logDebug(`Configuration file found: ${resolvedPath}`);
+    //             return;
+    //         } catch (error) {
+    //             this.logDebug(`File not accessible: ${resolvedPath}`);
+    //         }
+    //     }
+
+    //     this.logWarn(
+    //         "No configuration file found. Proceeding with default settings.",
+    //     );
+    // }
 
     /**
      * Loads and validates the configuration file.
