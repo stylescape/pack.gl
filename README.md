@@ -286,7 +286,7 @@ Contributions are welcome! Follow these steps to contribute:
 
 #### Copyright
 
-Copyright &copy; 2024 [Scape Agency BV](https://www.scape.agency/ "Scape Agency website"). All Rights Reserved.
+Copyright &copy; 2025 [Scape Agency BV](https://www.scape.agency/ "Scape Agency website"). All Rights Reserved.
 
 #### License
 
