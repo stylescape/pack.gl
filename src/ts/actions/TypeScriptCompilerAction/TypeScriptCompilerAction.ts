@@ -23,7 +23,14 @@ export class TypeScriptCompilerAction extends Action {
      * @throws {Error} Throws an error if compilation fails.
      */
     async execute(options: ActionOptionsType): Promise<void> {
-        const { tsconfigPath = "tsconfig.json" } = options;
+        // const { tsconfigPath = "tsconfig.json" } = options;
+        const {
+            tsconfigPath = "tsconfig.json",
+            filePaths,
+            outputDir,
+            compilerOptions = {},
+        } = options;
+
         const resolvedTsconfigPath = path.resolve(tsconfigPath);
 
         this.logInfo(
@@ -36,11 +43,28 @@ export class TypeScriptCompilerAction extends Action {
                 resolvedTsconfigPath,
             );
 
+            // Merge custom compiler options
+            const mergedCompilerOptions = {
+                ...parsedConfig.options,
+                ...compilerOptions,
+            };
+
+            // Set output directory if specified
+            if (outputDir) {
+                mergedCompilerOptions.outDir = outputDir;
+            }
+
             // **Create a TypeScript Program**
             const program = ts.createProgram(
-                parsedConfig.fileNames,
-                parsedConfig.options,
+                filePaths ?? parsedConfig.fileNames,
+                mergedCompilerOptions,
             );
+
+            // **Create a TypeScript Program**
+            // const program = ts.createProgram(
+            //     parsedConfig.fileNames,
+            //     parsedConfig.options,
+            // );
             const emitResult = program.emit();
 
             // **Collect Diagnostics**
