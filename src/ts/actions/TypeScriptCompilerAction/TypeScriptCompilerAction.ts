@@ -44,9 +44,14 @@ export class TypeScriptCompilerAction extends Action {
             );
 
             // Merge custom compiler options
-            const mergedCompilerOptions = {
+            const mergedCompilerOptions = ts.convertCompilerOptionsFromJson(
+                compilerOptions,
+                path.dirname(resolvedTsconfigPath),
+            ).options;
+
+            const finalCompilerOptions = {
                 ...parsedConfig.options,
-                ...compilerOptions,
+                ...mergedCompilerOptions,
             };
 
             // Set output directory if specified
@@ -57,7 +62,7 @@ export class TypeScriptCompilerAction extends Action {
             // **Create a TypeScript Program**
             const program = ts.createProgram(
                 filePaths ?? parsedConfig.fileNames,
-                mergedCompilerOptions,
+                finalCompilerOptions,
             );
 
             // **Create a TypeScript Program**
