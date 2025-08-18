@@ -5,7 +5,8 @@
 import * as fs from "fs/promises";
 import * as glob from "glob";
 import * as path from "path";
-import SVGO, { loadConfig } from "svgo";
+// import SVGO, { loadConfig } from "svgo";
+import { loadConfig, optimize } from "svgo";
 
 // ============================================================================
 // Classes
@@ -163,8 +164,10 @@ class SvgPackager {
     //     }
     // }
     private async optimizeSvg(svgContent: string): Promise<string> {
+        // const config = await loadConfig(this.svgoConfigPath);
+        // const result = await SVGO.optimize(svgContent, { ...config });
         const config = await loadConfig(this.svgoConfigPath);
-        const result = await SVGO.optimize(svgContent, { ...config });
+        const result = optimize(svgContent, { ...config });
         return result.data.trim();
     }
 

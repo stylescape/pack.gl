@@ -2,7 +2,7 @@ import { __awaiter } from "tslib";
 import * as fs from "fs/promises";
 import * as glob from "glob";
 import * as path from "path";
-import SVGO, { loadConfig } from "svgo";
+import { loadConfig, optimize } from "svgo";
 class SvgPackager {
     constructor(svgoConfigPath) {
         this.svgoConfigPath = svgoConfigPath;
@@ -47,7 +47,7 @@ class SvgPackager {
     optimizeSvg(svgContent) {
         return __awaiter(this, void 0, void 0, function* () {
             const config = yield loadConfig(this.svgoConfigPath);
-            const result = yield SVGO.optimize(svgContent, Object.assign({}, config));
+            const result = optimize(svgContent, Object.assign({}, config));
             return result.data.trim();
         });
     }
