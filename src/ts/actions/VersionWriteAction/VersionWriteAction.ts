@@ -158,7 +158,7 @@ export class VersionWriteAction extends Action {
      * @returns A string description of the action.
      */
     describe(): string {
-        let description = `
+        const description = `
             Replaces a version string in one or more specified files based on
             a key and pattern. Can retrieve the version from package.json or
             set it manually.

@@ -22,6 +22,10 @@
         "Scape Agency <info@scape.agency>"
     ],
     "license": "MIT",
+    "engines": {
+        "node": ">=18.0.0",
+        "npm": ">=9.0.0"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/getkist/kist.git"
@@ -35,25 +39,34 @@
             "url": "https://github.com/sponsors/scape-foundation"
         }
     ],
-    "main": "src/ts/index.ts",
+    "main": "dist/js/index.js",
+    "types": "dist/js/index.d.ts",
     "type": "module",
     "module": "dist/js/index.js",
+    "exports": {
+        ".": {
+            "types": "./dist/js/index.d.ts",
+            "import": "./dist/js/index.js"
+        }
+    },
     "bin": {
-        "kist": "js/cli.js"
+        "kist": "./dist/js/cli.js"
     },
     "scripts": {
-        "format": "npx prettier --write .",
-        "lint": "eslint 'src/**/*.ts' || true",
-        "prettify": "prettier --write 'src/**/*.ts'",
-        "build2": "npm run build-compile && npm run build-process && npm run test-cli-live",
-        "build": "npm run build-compile && npm run build-process",
-        "build-compile": "tsc -p bin/tsconfig.json",
-        "build-process": "node bin/js/index.js",
-        "build-tsc": "tsc -p ./tsconfig.json",
-        "test-cli": "node dist/js/cli.js",
-        "test-cli-live": "node dist/js/cli.js $*",
-        "test-dev": "npm run build && npm run test-cli-live",
-        "test": "node --loader ts-node/esm scripts/run-tests.ts"
+        "format": "prettier --write .",
+        "lint": "eslint 'src/**/*.ts' --max-warnings=50",
+        "lint:fix": "eslint 'src/**/*.ts' --fix --max-warnings=50",
+        "clean": "rm -rf dist build tmp",
+        "prebuild": "npm run clean",
+        "build": "npm run build:compile && npm run build:process",
+        "build:compile": "tsc -p bin/tsconfig.json",
+        "build:process": "node bin/js/index.js",
+        "build:check": "tsc --noEmit",
+        "dev": "npm run build && npm run test:cli",
+        "test": "node --loader ts-node/esm scripts/run-tests.ts",
+        "test:cli": "node dist/js/cli.js",
+        "prepare": "npm run build",
+        "prepublishOnly": "npm run lint && npm run build && npm test"
     },
     "dependencies": {
         "@babel/core": "^7.28.3",
@@ -102,6 +115,7 @@
         "@types/supertest": "^6.0.3",
         "@types/ws": "^8.18.1",
         "eslint-plugin-node": "^11.1.0",
+        "husky": "^9.1.7",
         "jest": "^30.0.5",
         "mocha": "^11.7.1",
         "stylelint": "^16.23.1",
@@ -117,8 +131,11 @@
         "chokidar": "^4.0.3"
     },
     "files": [
-        "src/**",
-        "dist/**"
+        "dist/**",
+        "bin/js/**",
+        "README.md",
+        "LICENSE",
+        "CHANGELOG.md"
     ],
     "jest": {
         "transform": {

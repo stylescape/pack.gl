@@ -3,7 +3,6 @@
 // ============================================================================
 
 import autoprefixer from "autoprefixer"; // Automatically adds vendor prefixes to CSS rules
-import cssnano from "cssnano";
 // import postcssSimpleVars from 'postcss-simple-vars'; // Plugin to handle CSS variables
 // import postcssNested from 'postcss-nested'; // Plugin to allow nesting of CSS rules
 // import postcssImport from 'postcss-import'; // Plugin to inline import CSS files into a single CSS

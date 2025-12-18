@@ -62,6 +62,7 @@ interface SvgPath {
 /**
  * Example usage of the Svg interface.
  */
+/*
 const exampleSvg: Svg = {
     metadata: {
         name: "Example SVG",
@@ -82,3 +83,4 @@ const exampleSvg: Svg = {
         },
     ],
 };
+*/

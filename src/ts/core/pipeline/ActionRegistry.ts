@@ -183,19 +183,30 @@ export class ActionRegistry extends AbstractProcess {
             for (const dir of directories) {
                 if (dir.isDirectory() && dir.name.startsWith(pluginPrefix)) {
                     const pluginPath = join(nodeModulesPath, dir.name);
-                    const plugin: ActionPlugin = require(pluginPath).default;
+                    // Dynamically import plugin (fire and forget)
+                    import(pluginPath)
+                        .then((pluginModule) => {
+                            const plugin: ActionPlugin = pluginModule.default;
 
-                    if (
-                        plugin &&
-                        typeof plugin.registerActions === "function"
-                    ) {
-                        const actions = plugin.registerActions();
-                        for (const [name, actionClass] of Object.entries(
-                            actions,
-                        )) {
-                            this.registerAction(actionClass);
-                        }
-                    }
+                            if (
+                                plugin &&
+                                typeof plugin.registerActions === "function"
+                            ) {
+                                const actions = plugin.registerActions();
+                                for (const [
+                                    _actionName,
+                                    actionClass,
+                                ] of Object.entries(actions)) {
+                                    this.registerAction(actionClass);
+                                }
+                            }
+                        })
+                        .catch((err) => {
+                            this.logError(
+                                `Failed to load plugin ${dir.name}:`,
+                                err,
+                            );
+                        });
                 }
             }
 

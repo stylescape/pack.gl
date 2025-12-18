@@ -3,7 +3,6 @@
 // ============================================================================
 
 import js from "@eslint/js";
-import stylelint from "stylelint-config-standard-scss";
 import tseslint from "typescript-eslint";
 
 // ============================================================================
@@ -12,39 +11,45 @@ import tseslint from "typescript-eslint";
 
 export default [
     js.configs.recommended,
-    tseslint.configs.recommended,
+    ...tseslint.configs.recommended,
+
+    {
+        ignores: [
+            "**/*.min.js",
+            "**/dist/**",
+            "**/vendor/**",
+            ".cache/**",
+            "node_modules/**",
+            "coverage/**",
+            "bin/js/**",
+            "public/**",
+            "tmp/**",
+            "**/tests/**",
+        ],
+    },
 
     {
         languageOptions: {
             parser: tseslint.parser,
             parserOptions: {
                 project: "./tsconfig.json",
-                ecmaVersion: "2021",
-                // ecmaVersion: "latest",
+                ecmaVersion: 2021,
                 sourceType: "module",
             },
         },
         rules: {
-            "@typescript-eslint/no-unused-vars": "warn",
+            "@typescript-eslint/no-unused-vars": [
+                "warn",
+                {
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_",
+                },
+            ],
             "@typescript-eslint/explicit-function-return-type": "off",
             "@typescript-eslint/no-explicit-any": "warn",
-
-            "import/order": [
-                "error",
-                { groups: ["builtin", "external", "internal"] },
-            ],
-            "import/no-unresolved": "error",
-
-            "prettier/prettier": [
-                "error",
-                { singleQuote: true, trailingComma: "all" },
-            ],
-
             "no-console": "warn",
             "no-debugger": "warn",
         },
     },
-
-    // Enable Stylelint for SCSS files
-    stylelint,
 ];

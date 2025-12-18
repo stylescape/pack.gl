@@ -46,7 +46,7 @@ export class Step extends AbstractProcess {
         // const ActionClass = actionRegistry.getAction(step.action.name);
         const ActionClass = actionRegistry.getAction(String(step.action));
         if (!ActionClass) {
-            let msg = `
+            const msg = `
                 Unknown action "${step.action}" for step "${this.name}".
                 Ensure the action is registered in the registry.
                 `;

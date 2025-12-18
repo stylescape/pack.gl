@@ -84,7 +84,7 @@ export class TemplateRenderAction extends Action {
         template: string,
         outputFile: string,
         context: Record<string, any>,
-        templatesDir: string,
+        _templatesDir: string,
     ): Promise<void> {
         this.logInfo(`Rendering: ${template} → ${outputFile}`);
 

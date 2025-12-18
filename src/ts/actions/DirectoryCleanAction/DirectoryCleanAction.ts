@@ -105,7 +105,7 @@ export class DirectoryCleanAction extends Action {
      * @returns A string description of the action.
      */
     describe(): string {
-        let description = `
+        const description = `
             Cleans a directory by deleting all its contents while retaining
             files and directories matching specified glob patterns. If the
             directory does not exist, the action will skip gracefully.

@@ -55,7 +55,7 @@ export abstract class Action
      * @returns A boolean indicating whether the options are valid. Default
      * implementation always returns true.
      */
-    validateOptions(options: ActionOptionsType): boolean {
+    validateOptions(_options: ActionOptionsType): boolean {
         // Default validation: always returns true, can be overridden in
         // derived classes
         return true;
