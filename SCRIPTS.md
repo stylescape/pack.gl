@@ -135,8 +135,8 @@ npm run version:patch  # or minor/major
 npm run validate:package
 npm test
 git add -A
-git commit -m "chore: release v0.1.47"
-git tag v0.1.47
+git commit -m "chore: release v0.1.48"
+git tag v0.1.48
 git push && git push --tags
 ```
 

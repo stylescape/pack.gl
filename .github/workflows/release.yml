@@ -47,6 +47,11 @@ jobs:
           echo "Release ${{ steps.get_version.outputs.VERSION }}" > release_notes.md
         fi
 
+    - name: Remove empty files from dist
+      run: |
+        find dist -type f -size 0 -delete
+        echo "Cleaned up empty files from dist directory"
+
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
