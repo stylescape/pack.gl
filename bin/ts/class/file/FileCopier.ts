@@ -43,6 +43,14 @@ class FileCopier {
         destDir: string,
     ): Promise<void> {
         try {
+            // Check if source file exists
+            if (!fs.existsSync(srcFile)) {
+                console.warn(
+                    `Source file does not exist, skipping: ${srcFile}`,
+                );
+                return;
+            }
+
             const fileName = path.basename(srcFile);
             const destFilePath = path.join(destDir, fileName);
             await fs.promises.copyFile(srcFile, destFilePath);

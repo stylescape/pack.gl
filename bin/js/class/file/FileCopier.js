@@ -5,6 +5,10 @@ class FileCopier {
     copyFileToDirectory(srcFile, destDir) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                if (!fs.existsSync(srcFile)) {
+                    console.warn(`Source file does not exist, skipping: ${srcFile}`);
+                    return;
+                }
                 const fileName = path.basename(srcFile);
                 const destFilePath = path.join(destDir, fileName);
                 yield fs.promises.copyFile(srcFile, destFilePath);

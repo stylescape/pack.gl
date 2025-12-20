@@ -53,12 +53,17 @@ jobs:
         echo "Cleaned up empty files from dist directory"
 
     - name: Create GitHub Release
+      id: create_release
       uses: softprops/action-gh-release@v2
       with:
         body_path: release_notes.md
         draft: false
         prerelease: false
         files: |
-          dist/**/*
+          dist/js/**/*
+          dist/ts/**/*
+          dist/package.json
+          dist/README.md
+          dist/LICENSE
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
