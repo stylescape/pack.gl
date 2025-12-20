@@ -61,7 +61,6 @@ jobs:
           --title "Release ${{ steps.get_version.outputs.VERSION }}" \
           --notes-file release_notes.md \
           --draft=false \
-          dist/js/* \
           dist/package.json \
           dist/README.md \
           dist/LICENSE
