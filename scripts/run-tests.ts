@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { exec } from "child_process";
+import { execFile } from "child_process";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { promisify } from "util";
@@ -13,7 +13,7 @@ import { promisify } from "util";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 // ============================================================================
 // Functions
@@ -29,9 +29,12 @@ async function runTests(): Promise<void> {
             "../jest.config.cjs",
         );
 
-        // Run Jest
-        const command = `npx jest --config ${jestConfigPath}`;
-        const { stdout, stderr } = await execAsync(command);
+        // Run Jest using execFile with array form (safe from shell injection)
+        const { stdout, stderr } = await execFileAsync("npx", [
+            "jest",
+            "--config",
+            jestConfigPath,
+        ]);
 
         if (stderr) {
             console.error("Test errors:", stderr);

@@ -97,13 +97,39 @@ export class ConfigStore extends AbstractProcess {
 
         for (let i = 0; i < keys.length - 1; i++) {
             const k = keys[i];
+
+            // Guard against prototype pollution
+            if (
+                k === "__proto__" ||
+                k === "constructor" ||
+                k === "prototype"
+            ) {
+                this.logWarn(
+                    `Attempted to set protected key "${k}". This operation is blocked for security reasons.`,
+                );
+                return;
+            }
+
             if (!current[k] || typeof current[k] !== "object") {
                 current[k] = {};
             }
             current = current[k];
         }
 
-        current[keys[keys.length - 1]] = value;
+        // Guard against prototype pollution for the final key
+        const finalKey = keys[keys.length - 1];
+        if (
+            finalKey === "__proto__" ||
+            finalKey === "constructor" ||
+            finalKey === "prototype"
+        ) {
+            this.logWarn(
+                `Attempted to set protected key "${finalKey}". This operation is blocked for security reasons.`,
+            );
+            return;
+        }
+
+        current[finalKey] = value;
         this.logDebug(
             `Set configuration key "${key}" to: ${JSON.stringify(value)}`,
         );
