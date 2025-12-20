@@ -5,6 +5,7 @@ This guide helps you migrate from kist's monolithic action system to the new lig
 ## Overview
 
 kist is transitioning to a plugin-based architecture to:
+
 - Reduce core package size and installation time
 - Allow users to install only the actions they need
 - Enable easier community contributions
@@ -14,7 +15,9 @@ kist is transitioning to a plugin-based architecture to:
 ## What's Changing
 
 ### Core Actions (Remain in kist)
+
 These lightweight, essential actions stay in the main package:
+
 - ✅ `DirectoryCleanAction`
 - ✅ `DirectoryCopyAction`
 - ✅ `DirectoryCreateAction`
@@ -24,25 +27,27 @@ These lightweight, essential actions stay in the main package:
 - ✅ `VersionWriteAction`
 
 ### Plugin Actions (Moving to Separate Packages)
+
 These actions are moving to dedicated plugin packages:
 
-| Current Action | New Plugin Package | Install Command |
-|----------------|-------------------|-----------------|
-| `StyleProcessingAction` | `@kist/action-sass` | `npm install -D @kist/action-sass` |
-| `TypeScriptCompilerAction` | `@kist/action-typescript` | `npm install -D @kist/action-typescript` |
-| `JavaScriptMinifyAction` | `@kist/action-terser` | `npm install -D @kist/action-terser` |
-| `SvgPackagerAction` | `@kist/action-svg` | `npm install -D @kist/action-svg` |
-| `SvgReaderAction` | `@kist/action-svg` | `npm install -D @kist/action-svg` |
-| `SvgSpriteAction` | `@kist/action-svg` | `npm install -D @kist/action-svg` |
-| `SvgToPngAction` | `@kist/action-svg` | `npm install -D @kist/action-svg` |
-| `LintAction` | `@kist/action-lint` | `npm install -D @kist/action-lint` |
-| `DocumentationAction` | `@kist/action-docs` | `npm install -D @kist/action-docs` |
-| `PackageManagerAction` | `@kist/action-package-manager` | `npm install -D @kist/action-package-manager` |
-| `RunScriptAction` | `@kist/action-scripts` | `npm install -D @kist/action-scripts` |
+| Current Action             | New Plugin Package             | Install Command                               |
+| -------------------------- | ------------------------------ | --------------------------------------------- |
+| `StyleProcessingAction`    | `@kist/action-sass`            | `npm install -D @kist/action-sass`            |
+| `TypeScriptCompilerAction` | `@kist/action-typescript`      | `npm install -D @kist/action-typescript`      |
+| `JavaScriptMinifyAction`   | `@kist/action-terser`          | `npm install -D @kist/action-terser`          |
+| `SvgPackagerAction`        | `@kist/action-svg`             | `npm install -D @kist/action-svg`             |
+| `SvgReaderAction`          | `@kist/action-svg`             | `npm install -D @kist/action-svg`             |
+| `SvgSpriteAction`          | `@kist/action-svg`             | `npm install -D @kist/action-svg`             |
+| `SvgToPngAction`           | `@kist/action-svg`             | `npm install -D @kist/action-svg`             |
+| `LintAction`               | `@kist/action-lint`            | `npm install -D @kist/action-lint`            |
+| `DocumentationAction`      | `@kist/action-docs`            | `npm install -D @kist/action-docs`            |
+| `PackageManagerAction`     | `@kist/action-package-manager` | `npm install -D @kist/action-package-manager` |
+| `RunScriptAction`          | `@kist/action-scripts`         | `npm install -D @kist/action-scripts`         |
 
 ## Migration Timeline
 
 ### Phase 1: Plugin System (Current)
+
 - ✅ Plugin infrastructure added
 - ✅ PluginManager created
 - ✅ ActionRegistry supports plugins
@@ -50,12 +55,14 @@ These actions are moving to dedicated plugin packages:
 - ⏳ All actions still in core (backwards compatible)
 
 ### Phase 2: Plugin Packages (Next Release)
+
 - Create separate plugin repositories
 - Publish initial plugin packages
 - Add deprecation warnings for plugin actions in core
 - Update documentation
 
 ### Phase 3: Core Cleanup (Major Version)
+
 - Remove plugin actions from core package
 - Require explicit plugin installation
 - Reduce core package size significantly
@@ -68,26 +75,26 @@ Review your `kist.yml` file to identify which actions you use:
 
 ```yaml
 pipeline:
-  stages:
-    - name: build
-      steps:
-        - name: compile-ts
-          action: TypeScriptCompilerAction  # Plugin action
-          options:
-            input: ./src
-            output: ./dist
-        
-        - name: process-sass
-          action: StyleProcessingAction     # Plugin action
-          options:
-            input: ./styles
-            output: ./dist/css
-        
-        - name: copy-assets
-          action: DirectoryCopyAction       # Core action (no change)
-          options:
-            source: ./assets
-            destination: ./dist/assets
+    stages:
+        - name: build
+          steps:
+              - name: compile-ts
+                action: TypeScriptCompilerAction # Plugin action
+                options:
+                    input: ./src
+                    output: ./dist
+
+              - name: process-sass
+                action: StyleProcessingAction # Plugin action
+                options:
+                    input: ./styles
+                    output: ./dist/css
+
+              - name: copy-assets
+                action: DirectoryCopyAction # Core action (no change)
+                options:
+                    source: ./assets
+                    destination: ./dist/assets
 ```
 
 ### Step 2: Install Required Plugins
@@ -118,14 +125,14 @@ Your `kist.yml` configuration remains the same. kist automatically discovers and
 ```yaml
 # This works automatically after installing plugins
 pipeline:
-  stages:
-    - name: build
-      steps:
-        - name: compile-ts
-          action: TypeScriptCompilerAction
-          options:
-            input: ./src
-            output: ./dist
+    stages:
+        - name: build
+          steps:
+              - name: compile-ts
+                action: TypeScriptCompilerAction
+                options:
+                    input: ./src
+                    output: ./dist
 ```
 
 ### Step 4: Verify Plugin Loading
@@ -137,6 +144,7 @@ kist --verbose
 ```
 
 You should see output like:
+
 ```
 [INFO] Initializing plugin system...
 [INFO] Loaded 3 plugin(s):
@@ -154,12 +162,14 @@ npx kist migrate
 ```
 
 This command will:
+
 1. Analyze your `kist.yml` configuration
 2. Identify which plugin actions you use
 3. Generate install commands for required plugins
 4. Update your `package.json` dependencies
 
 Example output:
+
 ```bash
 Analyzing kist configuration...
 
@@ -187,43 +197,47 @@ Or automatically install with:
 ### Scenario 1: Full-Stack Project
 
 **Before** (all actions in core):
+
 ```json
 {
-  "devDependencies": {
-    "kist": "^0.1.45"
-  }
+    "devDependencies": {
+        "kist": "^0.1.45"
+    }
 }
 ```
 
 **After** (with plugins):
+
 ```json
 {
-  "devDependencies": {
-    "kist": "^0.2.0",
-    "@kist/action-typescript": "^1.0.0",
-    "@kist/action-sass": "^1.0.0",
-    "@kist/action-terser": "^1.0.0"
-  }
+    "devDependencies": {
+        "kist": "^0.2.0",
+        "@kist/action-typescript": "^1.0.0",
+        "@kist/action-sass": "^1.0.0",
+        "@kist/action-terser": "^1.0.0"
+    }
 }
 ```
 
 ### Scenario 2: Simple Static Site
 
 **Before**:
+
 ```json
 {
-  "devDependencies": {
-    "kist": "^0.1.45"
-  }
+    "devDependencies": {
+        "kist": "^0.1.45"
+    }
 }
 ```
 
 **After** (no plugins needed):
+
 ```json
 {
-  "devDependencies": {
-    "kist": "^0.2.0"
-  }
+    "devDependencies": {
+        "kist": "^0.2.0"
+    }
 }
 ```
 
@@ -232,21 +246,23 @@ If you only use core actions (file operations, templates), no plugins are needed
 ### Scenario 3: SVG-Heavy Project
 
 **Before**:
+
 ```json
 {
-  "devDependencies": {
-    "kist": "^0.1.45"
-  }
+    "devDependencies": {
+        "kist": "^0.1.45"
+    }
 }
 ```
 
 **After**:
+
 ```json
 {
-  "devDependencies": {
-    "kist": "^0.2.0",
-    "@kist/action-svg": "^1.0.0"
-  }
+    "devDependencies": {
+        "kist": "^0.2.0",
+        "@kist/action-svg": "^1.0.0"
+    }
 }
 ```
 
@@ -257,14 +273,16 @@ If you only use core actions (file operations, templates), no plugins are needed
 When kist v1.0.0 is released, plugin actions will be removed from core:
 
 **What breaks:**
+
 ```yaml
 # This will fail without installing the plugin
 steps:
-  - name: compile
-    action: TypeScriptCompilerAction  # Error: Unknown action
+    - name: compile
+      action: TypeScriptCompilerAction # Error: Unknown action
 ```
 
 **How to fix:**
+
 ```bash
 # Install the required plugin
 npm install --save-dev @kist/action-typescript
@@ -275,6 +293,7 @@ npm install --save-dev @kist/action-typescript
 ## Benefits After Migration
 
 ### 1. Faster Installation
+
 ```bash
 # Before: ~200MB (all dependencies)
 npm install kist
@@ -284,23 +303,29 @@ npm install kist @kist/action-sass
 ```
 
 ### 2. Smaller Bundle Size
+
 Only install what you need:
+
 - Core only: ~5MB
 - Core + TypeScript: ~15MB
 - Core + Full plugins: ~50MB
 
 ### 3. Independent Versioning
+
 Plugins can be updated independently:
+
 ```json
 {
-  "kist": "^1.0.0",
-  "@kist/action-typescript": "^2.0.0",  // Updated separately
-  "@kist/action-sass": "^1.5.0"
+    "kist": "^1.0.0",
+    "@kist/action-typescript": "^2.0.0", // Updated separately
+    "@kist/action-sass": "^1.5.0"
 }
 ```
 
 ### 4. Community Plugins
+
 Easily install and use community plugins:
+
 ```bash
 npm install --save-dev kist-plugin-markdown
 npm install --save-dev @mycompany/kist-plugin-custom
@@ -311,11 +336,13 @@ npm install --save-dev @mycompany/kist-plugin-custom
 ### Plugin Not Found
 
 **Error:**
+
 ```
 [ERROR] Unknown action "TypeScriptCompilerAction" for step "compile".
 ```
 
 **Solution:**
+
 ```bash
 npm install --save-dev @kist/action-typescript
 ```
@@ -323,6 +350,7 @@ npm install --save-dev @kist/action-typescript
 ### Action Name Changed
 
 Check the plugin documentation for any renamed actions:
+
 ```yaml
 # Old (deprecated)
 action: TypeScriptCompilerAction
@@ -334,11 +362,13 @@ action: TypeScriptCompiler
 ### Multiple Versions Conflict
 
 Ensure compatible versions:
+
 ```bash
 npm list kist @kist/action-*
 ```
 
 If conflicts exist:
+
 ```bash
 npm install --save-dev kist@latest @kist/action-typescript@latest
 ```
@@ -346,11 +376,13 @@ npm install --save-dev kist@latest @kist/action-typescript@latest
 ### Plugin Not Loading
 
 Check plugin discovery:
+
 ```bash
 kist --verbose
 ```
 
 Ensure plugin naming follows conventions:
+
 - ✅ `@kist/action-typescript`
 - ✅ `kist-plugin-custom`
 - ❌ `typescript-plugin` (won't auto-discover)
@@ -361,9 +393,9 @@ If you encounter issues, you can temporarily stay on v0.1.x:
 
 ```json
 {
-  "devDependencies": {
-    "kist": "^0.1.45"
-  }
+    "devDependencies": {
+        "kist": "^0.1.45"
+    }
 }
 ```
 
