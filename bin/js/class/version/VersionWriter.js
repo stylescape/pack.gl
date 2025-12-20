@@ -4,7 +4,7 @@ class VersionWriter {
     writeVersionToFile(filePath, version) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield fs.writeFile(filePath, version, "utf8");
+                yield fs.writeFile(filePath, version + "\n", "utf8");
                 console.log(`Version ${version} written to ${filePath}`);
             }
             catch (error) {

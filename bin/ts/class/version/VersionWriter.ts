@@ -40,7 +40,7 @@ class VersionWriter {
         version: string,
     ): Promise<void> {
         try {
-            await fs.writeFile(filePath, version, "utf8");
+            await fs.writeFile(filePath, version + "\n", "utf8");
             console.log(`Version ${version} written to ${filePath}`);
         } catch (error) {
             console.error(`Error writing version to file: ${error}`);
