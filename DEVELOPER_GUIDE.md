@@ -145,12 +145,12 @@ Actions are the building blocks of kist pipelines.
 Example:
 
 ```typescript
-import { Action } from '../../core/pipeline/Action';
-import { ActionOptionsType } from '../../types/ActionOptionsType';
+import { Action } from "../../core/pipeline/Action";
+import { ActionOptionsType } from "../../types/ActionOptionsType";
 
 export class MyAction extends Action {
     async execute(options: ActionOptionsType): Promise<void> {
-        this.logInfo('Executing MyAction');
+        this.logInfo("Executing MyAction");
         // Your implementation
     }
 }
