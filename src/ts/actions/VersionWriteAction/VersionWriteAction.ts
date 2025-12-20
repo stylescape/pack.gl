@@ -141,7 +141,11 @@ export class VersionWriteAction extends Action {
                 return line;
             });
 
-            await fs.writeFile(filePath, updatedLines.join("\n"), "utf8");
+            await fs.writeFile(
+                filePath,
+                updatedLines.join("\n") + "\n",
+                "utf8",
+            );
             this.logInfo(
                 `Version replaced in file "${filePath}" for key "${key}".`,
             );
