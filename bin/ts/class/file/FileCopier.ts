@@ -56,8 +56,9 @@ class FileCopier {
             await fs.promises.copyFile(srcFile, destFilePath);
             console.log(`File copied from ${srcFile} to ${destFilePath}`);
         } catch (error) {
-            console.error("Error copying file:", error);
-            throw error;
+            console.warn("Skipping copy due to error:", error);
+            // Do not throw; treat missing or unreadable files as non-fatal
+            return;
         }
     }
 }

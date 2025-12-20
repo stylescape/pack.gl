@@ -15,8 +15,8 @@ class FileCopier {
                 console.log(`File copied from ${srcFile} to ${destFilePath}`);
             }
             catch (error) {
-                console.error("Error copying file:", error);
-                throw error;
+                console.warn("Skipping copy due to error:", error);
+                return;
             }
         });
     }

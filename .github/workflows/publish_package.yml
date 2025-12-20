@@ -117,7 +117,7 @@ jobs:
         name: Publish NPM
         run: |
           cd dist
-          npm publish --access public
+          npm publish --access public --provenance
 
 
 # =============================================================================
