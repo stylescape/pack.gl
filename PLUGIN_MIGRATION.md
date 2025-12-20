@@ -30,8 +30,8 @@ These lightweight, essential actions stay in the main package:
 
 These actions are moving to dedicated plugin packages:
 
-| Current Action             | New Plugin Package             | Install Command                               |
-| -------------------------- | ------------------------------ | --------------------------------------------- |
+| Current Action             | New Plugin Package                | Install Command                                  |
+| -------------------------- | --------------------------------- | ------------------------------------------------ |
 | `StyleProcessingAction`    | `@getkist/action-sass`            | `npm install -D @getkist/action-sass`            |
 | `TypeScriptCompilerAction` | `@getkist/action-typescript`      | `npm install -D @getkist/action-typescript`      |
 | `JavaScriptMinifyAction`   | `@getkist/action-terser`          | `npm install -D @getkist/action-terser`          |

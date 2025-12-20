@@ -388,8 +388,8 @@ npm publish
 
 The following actions are being moved from core to plugins:
 
-| Action                                   | Plugin Package          | Repository                |
-| ---------------------------------------- | ----------------------- | ------------------------- |
+| Action                                   | Plugin Package             | Repository                |
+| ---------------------------------------- | -------------------------- | ------------------------- |
 | StyleProcessingAction                    | @getkist/action-sass       | getkist/action-sass       |
 | TypeScriptCompilerAction                 | @getkist/action-typescript | getkist/action-typescript |
 | JavaScriptMinifyAction                   | @getkist/action-terser     | getkist/action-terser     |
