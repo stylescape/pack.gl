@@ -108,6 +108,12 @@ jobs:
           npm pkg get bin
 
       -
+        name: Debug npm auth config
+        run: |
+          npm config get //registry.npmjs.org/:_authToken || true
+          npm config get provenance || true
+
+      -
         name: Fix bin path in dist package.json
         run: |
           cd dist
@@ -118,6 +124,9 @@ jobs:
         run: |
           cd dist
           npm publish --access public --provenance
+        env:
+          NPM_CONFIG_USERCONFIG: /dev/null
+          NPM_CONFIG_GLOBALCONFIG: /dev/null
 
 
 # =============================================================================
