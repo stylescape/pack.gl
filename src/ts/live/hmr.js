@@ -20,6 +20,6 @@ ws.onmessage = (event) => {
 
 function updateCSS(css) {
     const styleElement = document.createElement("style");
-    styleElement.innerHTML = css;
+    styleElement.textContent = css;
     document.head.appendChild(styleElement);
 }
