@@ -213,7 +213,7 @@ pipeline:
 
 - Name: `@getkist/action-{name}`
 - Example: `@getkist/action-svg`, `@getkist/action-sass`
-- Repository: `https://github.com/getkist/action-{name}`
+- Repository: `https://github.com/getkist/kist-action-{name}`
 
 ### Community Plugins
 

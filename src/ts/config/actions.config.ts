@@ -82,56 +82,56 @@ export const PLUGIN_PACKAGES: Record<
     StyleProcessingAction: {
         package: "@getkist/action-sass",
         npm: "npm install --save-dev @getkist/action-sass",
-        github: "https://github.com/getkist/action-sass",
+        github: "https://github.com/getkist/kist-action-sass",
     },
     TypeScriptCompilerAction: {
         package: "@getkist/action-typescript",
         npm: "npm install --save-dev @getkist/action-typescript",
-        github: "https://github.com/getkist/action-typescript",
+        github: "https://github.com/getkist/kist-action-typescript",
     },
     JavaScriptMinifyAction: {
         package: "@getkist/action-terser",
         npm: "npm install --save-dev @getkist/action-terser",
-        github: "https://github.com/getkist/action-terser",
+        github: "https://github.com/getkist/kist-action-terser",
     },
     SvgPackagerAction: {
         package: "@getkist/action-svg",
         npm: "npm install --save-dev @getkist/action-svg",
-        github: "https://github.com/getkist/action-svg",
+        github: "https://github.com/getkist/kist-action-svg",
     },
     SvgReaderAction: {
         package: "@getkist/action-svg",
         npm: "npm install --save-dev @getkist/action-svg",
-        github: "https://github.com/getkist/action-svg",
+        github: "https://github.com/getkist/kist-action-svg",
     },
     SvgSpriteAction: {
         package: "@getkist/action-svg",
         npm: "npm install --save-dev @getkist/action-svg",
-        github: "https://github.com/getkist/action-svg",
+        github: "https://github.com/getkist/kist-action-svg",
     },
     SvgToPngAction: {
         package: "@getkist/action-svg",
         npm: "npm install --save-dev @getkist/action-svg",
-        github: "https://github.com/getkist/action-svg",
+        github: "https://github.com/getkist/kist-action-svg",
     },
     LintAction: {
         package: "@getkist/action-lint",
         npm: "npm install --save-dev @getkist/action-lint",
-        github: "https://github.com/getkist/action-lint",
+        github: "https://github.com/getkist/kist-action-lint",
     },
     DocumentationAction: {
         package: "@getkist/action-docs",
         npm: "npm install --save-dev @getkist/action-docs",
-        github: "https://github.com/getkist/action-docs",
+        github: "https://github.com/getkist/kist-action-docs",
     },
     PackageManagerAction: {
         package: "@getkist/action-package-manager",
         npm: "npm install --save-dev @getkist/action-package-manager",
-        github: "https://github.com/getkist/action-package-manager",
+        github: "https://github.com/getkist/kist-action-package-manager",
     },
     RunScriptAction: {
         package: "@getkist/action-scripts",
         npm: "npm install --save-dev @getkist/action-scripts",
-        github: "https://github.com/getkist/action-scripts",
+        github: "https://github.com/getkist/kist-action-scripts",
     },
 };
