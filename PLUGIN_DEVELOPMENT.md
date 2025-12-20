@@ -22,14 +22,14 @@ kist uses a plugin-based architecture similar to webpack, allowing developers to
 
 **Plugin Actions** (separate packages):
 
-- `@kist/action-sass` - Sass/SCSS processing
-- `@kist/action-typescript` - TypeScript compilation
-- `@kist/action-terser` - JavaScript minification
-- `@kist/action-svg` - SVG optimization and sprites
-- `@kist/action-lint` - Code linting
-- `@kist/action-docs` - Documentation generation
-- `@kist/action-package-manager` - Package management
-- `@kist/action-scripts` - Script execution
+- `@getkist/action-sass` - Sass/SCSS processing
+- `@getkist/action-typescript` - TypeScript compilation
+- `@getkist/action-terser` - JavaScript minification
+- `@getkist/action-svg` - SVG optimization and sprites
+- `@getkist/action-lint` - Code linting
+- `@getkist/action-docs` - Documentation generation
+- `@getkist/action-package-manager` - Package management
+- `@getkist/action-scripts` - Script execution
 
 ## Creating a Plugin
 
@@ -179,7 +179,7 @@ export { ExampleAction };
 
 ```bash
 # Install an official kist plugin
-npm install --save-dev @kist/action-svg
+npm install --save-dev @getkist/action-svg
 
 # Install a third-party plugin
 npm install --save-dev @your-scope/kist-plugin-example
@@ -189,7 +189,7 @@ npm install --save-dev @your-scope/kist-plugin-example
 
 kist automatically discovers and loads plugins with these naming conventions:
 
-- `@kist/action-*` - Official plugins (scoped)
+- `@getkist/action-*` - Official plugins (scoped)
 - `kist-plugin-*` - Community plugins (unscoped)
 - `@your-scope/plugin-*` - Custom scoped plugins
 
@@ -211,8 +211,8 @@ pipeline:
 
 ### Official Plugins
 
-- Name: `@kist/action-{name}`
-- Example: `@kist/action-svg`, `@kist/action-sass`
+- Name: `@getkist/action-{name}`
+- Example: `@getkist/action-svg`, `@getkist/action-sass`
 - Repository: `https://github.com/getkist/action-{name}`
 
 ### Community Plugins
@@ -390,12 +390,12 @@ The following actions are being moved from core to plugins:
 
 | Action                                   | Plugin Package          | Repository                |
 | ---------------------------------------- | ----------------------- | ------------------------- |
-| StyleProcessingAction                    | @kist/action-sass       | getkist/action-sass       |
-| TypeScriptCompilerAction                 | @kist/action-typescript | getkist/action-typescript |
-| JavaScriptMinifyAction                   | @kist/action-terser     | getkist/action-terser     |
-| SvgPackagerAction, SvgSpriteAction, etc. | @kist/action-svg        | getkist/action-svg        |
-| LintAction                               | @kist/action-lint       | getkist/action-lint       |
-| DocumentationAction                      | @kist/action-docs       | getkist/action-docs       |
+| StyleProcessingAction                    | @getkist/action-sass       | getkist/action-sass       |
+| TypeScriptCompilerAction                 | @getkist/action-typescript | getkist/action-typescript |
+| JavaScriptMinifyAction                   | @getkist/action-terser     | getkist/action-terser     |
+| SvgPackagerAction, SvgSpriteAction, etc. | @getkist/action-svg        | getkist/action-svg        |
+| LintAction                               | @getkist/action-lint       | getkist/action-lint       |
+| DocumentationAction                      | @getkist/action-docs       | getkist/action-docs       |
 
 Migration will happen gradually to maintain backward compatibility.
 

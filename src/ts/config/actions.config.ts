@@ -13,17 +13,17 @@
  * - Template rendering (lightweight)
  *
  * Plugin Actions (Move to separate repos):
- * - StyleProcessingAction -> @kist/action-sass
- * - TypeScriptCompilerAction -> @kist/action-typescript
- * - JavaScriptMinifyAction -> @kist/action-terser
- * - SvgPackagerAction -> @kist/action-svg
- * - SvgSpriteAction -> @kist/action-svg
- * - SvgToPngAction -> @kist/action-svg
- * - SvgReaderAction -> @kist/action-svg
- * - LintAction -> @kist/action-lint
- * - DocumentationAction -> @kist/action-docs
- * - PackageManagerAction -> @kist/action-package-manager
- * - RunScriptAction -> @kist/action-scripts
+ * - StyleProcessingAction -> @getkist/action-sass
+ * - TypeScriptCompilerAction -> @getkist/action-typescript
+ * - JavaScriptMinifyAction -> @getkist/action-terser
+ * - SvgPackagerAction -> @getkist/action-svg
+ * - SvgSpriteAction -> @getkist/action-svg
+ * - SvgToPngAction -> @getkist/action-svg
+ * - SvgReaderAction -> @getkist/action-svg
+ * - LintAction -> @getkist/action-lint
+ * - DocumentationAction -> @getkist/action-docs
+ * - PackageManagerAction -> @getkist/action-package-manager
+ * - RunScriptAction -> @getkist/action-scripts
  */
 
 export const CORE_ACTIONS = [
@@ -37,31 +37,31 @@ export const CORE_ACTIONS = [
 ] as const;
 
 export const PLUGIN_ACTIONS = [
-    // @kist/action-sass
+    // @getkist/action-sass
     "StyleProcessingAction",
 
-    // @kist/action-typescript
+    // @getkist/action-typescript
     "TypeScriptCompilerAction",
 
-    // @kist/action-terser
+    // @getkist/action-terser
     "JavaScriptMinifyAction",
 
-    // @kist/action-svg
+    // @getkist/action-svg
     "SvgPackagerAction",
     "SvgReaderAction",
     "SvgSpriteAction",
     "SvgToPngAction",
 
-    // @kist/action-lint
+    // @getkist/action-lint
     "LintAction",
 
-    // @kist/action-docs
+    // @getkist/action-docs
     "DocumentationAction",
 
-    // @kist/action-package-manager
+    // @getkist/action-package-manager
     "PackageManagerAction",
 
-    // @kist/action-scripts
+    // @getkist/action-scripts
     "RunScriptAction",
 ] as const;
 
@@ -80,58 +80,58 @@ export const PLUGIN_PACKAGES: Record<
     }
 > = {
     StyleProcessingAction: {
-        package: "@kist/action-sass",
-        npm: "npm install --save-dev @kist/action-sass",
+        package: "@getkist/action-sass",
+        npm: "npm install --save-dev @getkist/action-sass",
         github: "https://github.com/getkist/action-sass",
     },
     TypeScriptCompilerAction: {
-        package: "@kist/action-typescript",
-        npm: "npm install --save-dev @kist/action-typescript",
+        package: "@getkist/action-typescript",
+        npm: "npm install --save-dev @getkist/action-typescript",
         github: "https://github.com/getkist/action-typescript",
     },
     JavaScriptMinifyAction: {
-        package: "@kist/action-terser",
-        npm: "npm install --save-dev @kist/action-terser",
+        package: "@getkist/action-terser",
+        npm: "npm install --save-dev @getkist/action-terser",
         github: "https://github.com/getkist/action-terser",
     },
     SvgPackagerAction: {
-        package: "@kist/action-svg",
-        npm: "npm install --save-dev @kist/action-svg",
+        package: "@getkist/action-svg",
+        npm: "npm install --save-dev @getkist/action-svg",
         github: "https://github.com/getkist/action-svg",
     },
     SvgReaderAction: {
-        package: "@kist/action-svg",
-        npm: "npm install --save-dev @kist/action-svg",
+        package: "@getkist/action-svg",
+        npm: "npm install --save-dev @getkist/action-svg",
         github: "https://github.com/getkist/action-svg",
     },
     SvgSpriteAction: {
-        package: "@kist/action-svg",
-        npm: "npm install --save-dev @kist/action-svg",
+        package: "@getkist/action-svg",
+        npm: "npm install --save-dev @getkist/action-svg",
         github: "https://github.com/getkist/action-svg",
     },
     SvgToPngAction: {
-        package: "@kist/action-svg",
-        npm: "npm install --save-dev @kist/action-svg",
+        package: "@getkist/action-svg",
+        npm: "npm install --save-dev @getkist/action-svg",
         github: "https://github.com/getkist/action-svg",
     },
     LintAction: {
-        package: "@kist/action-lint",
-        npm: "npm install --save-dev @kist/action-lint",
+        package: "@getkist/action-lint",
+        npm: "npm install --save-dev @getkist/action-lint",
         github: "https://github.com/getkist/action-lint",
     },
     DocumentationAction: {
-        package: "@kist/action-docs",
-        npm: "npm install --save-dev @kist/action-docs",
+        package: "@getkist/action-docs",
+        npm: "npm install --save-dev @getkist/action-docs",
         github: "https://github.com/getkist/action-docs",
     },
     PackageManagerAction: {
-        package: "@kist/action-package-manager",
-        npm: "npm install --save-dev @kist/action-package-manager",
+        package: "@getkist/action-package-manager",
+        npm: "npm install --save-dev @getkist/action-package-manager",
         github: "https://github.com/getkist/action-package-manager",
     },
     RunScriptAction: {
-        package: "@kist/action-scripts",
-        npm: "npm install --save-dev @kist/action-scripts",
+        package: "@getkist/action-scripts",
+        npm: "npm install --save-dev @getkist/action-scripts",
         github: "https://github.com/getkist/action-scripts",
     },
 };

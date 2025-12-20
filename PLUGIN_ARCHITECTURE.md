@@ -13,7 +13,7 @@ kist has been successfully transformed into a lightweight, plugin-based build to
 - Singleton pattern for centralized plugin management
 - Automatic plugin discovery from node_modules
 - Support for multiple naming conventions:
-    - `@kist/action-*` (official scoped)
+    - `@getkist/action-*` (official scoped)
     - `kist-plugin-*` (community unscoped)
     - `@scope/plugin-*` (custom scoped)
 - Manual plugin registration for programmatic use
@@ -53,8 +53,8 @@ kist has been successfully transformed into a lightweight, plugin-based build to
 - Comprehensive plugin loading with logging:
     ```
     [INFO] Loaded 3 plugin(s):
-    [INFO]   - @kist/action-typescript v1.0.0 (1 actions)
-    [INFO]   - @kist/action-sass v1.0.0 (1 actions)
+    [INFO]   - @getkist/action-typescript v1.0.0 (1 actions)
+    [INFO]   - @getkist/action-sass v1.0.0 (1 actions)
     ```
 - Graceful handling of zero plugins
 
@@ -90,14 +90,14 @@ Defines the separation of core vs plugin actions:
 
 **Plugin Actions** (11 actions - move to plugins):
 
-- StyleProcessingAction → `@kist/action-sass`
-- TypeScriptCompilerAction → `@kist/action-typescript`
-- JavaScriptMinifyAction → `@kist/action-terser`
-- SvgPackagerAction, SvgReaderAction, SvgSpriteAction, SvgToPngAction → `@kist/action-svg`
-- LintAction → `@kist/action-lint`
-- DocumentationAction → `@kist/action-docs`
-- PackageManagerAction → `@kist/action-package-manager`
-- RunScriptAction → `@kist/action-scripts`
+- StyleProcessingAction → `@getkist/action-sass`
+- TypeScriptCompilerAction → `@getkist/action-typescript`
+- JavaScriptMinifyAction → `@getkist/action-terser`
+- SvgPackagerAction, SvgReaderAction, SvgSpriteAction, SvgToPngAction → `@getkist/action-svg`
+- LintAction → `@getkist/action-lint`
+- DocumentationAction → `@getkist/action-docs`
+- PackageManagerAction → `@getkist/action-package-manager`
+- RunScriptAction → `@getkist/action-scripts`
 
 #### Plugin Development Guide ([PLUGIN_DEVELOPMENT.md](PLUGIN_DEVELOPMENT.md))
 
@@ -196,14 +196,14 @@ Ready-to-use template with:
 ### Official Plugins
 
 ```
-@kist/action-sass
-@kist/action-typescript
-@kist/action-terser
-@kist/action-svg
-@kist/action-lint
-@kist/action-docs
-@kist/action-package-manager
-@kist/action-scripts
+@getkist/action-sass
+@getkist/action-typescript
+@getkist/action-terser
+@getkist/action-svg
+@getkist/action-lint
+@getkist/action-docs
+@getkist/action-package-manager
+@getkist/action-scripts
 ```
 
 ### Community Plugins
@@ -220,7 +220,7 @@ kist-plugin-yaml
 
 ```bash
 # Official plugins
-npm install --save-dev @kist/action-typescript @kist/action-sass
+npm install --save-dev @getkist/action-typescript @getkist/action-sass
 
 # Community plugins
 npm install --save-dev kist-plugin-markdown
@@ -268,8 +268,8 @@ $ kist --verbose
 [INFO] Starting Kist workflow...
 [INFO] Initializing plugin system...
 [INFO] Loaded 2 plugin(s):
-[INFO]   - @kist/action-typescript v1.0.0 (1 actions)
-[INFO]   - @kist/action-sass v1.0.0 (1 actions)
+[INFO]   - @getkist/action-typescript v1.0.0 (1 actions)
+[INFO]   - @getkist/action-sass v1.0.0 (1 actions)
 [INFO] Initializing ActionRegistry...
 [INFO] Core actions registered successfully.
 [INFO] Registered 2 actions from plugins.
@@ -288,7 +288,7 @@ const plugins = pm.getLoadedPlugins();
 console.log(plugins);
 // [
 //   {
-//     name: '@kist/action-typescript',
+//     name: '@getkist/action-typescript',
 //     version: '1.0.0',
 //     description: 'TypeScript compilation for kist',
 //     actions: ['TypeScriptCompilerAction']
@@ -296,7 +296,7 @@ console.log(plugins);
 // ]
 
 // Check if specific plugin is loaded
-if (pm.isPluginLoaded("@kist/action-sass")) {
+if (pm.isPluginLoaded("@getkist/action-sass")) {
     console.log("Sass plugin is available");
 }
 
@@ -348,14 +348,14 @@ src/ts/
 
 ### Phase 2: Plugin Repository Creation (Next)
 
-- [ ] Create `@kist/action-typescript` repository
-- [ ] Create `@kist/action-sass` repository
-- [ ] Create `@kist/action-svg` repository
-- [ ] Create `@kist/action-terser` repository
-- [ ] Create `@kist/action-lint` repository
-- [ ] Create `@kist/action-docs` repository
-- [ ] Create `@kist/action-package-manager` repository
-- [ ] Create `@kist/action-scripts` repository
+- [ ] Create `@getkist/action-typescript` repository
+- [ ] Create `@getkist/action-sass` repository
+- [ ] Create `@getkist/action-svg` repository
+- [ ] Create `@getkist/action-terser` repository
+- [ ] Create `@getkist/action-lint` repository
+- [ ] Create `@getkist/action-docs` repository
+- [ ] Create `@getkist/action-package-manager` repository
+- [ ] Create `@getkist/action-scripts` repository
 
 ### Phase 3: Migration & Publishing
 

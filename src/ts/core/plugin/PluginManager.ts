@@ -15,7 +15,7 @@ import { AbstractProcess } from "../abstract/AbstractProcess";
 
 /**
  * PluginManager handles discovery, loading, and lifecycle of kist plugins.
- * Supports both npm-installed plugins (@kist/plugin-*) and local plugins.
+ * Supports both npm-installed plugins (@getkist/plugin-*) and local plugins.
  */
 export class PluginManager extends AbstractProcess {
     // Parameters
@@ -52,7 +52,7 @@ export class PluginManager extends AbstractProcess {
 
     /**
      * Discovers and loads all available plugins from:
-     * - node_modules/@kist/plugin-*
+     * - node_modules/@getkist/plugin-*
      * - node_modules/kist-plugin-*
      * - Local plugins directory (if configured)
      */
@@ -63,7 +63,7 @@ export class PluginManager extends AbstractProcess {
         this.logInfo("Starting plugin discovery...");
 
         const prefixes = options?.pluginPrefixes || [
-            "@kist/action-",
+            "@getkist/action-",
             "kist-plugin-",
         ];
 
@@ -92,7 +92,7 @@ export class PluginManager extends AbstractProcess {
             });
 
             for (const dir of directories) {
-                // Check for scoped packages (@kist/plugin-*)
+                // Check for scoped packages (@getkist/plugin-*)
                 if (dir.isDirectory() && dir.name.startsWith("@")) {
                     await this.discoverScopedPlugins(
                         join(nodeModulesPath, dir.name),
@@ -120,7 +120,7 @@ export class PluginManager extends AbstractProcess {
     }
 
     /**
-     * Discovers plugins in scoped packages (@kist/*)
+     * Discovers plugins in scoped packages (@getkist/*)
      */
     private async discoverScopedPlugins(
         scopePath: string,
@@ -131,7 +131,7 @@ export class PluginManager extends AbstractProcess {
 
             for (const pkg of packages) {
                 for (const prefix of prefixes) {
-                    const scopePrefix = prefix.split("/")[1]; // Extract "plugin-" from "@kist/plugin-"
+                    const scopePrefix = prefix.split("/")[1]; // Extract "plugin-" from "@getkist/plugin-"
                     if (
                         pkg.isDirectory() &&
                         scopePrefix &&

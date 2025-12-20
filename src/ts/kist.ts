@@ -83,7 +83,7 @@ export class Kist extends AbstractProcess {
         // Initialize and discover plugins first
         const pluginManager = PluginManager.getInstance();
         await pluginManager.discoverPlugins({
-            pluginPrefixes: ["@kist/action-", "kist-plugin-"],
+            pluginPrefixes: ["@getkist/action-", "kist-plugin-"],
         });
 
         // Log loaded plugins

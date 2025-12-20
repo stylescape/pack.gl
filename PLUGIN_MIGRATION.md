@@ -32,17 +32,17 @@ These actions are moving to dedicated plugin packages:
 
 | Current Action             | New Plugin Package             | Install Command                               |
 | -------------------------- | ------------------------------ | --------------------------------------------- |
-| `StyleProcessingAction`    | `@kist/action-sass`            | `npm install -D @kist/action-sass`            |
-| `TypeScriptCompilerAction` | `@kist/action-typescript`      | `npm install -D @kist/action-typescript`      |
-| `JavaScriptMinifyAction`   | `@kist/action-terser`          | `npm install -D @kist/action-terser`          |
-| `SvgPackagerAction`        | `@kist/action-svg`             | `npm install -D @kist/action-svg`             |
-| `SvgReaderAction`          | `@kist/action-svg`             | `npm install -D @kist/action-svg`             |
-| `SvgSpriteAction`          | `@kist/action-svg`             | `npm install -D @kist/action-svg`             |
-| `SvgToPngAction`           | `@kist/action-svg`             | `npm install -D @kist/action-svg`             |
-| `LintAction`               | `@kist/action-lint`            | `npm install -D @kist/action-lint`            |
-| `DocumentationAction`      | `@kist/action-docs`            | `npm install -D @kist/action-docs`            |
-| `PackageManagerAction`     | `@kist/action-package-manager` | `npm install -D @kist/action-package-manager` |
-| `RunScriptAction`          | `@kist/action-scripts`         | `npm install -D @kist/action-scripts`         |
+| `StyleProcessingAction`    | `@getkist/action-sass`            | `npm install -D @getkist/action-sass`            |
+| `TypeScriptCompilerAction` | `@getkist/action-typescript`      | `npm install -D @getkist/action-typescript`      |
+| `JavaScriptMinifyAction`   | `@getkist/action-terser`          | `npm install -D @getkist/action-terser`          |
+| `SvgPackagerAction`        | `@getkist/action-svg`             | `npm install -D @getkist/action-svg`             |
+| `SvgReaderAction`          | `@getkist/action-svg`             | `npm install -D @getkist/action-svg`             |
+| `SvgSpriteAction`          | `@getkist/action-svg`             | `npm install -D @getkist/action-svg`             |
+| `SvgToPngAction`           | `@getkist/action-svg`             | `npm install -D @getkist/action-svg`             |
+| `LintAction`               | `@getkist/action-lint`            | `npm install -D @getkist/action-lint`            |
+| `DocumentationAction`      | `@getkist/action-docs`            | `npm install -D @getkist/action-docs`            |
+| `PackageManagerAction`     | `@getkist/action-package-manager` | `npm install -D @getkist/action-package-manager` |
+| `RunScriptAction`          | `@getkist/action-scripts`         | `npm install -D @getkist/action-scripts`         |
 
 ## Migration Timeline
 
@@ -103,19 +103,19 @@ Based on your configuration, install the necessary plugins:
 
 ```bash
 # For TypeScript compilation
-npm install --save-dev @kist/action-typescript
+npm install --save-dev @getkist/action-typescript
 
 # For Sass/SCSS processing
-npm install --save-dev @kist/action-sass
+npm install --save-dev @getkist/action-sass
 
 # For SVG operations
-npm install --save-dev @kist/action-svg
+npm install --save-dev @getkist/action-svg
 
 # For JavaScript minification
-npm install --save-dev @kist/action-terser
+npm install --save-dev @getkist/action-terser
 
 # For linting
-npm install --save-dev @kist/action-lint
+npm install --save-dev @getkist/action-lint
 ```
 
 ### Step 3: No Configuration Changes Needed!
@@ -148,9 +148,9 @@ You should see output like:
 ```
 [INFO] Initializing plugin system...
 [INFO] Loaded 3 plugin(s):
-[INFO]   - @kist/action-typescript v1.0.0 (1 actions)
-[INFO]   - @kist/action-sass v1.0.0 (1 actions)
-[INFO]   - @kist/action-svg v1.0.0 (4 actions)
+[INFO]   - @getkist/action-typescript v1.0.0 (1 actions)
+[INFO]   - @getkist/action-sass v1.0.0 (1 actions)
+[INFO]   - @getkist/action-svg v1.0.0 (4 actions)
 ```
 
 ## Automated Migration Tool
@@ -179,13 +179,13 @@ Found 3 plugin actions in use:
   - SvgPackagerAction (used in 1 step)
 
 Required plugins:
-  @kist/action-typescript
-  @kist/action-sass
-  @kist/action-svg
+  @getkist/action-typescript
+  @getkist/action-sass
+  @getkist/action-svg
 
 Run the following command to install:
 
-  npm install --save-dev @kist/action-typescript @kist/action-sass @kist/action-svg
+  npm install --save-dev @getkist/action-typescript @getkist/action-sass @getkist/action-svg
 
 Or automatically install with:
 
@@ -212,9 +212,9 @@ Or automatically install with:
 {
     "devDependencies": {
         "kist": "^0.2.0",
-        "@kist/action-typescript": "^1.0.0",
-        "@kist/action-sass": "^1.0.0",
-        "@kist/action-terser": "^1.0.0"
+        "@getkist/action-typescript": "^1.0.0",
+        "@getkist/action-sass": "^1.0.0",
+        "@getkist/action-terser": "^1.0.0"
     }
 }
 ```
@@ -261,7 +261,7 @@ If you only use core actions (file operations, templates), no plugins are needed
 {
     "devDependencies": {
         "kist": "^0.2.0",
-        "@kist/action-svg": "^1.0.0"
+        "@getkist/action-svg": "^1.0.0"
     }
 }
 ```
@@ -285,7 +285,7 @@ steps:
 
 ```bash
 # Install the required plugin
-npm install --save-dev @kist/action-typescript
+npm install --save-dev @getkist/action-typescript
 
 # Configuration stays the same
 ```
@@ -299,7 +299,7 @@ npm install --save-dev @kist/action-typescript
 npm install kist
 
 # After: ~20MB (core only)
-npm install kist @kist/action-sass
+npm install kist @getkist/action-sass
 ```
 
 ### 2. Smaller Bundle Size
@@ -317,8 +317,8 @@ Plugins can be updated independently:
 ```json
 {
     "kist": "^1.0.0",
-    "@kist/action-typescript": "^2.0.0", // Updated separately
-    "@kist/action-sass": "^1.5.0"
+    "@getkist/action-typescript": "^2.0.0", // Updated separately
+    "@getkist/action-sass": "^1.5.0"
 }
 ```
 
@@ -344,7 +344,7 @@ npm install --save-dev @mycompany/kist-plugin-custom
 **Solution:**
 
 ```bash
-npm install --save-dev @kist/action-typescript
+npm install --save-dev @getkist/action-typescript
 ```
 
 ### Action Name Changed
@@ -364,13 +364,13 @@ action: TypeScriptCompiler
 Ensure compatible versions:
 
 ```bash
-npm list kist @kist/action-*
+npm list kist @getkist/action-*
 ```
 
 If conflicts exist:
 
 ```bash
-npm install --save-dev kist@latest @kist/action-typescript@latest
+npm install --save-dev kist@latest @getkist/action-typescript@latest
 ```
 
 ### Plugin Not Loading
@@ -383,7 +383,7 @@ kist --verbose
 
 Ensure plugin naming follows conventions:
 
-- ✅ `@kist/action-typescript`
+- ✅ `@getkist/action-typescript`
 - ✅ `kist-plugin-custom`
 - ❌ `typescript-plugin` (won't auto-discover)
 
