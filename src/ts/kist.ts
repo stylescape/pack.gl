@@ -6,6 +6,7 @@ import { AbstractProcess } from "./core/abstract/AbstractProcess";
 import { ConfigStore } from "./core/config/ConfigStore";
 import { ActionRegistry } from "./core/pipeline/ActionRegistry";
 import { PipelineManager } from "./core/pipeline/PipelineManager";
+import { PluginManager } from "./core/plugin/PluginManager";
 import { LiveServer } from "./live/LiveServer";
 import { LiveWatcher } from "./live/LiveWatcher";
 
@@ -50,7 +51,7 @@ export class Kist extends AbstractProcess {
 
         try {
             // Initialize the ActionRegistry with available actions
-            this.initializeActionRegistry();
+            await this.initializeActionRegistry();
 
             // Create and run the PipelineManager
             const liveReloadEnabled = ConfigStore.getInstance().get<boolean>(
@@ -76,7 +77,29 @@ export class Kist extends AbstractProcess {
      * Initializes the ActionRegistry with available actions.
      * Automatically registers core actions and discovers external plugins.
      */
-    private initializeActionRegistry(): void {
+    private async initializeActionRegistry(): Promise<void> {
+        this.logInfo("Initializing plugin system...");
+
+        // Initialize and discover plugins first
+        const pluginManager = PluginManager.getInstance();
+        await pluginManager.discoverPlugins({
+            pluginPrefixes: ["@kist/action-", "kist-plugin-"],
+        });
+
+        // Log loaded plugins
+        const plugins = pluginManager.getLoadedPlugins();
+        if (plugins.length > 0) {
+            this.logInfo(`Loaded ${plugins.length} plugin(s):`);
+            plugins.forEach((plugin) => {
+                this.logInfo(
+                    `  - ${plugin.name} v${plugin.version} (${plugin.actions.length} actions)`,
+                );
+            });
+        } else {
+            this.logDebug("No external plugins found.");
+        }
+
+        // Initialize ActionRegistry (will register core + plugin actions)
         this.logInfo("Initializing ActionRegistry...");
         ActionRegistry.initialize();
         this.logInfo("ActionRegistry initialized successfully.");

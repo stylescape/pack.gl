@@ -22,3 +22,28 @@ export * from "./types";
 
 // CLI Functions (if required programmatically)
 export * from "./cli.js";
+
+// ============================================================================
+// Plugin System Exports
+// ============================================================================
+
+// Core plugin interfaces and types
+export { ActionInterface } from "./interface/ActionInterface";
+export { ActionPlugin } from "./interface/ActionPlugin";
+export { PluginMetadata } from "./interface/PluginMetadata";
+
+// Plugin management
+export { PluginManager } from "./core/plugin/PluginManager";
+
+// Action system
+export { Action } from "./core/pipeline/Action";
+export { ActionRegistry } from "./core/pipeline/ActionRegistry";
+
+// Configuration for plugin developers
+export {
+    CORE_ACTIONS,
+    PLUGIN_ACTIONS,
+    PLUGIN_PACKAGES,
+    type CoreActionName,
+    type PluginActionName,
+} from "./config/actions.config";

@@ -1,6 +1,6 @@
 {
     "name": "kist",
-    "description": "Package Pipeline Processor",
+    "description": "Lightweight Package Pipeline Processor with Plugin Architecture",
     "version": "0.1.45",
     "config": {
         "version_short": "0.1"
@@ -14,7 +14,11 @@
         "compile",
         "compiler",
         "framework",
-        "web"
+        "web",
+        "plugin-architecture",
+        "pipeline",
+        "build-tool",
+        "automation"
     ],
     "homepage": "https://www.getkist.com/",
     "author": "Lars van Vianen <lars@vianen.com> (https://vianen.com)",
@@ -145,7 +149,9 @@
         "bin/js/**",
         "README.md",
         "LICENSE",
-        "CHANGELOG.md"
+        "CHANGELOG.md",
+        "PLUGIN_DEVELOPMENT.md",
+        "PLUGIN_MIGRATION.md"
     ],
     "jest": {
         "transform": {

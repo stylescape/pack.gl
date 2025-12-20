@@ -2,12 +2,10 @@
 // Import
 // ============================================================================
 
-import { readdirSync } from "fs";
-import { join } from "path";
 import { coreActions } from "../../actions/CoreActions";
 import { ActionInterface } from "../../interface/ActionInterface";
-import { ActionPlugin } from "../../interface/ActionPlugin";
 import { AbstractProcess } from "../abstract/AbstractProcess";
+import { PluginManager } from "../plugin/PluginManager";
 
 // ============================================================================
 // Class
@@ -46,7 +44,8 @@ export class ActionRegistry extends AbstractProcess {
         this.registry = new Map();
         // Automatically register core actions
         this.registerCoreActions();
-        this.discoverPlugins();
+        // Register plugin actions via PluginManager
+        this.registerPluginActions();
         this.logInfo("ActionRegistry initialized.");
     }
 
@@ -169,51 +168,27 @@ export class ActionRegistry extends AbstractProcess {
         this.logInfo("Core actions registered successfully.");
     }
 
-    private discoverPlugins(): void {
-        this.logInfo("Discovering external plugins...");
+    /**
+     * Registers actions from loaded plugins via PluginManager.
+     * This method integrates the plugin system with the action registry.
+     */
+    private registerPluginActions(): void {
+        const pluginManager = PluginManager.getInstance();
+        const pluginActions = pluginManager.getPluginActions();
 
-        const nodeModulesPath = join(process.cwd(), "node_modules");
-        const pluginPrefix = "@kist/plugin-";
-
-        try {
-            const directories = readdirSync(nodeModulesPath, {
-                withFileTypes: true,
-            });
-
-            for (const dir of directories) {
-                if (dir.isDirectory() && dir.name.startsWith(pluginPrefix)) {
-                    const pluginPath = join(nodeModulesPath, dir.name);
-                    // Dynamically import plugin (fire and forget)
-                    import(pluginPath)
-                        .then((pluginModule) => {
-                            const plugin: ActionPlugin = pluginModule.default;
-
-                            if (
-                                plugin &&
-                                typeof plugin.registerActions === "function"
-                            ) {
-                                const actions = plugin.registerActions();
-                                for (const [
-                                    _actionName,
-                                    actionClass,
-                                ] of Object.entries(actions)) {
-                                    this.registerAction(actionClass);
-                                }
-                            }
-                        })
-                        .catch((err) => {
-                            this.logError(
-                                `Failed to load plugin ${dir.name}:`,
-                                err,
-                            );
-                        });
-                }
+        for (const [actionName, actionClass] of pluginActions.entries()) {
+            try {
+                this.registerAction(actionClass);
+                this.logDebug(`Registered plugin action: ${actionName}`);
+            } catch (error) {
+                this.logError(
+                    `Failed to register plugin action ${actionName}:`,
+                    error,
+                );
             }
-
-            this.logInfo("Plugins loaded successfully.");
-        } catch (error) {
-            this.logError("Failed to discover plugins.", error);
         }
+
+        this.logInfo(`Registered ${pluginActions.size} actions from plugins.`);
     }
 
     /**
