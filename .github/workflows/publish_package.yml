@@ -139,10 +139,11 @@ jobs:
 
       -
         name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           registry-url: https://registry.npmjs.org/
+          scope: '@getkist'
 
       -
         name: Download build.zip
@@ -155,8 +156,22 @@ jobs:
         run: unzip -q -o build.zip
 
       -
+        name: Verify package.json before publish
+        run: |
+          cat dist/package.json | head -20
+          echo "---"
+          npm pkg get bin
+
+      -
+        name: Fix bin path in dist package.json
+        run: |
+          cd dist
+          npm pkg set bin="js/cli.js"
+
+      -
         name: Publish NPM
         run: |
+          cd dist
           npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_NPM_TOKEN }}
