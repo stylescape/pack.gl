@@ -4,7 +4,7 @@
 # Base Image
 # =============================================================================
 
-FROM ghcr.io/stylescape/stylescape-devcontainer/devcontainer:latest
+FROM ghcr.io/kist/kist-devcontainer/devcontainer:latest
 
 
 # Copy package.json and package-lock.json

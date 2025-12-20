@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   stylescape-dev:
-    image: ghcr.io/stylescape/stylescape-devcontainer/devcontainer:latest
-    container_name: stylescape-dev-container
+    image: ghcr.io/stylescape/kist-devcontainer/devcontainer:latest
+    container_name: kist-dev-container
     environment:
       NODE_ENV: development
       # Add other environment variables here if needed

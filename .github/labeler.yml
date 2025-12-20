@@ -12,6 +12,10 @@
   - changed-files:
     - any-glob-to-any-file: ['.github/**/*']
 
+'ci':
+  - changed-files:
+    - any-glob-to-any-file: ['.github/workflows/**/*']
+
 'configuration':
   - changed-files:
     - any-glob-to-any-file: ['**/*config.*', '**/*.config.*', '.editorconfig', '.nvmrc', '.npmrc', 'tsconfig.json']
