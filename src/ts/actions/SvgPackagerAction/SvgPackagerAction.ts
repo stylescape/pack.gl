@@ -5,7 +5,7 @@
 import * as fs from "fs/promises";
 import * as glob from "glob";
 import * as path from "path";
-import SVGO, { loadConfig } from "svgo";
+import { loadConfig, optimize } from "svgo";
 import { Action } from "../../core/pipeline/Action";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
 
@@ -101,7 +101,7 @@ export class SvgPackagerAction extends Action {
         svgContent: string,
     ): Promise<string> {
         const config = await loadConfig(svgoConfigPath);
-        const result = await SVGO.optimize(svgContent, { ...config });
+        const result = await optimize(svgContent, { ...config });
         return result.data.trim();
     }
 
