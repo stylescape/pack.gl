@@ -76,6 +76,7 @@ jobs:
 
     permissions:
       id-token: write
+      contents: read
 
     steps:
 
@@ -89,6 +90,13 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: https://registry.npmjs.org/
+
+      -
+        name: Upgrade npm to 11.5.1+
+        run: |
+          npm -v
+          npm i -g npm@^11.5.1
+          npm -v
 
       -
         name: Download build.zip
@@ -112,6 +120,7 @@ jobs:
         run: |
           npm config get //registry.npmjs.org/:_authToken || true
           npm config get provenance || true
+          npm -v
 
       -
         name: Fix bin path in dist package.json
@@ -125,8 +134,7 @@ jobs:
           cd dist
           npm publish --access public --provenance
         env:
-          NPM_CONFIG_USERCONFIG: /dev/null
-          NPM_CONFIG_GLOBALCONFIG: /dev/null
+          NODE_AUTH_TOKEN: ""
 
 
 # =============================================================================
