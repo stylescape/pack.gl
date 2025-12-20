@@ -87,7 +87,7 @@ export class DirectoryCleanAction extends Action {
                 const stat = await fs.promises.lstat(curPath);
                 if (stat.isDirectory()) {
                     // Recursively clean subdirectory
-                    await fs.promises.rmdir(curPath, { recursive: true });
+                    await fs.promises.rm(curPath, { recursive: true });
                     this.logInfo(`Deleted directory: ${relativePath}`);
                 } else {
                     // Delete file
