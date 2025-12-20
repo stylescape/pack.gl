@@ -1,0 +1,37 @@
+# Automatically label PRs based on file changes
+
+'documentation':
+  - changed-files:
+    - any-glob-to-any-file: ['**/*.md', 'doc/**/*', 'docs/**/*']
+
+'dependencies':
+  - changed-files:
+    - any-glob-to-any-file: ['package.json', 'package-lock.json', 'yarn.lock']
+
+'github-actions':
+  - changed-files:
+    - any-glob-to-any-file: ['.github/**/*']
+
+'configuration':
+  - changed-files:
+    - any-glob-to-any-file: ['**/*config.*', '**/*.config.*', '.editorconfig', '.nvmrc', '.npmrc', 'tsconfig.json']
+
+'tests':
+  - changed-files:
+    - any-glob-to-any-file: ['**/*.test.ts', '**/*.spec.ts', 'src/tests/**/*', 'scripts/run-tests.ts']
+
+'typescript':
+  - changed-files:
+    - any-glob-to-any-file: ['**/*.ts', 'tsconfig.json']
+
+'source':
+  - changed-files:
+    - any-glob-to-any-file: ['src/**/*']
+
+'scripts':
+  - changed-files:
+    - any-glob-to-any-file: ['scripts/**/*']
+
+'build':
+  - changed-files:
+    - any-glob-to-any-file: ['bin/**/*']

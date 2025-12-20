@@ -21,14 +21,16 @@ export default [
             ".cache/**",
             "node_modules/**",
             "coverage/**",
-            "bin/js/**",
+            "bin/**",
             "public/**",
             "tmp/**",
             "**/tests/**",
+            "scripts/**",
         ],
     },
 
     {
+        files: ["src/**/*.ts"],
         languageOptions: {
             parser: tseslint.parser,
             parserOptions: {

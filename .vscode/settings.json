@@ -989,6 +989,7 @@
     "docker.commands.run": "${containerCommand} run --rm -d ${exposedPorts} ${tag}",
     "docker.commands.runInteractive": "${containerCommand} run --rm -it ${exposedPorts} ${tag}",
     "docker.composeCommand": "",
-    "docker.containers.groupBy": "Compose Project Name"
+    "docker.containers.groupBy": "Compose Project Name",
+    "containers.commands.build": "${containerCommand} build --pull --rm -f \"${dockerfile}\" -t ${tag} \"${context}\""
     // ...
 }
