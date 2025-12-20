@@ -125,16 +125,16 @@ package.json                     # Added test/benchmark scripts
 
 ## Repositories Updated
 
-✅ kist-action-jinja  
-✅ kist-action-test  
-✅ kist-action-docs  
-✅ kist-action-sass  
-✅ kist-action-typescript  
-✅ kist-action-terser  
-✅ kist-action-lint  
-✅ kist-action-scripts  
-✅ kist-action-svg  
-✅ kist-action-template  
+✅ kist-action-jinja
+✅ kist-action-test
+✅ kist-action-docs
+✅ kist-action-sass
+✅ kist-action-typescript
+✅ kist-action-terser
+✅ kist-action-lint
+✅ kist-action-scripts
+✅ kist-action-svg
+✅ kist-action-template
 ✅ kist-action-package-manager
 
 ## Test Execution Flow
