@@ -1,7 +1,7 @@
 {
     "name": "kist",
     "description": "Lightweight Package Pipeline Processor with Plugin Architecture",
-    "version": "0.1.57",
+    "version": "0.1.58",
     "config": {
         "version_short": "0.1"
     },
