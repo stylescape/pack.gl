@@ -42,8 +42,8 @@ export { ActionRegistry } from "./core/pipeline/ActionRegistry";
 // Configuration for plugin developers
 export {
     CORE_ACTIONS,
-    PLUGIN_ACTIONS,
-    PLUGIN_PACKAGES,
+    MIGRATED_ACTIONS,
+    MIGRATED_PACKAGES,
     type CoreActionName,
-    type PluginActionName,
+    type MigratedActionName,
 } from "./config/actions.config";

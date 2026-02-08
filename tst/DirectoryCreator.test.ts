@@ -4,7 +4,7 @@
 
 import fs from "fs/promises";
 import path from "path";
-import DirectoryCreator from "../ts/class/directory/DirectoryCreator";
+import DirectoryCreator from "../src/ts/class/directory/DirectoryCreator";
 
 // ============================================================================
 // Tests

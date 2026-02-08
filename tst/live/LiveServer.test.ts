@@ -5,7 +5,7 @@
 import fs from "fs";
 import request from "supertest";
 import { WebSocket } from "ws";
-import { LiveServer } from "../../ts/live/LiveServer";
+import { LiveServer } from "../../src/ts/live/LiveServer";
 
 // ============================================================================
 // Mock Setup

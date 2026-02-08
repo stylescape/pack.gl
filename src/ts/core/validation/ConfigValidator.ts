@@ -64,9 +64,13 @@ export class ConfigValidator extends AbstractValidator<ConfigInterface> {
         value: ConfigInterface[K],
     ): void {
         switch (key) {
+            case "extends":
+                // Already resolved by ConfigLoader, skip validation
+                break;
+
             case "stages":
                 if (Array.isArray(value)) {
-                    this.validateStages(value); // Validate only if it's an array
+                    this.validateStages(value as ConfigInterface["stages"]); // Validate only if it's an array
                 } else {
                     this.throwValidationError(
                         key,
@@ -74,6 +78,12 @@ export class ConfigValidator extends AbstractValidator<ConfigInterface> {
                         "'stages' must be an array.",
                     );
                 }
+                break;
+
+            case "metadata":
+            case "options":
+            case "validateConfig":
+                // Optional properties - no strict validation required
                 break;
 
             default:

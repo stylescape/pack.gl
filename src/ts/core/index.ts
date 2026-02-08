@@ -14,6 +14,13 @@ export { PipelineManager } from "./pipeline/PipelineManager";
 export { Stage } from "./pipeline/Stage";
 export { Step } from "./pipeline/Step";
 
+// Cache Modules
+export { FileCache } from "./cache/FileCache";
+export { BuildCache } from "./cache/BuildCache";
+
+// Progress Modules
+export { ProgressReporter, createFileProgress, createBuildProgress } from "./progress/ProgressReporter";
+
 // Utility Functions and Modules
 // If there are reusable utilities, add them here.
 // Example:

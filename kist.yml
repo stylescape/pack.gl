@@ -9,6 +9,8 @@
 options:
 
     mode: development
+
+    # Live reload configuration
     live:
         # enabled: true
         enabled: false
@@ -19,7 +21,27 @@ options:
             - config/**
         ignoredPaths:
             - node_modules/**
+
     logLevel: debug
+
+    # Build caching configuration (new)
+    cache:
+        enabled: true
+        cacheDir: ".kist-cache"
+        # maxCacheSize: 1073741824  # 1GB
+        # ttl: 604800000            # 7 days
+        persistent: true
+
+    # Performance tuning options (new)
+    performance:
+        maxConcurrentStages: 4
+        maxConcurrentSteps: 8
+        parallelProcessing: true
+        streamingThreshold: 5242880  # 5MB
+        showProgress: true
+
+    # Error handling
+    haltOnFailure: true
 
 
 # =============================================================================
@@ -33,6 +55,7 @@ stages:
     -
         name: Preprocessing
         description: "Before starting a new build."
+        parallel: false  # Execute steps sequentially (default)
 
         steps:
 
@@ -60,7 +83,7 @@ stages:
             #         outputFile: "./dist/styles/additional.css"
             #         styleOption: "expanded"
 
-            # Copy Files
+            # Copy Files (using new batch copy with caching)
             # -----------------------------------------------------------------
             -
                 name: CopyLICENSE
@@ -68,12 +91,14 @@ stages:
                 options:
                     srcFile: "./LICENSE"
                     destDir: "./dist"
+                    useCache: true
             -
                 name: CopyREADME
                 action: FileCopyAction
                 options:
                     srcFile: "./README.md"
                     destDir: "./dist"
+                    useCache: true
 
             # Copy Dirs
             # -----------------------------------------------------------------

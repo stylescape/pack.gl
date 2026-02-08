@@ -3,45 +3,44 @@
 // ============================================================================
 
 /**
- * Defines which actions are considered "core" and will remain in the main
- * kist package. All other actions should be moved to separate plugin packages.
+ * Defines which actions are in the main kist package vs. separate plugins.
  *
- * Core Actions (Lightweight essentials):
+ * Core Actions (in main kist package):
  * - Directory operations (create, copy, clean)
  * - File operations (copy, rename)
  * - Version management
- * - Template rendering (lightweight)
+ * - TypeScript compilation
+ * - Documentation generation
+ * - Package management
+ * - Script running
  *
- * Plugin Actions (Move to separate repos):
+ * Migrated to Plugin Packages:
  * - StyleProcessingAction -> @getkist/action-sass
- * - TypeScriptCompilerAction -> @getkist/action-typescript
  * - JavaScriptMinifyAction -> @getkist/action-terser
  * - SvgPackagerAction -> @getkist/action-svg
  * - SvgSpriteAction -> @getkist/action-svg
  * - SvgToPngAction -> @getkist/action-svg
  * - SvgReaderAction -> @getkist/action-svg
- * - LintAction -> @getkist/action-lint
- * - DocumentationAction -> @getkist/action-docs
- * - PackageManagerAction -> @getkist/action-package-manager
- * - RunScriptAction -> @getkist/action-scripts
+ * - LintAction -> @getkist/action-eslint
+ * - TemplateRenderAction -> @getkist/action-nunjucks
  */
 
 export const CORE_ACTIONS = [
     "DirectoryCleanAction",
     "DirectoryCopyAction",
     "DirectoryCreateAction",
+    "DocumentationAction",
     "FileCopyAction",
     "FileRenameAction",
-    "TemplateRenderAction",
+    "PackageManagerAction",
+    "RunScriptAction",
+    "TypeScriptCompilerAction",
     "VersionWriteAction",
 ] as const;
 
-export const PLUGIN_ACTIONS = [
+export const MIGRATED_ACTIONS = [
     // @getkist/action-sass
     "StyleProcessingAction",
-
-    // @getkist/action-typescript
-    "TypeScriptCompilerAction",
 
     // @getkist/action-terser
     "JavaScriptMinifyAction",
@@ -52,27 +51,21 @@ export const PLUGIN_ACTIONS = [
     "SvgSpriteAction",
     "SvgToPngAction",
 
-    // @getkist/action-lint
+    // @getkist/action-eslint
     "LintAction",
 
-    // @getkist/action-docs
-    "DocumentationAction",
-
-    // @getkist/action-package-manager
-    "PackageManagerAction",
-
-    // @getkist/action-scripts
-    "RunScriptAction",
+    // @getkist/action-nunjucks
+    "TemplateRenderAction",
 ] as const;
 
 export type CoreActionName = (typeof CORE_ACTIONS)[number];
-export type PluginActionName = (typeof PLUGIN_ACTIONS)[number];
+export type MigratedActionName = (typeof MIGRATED_ACTIONS)[number];
 
 /**
- * Plugin package mappings for migration guide
+ * Plugin package mappings - use these packages for the migrated actions
  */
-export const PLUGIN_PACKAGES: Record<
-    PluginActionName,
+export const MIGRATED_PACKAGES: Record<
+    MigratedActionName,
     {
         package: string;
         npm: string;
@@ -83,11 +76,6 @@ export const PLUGIN_PACKAGES: Record<
         package: "@getkist/action-sass",
         npm: "npm install --save-dev @getkist/action-sass",
         github: "https://github.com/getkist/kist-action-sass",
-    },
-    TypeScriptCompilerAction: {
-        package: "@getkist/action-typescript",
-        npm: "npm install --save-dev @getkist/action-typescript",
-        github: "https://github.com/getkist/kist-action-typescript",
     },
     JavaScriptMinifyAction: {
         package: "@getkist/action-terser",
@@ -115,23 +103,13 @@ export const PLUGIN_PACKAGES: Record<
         github: "https://github.com/getkist/kist-action-svg",
     },
     LintAction: {
-        package: "@getkist/action-lint",
-        npm: "npm install --save-dev @getkist/action-lint",
-        github: "https://github.com/getkist/kist-action-lint",
+        package: "@getkist/action-eslint",
+        npm: "npm install --save-dev @getkist/action-eslint",
+        github: "https://github.com/getkist/kist-action-eslint",
     },
-    DocumentationAction: {
-        package: "@getkist/action-docs",
-        npm: "npm install --save-dev @getkist/action-docs",
-        github: "https://github.com/getkist/kist-action-docs",
-    },
-    PackageManagerAction: {
-        package: "@getkist/action-package-manager",
-        npm: "npm install --save-dev @getkist/action-package-manager",
-        github: "https://github.com/getkist/kist-action-package-manager",
-    },
-    RunScriptAction: {
-        package: "@getkist/action-scripts",
-        npm: "npm install --save-dev @getkist/action-scripts",
-        github: "https://github.com/getkist/kist-action-scripts",
+    TemplateRenderAction: {
+        package: "@getkist/action-nunjucks",
+        npm: "npm install --save-dev @getkist/action-nunjucks",
+        github: "https://github.com/getkist/kist-action-nunjucks",
     },
 };

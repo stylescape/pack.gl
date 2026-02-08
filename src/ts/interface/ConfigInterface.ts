@@ -18,6 +18,26 @@ import { StageInterface } from "./StageInterface";
  */
 export interface ConfigInterface {
     /**
+     * Optional path(s) to parent configuration file(s) to inherit from.
+     * Child configuration values override parent values. Stages are merged
+     * by name (child stage with same name replaces parent stage), or appended
+     * if no matching name exists.
+     *
+     * @example
+     * ```yaml
+     * extends: "./kist.base.yml"
+     * ```
+     *
+     * @example
+     * ```yaml
+     * extends:
+     *   - "./kist.base.yml"
+     *   - "./kist.dev-defaults.yml"
+     * ```
+     */
+    extends?: string | string[];
+
+    /**
      * Optional metadata that provides additional context or descriptive
      * information about the pipeline configuration. This can include the
      * pipeline name, version, author, or any other relevant details. Useful

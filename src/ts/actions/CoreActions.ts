@@ -11,20 +11,9 @@ import { DocumentationAction } from "../actions/DocumentationAction";
 import { FileCopyAction } from "../actions/FileCopyAction";
 import { FileRenameAction } from "../actions/FileRenameAction";
 
-import { JavaScriptMinifyAction } from "../actions/JavaScriptMinifyAction";
-import { LintAction } from "../actions/LintAction";
-
 import { PackageManagerAction } from "../actions/PackageManagerAction";
 import { RunScriptAction } from "../actions/RunScriptAction";
 
-import { StyleProcessingAction } from "../actions/StyleProcessingAction";
-
-import { SvgPackagerAction } from "../actions/SvgPackagerAction";
-import { SvgReaderAction } from "../actions/SvgReaderAction";
-import { SvgSpriteAction } from "../actions/SvgSpriteAction";
-import { SvgToPngAction } from "../actions/SvgToPngAction";
-
-import { TemplateRenderAction } from "../actions/TemplateRenderAction";
 import { TypeScriptCompilerAction } from "../actions/TypeScriptCompilerAction";
 
 import { VersionWriteAction } from "../actions/VersionWriteAction";
@@ -38,6 +27,18 @@ import { ActionInterface } from "../interface/ActionInterface";
 /**
  * A record of core actions, mapped by their unique `name` property.
  * Automatically derives names from the action classes.
+ * 
+ * Note: Additional actions are available in separate @getkist/action-* packages:
+ * - @getkist/action-eslint - ESLint linting
+ * - @getkist/action-jest - Jest test runner
+ * - @getkist/action-nunjucks - Nunjucks/Jinja templating
+ * - @getkist/action-postcss - PostCSS processing
+ * - @getkist/action-prettier - Prettier formatting
+ * - @getkist/action-sass - SASS/SCSS compilation
+ * - @getkist/action-svg - SVG sprite generation and optimization
+ * - @getkist/action-terser - JavaScript minification
+ * - @getkist/action-tsdown - tsdown bundling
+ * - @getkist/action-tsup - tsup bundling
  */
 export const coreActions: Record<string, new () => ActionInterface> = {
     [new DirectoryCleanAction().name]: DirectoryCleanAction,
@@ -49,19 +50,9 @@ export const coreActions: Record<string, new () => ActionInterface> = {
     [new FileCopyAction().name]: FileCopyAction,
     [new FileRenameAction().name]: FileRenameAction,
 
-    [new JavaScriptMinifyAction().name]: JavaScriptMinifyAction,
-    [new LintAction().name]: LintAction,
-
     [new PackageManagerAction().name]: PackageManagerAction,
     [new RunScriptAction().name]: RunScriptAction,
-    [new StyleProcessingAction().name]: StyleProcessingAction,
 
-    [new SvgPackagerAction().name]: SvgPackagerAction,
-    [new SvgReaderAction().name]: SvgReaderAction,
-    [new SvgSpriteAction().name]: SvgSpriteAction,
-    [new SvgToPngAction().name]: SvgToPngAction,
-
-    [new TemplateRenderAction().name]: TemplateRenderAction,
     [new TypeScriptCompilerAction().name]: TypeScriptCompilerAction,
 
     [new VersionWriteAction().name]: VersionWriteAction,

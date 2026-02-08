@@ -93,4 +93,27 @@ export interface StageInterface {
         before?: () => Promise<void> | void;
         after?: () => Promise<void> | void;
     };
+
+    /**
+     * Whether to execute steps within this stage in parallel.
+     * When true, all steps in the stage will execute concurrently for
+     * improved performance. Only use this when steps are independent
+     * and don't share resources.
+     * Default: false (sequential execution).
+     */
+    parallel?: boolean;
+
+    /**
+     * Maximum number of steps to run concurrently when parallel is enabled.
+     * Useful for limiting resource usage when there are many steps.
+     * Default: unlimited (all steps run simultaneously).
+     */
+    maxConcurrentSteps?: number;
+
+    /**
+     * Whether to skip this stage if inputs haven't changed since last build.
+     * Requires caching to be enabled in global options.
+     * Default: false.
+     */
+    cacheEnabled?: boolean;
 }

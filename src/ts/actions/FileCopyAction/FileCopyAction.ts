@@ -4,8 +4,17 @@
 
 import fs from "fs";
 import path from "path";
+import { pipeline } from "stream/promises";
 import { Action } from "../../core/pipeline/Action";
+import { FileCache } from "../../core/cache/FileCache";
 import { ActionOptionsType } from "../../types/ActionOptionsType";
+
+// ============================================================================
+// Constants
+// ============================================================================
+
+/** Threshold for using streaming copy (5MB) */
+const STREAMING_THRESHOLD = 5 * 1024 * 1024;
 
 // ============================================================================
 // Classes
@@ -16,13 +25,25 @@ import { ActionOptionsType } from "../../types/ActionOptionsType";
  * location to a destination directory. This action handles file path
  * resolution and ensures that existing files in the destination can be
  * replaced if necessary.
+ *
+ * Performance features:
+ * - Uses streaming for large files to reduce memory usage
+ * - Supports file caching to skip unchanged files
+ * - Parallel batch copy support
  */
 export class FileCopyAction extends Action {
     // Parameters
     // ========================================================================
 
+    private fileCache: FileCache;
+
     // Constructor
     // ========================================================================
+
+    constructor() {
+        super();
+        this.fileCache = FileCache.getInstance();
+    }
 
     // Methods
     // ========================================================================
@@ -35,32 +56,139 @@ export class FileCopyAction extends Action {
      * copied, or rejects with an error if the action fails.
      */
     async execute(options: ActionOptionsType): Promise<void> {
-        const srcFile = options.srcFile as string;
+        const srcFile = options.srcFile as string | undefined;
+        const srcFiles = options.srcFiles as string[] | undefined;
         const destDir = options.destDir as string;
+        const useCache = options.useCache as boolean | undefined;
+        const parallel = options.parallel as boolean | undefined;
 
-        if (!srcFile || !destDir) {
-            throw new Error("Missing required options: srcFile or destDir.");
+        if ((!srcFile && !srcFiles) || !destDir) {
+            throw new Error("Missing required options: srcFile/srcFiles or destDir.");
+        }
+
+        // Handle batch copy
+        if (srcFiles && srcFiles.length > 0) {
+            await this.copyMultipleFiles(srcFiles, destDir, { useCache, parallel });
+            return;
+        }
+
+        // Handle single file copy
+        if (srcFile) {
+            await this.copySingleFile(srcFile, destDir, { useCache });
+        }
+    }
+
+    /**
+     * Copies a single file with optional caching.
+     */
+    private async copySingleFile(
+        srcFile: string,
+        destDir: string,
+        options: { useCache?: boolean } = {}
+    ): Promise<void> {
+        // Check cache if enabled
+        if (options.useCache) {
+            const hasChanged = await this.fileCache.hasFileChanged(srcFile);
+            if (!hasChanged) {
+                this.logDebug(`Skipping unchanged file: ${srcFile}`);
+                return;
+            }
         }
 
         this.logInfo(`Copying file from ${srcFile} to ${destDir}.`);
 
         try {
             await this.copyFileToDirectory(srcFile, destDir);
-            this.logInfo(
-                `File copied successfully from ${srcFile} to ${destDir}.`,
-            );
+
+            // Update cache
+            if (options.useCache) {
+                await this.fileCache.updateFileEntry(srcFile);
+            }
+
+            this.logInfo(`File copied successfully from ${srcFile} to ${destDir}.`);
         } catch (error) {
-            this.logError(
-                `Error copying file from ${srcFile} to ${destDir}: ${error}`,
-            );
+            this.logError(`Error copying file from ${srcFile} to ${destDir}: ${error}`);
             throw error;
         }
     }
 
     /**
+     * Copies multiple files with optional parallel execution.
+     */
+    private async copyMultipleFiles(
+        srcFiles: string[],
+        destDir: string,
+        options: { useCache?: boolean; parallel?: boolean } = {}
+    ): Promise<void> {
+        const startTime = performance.now();
+        let filesToCopy = srcFiles;
+
+        // Filter unchanged files if caching is enabled
+        if (options.useCache) {
+            filesToCopy = await this.fileCache.getChangedFiles(srcFiles);
+            const skipped = srcFiles.length - filesToCopy.length;
+            if (skipped > 0) {
+                this.logInfo(`Skipping ${skipped} unchanged files.`);
+            }
+        }
+
+        if (filesToCopy.length === 0) {
+            this.logInfo("All files are up to date, nothing to copy.");
+            return;
+        }
+
+        this.logInfo(`Copying ${filesToCopy.length} files to ${destDir}.`);
+
+        try {
+            if (options.parallel) {
+                // Parallel copy with concurrency limit
+                await this.copyFilesInParallel(filesToCopy, destDir, 10);
+            } else {
+                // Sequential copy
+                for (const file of filesToCopy) {
+                    await this.copyFileToDirectory(file, destDir);
+                }
+            }
+
+            // Update cache for all copied files
+            if (options.useCache) {
+                await this.fileCache.updateFileEntries(filesToCopy);
+            }
+
+            const duration = performance.now() - startTime;
+            this.logInfo(`Copied ${filesToCopy.length} files in ${duration.toFixed(2)}ms.`);
+        } catch (error) {
+            this.logError(`Error copying files: ${error}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Copies files in parallel with concurrency control.
+     */
+    private async copyFilesInParallel(
+        srcFiles: string[],
+        destDir: string,
+        maxConcurrent: number = 10
+    ): Promise<void> {
+        const executing = new Set<Promise<void>>();
+
+        for (const srcFile of srcFiles) {
+            const copyPromise = this.copyFileToDirectory(srcFile, destDir)
+                .finally(() => executing.delete(copyPromise));
+            executing.add(copyPromise);
+
+            if (executing.size >= maxConcurrent) {
+                await Promise.race(executing);
+            }
+        }
+
+        await Promise.all(executing);
+    }
+
+    /**
      * Copies a file from a specified source to a destination directory.
-     * Handles file path resolution and ensures the destination directory
-     * exists.
+     * Uses streaming for large files to reduce memory usage.
      *
      * @param srcFile - The path of the source file to be copied.
      * @param destDir - The destination directory where the file should
@@ -82,12 +210,30 @@ export class FileCopyAction extends Action {
             const fileName = path.basename(srcFile);
             const destFilePath = path.join(destDir, fileName);
 
-            // Copy the file
-            await fs.promises.copyFile(srcFile, destFilePath);
+            // Check file size to determine copy method
+            const stat = await fs.promises.stat(srcFile);
+
+            if (stat.size > STREAMING_THRESHOLD) {
+                // Use streaming for large files
+                await this.streamCopyFile(srcFile, destFilePath);
+            } else {
+                // Use standard copy for smaller files
+                await fs.promises.copyFile(srcFile, destFilePath);
+            }
         } catch (error) {
             this.logError(`Error copying file: ${error}`);
             throw error;
         }
+    }
+
+    /**
+     * Copies a file using streams for memory-efficient handling of large files.
+     */
+    private async streamCopyFile(srcFile: string, destFile: string): Promise<void> {
+        const readStream = fs.createReadStream(srcFile);
+        const writeStream = fs.createWriteStream(destFile);
+
+        await pipeline(readStream, writeStream);
     }
 
     /**
