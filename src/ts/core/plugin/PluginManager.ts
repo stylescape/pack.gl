@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { readdirSync } from "fs";
+import { readdirSync, statSync } from "fs";
 import { join } from "path";
 import { ActionInterface } from "../../interface/ActionInterface";
 import { ActionPlugin } from "../../interface/ActionPlugin";
@@ -132,8 +132,12 @@ export class PluginManager extends AbstractProcess {
             for (const pkg of packages) {
                 for (const prefix of prefixes) {
                     const scopePrefix = prefix.split("/")[1]; // Extract "plugin-" from "@getkist/plugin-"
+                    // Check if entry is a directory or a symlink pointing to a directory
+                    const pkgPath = join(scopePath, pkg.name);
+                    const isDir = pkg.isDirectory() || 
+                        (pkg.isSymbolicLink() && statSync(pkgPath).isDirectory());
                     if (
-                        pkg.isDirectory() &&
+                        isDir &&
                         scopePrefix &&
                         pkg.name.startsWith(scopePrefix)
                     ) {

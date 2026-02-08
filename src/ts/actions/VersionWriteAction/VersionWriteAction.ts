@@ -131,7 +131,13 @@ export class VersionWriteAction extends Action {
     ): Promise<void> {
         try {
             const content = await fs.readFile(filePath, "utf8");
+            const endsWithNewline = content.endsWith("\n");
             const lines = content.split("\n");
+
+            // Remove empty string at end if file ended with newline
+            if (endsWithNewline && lines[lines.length - 1] === "") {
+                lines.pop();
+            }
 
             const updatedLines = lines.map((line) => {
                 const regex = new RegExp(`^\\s*${key}\\s*\\d+\\.\\d+\\.\\d+`);
@@ -141,11 +147,12 @@ export class VersionWriteAction extends Action {
                 return line;
             });
 
-            await fs.writeFile(
-                filePath,
-                updatedLines.join("\n") + "\n",
-                "utf8",
-            );
+            // Preserve original newline ending behavior
+            const finalContent = endsWithNewline
+                ? updatedLines.join("\n") + "\n"
+                : updatedLines.join("\n");
+
+            await fs.writeFile(filePath, finalContent, "utf8");
             this.logInfo(
                 `Version replaced in file "${filePath}" for key "${key}".`,
             );
