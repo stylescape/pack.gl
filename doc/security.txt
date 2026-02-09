@@ -1,8 +1,0 @@
-# Canonical
-Canonical: https://www.pack.gl/security.txt
-
-# Contact
-Contact: mailto:info@scape.agency
-
-# Preferred-Languages
-Preferred-Languages: en
