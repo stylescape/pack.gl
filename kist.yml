@@ -54,18 +54,13 @@ stages:
     # =========================================================================
     -
         name: Preprocessing
-        description: "Before starting a new build."
+        description: "Post-compile processing after tsc bootstrap"
         parallel: false  # Execute steps sequentially (default)
 
         steps:
 
-            # Dirs Clean
-            # -----------------------------------------------------------------
-            -
-                name: CleanBuildDirStep
-                action: DirectoryCleanAction
-                options:
-                    dirPath: "./dist"
+            # Note: Directory cleaning handled by 'npm run clean' (prebuild)
+            # TypeScript compilation handled by 'npm run build:bootstrap' (tsc)
 
             # Process Styles
             # -----------------------------------------------------------------
@@ -118,18 +113,8 @@ stages:
             # Compile TS to JS
             # -----------------------------------------------------------------
 
-            -
-                name: Compile TS to JS
-                action: TypeScriptCompilerAction
-                options:
-                    tsConfigPath: "./tsconfig.json"
-                    filePaths:
-                        - "src/ts/index.ts"
-                        # - "src/utils.ts"
-                    outputDir: "./dist/js"
-                    compilerOptions:
-                        target: "ES2020"
-                        module: "CommonJS"
+            # Note: TypeScript compilation handled by build:bootstrap step
+            # kist uses itself after initial tsc bootstrap
 
 
             # Package.json

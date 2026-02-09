@@ -25,7 +25,6 @@ export default [
             "public/**",
             "tmp/**",
             "**/tests/**",
-            "scripts/**",
         ],
     },
 
