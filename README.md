@@ -1,300 +1,280 @@
 <p align="center">
     <img src="https://raw.githubusercontent.com/getkist/brand/master/src/logo/kist.png" width="20%" alt="kist logo"></p>
 <h1 align="center" style='border-bottom: none;'>kist</h1>
-<h3 align="center">Package Pipeline Processor</h3>
+<h3 align="center">Lightweight Package Pipeline Processor</h3>
 
 <br/>
 
 <div align="center">
 
-[![Website](https://img.shields.io/website?url=https%3A%2F%2Fwww.kist&up_message=Up&up_color=5e4d34&down_message=Down&down_color=5e4d34&style=flat-square&logo=Firefox&logoColor=FFFFFF&label=Website&labelColor=5e4d34&color=5e4d34)
-](https://www.kist)
-[![NPM Version](https://img.shields.io/npm/v/kist?style=flat-square&logo=npm&logoColor=FFFFFF&label=NPM&labelColor=5e4d34&color=5e4d34&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fkist)](https://www.npmjs.com/package/kist)
-[![devContainer](https://img.shields.io/badge/devContainer-235e4d34?style=flat-square&logo=Docker&logoColor=%23FFFFFF&labelColor=%235e4d34&color=%235e4d34)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/getkist/kist)
-[![StackBlitz](https://img.shields.io/badge/StackBlitz-235e4d34?style=flat-square&logo=StackBlitz&logoColor=%23FFFFFF&labelColor=%235e4d34&color=%235e4d34)](https://stackblitz.com/github/getkist/kist/tree/main?file=src%2Findex.html)
-[![GitHub License](https://img.shields.io/github/license/getkist/kist?style=flat-square&logo=readthedocs&logoColor=FFFFFF&label=&labelColor=%235e4d34&color=%235e4d34&link=LICENSE)](https://github.com/getkist/kist/blob/main/LICENSE)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fwww.getkist.com&up_message=Up&up_color=5e4d34&down_message=Down&down_color=5e4d34&style=flat-square&logo=Firefox&logoColor=FFFFFF&label=Website&labelColor=5e4d34&color=5e4d34)](https://www.getkist.com)
+[![NPM Version](https://img.shields.io/npm/v/kist?style=flat-square&logo=npm&logoColor=FFFFFF&label=NPM&labelColor=5e4d34&color=5e4d34)](https://www.npmjs.com/package/kist)
+[![GitHub License](https://img.shields.io/github/license/getkist/kist?style=flat-square&logo=readthedocs&logoColor=FFFFFF&label=&labelColor=%235e4d34&color=%235e4d34)](https://github.com/getkist/kist/blob/main/LICENSE)
 
 </div>
 
 <div align="center">
 
-[![Report a Bug](https://img.shields.io/badge/Report%20a%20Bug-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=bug_report.yml)
-[![Request a Feature](https://img.shields.io/badge/Request%20a%20Feature-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=feature_request.yml)
-[![Ask a Question](https://img.shields.io/badge/Ask%20a%20Question-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=question.yml)
-[![Make a Suggestion](https://img.shields.io/badge/Make%20a%20Suggestion-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=suggestion.yml)
-[![Start a Discussion](https://img.shields.io/badge/Start%20a%20Discussion-GitHub?style=flat-square&&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&projects=&template=discussion.yml)
+[![Report a Bug](https://img.shields.io/badge/Report%20a%20Bug-GitHub?style=flat-square&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?template=bug_report.yml)
+[![Request a Feature](https://img.shields.io/badge/Request%20a%20Feature-GitHub?style=flat-square&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/issues/new?template=feature_request.yml)
+[![Start a Discussion](https://img.shields.io/badge/Start%20a%20Discussion-GitHub?style=flat-square&logoColor=%23FFFFFF&color=%23D2D9DF)](https://github.com/getkist/kist/discussions)
 
 </div>
 
 ---
 
-<br/>
-
-kist is a highly customizable and efficient package builder designed to streamline software development workflows. It provides a modular framework for managing build pipelines with support for live reload functionality.
-
-`kist` is a package builder designed to enhance the efficiency and organization of software development projects. Key to its design philosophy is the adaptability to various development workflows, making it an ideal companion for a range of projects from small-scale personal endeavors to large, complex enterprise applications. `kist` stands not just as a tool but as a partner in the software development journey, enhancing productivity, reducing overhead, and bringing clarity and ease to the package management process.
+**kist** is a lightweight, plugin-based package pipeline processor for modern JavaScript/TypeScript projects. It provides a modular framework for automating build workflows with support for live reload, parallel execution, and extensible actions.
 
 ---
 
 ## Features
 
-- Modular pipeline system with stages and steps.
-- Live reload functionality for enhanced developer experience.
-- Plugin-based architecture to extend functionality.
-- TypeScript support for a modern development workflow.
-- Robust error handling and logging.
+- **Plugin Architecture** - Extend functionality with official and community plugins
+- **Pipeline System** - Define stages and steps in YAML configuration
+- **Core Actions** - Built-in actions for common tasks (copy, clean, compile, etc.)
+- **Live Reload** - Watch mode with automatic rebuilds
+- **TypeScript** - Full TypeScript support with type definitions
+- **Self-Hosting** - kist builds itself using its own pipeline
+- **Caching** - Smart build caching for faster rebuilds
+- **Parallel Execution** - Run stages and steps concurrently
 
 ---
 
-## Quickstart
+## Quick Start
 
-To install `kist`, use npm or yarn:
-
-### NPM
+### Installation
 
 ```bash
 npm install kist --save-dev
 ```
 
-### Yarn
+### Create Configuration
+
+Create a `kist.yml` file in your project root:
+
+```yaml
+stages:
+    - name: build
+      steps:
+          - name: clean
+            action: DirectoryCleanAction
+            options:
+                dirPath: "./dist"
+
+          - name: copy-files
+            action: FileCopyAction
+            options:
+                srcFile: "./README.md"
+                destDir: "./dist"
+
+          - name: compile
+            action: TypeScriptCompilerAction
+            options:
+                tsConfigPath: "./tsconfig.json"
+                outputDir: "./dist/js"
+```
+
+### Run Pipeline
 
 ```bash
-yarn add kist --dev
+npx kist
+# or with a specific config
+npx kist --config kist.production.yml
 ```
 
 ---
 
-## Installation
+## Core Actions
 
-1. Clone the Repository:
+kist includes these built-in actions:
 
-    ```sh
-    git clone <https://github.com/getkist/kist.git>
-    cd kist
-    ```
-
-2. Install Dependencies:
-
-    ```sh
-    npm install
-    ```
-
-3. Build the Project:
-
-    ```sh
-    npm run build
-    ```
-
-4. Link the CLI Globally:
-
-    ```sh
-    npm link
-    ```
+| Action                     | Description                  |
+| -------------------------- | ---------------------------- |
+| `DirectoryCleanAction`     | Remove directory contents    |
+| `DirectoryCopyAction`      | Copy directories recursively |
+| `DirectoryCreateAction`    | Create directories           |
+| `FileCopyAction`           | Copy individual files        |
+| `FileRenameAction`         | Rename or move files         |
+| `TypeScriptCompilerAction` | Compile TypeScript           |
+| `PackageManagerAction`     | Generate package.json        |
+| `VersionWriteAction`       | Update version in files      |
+| `RunScriptAction`          | Execute npm scripts          |
+| `DocumentationAction`      | Generate documentation       |
 
 ---
 
-## Usage
+## Official Plugins
 
-### Run the Pipeline
+Extend kist with official action plugins:
 
-Run the pipeline defined in your pack.yaml file:
+| Plugin                                                                      | Description                     |
+| --------------------------------------------------------------------------- | ------------------------------- |
+| [kist-action-sass](https://github.com/getkist/kist-action-sass)             | Compile SASS/SCSS to CSS        |
+| [kist-action-typescript](https://github.com/getkist/kist-action-typescript) | Advanced TypeScript compilation |
+| [kist-action-jinja](https://github.com/getkist/kist-action-jinja)           | Process Jinja2 templates        |
+| [kist-action-svg](https://github.com/getkist/kist-action-svg)               | Optimize and package SVGs       |
+| [kist-action-test](https://github.com/getkist/kist-action-test)             | Run tests with Jest/Vitest      |
 
-```sh
-pack
-```
+Install plugins via npm:
 
-### Enable Live Reload
-
-Run the pipeline with live reload enabled:
-
-```sh
-pack --live
+```bash
+npm install kist-action-sass --save-dev
 ```
 
 ---
 
 ## Configuration
 
-The pipeline configuration is defined in a pack.yaml file located in the root of your project. Here’s an example:
+### Full Example
 
-```sh
+```yaml
+options:
+    mode: development
+    logLevel: debug
+    live:
+        enabled: true
+        port: 3000
+        watchPaths:
+            - src/**
+    cache:
+        enabled: true
+        cacheDir: ".kist-cache"
+    performance:
+        parallelProcessing: true
+        maxConcurrentStages: 4
+
 stages:
+    - name: Preprocessing
+      parallel: false
+      steps:
+          - name: Clean
+            action: DirectoryCleanAction
+            options:
+                dirPath: "./dist"
 
-- name: build
-    steps:
-  - name: compile
-        action: build
-        options:
-          source: src/
-          output: dist/
-- name: test
-    dependsOn: [build]
-    steps:
-  - name: run-tests
-        action: test
+          - name: CopyAssets
+            action: DirectoryCopyAction
+            options:
+                srcDir: "./src/assets"
+                destDir: "./dist/assets"
+
+    - name: Compile
+      parallel: true
+      steps:
+          - name: CompileTS
+            action: TypeScriptCompilerAction
+            options:
+                tsConfigPath: "./tsconfig.json"
+                outputDir: "./dist/js"
+
+          - name: CompileSASS
+            action: StyleProcessingAction
+            options:
+                inputFile: "./src/scss/main.scss"
+                outputFile: "./dist/css/main.css"
 ```
 
-Stage and Step Structure
+### Config Inheritance
 
-- Stages: Define a group of steps to be executed.
-- Steps: Individual tasks within a stage (e.g., compiling, testing).
-- Dependencies: Stages can depend on other stages to enforce execution order.
+Create reusable base configurations:
+
+```yaml
+# kist.base.yml
+stages:
+    - name: build
+      steps:
+          - name: compile
+            action: TypeScriptCompilerAction
+            options:
+                tsConfigPath: "./tsconfig.json"
+```
+
+```yaml
+# kist.production.yml
+extends: ./kist.base.yml
+options:
+    mode: production
+```
+
+---
+
+## CLI Options
+
+```bash
+kist [options]
+
+Options:
+  --config, -c    Path to config file (default: kist.yml)
+  --live, -l      Enable live reload mode
+  --verbose, -v   Enable verbose logging
+  --help, -h      Show help
+  --version       Show version
+```
 
 ---
 
 ## Development
 
-### Build
+### Build from Source
 
-Compile the TypeScript files into JavaScript:
-
-```sh
-npm run build-tsc
+```bash
+git clone https://github.com/getkist/kist.git
+cd kist
+npm install
+npm run build
 ```
 
-### Lint
+kist uses a self-hosting build process:
 
-Run ESLint to check for code issues:
+1. `tsc` compiles TypeScript (bootstrap)
+2. `kist` runs its own pipeline for packaging
 
-```sh
-npm run lint
+### Project Structure
+
 ```
-
-### Run Tests
-
-Run all tests in the src/tests directory:
-
-```sh
-npm run test
-```
-
-### Live Reload
-
-To enable live reload during development, add the --live flag:
-
-```sh
-pack --live
-```
-
----
-
-## Folder Structure
-
-```sh
 kist/
-├── src/
-│   ├── core/           # Core pipeline logic
-│   ├── live/           # Live reload server and related components
-│   ├── actions/        # Built-in step actions (e.g., build, test)
-│   ├── tests/          # Unit tests
-│   └── pack.ts         # Entry point for the CLI
-├── dist/               # Compiled JavaScript output
-├── pack.yaml           # Example configuration file
-├── package.json        # Project metadata and dependencies
-├── tsconfig.json       # TypeScript configuration
-└── README.md           # Project documentation
+├── src/ts/
+│   ├── actions/      # Built-in action implementations
+│   ├── core/         # Pipeline engine, config, plugins
+│   ├── interface/    # TypeScript interfaces
+│   ├── live/         # Live reload server
+│   ├── cli.ts        # CLI entry point
+│   └── kist.ts       # Main Kist class
+├── dist/             # Compiled output
+├── kist.yml          # Build configuration
+└── package.json
 ```
 
 ---
 
-## Key Components
+## Documentation
 
-### Pipeline
+Full documentation available at **[getkist.com](https://www.getkist.com)**
 
-The Pipeline class manages the execution of stages and steps defined in the pack.yaml file.
-
-### LiveReloadServer
-
-The LiveReloadServer provides live reload functionality by watching files for changes and notifying connected clients.
-
-### ConfigLoader
-
-The ConfigLoader reads and validates the pipeline configuration from the pack.yaml file.
-
-### Actions
-
-kist supports plugin-based actions. Default actions include:
-
-- build: Compiles source files.
-- test: Runs tests.
-- lint: Lints the codebase.
-
-Custom actions can be implemented and registered as plugins.
-
-```mermaid
-graph TD
-    subgraph Pipeline
-        Stage1[Stage 1]
-        Stage2[Stage 2]
-        Stage3[Stage 3]
-    end
-
-    subgraph Stage1
-        Step1_1[Step 1.1]
-        Step1_2[Step 1.2]
-    end
-    subgraph Stage2
-        Step2_1[Step 2.1]
-        Step2_2[Step 2.2]
-    end
-    subgraph Stage3
-        Step3_1[Step 3.1]
-        Step3_2[Step 3.2]
-    end
-
-    Step1_1 --> Action1_1[Action: DirectoryCleanAction]
-    Step1_2 --> Action1_2[Action: DirectoryCopyAction]
-    Step2_1 --> Action2_1[Action: FileCopyAction]
-    Step2_2 --> Action2_2[Action: StyleProcessingAction]
-    Step3_1 --> Action3_1[Action: PackageManagerAction]
-    Step3_2 --> Action3_2[Action: VersionWriteAction]
-
-    Stage1 --> Stage2
-    Stage2 --> Stage3
-```
+- [Getting Started](https://www.getkist.com/guide/getting-started)
+- [Configuration Guide](https://www.getkist.com/guide/configuration)
+- [Core Actions](https://www.getkist.com/guide/core-actions)
+- [Plugin Development](https://www.getkist.com/guide/plugin-development)
+- [API Reference](https://www.getkist.com/api/)
 
 ---
 
-## Colophon
+## Contributing
 
-### Authors
+Contributions are welcome! See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for guidelines.
 
-**kist** is an open-source project by **[Scape Agency](https://www.scape.agency "Scape Agency website")**.
+1. Fork the repository
+2. Create a feature branch
+3. Make changes and add tests
+4. Submit a pull request
 
-#### Scape Agency
+---
 
-Scape Agency is a spatial innovation collective that dreams, discovers and designs the everyday of tomorrow. We blend design thinking with emerging technologies to create a brighter perspective for people and planet. Our products and services naturalise technology in liveable and sustainable –scapes that spark the imagination and inspire future generations.
+## License
 
-- website: [scape.agency](https://www.scape.agency "Scape Agency website")
-- github: [github.com/getkist](https://github.com/getkist "Scape Agency GitHub")
+MIT License - see [LICENSE](LICENSE) for details.
 
-### Development Resources
-
-#### Contributing
-
-We'd love for you to contribute and to make this project even better than it is today!
-Please refer to the [contribution guidelines](.github/CONTRIBUTING.md) for information.
-
-Contributions are welcome! Follow these steps to contribute:
-
-1. Fork the repository.
-2. Create a new feature branch.
-3. Make your changes and write tests.
-4. Submit a pull request.
-
-### Legal Information
-
-#### Copyright
-
-Copyright &copy; 2025 [Scape Agency BV](https://www.scape.agency/ "Scape Agency website"). All Rights Reserved.
-
-#### License
-
-Except as otherwise noted, the code in this repository is licensed under the MIT License. Also see [LICENSE](https://github.com/getkist/community/blob/master/src/LICENSE). The documentation is licensed under the [Creative Commons Attribution 4.0 International (CC BY 4.0) License](https://creativecommons.org/licenses/by/4.0/).
-
-#### Disclaimer
-
-**THIS SOFTWARE IS PROVIDED AS IS WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
+Copyright © 2024-2026 [Scape Agency](https://www.scape.agency)
 
 ---
 
