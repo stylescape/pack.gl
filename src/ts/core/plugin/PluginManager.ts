@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { readdirSync, statSync } from "fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "fs";
 import { join } from "path";
 import { ActionInterface } from "../../interface/ActionInterface.js";
 import { ActionPlugin } from "../../interface/ActionPlugin.js";
@@ -192,7 +192,30 @@ export class PluginManager extends AbstractProcess {
         try {
             this.logDebug(`Loading plugin: ${pluginName}`);
 
-            const pluginModule = await import(pluginPath);
+            // Resolve the correct entry point from package.json
+            let entryPoint = pluginPath;
+            const packageJsonPath = join(pluginPath, "package.json");
+            
+            if (existsSync(packageJsonPath)) {
+                try {
+                    const packageJson = JSON.parse(
+                        readFileSync(packageJsonPath, "utf-8")
+                    );
+                    // Check for module, main, or exports entry points
+                    const mainEntry = 
+                        packageJson.module ||
+                        packageJson.main ||
+                        (packageJson.exports?.["."]?.import) ||
+                        (packageJson.exports?.["."]?.require) ||
+                        (packageJson.exports?.["."]) ||
+                        "dist/index.js";
+                    entryPoint = join(pluginPath, mainEntry);
+                } catch (jsonError) {
+                    this.logDebug(`Failed to parse package.json for ${pluginName}`);
+                }
+            }
+
+            const pluginModule = await import(entryPoint);
             const plugin: ActionPlugin = pluginModule.default || pluginModule;
 
             if (!plugin || typeof plugin.registerActions !== "function") {
