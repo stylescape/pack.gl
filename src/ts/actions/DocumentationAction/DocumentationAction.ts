@@ -6,7 +6,7 @@ import { execFile } from "child_process";
 import path from "path";
 import util from "util";
 import { Action } from "../../core/pipeline/Action.js";
-import { ActionOptionsType } from "../../types/ActionOptionsType.js";
+import type { ActionOptionsType } from "../../types/ActionOptionsType.js";
 
 // ============================================================================
 // Constants
@@ -78,14 +78,14 @@ export class DocumentationAction extends Action {
             this.logInfo(
                 `Documentation successfully generated at: ${resolvedOutputPath}`,
             );
-        } catch (error: any) {
+        } catch (error: unknown) {
             this.logError(
                 "Error occurred while generating documentation.",
                 error,
             );
-            throw new Error(
-                `Documentation generation failed: ${error.message}`,
-            );
+            const message =
+                error instanceof Error ? error.message : String(error);
+            throw new Error(`Documentation generation failed: ${message}`);
         }
     }
 

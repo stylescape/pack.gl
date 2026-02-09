@@ -109,16 +109,16 @@ export interface PackageJson {
     browserslist?: string[] | Record<string, string[]>;
 
     // Configuration for publishing the package.
-    publishConfig?: Record<string, any>;
+    publishConfig?: Record<string, unknown>;
 
     // Configuration parameters used in scripts.
-    config?: Record<string, any>;
+    config?: Record<string, unknown>;
 
     // Alternative to "types", path to TypeScript declaration files.
     typings?: string;
 
     // Define export map for submodules and conditions.
-    exports?: Record<string, any>;
+    exports?: Record<string, unknown>;
 
     // Specify an ES module entry point.
     module?: string;
@@ -146,19 +146,19 @@ export interface PackageJson {
           };
 
     // ESLint configuration embedded in package.json.
-    eslintConfig?: Record<string, any>;
+    eslintConfig?: Record<string, unknown>;
 
     // Babel configuration embedded in package.json.
-    babel?: Record<string, any>;
+    babel?: Record<string, unknown>;
 
     // Prettier configuration embedded in package.json.
-    prettier?: Record<string, any>;
+    prettier?: Record<string, unknown>;
 
     // Husky configuration for Git hooks.
-    husky?: Record<string, any>;
+    husky?: Record<string, unknown>;
 
     // Jest configuration for unit tests.
-    jest?: Record<string, any>;
+    jest?: Record<string, unknown>;
 
     // Enforce engine requirements strictly.
     enginesStrict?: boolean;

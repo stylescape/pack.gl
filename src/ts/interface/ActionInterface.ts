@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { ActionOptionsType } from "../types/ActionOptionsType.js";
+import type { ActionOptionsType } from "../types/ActionOptionsType.js";
 
 // ============================================================================
 // Interfaces

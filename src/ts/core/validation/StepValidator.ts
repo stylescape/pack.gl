@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import { StepInterface } from "../../interface/StepInterface.js";
-import { StepOptionsInterface } from "../../interface/StepOptionsInterface.js";
+import type { StepInterface } from "../../interface/StepInterface.js";
+import type { StepOptionsInterface } from "../../interface/StepOptionsInterface.js";
 import { AbstractValidator } from "../abstract/AbstractValidator.js";
 import { ActionValidator } from "./ActionValidator.js";
 
@@ -72,6 +72,7 @@ export class StepValidator extends AbstractValidator<StepInterface> {
                 this.validateName(value as string);
                 break;
             case "options":
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 this.validateOptions(value as Record<string, any>);
                 break;
             default:

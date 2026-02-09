@@ -18,7 +18,7 @@ import { TypeScriptCompilerAction } from "./TypeScriptCompilerAction/index.js";
 
 import { VersionWriteAction } from "./VersionWriteAction/index.js";
 
-import { ActionInterface } from "../interface/ActionInterface.js";
+import type { ActionInterface } from "../interface/ActionInterface.js";
 
 // ============================================================================
 // Core Actions

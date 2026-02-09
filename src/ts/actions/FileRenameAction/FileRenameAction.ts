@@ -5,7 +5,7 @@
 import { promises as fsPromises } from "fs";
 import path from "path";
 import { Action } from "../../core/pipeline/Action.js";
-import { ActionOptionsType } from "../../types/ActionOptionsType.js";
+import type { ActionOptionsType } from "../../types/ActionOptionsType.js";
 
 // ============================================================================
 // Classes

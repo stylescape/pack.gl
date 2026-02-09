@@ -5,7 +5,7 @@
 import fs from "fs/promises";
 import path from "path";
 import { Action } from "../../core/pipeline/Action.js";
-import { ActionOptionsType } from "../../types/ActionOptionsType.js";
+import type { ActionOptionsType } from "../../types/ActionOptionsType.js";
 import packageConfig from "./package.config.js";
 
 // ============================================================================
@@ -63,18 +63,17 @@ export class PackageManagerAction extends Action {
             const parsedContent = JSON.parse(fileContent);
             this.logInfo(`Successfully read package.json from ${fullPath}`);
             return parsedContent;
-        } catch (error: any) {
-            if (error.code === "ENOENT") {
+        } catch (error: unknown) {
+            const err = error as NodeJS.ErrnoException;
+            if (err.code === "ENOENT") {
                 throw new Error(
                     `File not found at ${fullPath}. Please ensure the path is correct.`,
                 );
-            } else if (error.name === "SyntaxError") {
-                throw new Error(
-                    `Invalid JSON in ${fullPath}: ${error.message}`,
-                );
+            } else if (err.name === "SyntaxError") {
+                throw new Error(`Invalid JSON in ${fullPath}: ${err.message}`);
             } else {
                 throw new Error(
-                    `Unexpected error while reading ${fullPath}: ${error.message}`,
+                    `Unexpected error while reading ${fullPath}: ${err.message ?? String(error)}`,
                 );
             }
         }
@@ -119,7 +118,9 @@ export class PackageManagerAction extends Action {
      */
     private async createPackageJson(
         outputDir: string,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         filteredConfig: Record<string, any>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         customConfig: Record<string, any>,
     ): Promise<void> {
         const filePath = path.join(outputDir, "package.json");

@@ -126,6 +126,7 @@ export class FileCache extends AbstractProcess {
      * Resets the singleton instance (useful for testing).
      */
     public static resetInstance(): void {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         FileCache.instance = undefined as any;
     }
 

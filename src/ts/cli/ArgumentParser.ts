@@ -4,7 +4,7 @@
 
 import { AbstractProcess } from "../core/abstract/AbstractProcess.js";
 import { OptionsValidator } from "../core/validation/OptionsValidator.js";
-import { OptionsInterface } from "../interface/OptionsInterface.js";
+import type { OptionsInterface } from "../interface/OptionsInterface.js";
 
 // ============================================================================
 // Class

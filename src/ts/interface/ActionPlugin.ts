@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { ActionInterface } from "./ActionInterface.js";
+import type { ActionInterface } from "./ActionInterface.js";
 
 // ============================================================================
 // Interfaces

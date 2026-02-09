@@ -4,9 +4,9 @@
 
 import { existsSync, readdirSync, readFileSync, statSync } from "fs";
 import { join } from "path";
-import { ActionInterface } from "../../interface/ActionInterface.js";
-import { ActionPlugin } from "../../interface/ActionPlugin.js";
-import { PluginMetadata } from "../../interface/PluginMetadata.js";
+import type { ActionInterface } from "../../interface/ActionInterface.js";
+import type { ActionPlugin } from "../../interface/ActionPlugin.js";
+import type { PluginMetadata } from "../../interface/PluginMetadata.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 
 // ============================================================================
@@ -195,23 +195,25 @@ export class PluginManager extends AbstractProcess {
             // Resolve the correct entry point from package.json
             let entryPoint = pluginPath;
             const packageJsonPath = join(pluginPath, "package.json");
-            
+
             if (existsSync(packageJsonPath)) {
                 try {
                     const packageJson = JSON.parse(
-                        readFileSync(packageJsonPath, "utf-8")
+                        readFileSync(packageJsonPath, "utf-8"),
                     );
                     // Check for module, main, or exports entry points
-                    const mainEntry = 
+                    const mainEntry =
                         packageJson.module ||
                         packageJson.main ||
-                        (packageJson.exports?.["."]?.import) ||
-                        (packageJson.exports?.["."]?.require) ||
-                        (packageJson.exports?.["."]) ||
+                        packageJson.exports?.["."]?.import ||
+                        packageJson.exports?.["."]?.require ||
+                        packageJson.exports?.["."] ||
                         "dist/index.js";
                     entryPoint = join(pluginPath, mainEntry);
                 } catch (jsonError) {
-                    this.logDebug(`Failed to parse package.json for ${pluginName}`);
+                    this.logDebug(
+                        `Failed to parse package.json for ${pluginName}`,
+                    );
                 }
             }
 

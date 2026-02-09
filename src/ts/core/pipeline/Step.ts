@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import { ActionInterface } from "../../interface/ActionInterface.js";
-import { StepInterface } from "../../interface/StepInterface.js";
+import type { ActionInterface } from "../../interface/ActionInterface.js";
+import type { StepInterface } from "../../interface/StepInterface.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 import { ActionRegistry } from "./ActionRegistry.js";
 
@@ -22,6 +22,7 @@ export class Step extends AbstractProcess {
 
     private name: string;
     private action: ActionInterface;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private options?: Record<string, any>;
 
     // Constructor

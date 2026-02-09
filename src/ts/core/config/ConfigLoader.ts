@@ -6,8 +6,8 @@ import fs from "fs";
 import yaml from "js-yaml";
 import path from "path";
 import { ArgumentParser } from "../../cli/ArgumentParser.js";
-import { ConfigInterface } from "../../interface/ConfigInterface.js";
-import { StageInterface } from "../../interface/StageInterface.js";
+import type { ConfigInterface } from "../../interface/ConfigInterface.js";
+import type { StageInterface } from "../../interface/StageInterface.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 
 // ============================================================================

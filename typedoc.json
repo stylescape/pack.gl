@@ -1,0 +1,15 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "displayName": "kist",
+    "out": "docs/api",
+    "readme": "README.md",
+    "entryPoints": ["src/ts/index.ts"],
+    "excludePrivate": true,
+    "excludeProtected": false,
+    "excludeExternals": false,
+    "excludeInternal": true,
+    "excludeNotDocumented": false,
+    "sort": ["source-order"],
+    "tsconfig": "./tsconfig.json",
+    "plugin": ["typedoc-plugin-markdown"]
+}

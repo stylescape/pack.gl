@@ -1,7 +1,7 @@
 {
     "name": "kist",
     "description": "Lightweight Package Pipeline Processor with Plugin Architecture",
-    "version": "0.1.65",
+    "version": "0.1.67",
     "config": {
         "version_short": "0.1"
     },
@@ -77,6 +77,7 @@
         "test:cli": "node dist/js/cli.js",
         "test:coverage": "jest --coverage",
         "test:watch": "jest --watch",
+        "docs": "typedoc",
         "deps:check": "node bin/check-deps.js",
         "deps:update": "npm update",
         "validate:package": "node bin/validate-package.js",
@@ -148,6 +149,8 @@
         "ts-jest": "^29.4.6",
         "ts-node": "^10.9.2",
         "tslib": "^2.8.1",
+        "typedoc": "0.28.16",
+        "typedoc-plugin-markdown": "4.10.0",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.54.0"
     },

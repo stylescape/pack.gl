@@ -7,6 +7,7 @@
  * It ensures that only one instance of the derived class can exist.
  */
 export abstract class AbstractSingleton<T extends AbstractSingleton<T>> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private static _instances = new Map<string, AbstractSingleton<any>>();
 
     protected constructor() {

@@ -148,6 +148,7 @@ export class BuildCache extends AbstractProcess {
      * Resets the singleton instance (useful for testing).
      */
     public static resetInstance(): void {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         BuildCache.instance = undefined as any;
     }
 
@@ -186,7 +187,7 @@ export class BuildCache extends AbstractProcess {
     public async lookup(
         actionName: string,
         inputFiles: string[],
-        config: Record<string, any> = {},
+        config: Record<string, unknown> = {},
     ): Promise<CacheLookupResult> {
         await this.initialize();
 
@@ -254,7 +255,7 @@ export class BuildCache extends AbstractProcess {
         actionName: string,
         inputFiles: string[],
         outputFiles: string[],
-        config: Record<string, any> = {},
+        config: Record<string, unknown> = {},
         buildDuration?: number,
     ): Promise<void> {
         await this.initialize();
@@ -369,7 +370,7 @@ export class BuildCache extends AbstractProcess {
     private async computeCacheKey(
         actionName: string,
         inputFiles: string[],
-        config: Record<string, any>,
+        config: Record<string, unknown>,
     ): Promise<string> {
         const sortedFiles = [...inputFiles].sort().join("|");
         const configStr = JSON.stringify(config);
@@ -403,7 +404,7 @@ export class BuildCache extends AbstractProcess {
     /**
      * Computes a hash of the configuration object.
      */
-    private computeConfigHash(config: Record<string, any>): string {
+    private computeConfigHash(config: Record<string, unknown>): string {
         return crypto
             .createHash("md5")
             .update(JSON.stringify(config))

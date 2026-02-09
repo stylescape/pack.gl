@@ -2,15 +2,16 @@
 // Import
 // ============================================================================
 
-import express, { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
+import express from "express";
 import rateLimit from "express-rate-limit";
-import { Server } from "http";
+import type { Server } from "http";
 import path from "path";
 import { WebSocket, WebSocketServer } from "ws";
 import { AbstractProcess } from "../core/abstract/AbstractProcess.js";
 import { ConfigStore } from "../core/config/ConfigStore.js";
-import { LiveOptionsInterface } from "../interface/index.js";
-import { OptionsInterface } from "../interface/OptionsInterface.js";
+import type { LiveOptionsInterface } from "../interface/index.js";
+import type { OptionsInterface } from "../interface/OptionsInterface.js";
 
 // ============================================================================
 // Class

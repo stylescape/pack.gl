@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import { LiveOptionsInterface } from "./LiveOptionsInterface.js";
-import { PipelineOptionsInterface } from "./PipelineOptionsInterface.js";
+import type { LiveOptionsInterface } from "./LiveOptionsInterface.js";
+import type { PipelineOptionsInterface } from "./PipelineOptionsInterface.js";
 
 // ============================================================================
 // Interfaces

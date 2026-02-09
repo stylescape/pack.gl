@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { OptionsInterface } from "../../interface/OptionsInterface.js";
+import type { OptionsInterface } from "../../interface/OptionsInterface.js";
 import { AbstractValidator } from "../abstract/AbstractValidator.js";
 
 // ============================================================================

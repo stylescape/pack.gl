@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { ConfigInterface } from "../../interface/ConfigInterface.js";
+import type { ConfigInterface } from "../../interface/ConfigInterface.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 import { defaultConfig } from "./defaultConfig.js";
 
@@ -47,6 +47,7 @@ export class ConfigStore extends AbstractProcess {
      */
     public get<T>(key: string): T | undefined {
         const keys = key.split(".");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let current: any = this.config;
 
         for (const k of keys) {
@@ -68,6 +69,7 @@ export class ConfigStore extends AbstractProcess {
      */
     public set(key: string, value: unknown): void {
         const keys = key.split(".");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let current: any = this.config;
 
         for (let i = 0; i < keys.length - 1; i++) {
@@ -140,6 +142,7 @@ export class ConfigStore extends AbstractProcess {
      * @param source - The source object.
      * @returns The merged object.
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private deepMerge(target: any, source: any): any {
         if (typeof target !== "object" || target === null) {
             return source;

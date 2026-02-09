@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { ConfigInterface } from "../../interface/ConfigInterface.js";
+import type { ConfigInterface } from "../../interface/ConfigInterface.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 import { FileCache } from "../cache/FileCache.js";
 import { BuildCache } from "../cache/BuildCache.js";

@@ -5,7 +5,7 @@
 import path from "path";
 import ts from "typescript";
 import { Action } from "../../core/pipeline/Action.js";
-import { ActionOptionsType } from "../../types/ActionOptionsType.js";
+import type { ActionOptionsType } from "../../types/ActionOptionsType.js";
 
 // ============================================================================
 // Classes
@@ -90,9 +90,11 @@ export class TypeScriptCompilerAction extends Action {
             }
 
             this.logInfo("TypeScript compilation completed successfully.");
-        } catch (error: any) {
+        } catch (error: unknown) {
             this.logError("Error during TypeScript compilation:", error);
-            throw new Error(`TypeScript compilation failed: ${error.message}`);
+            const message =
+                error instanceof Error ? error.message : String(error);
+            throw new Error(`TypeScript compilation failed: ${message}`);
         }
     }
 

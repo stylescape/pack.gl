@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { StepInterface } from "./StepInterface.js";
+import type { StepInterface } from "./StepInterface.js";
 
 // ============================================================================
 // Interfaces

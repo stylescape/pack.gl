@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { StageInterface } from "../../interface/StageInterface.js";
+import type { StageInterface } from "../../interface/StageInterface.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 import { Step } from "./Step.js";
 

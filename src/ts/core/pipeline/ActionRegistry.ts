@@ -3,7 +3,7 @@
 // ============================================================================
 
 import { coreActions } from "../../actions/CoreActions.js";
-import { ActionInterface } from "../../interface/ActionInterface.js";
+import type { ActionInterface } from "../../interface/ActionInterface.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 import { PluginManager } from "../plugin/PluginManager.js";
 

@@ -7,7 +7,7 @@ import path from "path";
 import { pipeline } from "stream/promises";
 import { Action } from "../../core/pipeline/Action.js";
 import { FileCache } from "../../core/cache/FileCache.js";
-import { ActionOptionsType } from "../../types/ActionOptionsType.js";
+import type { ActionOptionsType } from "../../types/ActionOptionsType.js";
 
 // ============================================================================
 // Constants

@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { ConfigInterface } from "../../interface/ConfigInterface.js";
+import type { ConfigInterface } from "../../interface/ConfigInterface.js";
 import { AbstractValidator } from "../abstract/AbstractValidator.js";
 import { StageValidator } from "./StageValidator.js";
 
