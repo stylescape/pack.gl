@@ -1,7 +1,7 @@
 {
     "name": "kist",
     "description": "Lightweight Package Pipeline Processor with Plugin Architecture",
-    "version": "0.1.64",
+    "version": "0.1.65",
     "config": {
         "version_short": "0.1"
     },
@@ -49,11 +49,19 @@
     "module": "dist/js/index.js",
     "exports": {
         ".": {
-            "types": "./js/index.d.ts",
-            "import": "./js/index.js"
+            "import": {
+                "types": "./dist/js/index.d.ts",
+                "default": "./dist/js/index.js"
+            }
+        },
+        "./cli": {
+            "import": "./dist/js/cli.js"
         }
     },
-    "bin": "dist/js/cli.js",
+    "sideEffects": false,
+    "bin": {
+        "kist": "./dist/js/cli.js"
+    },
     "scripts": {
         "format": "prettier --write .",
         "lint": "eslint 'src/**/*.ts' --max-warnings=50",
