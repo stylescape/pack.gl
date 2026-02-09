@@ -4,7 +4,7 @@
 
 import fs from "fs/promises";
 import path from "path";
-import { Action } from "../../core/pipeline/Action";
+import { Action } from "../../core/pipeline/Action.js";
 import { ActionOptionsType } from "../../types/ActionOptionsType.js";
 import packageConfig from "./package.config.js";
 

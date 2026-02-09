@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import { OptionsInterface } from "../../interface/OptionsInterface";
-import { AbstractValidator } from "../abstract/AbstractValidator";
+import { OptionsInterface } from "../../interface/OptionsInterface.js";
+import { AbstractValidator } from "../abstract/AbstractValidator.js";
 
 // ============================================================================
 // Class

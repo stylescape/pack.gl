@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import { ActionInterface } from "./ActionInterface";
-import { StepOptionsInterface } from "./StepOptionsInterface";
+import { ActionInterface } from "./ActionInterface.js";
+import { StepOptionsInterface } from "./StepOptionsInterface.js";
 
 // ============================================================================
 // Interfaces

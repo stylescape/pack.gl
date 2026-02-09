@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { AbstractProcess } from "../abstract/AbstractProcess";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
 
 // ============================================================================
 // Class

@@ -4,10 +4,10 @@
 // Imports
 // ============================================================================
 
-import { ArgumentParser } from "./cli/ArgumentParser";
-import { ConfigLoader } from "./core/config/ConfigLoader";
-import { ConfigStore } from "./core/config/ConfigStore";
-import { Kist } from "./kist";
+import { ArgumentParser } from "./cli/ArgumentParser.js";
+import { ConfigLoader } from "./core/config/ConfigLoader.js";
+import { ConfigStore } from "./core/config/ConfigStore.js";
+import { Kist } from "./kist.js";
 
 // ============================================================================
 // Main Entry Point

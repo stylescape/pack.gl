@@ -5,9 +5,9 @@
 import fs from "fs";
 import path from "path";
 import { pipeline } from "stream/promises";
-import { Action } from "../../core/pipeline/Action";
-import { FileCache } from "../../core/cache/FileCache";
-import { ActionOptionsType } from "../../types/ActionOptionsType";
+import { Action } from "../../core/pipeline/Action.js";
+import { FileCache } from "../../core/cache/FileCache.js";
+import { ActionOptionsType } from "../../types/ActionOptionsType.js";
 
 // ============================================================================
 // Constants
@@ -63,12 +63,17 @@ export class FileCopyAction extends Action {
         const parallel = options.parallel as boolean | undefined;
 
         if ((!srcFile && !srcFiles) || !destDir) {
-            throw new Error("Missing required options: srcFile/srcFiles or destDir.");
+            throw new Error(
+                "Missing required options: srcFile/srcFiles or destDir.",
+            );
         }
 
         // Handle batch copy
         if (srcFiles && srcFiles.length > 0) {
-            await this.copyMultipleFiles(srcFiles, destDir, { useCache, parallel });
+            await this.copyMultipleFiles(srcFiles, destDir, {
+                useCache,
+                parallel,
+            });
             return;
         }
 
@@ -84,7 +89,7 @@ export class FileCopyAction extends Action {
     private async copySingleFile(
         srcFile: string,
         destDir: string,
-        options: { useCache?: boolean } = {}
+        options: { useCache?: boolean } = {},
     ): Promise<void> {
         // Check cache if enabled
         if (options.useCache) {
@@ -105,9 +110,13 @@ export class FileCopyAction extends Action {
                 await this.fileCache.updateFileEntry(srcFile);
             }
 
-            this.logInfo(`File copied successfully from ${srcFile} to ${destDir}.`);
+            this.logInfo(
+                `File copied successfully from ${srcFile} to ${destDir}.`,
+            );
         } catch (error) {
-            this.logError(`Error copying file from ${srcFile} to ${destDir}: ${error}`);
+            this.logError(
+                `Error copying file from ${srcFile} to ${destDir}: ${error}`,
+            );
             throw error;
         }
     }
@@ -118,7 +127,7 @@ export class FileCopyAction extends Action {
     private async copyMultipleFiles(
         srcFiles: string[],
         destDir: string,
-        options: { useCache?: boolean; parallel?: boolean } = {}
+        options: { useCache?: boolean; parallel?: boolean } = {},
     ): Promise<void> {
         const startTime = performance.now();
         let filesToCopy = srcFiles;
@@ -156,7 +165,9 @@ export class FileCopyAction extends Action {
             }
 
             const duration = performance.now() - startTime;
-            this.logInfo(`Copied ${filesToCopy.length} files in ${duration.toFixed(2)}ms.`);
+            this.logInfo(
+                `Copied ${filesToCopy.length} files in ${duration.toFixed(2)}ms.`,
+            );
         } catch (error) {
             this.logError(`Error copying files: ${error}`);
             throw error;
@@ -169,13 +180,15 @@ export class FileCopyAction extends Action {
     private async copyFilesInParallel(
         srcFiles: string[],
         destDir: string,
-        maxConcurrent: number = 10
+        maxConcurrent: number = 10,
     ): Promise<void> {
         const executing = new Set<Promise<void>>();
 
         for (const srcFile of srcFiles) {
-            const copyPromise = this.copyFileToDirectory(srcFile, destDir)
-                .finally(() => executing.delete(copyPromise));
+            const copyPromise = this.copyFileToDirectory(
+                srcFile,
+                destDir,
+            ).finally(() => executing.delete(copyPromise));
             executing.add(copyPromise);
 
             if (executing.size >= maxConcurrent) {
@@ -229,7 +242,10 @@ export class FileCopyAction extends Action {
     /**
      * Copies a file using streams for memory-efficient handling of large files.
      */
-    private async streamCopyFile(srcFile: string, destFile: string): Promise<void> {
+    private async streamCopyFile(
+        srcFile: string,
+        destFile: string,
+    ): Promise<void> {
         const readStream = fs.createReadStream(srcFile);
         const writeStream = fs.createWriteStream(destFile);
 

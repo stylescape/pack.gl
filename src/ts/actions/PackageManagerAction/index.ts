@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { PackageManagerAction } from "./PackageManagerAction";
+import { PackageManagerAction } from "./PackageManagerAction.js";
 
 // ============================================================================
 // Export

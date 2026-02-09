@@ -2,12 +2,12 @@
 // Import
 // ============================================================================
 
-import { ConfigInterface } from "../../interface/ConfigInterface";
-import { AbstractProcess } from "../abstract/AbstractProcess";
-import { FileCache } from "../cache/FileCache";
-import { BuildCache } from "../cache/BuildCache";
-import { ProgressReporter } from "../progress/ProgressReporter";
-import { Stage } from "./Stage";
+import { ConfigInterface } from "../../interface/ConfigInterface.js";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
+import { FileCache } from "../cache/FileCache.js";
+import { BuildCache } from "../cache/BuildCache.js";
+import { ProgressReporter } from "../progress/ProgressReporter.js";
+import { Stage } from "./Stage.js";
 
 // ============================================================================
 // Class
@@ -106,7 +106,9 @@ export class Pipeline extends AbstractProcess {
             await this.saveCaches();
 
             const duration = performance.now() - startTime;
-            this.logInfo(`Pipeline execution completed successfully in ${this.formatDuration(duration)}.`);
+            this.logInfo(
+                `Pipeline execution completed successfully in ${this.formatDuration(duration)}.`,
+            );
             this.reportCacheStats();
         } catch (error) {
             this.progress?.cancel();
@@ -173,10 +175,7 @@ export class Pipeline extends AbstractProcess {
      * Saves caches to disk.
      */
     private async saveCaches(): Promise<void> {
-        await Promise.all([
-            this.fileCache?.save(),
-            this.buildCache?.save(),
-        ]);
+        await Promise.all([this.fileCache?.save(), this.buildCache?.save()]);
     }
 
     /**
@@ -185,11 +184,15 @@ export class Pipeline extends AbstractProcess {
     private reportCacheStats(): void {
         if (this.fileCache) {
             const stats = this.fileCache.getStats();
-            this.logDebug(`File cache: ${stats.size} entries, ${stats.hitRate} hit rate`);
+            this.logDebug(
+                `File cache: ${stats.size} entries, ${stats.hitRate} hit rate`,
+            );
         }
         if (this.buildCache) {
             const stats = this.buildCache.getStats();
-            this.logDebug(`Build cache: ${stats.size} entries, ${stats.hitRate} hit rate`);
+            this.logDebug(
+                `Build cache: ${stats.size} entries, ${stats.hitRate} hit rate`,
+            );
         }
     }
 

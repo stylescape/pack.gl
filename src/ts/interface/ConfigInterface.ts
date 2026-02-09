@@ -2,9 +2,9 @@
 // Import
 // ============================================================================
 
-import { MetadataInterface } from "./MetadataInterface";
-import { OptionsInterface } from "./OptionsInterface";
-import { StageInterface } from "./StageInterface";
+import { MetadataInterface } from "./MetadataInterface.js";
+import { OptionsInterface } from "./OptionsInterface.js";
+import { StageInterface } from "./StageInterface.js";
 
 // ============================================================================
 // Interfaces

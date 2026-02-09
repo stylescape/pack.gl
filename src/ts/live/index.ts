@@ -5,7 +5,7 @@
 // Export core classes for live reload functionality
 
 // Manages server operations and live reload communication
-export { LiveServer } from "./LiveServer";
+export { LiveServer } from "./LiveServer.js";
 
 // Watches for file changes and triggers reload actions
-export { LiveWatcher } from "./LiveWatcher";
+export { LiveWatcher } from "./LiveWatcher.js";

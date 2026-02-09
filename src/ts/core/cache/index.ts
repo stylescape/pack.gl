@@ -2,5 +2,5 @@
 // Cache Module
 // ============================================================================
 
-export { FileCache } from "./FileCache";
-export { BuildCache } from "./BuildCache";
+export { FileCache } from "./FileCache.js";
+export { BuildCache } from "./BuildCache.js";

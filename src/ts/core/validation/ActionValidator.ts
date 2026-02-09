@@ -2,8 +2,8 @@
 // Import
 // ============================================================================
 
-import { AbstractValidator } from "../abstract/AbstractValidator";
-import { ActionRegistry } from "../pipeline/ActionRegistry";
+import { AbstractValidator } from "../abstract/AbstractValidator.js";
+import { ActionRegistry } from "../pipeline/ActionRegistry.js";
 
 // ============================================================================
 // Types

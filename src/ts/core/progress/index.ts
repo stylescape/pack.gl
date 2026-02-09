@@ -6,4 +6,4 @@ export {
     ProgressReporter,
     createFileProgress,
     createBuildProgress,
-} from "./ProgressReporter";
+} from "./ProgressReporter.js";

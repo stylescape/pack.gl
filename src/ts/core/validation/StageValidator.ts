@@ -2,9 +2,9 @@
 // Import
 // ============================================================================
 
-import { StageInterface } from "../../interface/StageInterface";
-import { AbstractValidator } from "../abstract/AbstractValidator";
-import { StepValidator } from "./StepValidator";
+import { StageInterface } from "../../interface/StageInterface.js";
+import { AbstractValidator } from "../abstract/AbstractValidator.js";
+import { StepValidator } from "./StepValidator.js";
 
 // ============================================================================
 // Class

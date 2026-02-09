@@ -2,9 +2,9 @@
 // Import
 // ============================================================================
 
-import { StageInterface } from "../../interface/StageInterface";
-import { AbstractProcess } from "../abstract/AbstractProcess";
-import { Step } from "./Step";
+import { StageInterface } from "../../interface/StageInterface.js";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
+import { Step } from "./Step.js";
 
 // ============================================================================
 // Class
@@ -79,7 +79,9 @@ export class Stage extends AbstractProcess {
         }
 
         const startTime = performance.now();
-        this.logInfo(`Executing stage: ${this.name}${this.parallel ? " (parallel mode)" : ""}`);
+        this.logInfo(
+            `Executing stage: ${this.name}${this.parallel ? " (parallel mode)" : ""}`,
+        );
 
         // Execute with optional timeout
         const executeSteps = async () => {
@@ -98,7 +100,9 @@ export class Stage extends AbstractProcess {
             }
 
             const duration = performance.now() - startTime;
-            this.logInfo(`Stage "${this.name}" completed successfully in ${duration.toFixed(2)}ms.`);
+            this.logInfo(
+                `Stage "${this.name}" completed successfully in ${duration.toFixed(2)}ms.`,
+            );
             completedStages.add(this.name);
         } catch (error) {
             const duration = performance.now() - startTime;
@@ -125,12 +129,18 @@ export class Stage extends AbstractProcess {
      * Executes steps in parallel with optional concurrency limit.
      */
     private async executeStepsInParallel(): Promise<void> {
-        if (!this.maxConcurrentSteps || this.maxConcurrentSteps >= this.steps.length) {
+        if (
+            !this.maxConcurrentSteps ||
+            this.maxConcurrentSteps >= this.steps.length
+        ) {
             // Execute all steps simultaneously
             await Promise.all(this.steps.map((step) => step.execute()));
         } else {
             // Execute with concurrency control
-            await this.executeWithConcurrencyLimit(this.steps, this.maxConcurrentSteps);
+            await this.executeWithConcurrencyLimit(
+                this.steps,
+                this.maxConcurrentSteps,
+            );
         }
     }
 
@@ -146,7 +156,9 @@ export class Stage extends AbstractProcess {
         const executing = new Set<Promise<void>>();
 
         for (const step of steps) {
-            const execution = step.execute().finally(() => executing.delete(execution));
+            const execution = step
+                .execute()
+                .finally(() => executing.delete(execution));
             executing.add(execution);
 
             if (executing.size >= maxConcurrent) {
@@ -162,11 +174,22 @@ export class Stage extends AbstractProcess {
      * @param promise - Promise to execute
      * @param timeout - Timeout in milliseconds
      */
-    private async executeWithTimeout<T>(promise: Promise<T>, timeout: number): Promise<T> {
+    private async executeWithTimeout<T>(
+        promise: Promise<T>,
+        timeout: number,
+    ): Promise<T> {
         return Promise.race([
             promise,
             new Promise<T>((_, reject) =>
-                setTimeout(() => reject(new Error(`Stage "${this.name}" timed out after ${timeout}ms`)), timeout)
+                setTimeout(
+                    () =>
+                        reject(
+                            new Error(
+                                `Stage "${this.name}" timed out after ${timeout}ms`,
+                            ),
+                        ),
+                    timeout,
+                ),
             ),
         ]);
     }

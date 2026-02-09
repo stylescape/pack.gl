@@ -2,10 +2,10 @@
 // Import
 // ============================================================================
 
-import { ActionInterface } from "../../interface/ActionInterface";
-import { StepInterface } from "../../interface/StepInterface";
-import { AbstractProcess } from "../abstract/AbstractProcess";
-import { ActionRegistry } from "./ActionRegistry";
+import { ActionInterface } from "../../interface/ActionInterface.js";
+import { StepInterface } from "../../interface/StepInterface.js";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
+import { ActionRegistry } from "./ActionRegistry.js";
 
 // ============================================================================
 // Class

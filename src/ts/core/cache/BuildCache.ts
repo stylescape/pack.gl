@@ -5,8 +5,8 @@
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
-import { AbstractProcess } from "../abstract/AbstractProcess";
-import { FileCache } from "./FileCache";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
+import { FileCache } from "./FileCache.js";
 
 // ============================================================================
 // Types
@@ -122,7 +122,9 @@ export class BuildCache extends AbstractProcess {
      */
     private constructor(options: BuildCacheOptions = {}) {
         super();
-        this.cacheDir = options.cacheDir || path.join(process.cwd(), ".kist-cache", "build");
+        this.cacheDir =
+            options.cacheDir ||
+            path.join(process.cwd(), ".kist-cache", "build");
         this.maxCacheSize = options.maxCacheSize || 1024 * 1024 * 1024; // 1GB
         this.ttl = options.ttl || 7 * 24 * 60 * 60 * 1000; // 7 days
         this.indexPath = path.join(this.cacheDir, "build-index.json");
@@ -163,7 +165,9 @@ export class BuildCache extends AbstractProcess {
             await this.loadIndex();
             await this.fileCache.initialize();
             this.initialized = true;
-            this.logDebug(`BuildCache initialized with ${this.cacheIndex.size} entries.`);
+            this.logDebug(
+                `BuildCache initialized with ${this.cacheIndex.size} entries.`,
+            );
         } catch (error) {
             this.logWarn(`Failed to initialize build cache: ${error}`);
             this.cacheIndex.clear();
@@ -182,11 +186,15 @@ export class BuildCache extends AbstractProcess {
     public async lookup(
         actionName: string,
         inputFiles: string[],
-        config: Record<string, any> = {}
+        config: Record<string, any> = {},
     ): Promise<CacheLookupResult> {
         await this.initialize();
 
-        const cacheKey = await this.computeCacheKey(actionName, inputFiles, config);
+        const cacheKey = await this.computeCacheKey(
+            actionName,
+            inputFiles,
+            config,
+        );
         const entry = this.cacheIndex.get(cacheKey);
 
         if (!entry) {
@@ -217,7 +225,11 @@ export class BuildCache extends AbstractProcess {
             if (restored) {
                 this.stats.restored++;
                 this.stats.hits++;
-                return { found: true, outputFiles: entry.outputFiles, restored: true };
+                return {
+                    found: true,
+                    outputFiles: entry.outputFiles,
+                    restored: true,
+                };
             }
             this.cacheIndex.delete(cacheKey);
             this.stats.misses++;
@@ -243,11 +255,15 @@ export class BuildCache extends AbstractProcess {
         inputFiles: string[],
         outputFiles: string[],
         config: Record<string, any> = {},
-        buildDuration?: number
+        buildDuration?: number,
     ): Promise<void> {
         await this.initialize();
 
-        const cacheKey = await this.computeCacheKey(actionName, inputFiles, config);
+        const cacheKey = await this.computeCacheKey(
+            actionName,
+            inputFiles,
+            config,
+        );
         const inputHash = await this.computeInputHash(inputFiles);
         const configHash = this.computeConfigHash(config);
 
@@ -290,10 +306,19 @@ export class BuildCache extends AbstractProcess {
      */
     public async clear(): Promise<void> {
         this.cacheIndex.clear();
-        this.stats = { hits: 0, misses: 0, stored: 0, restored: 0, evicted: 0 };
+        this.stats = {
+            hits: 0,
+            misses: 0,
+            stored: 0,
+            restored: 0,
+            evicted: 0,
+        };
 
         try {
-            await fs.promises.rm(this.cacheDir, { recursive: true, force: true });
+            await fs.promises.rm(this.cacheDir, {
+                recursive: true,
+                force: true,
+            });
             await fs.promises.mkdir(this.cacheDir, { recursive: true });
         } catch {
             // Ignore cleanup errors
@@ -307,7 +332,11 @@ export class BuildCache extends AbstractProcess {
      */
     public async save(): Promise<void> {
         try {
-            const data = JSON.stringify(Object.fromEntries(this.cacheIndex), null, 2);
+            const data = JSON.stringify(
+                Object.fromEntries(this.cacheIndex),
+                null,
+                2,
+            );
             await fs.promises.writeFile(this.indexPath, data, "utf-8");
             this.logDebug("BuildCache index saved.");
         } catch (error) {
@@ -320,7 +349,10 @@ export class BuildCache extends AbstractProcess {
      */
     public getStats(): typeof this.stats & { size: number; hitRate: string } {
         const total = this.stats.hits + this.stats.misses;
-        const hitRate = total > 0 ? ((this.stats.hits / total) * 100).toFixed(2) + "%" : "N/A";
+        const hitRate =
+            total > 0
+                ? ((this.stats.hits / total) * 100).toFixed(2) + "%"
+                : "N/A";
         return {
             ...this.stats,
             size: this.cacheIndex.size,
@@ -337,7 +369,7 @@ export class BuildCache extends AbstractProcess {
     private async computeCacheKey(
         actionName: string,
         inputFiles: string[],
-        config: Record<string, any>
+        config: Record<string, any>,
     ): Promise<string> {
         const sortedFiles = [...inputFiles].sort().join("|");
         const configStr = JSON.stringify(config);
@@ -354,20 +386,28 @@ export class BuildCache extends AbstractProcess {
         for (const file of inputFiles.sort()) {
             try {
                 const content = await fs.promises.readFile(file);
-                hashes.push(crypto.createHash("sha256").update(content).digest("hex"));
+                hashes.push(
+                    crypto.createHash("sha256").update(content).digest("hex"),
+                );
             } catch {
                 hashes.push("missing");
             }
         }
 
-        return crypto.createHash("sha256").update(hashes.join(":")).digest("hex");
+        return crypto
+            .createHash("sha256")
+            .update(hashes.join(":"))
+            .digest("hex");
     }
 
     /**
      * Computes a hash of the configuration object.
      */
     private computeConfigHash(config: Record<string, any>): string {
-        return crypto.createHash("md5").update(JSON.stringify(config)).digest("hex");
+        return crypto
+            .createHash("md5")
+            .update(JSON.stringify(config))
+            .digest("hex");
     }
 
     /**
@@ -387,18 +427,26 @@ export class BuildCache extends AbstractProcess {
     /**
      * Stores output files as cached artifacts.
      */
-    private async storeArtifacts(cacheKey: string, outputFiles: string[]): Promise<void> {
+    private async storeArtifacts(
+        cacheKey: string,
+        outputFiles: string[],
+    ): Promise<void> {
         const artifactDir = path.join(this.cacheDir, "artifacts", cacheKey);
 
         try {
             await fs.promises.mkdir(artifactDir, { recursive: true });
 
             for (const file of outputFiles) {
-                const artifactPath = path.join(artifactDir, path.basename(file));
+                const artifactPath = path.join(
+                    artifactDir,
+                    path.basename(file),
+                );
                 await fs.promises.copyFile(file, artifactPath);
             }
         } catch (error) {
-            this.logWarn(`Failed to store artifacts for ${cacheKey}: ${error}`);
+            this.logWarn(
+                `Failed to store artifacts for ${cacheKey}: ${error}`,
+            );
         }
     }
 
@@ -407,13 +455,16 @@ export class BuildCache extends AbstractProcess {
      */
     private async restoreFromArtifacts(
         cacheKey: string,
-        entry: BuildCacheEntry
+        entry: BuildCacheEntry,
     ): Promise<boolean> {
         const artifactDir = path.join(this.cacheDir, "artifacts", cacheKey);
 
         try {
             for (const outputFile of entry.outputFiles) {
-                const artifactPath = path.join(artifactDir, path.basename(outputFile));
+                const artifactPath = path.join(
+                    artifactDir,
+                    path.basename(outputFile),
+                );
                 const outputDir = path.dirname(outputFile);
 
                 await fs.promises.mkdir(outputDir, { recursive: true });
@@ -448,8 +499,9 @@ export class BuildCache extends AbstractProcess {
         try {
             const size = await this.getDirectorySize(artifactsPath);
             if (size > this.maxCacheSize) {
-                const entries = Array.from(this.cacheIndex.entries())
-                    .sort(([, a], [, b]) => a.createdAt - b.createdAt);
+                const entries = Array.from(this.cacheIndex.entries()).sort(
+                    ([, a], [, b]) => a.createdAt - b.createdAt,
+                );
 
                 const toEvict = Math.ceil(entries.length * 0.2);
                 for (let i = 0; i < toEvict; i++) {
@@ -471,7 +523,10 @@ export class BuildCache extends AbstractProcess {
         const artifactDir = path.join(this.cacheDir, "artifacts", cacheKey);
 
         try {
-            await fs.promises.rm(artifactDir, { recursive: true, force: true });
+            await fs.promises.rm(artifactDir, {
+                recursive: true,
+                force: true,
+            });
         } catch {
             // Ignore deletion errors
         }
@@ -484,7 +539,9 @@ export class BuildCache extends AbstractProcess {
         let totalSize = 0;
 
         try {
-            const entries = await fs.promises.readdir(dirPath, { withFileTypes: true });
+            const entries = await fs.promises.readdir(dirPath, {
+                withFileTypes: true,
+            });
 
             for (const entry of entries) {
                 const fullPath = path.join(dirPath, entry.name);

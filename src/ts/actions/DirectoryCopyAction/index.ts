@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { DirectoryCopyAction } from "./DirectoryCopyAction";
+import { DirectoryCopyAction } from "./DirectoryCopyAction.js";
 
 // ============================================================================
 // Export

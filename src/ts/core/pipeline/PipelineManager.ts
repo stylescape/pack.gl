@@ -4,10 +4,10 @@
 
 import { ChildProcess, spawn } from "child_process";
 import path from "path";
-import { LiveServer } from "../../live/LiveServer";
-import { AbstractProcess } from "../abstract/AbstractProcess";
-import { ConfigStore } from "../config/ConfigStore";
-import { Pipeline } from "./Pipeline";
+import { LiveServer } from "../../live/LiveServer.js";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
+import { ConfigStore } from "../config/ConfigStore.js";
+import { Pipeline } from "./Pipeline.js";
 
 // ============================================================================
 // Class

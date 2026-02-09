@@ -5,8 +5,8 @@
 import { execFile } from "child_process";
 import path from "path";
 import util from "util";
-import { Action } from "../../core/pipeline/Action";
-import { ActionOptionsType } from "../../types/ActionOptionsType";
+import { Action } from "../../core/pipeline/Action.js";
+import { ActionOptionsType } from "../../types/ActionOptionsType.js";
 
 // ============================================================================
 // Constants

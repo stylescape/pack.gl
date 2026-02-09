@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { DocumentationAction } from "./DocumentationAction";
+import { DocumentationAction } from "./DocumentationAction.js";
 
 // ============================================================================
 // Export

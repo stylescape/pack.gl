@@ -4,8 +4,8 @@
 
 import { promises as fs } from "fs";
 import path from "path";
-import { Action } from "../../core/pipeline/Action";
-import { ActionOptionsType } from "../../types";
+import { Action } from "../../core/pipeline/Action.js";
+import { ActionOptionsType } from "../../types/index.js";
 
 // ============================================================================
 // Classes

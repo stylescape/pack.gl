@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { TypeScriptCompilerAction } from "./TypeScriptCompilerAction";
+import { TypeScriptCompilerAction } from "./TypeScriptCompilerAction.js";
 
 // ============================================================================
 // Export

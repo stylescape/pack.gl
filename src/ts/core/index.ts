@@ -8,23 +8,27 @@
  */
 
 // Core Classes
-export { Action } from "./pipeline/Action";
-export { Pipeline } from "./pipeline/Pipeline";
-export { PipelineManager } from "./pipeline/PipelineManager";
-export { Stage } from "./pipeline/Stage";
-export { Step } from "./pipeline/Step";
+export { Action } from "./pipeline/Action.js";
+export { Pipeline } from "./pipeline/Pipeline.js";
+export { PipelineManager } from "./pipeline/PipelineManager.js";
+export { Stage } from "./pipeline/Stage.js";
+export { Step } from "./pipeline/Step.js";
 
 // Cache Modules
-export { FileCache } from "./cache/FileCache";
-export { BuildCache } from "./cache/BuildCache";
+export { FileCache } from "./cache/FileCache.js";
+export { BuildCache } from "./cache/BuildCache.js";
 
 // Progress Modules
-export { ProgressReporter, createFileProgress, createBuildProgress } from "./progress/ProgressReporter";
+export {
+    ProgressReporter,
+    createFileProgress,
+    createBuildProgress,
+} from "./progress/ProgressReporter.js";
 
 // Utility Functions and Modules
 // If there are reusable utilities, add them here.
 // Example:
-// export { someUtilityFunction } from "./utils";
+// export { someUtilityFunction } from "./utils.js";
 
 // Action Registry
 // Export functions related to action registration and retrieval.
@@ -32,7 +36,7 @@ export { ProgressReporter, createFileProgress, createBuildProgress } from "./pro
 //     registerAction,
 //     getAction,
 //     listRegisteredActions
-// } from "../actions/ActionRegistry";
+// } from "../actions/ActionRegistry.js";
 
 /**
  * Note: If new modules or files are added in the `core` directory,

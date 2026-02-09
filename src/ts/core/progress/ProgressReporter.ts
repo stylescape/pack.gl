@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { AbstractProcess } from "../abstract/AbstractProcess";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
 
 // ============================================================================
 // Types
@@ -148,7 +148,9 @@ export class ProgressReporter extends AbstractProcess {
      */
     public cancel(): void {
         this.isRunning = false;
-        this.logWarn(`${this.label}: Cancelled at ${this.getPercentage().toFixed(1)}%`);
+        this.logWarn(
+            `${this.label}: Cancelled at ${this.getPercentage().toFixed(1)}%`,
+        );
     }
 
     /**
@@ -236,7 +238,11 @@ export class ProgressReporter extends AbstractProcess {
             parts.push(`(${state.percentage.toFixed(1)}%)`);
         }
 
-        if (this.showEta && state.eta !== null && state.completed < state.total) {
+        if (
+            this.showEta &&
+            state.eta !== null &&
+            state.completed < state.total
+        ) {
             parts.push(`ETA: ${this.formatDuration(state.eta)}`);
         }
 
@@ -272,7 +278,10 @@ export class ProgressReporter extends AbstractProcess {
  * @param fileCount - Total number of files
  * @param label - Operation label
  */
-export function createFileProgress(fileCount: number, label: string = "Processing files"): ProgressReporter {
+export function createFileProgress(
+    fileCount: number,
+    label: string = "Processing files",
+): ProgressReporter {
     return new ProgressReporter({
         total: fileCount,
         label,
@@ -286,7 +295,10 @@ export function createFileProgress(fileCount: number, label: string = "Processin
  * @param stepCount - Total number of steps
  * @param label - Build label
  */
-export function createBuildProgress(stepCount: number, label: string = "Building"): ProgressReporter {
+export function createBuildProgress(
+    stepCount: number,
+    label: string = "Building",
+): ProgressReporter {
     return new ProgressReporter({
         total: stepCount,
         label,

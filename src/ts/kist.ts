@@ -2,13 +2,13 @@
 // Import
 // ============================================================================
 
-import { AbstractProcess } from "./core/abstract/AbstractProcess";
-import { ConfigStore } from "./core/config/ConfigStore";
-import { ActionRegistry } from "./core/pipeline/ActionRegistry";
-import { PipelineManager } from "./core/pipeline/PipelineManager";
-import { PluginManager } from "./core/plugin/PluginManager";
-import { LiveServer } from "./live/LiveServer";
-import { LiveWatcher } from "./live/LiveWatcher";
+import { AbstractProcess } from "./core/abstract/AbstractProcess.js";
+import { ConfigStore } from "./core/config/ConfigStore.js";
+import { ActionRegistry } from "./core/pipeline/ActionRegistry.js";
+import { PipelineManager } from "./core/pipeline/PipelineManager.js";
+import { PluginManager } from "./core/plugin/PluginManager.js";
+import { LiveServer } from "./live/LiveServer.js";
+import { LiveWatcher } from "./live/LiveWatcher.js";
 
 // ============================================================================
 // Class

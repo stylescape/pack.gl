@@ -5,8 +5,8 @@
 import fs from "fs";
 import micromatch from "micromatch"; // For glob pattern matching
 import path from "path";
-import { Action } from "../../core/pipeline/Action";
-import { ActionOptionsType } from "../../types/ActionOptionsType";
+import { Action } from "../../core/pipeline/Action.js";
+import { ActionOptionsType } from "../../types/ActionOptionsType.js";
 
 // ============================================================================
 // Classes

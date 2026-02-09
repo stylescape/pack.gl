@@ -1,1 +1,1 @@
-// export { getMode } from "./getMode";
+// export { getMode } from "./getMode.js";

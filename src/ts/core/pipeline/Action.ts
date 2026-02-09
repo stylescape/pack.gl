@@ -2,9 +2,9 @@
 // Import
 // ============================================================================
 
-import { ActionInterface } from "../../interface/ActionInterface";
-import { ActionOptionsType } from "../../types/ActionOptionsType";
-import { AbstractProcess } from "../abstract/AbstractProcess";
+import { ActionInterface } from "../../interface/ActionInterface.js";
+import { ActionOptionsType } from "../../types/ActionOptionsType.js";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
 
 // ============================================================================
 // Class

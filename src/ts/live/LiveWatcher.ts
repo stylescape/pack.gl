@@ -3,10 +3,10 @@
 // ============================================================================
 
 import chokidar, { FSWatcher } from "chokidar";
-import { AbstractProcess } from "../core/abstract/AbstractProcess";
-import { ConfigStore } from "../core/config/ConfigStore";
-import { LiveOptionsInterface } from "../interface";
-import { OptionsInterface } from "../interface/OptionsInterface";
+import { AbstractProcess } from "../core/abstract/AbstractProcess.js";
+import { ConfigStore } from "../core/config/ConfigStore.js";
+import { LiveOptionsInterface } from "../interface/index.js";
+import { OptionsInterface } from "../interface/OptionsInterface.js";
 
 // ============================================================================
 // Class

@@ -4,10 +4,10 @@
 
 import { readdirSync, statSync } from "fs";
 import { join } from "path";
-import { ActionInterface } from "../../interface/ActionInterface";
-import { ActionPlugin } from "../../interface/ActionPlugin";
-import { PluginMetadata } from "../../interface/PluginMetadata";
-import { AbstractProcess } from "../abstract/AbstractProcess";
+import { ActionInterface } from "../../interface/ActionInterface.js";
+import { ActionPlugin } from "../../interface/ActionPlugin.js";
+import { PluginMetadata } from "../../interface/PluginMetadata.js";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
 
 // ============================================================================
 // Class
@@ -134,8 +134,10 @@ export class PluginManager extends AbstractProcess {
                     const scopePrefix = prefix.split("/")[1]; // Extract "plugin-" from "@getkist/plugin-"
                     // Check if entry is a directory or a symlink pointing to a directory
                     const pkgPath = join(scopePath, pkg.name);
-                    const isDir = pkg.isDirectory() || 
-                        (pkg.isSymbolicLink() && statSync(pkgPath).isDirectory());
+                    const isDir =
+                        pkg.isDirectory() ||
+                        (pkg.isSymbolicLink() &&
+                            statSync(pkgPath).isDirectory());
                     if (
                         isDir &&
                         scopePrefix &&

@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { VersionWriteAction } from "./VersionWriteAction";
+import { VersionWriteAction } from "./VersionWriteAction.js";
 
 // ============================================================================
 // Export

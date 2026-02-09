@@ -5,10 +5,10 @@
 import fs from "fs";
 import yaml from "js-yaml";
 import path from "path";
-import { ArgumentParser } from "../../cli/ArgumentParser";
-import { ConfigInterface } from "../../interface/ConfigInterface";
-import { StageInterface } from "../../interface/StageInterface";
-import { AbstractProcess } from "../abstract/AbstractProcess";
+import { ArgumentParser } from "../../cli/ArgumentParser.js";
+import { ConfigInterface } from "../../interface/ConfigInterface.js";
+import { StageInterface } from "../../interface/StageInterface.js";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
 
 // ============================================================================
 // Class
@@ -114,7 +114,9 @@ export class ConfigLoader extends AbstractProcess {
         this.loadedPaths.clear();
 
         try {
-            const config = await this.loadConfigWithInheritance(this.configPath);
+            const config = await this.loadConfigWithInheritance(
+                this.configPath,
+            );
             this.validateConfig(config);
             this.logDebug(
                 `Successfully loaded configuration from: ${this.configPath}`,
@@ -205,10 +207,7 @@ export class ConfigLoader extends AbstractProcess {
         };
 
         // Clean up empty metadata
-        if (
-            merged.metadata &&
-            Object.keys(merged.metadata).length === 0
-        ) {
+        if (merged.metadata && Object.keys(merged.metadata).length === 0) {
             delete merged.metadata;
         }
 

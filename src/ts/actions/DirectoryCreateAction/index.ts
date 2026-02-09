@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { DirectoryCreateAction } from "./DirectoryCreateAction";
+import { DirectoryCreateAction } from "./DirectoryCreateAction.js";
 
 // ============================================================================
 // Export

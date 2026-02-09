@@ -5,7 +5,7 @@
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
-import { AbstractProcess } from "../abstract/AbstractProcess";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
 
 // ============================================================================
 // Types
@@ -100,7 +100,8 @@ export class FileCache extends AbstractProcess {
      */
     private constructor(options: FileCacheOptions = {}) {
         super();
-        this.cacheDir = options.cacheDir || path.join(process.cwd(), ".kist-cache");
+        this.cacheDir =
+            options.cacheDir || path.join(process.cwd(), ".kist-cache");
         this.maxEntries = options.maxEntries || 10000;
         this.ttl = options.ttl || 24 * 60 * 60 * 1000; // 24 hours default
         this.cacheIndexPath = path.join(this.cacheDir, "file-cache.json");
@@ -142,9 +143,13 @@ export class FileCache extends AbstractProcess {
             await this.ensureCacheDirectory();
             await this.loadCacheFromDisk();
             this.initialized = true;
-            this.logDebug(`FileCache initialized with ${this.cache.size} entries.`);
+            this.logDebug(
+                `FileCache initialized with ${this.cache.size} entries.`,
+            );
         } catch (error) {
-            this.logWarn(`Failed to initialize file cache, starting fresh: ${error}`);
+            this.logWarn(
+                `Failed to initialize file cache, starting fresh: ${error}`,
+            );
             this.cache.clear();
             this.initialized = true;
         }
@@ -228,7 +233,9 @@ export class FileCache extends AbstractProcess {
                 await this.evictOldEntries();
             }
         } catch (error) {
-            this.logWarn(`Failed to update cache entry for ${filePath}: ${error}`);
+            this.logWarn(
+                `Failed to update cache entry for ${filePath}: ${error}`,
+            );
         }
     }
 
@@ -244,12 +251,10 @@ export class FileCache extends AbstractProcess {
             filePaths.map(async (filePath) => ({
                 filePath,
                 changed: await this.hasFileChanged(filePath),
-            }))
+            })),
         );
 
-        return results
-            .filter((r) => r.changed)
-            .map((r) => r.filePath);
+        return results.filter((r) => r.changed).map((r) => r.filePath);
     }
 
     /**
@@ -303,7 +308,7 @@ export class FileCache extends AbstractProcess {
             const data = JSON.stringify(
                 Object.fromEntries(this.cache),
                 null,
-                2
+                2,
             );
             await fs.promises.writeFile(this.cacheIndexPath, data, "utf-8");
             this.logDebug(`FileCache saved with ${this.cache.size} entries.`);
@@ -317,9 +322,18 @@ export class FileCache extends AbstractProcess {
      *
      * @returns Cache performance statistics
      */
-    public getStats(): { hits: number; misses: number; evictions: number; size: number; hitRate: string } {
+    public getStats(): {
+        hits: number;
+        misses: number;
+        evictions: number;
+        size: number;
+        hitRate: string;
+    } {
         const total = this.stats.hits + this.stats.misses;
-        const hitRate = total > 0 ? ((this.stats.hits / total) * 100).toFixed(2) + "%" : "N/A";
+        const hitRate =
+            total > 0
+                ? ((this.stats.hits / total) * 100).toFixed(2) + "%"
+                : "N/A";
         return {
             ...this.stats,
             size: this.cache.size,
@@ -367,7 +381,10 @@ export class FileCache extends AbstractProcess {
      */
     private async loadCacheFromDisk(): Promise<void> {
         try {
-            const data = await fs.promises.readFile(this.cacheIndexPath, "utf-8");
+            const data = await fs.promises.readFile(
+                this.cacheIndexPath,
+                "utf-8",
+            );
             const parsed = JSON.parse(data) as Record<string, CacheEntry>;
             this.cache = new Map(Object.entries(parsed));
         } catch {
@@ -382,8 +399,9 @@ export class FileCache extends AbstractProcess {
      */
     private async evictOldEntries(): Promise<void> {
         const entriesToEvict = Math.floor(this.maxEntries * 0.1); // Evict 10%
-        const entries = Array.from(this.cache.entries())
-            .sort(([, a], [, b]) => a.cachedAt - b.cachedAt);
+        const entries = Array.from(this.cache.entries()).sort(
+            ([, a], [, b]) => a.cachedAt - b.cachedAt,
+        );
 
         for (let i = 0; i < entriesToEvict && i < entries.length; i++) {
             this.cache.delete(entries[i][0]);

@@ -2,10 +2,10 @@
 // Import
 // ============================================================================
 
-import { coreActions } from "../../actions/CoreActions";
-import { ActionInterface } from "../../interface/ActionInterface";
-import { AbstractProcess } from "../abstract/AbstractProcess";
-import { PluginManager } from "../plugin/PluginManager";
+import { coreActions } from "../../actions/CoreActions.js";
+import { ActionInterface } from "../../interface/ActionInterface.js";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
+import { PluginManager } from "../plugin/PluginManager.js";
 
 // ============================================================================
 // Class

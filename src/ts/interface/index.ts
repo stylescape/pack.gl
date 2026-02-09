@@ -1,9 +1,9 @@
 // Exporting all interfaces from the interfaces directory
 
-export { ActionInterface } from "./ActionInterface";
-export { ConfigInterface } from "./ConfigInterface";
-export { LiveOptionsInterface } from "./LiveOptionsInterface";
-export { OptionsInterface } from "./OptionsInterface";
-export { StageInterface } from "./StageInterface";
-export { StepInterface } from "./StepInterface";
-export { StepOptionsInterface } from "./StepOptionsInterface";
+export { ActionInterface } from "./ActionInterface.js";
+export { ConfigInterface } from "./ConfigInterface.js";
+export { LiveOptionsInterface } from "./LiveOptionsInterface.js";
+export { OptionsInterface } from "./OptionsInterface.js";
+export { StageInterface } from "./StageInterface.js";
+export { StepInterface } from "./StepInterface.js";
+export { StepOptionsInterface } from "./StepOptionsInterface.js";

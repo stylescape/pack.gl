@@ -2,9 +2,9 @@
 // Import
 // ============================================================================
 
-import { AbstractProcess } from "../core/abstract/AbstractProcess";
-import { OptionsValidator } from "../core/validation/OptionsValidator";
-import { OptionsInterface } from "../interface/OptionsInterface";
+import { AbstractProcess } from "../core/abstract/AbstractProcess.js";
+import { OptionsValidator } from "../core/validation/OptionsValidator.js";
+import { OptionsInterface } from "../interface/OptionsInterface.js";
 
 // ============================================================================
 // Class

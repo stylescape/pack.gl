@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { DirectoryCleanAction } from "./DirectoryCleanAction";
+import { DirectoryCleanAction } from "./DirectoryCleanAction.js";
 
 // ============================================================================
 // Export

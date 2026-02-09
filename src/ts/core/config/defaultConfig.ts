@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { ConfigInterface } from "../../interface/ConfigInterface";
+import { ConfigInterface } from "../../interface/ConfigInterface.js";
 
 // ============================================================================
 // Constants

@@ -2,9 +2,9 @@
 // Import
 // ============================================================================
 
-import { ConfigInterface } from "../../interface/ConfigInterface";
-import { AbstractProcess } from "../abstract/AbstractProcess";
-import { defaultConfig } from "./defaultConfig";
+import { ConfigInterface } from "../../interface/ConfigInterface.js";
+import { AbstractProcess } from "../abstract/AbstractProcess.js";
+import { defaultConfig } from "./defaultConfig.js";
 
 // ============================================================================
 // Class

@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { FileRenameAction } from "./FileRenameAction";
+import { FileRenameAction } from "./FileRenameAction.js";
 
 // ============================================================================
 // Export

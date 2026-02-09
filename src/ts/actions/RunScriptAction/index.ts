@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { RunScriptAction } from "./RunScriptAction";
+import { RunScriptAction } from "./RunScriptAction.js";
 
 // ============================================================================
 // Export

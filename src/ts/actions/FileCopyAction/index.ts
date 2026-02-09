@@ -2,7 +2,7 @@
 // Import
 // ============================================================================
 
-import { FileCopyAction } from "./FileCopyAction";
+import { FileCopyAction } from "./FileCopyAction.js";
 
 // ============================================================================
 // Export
