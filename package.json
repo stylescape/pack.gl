@@ -1,7 +1,7 @@
 {
     "name": "kist",
     "description": "Lightweight Package Pipeline Processor with Plugin Architecture",
-    "version": "0.1.61",
+    "version": "0.1.62",
     "config": {
         "version_short": "0.1"
     },
@@ -49,8 +49,8 @@
     "module": "dist/js/index.js",
     "exports": {
         ".": {
-            "types": "./dist/js/index.d.ts",
-            "import": "./dist/js/index.js"
+            "types": "./js/index.d.ts",
+            "import": "./js/index.js"
         }
     },
     "bin": "dist/js/cli.js",
