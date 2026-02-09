@@ -47,3 +47,42 @@ export {
     type CoreActionName,
     type MigratedActionName,
 } from "./config/actions.config.js";
+
+// ============================================================================
+// Error Classes
+// ============================================================================
+
+export {
+    // Base error
+    KistError,
+    // Config errors
+    ConfigError,
+    ConfigNotFoundError,
+    ConfigParseError,
+    ConfigValidationError,
+    // Build errors
+    BuildError,
+    ActionError,
+    StepError,
+    StageError,
+    // Plugin errors
+    PluginError,
+    PluginNotFoundError,
+    PluginInitError,
+    // File system errors
+    FileSystemError,
+    FileNotFoundError,
+    DirectoryNotFoundError,
+    PermissionError,
+    PathTraversalError,
+    // CLI errors
+    CLIError,
+    InvalidArgumentError,
+    MissingArgumentError,
+    // Resource errors
+    TimeoutError,
+    ResourceLimitError,
+    // Error codes
+    ErrorCodes,
+    type ErrorCode,
+} from "./errors/index.js";

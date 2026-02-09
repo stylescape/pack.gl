@@ -1,7 +1,7 @@
 {
     "name": "kist",
     "description": "Lightweight Package Pipeline Processor with Plugin Architecture",
-    "version": "0.1.62",
+    "version": "0.1.63",
     "config": {
         "version_short": "0.1"
     },
@@ -115,6 +115,8 @@
         "ws": "^8.19.0"
     },
     "devDependencies": {
+        "@commitlint/cli": "20.4.1",
+        "@commitlint/config-conventional": "20.4.1",
         "@eslint/js": "9.39.2",
         "@types/eslint": "^9.6.1",
         "@types/express": "^5.0.6",
@@ -130,6 +132,7 @@
         "eslint-plugin-node": "^11.1.0",
         "husky": "^9.1.7",
         "jest": "^30.2.0",
+        "lint-staged": "16.2.7",
         "mocha": "^11.7.5",
         "stylelint": "^17.1.1",
         "stylelint-config-standard-scss": "^17.0.0",
@@ -156,5 +159,14 @@
         "transform": {
             "^.+\\.tsx?$": "ts-jest"
         }
+    },
+    "lint-staged": {
+        "*.{ts,tsx}": [
+            "eslint --fix --max-warnings=50",
+            "prettier --write"
+        ],
+        "*.{js,json,md,yml,yaml}": [
+            "prettier --write"
+        ]
     }
 }
