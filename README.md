@@ -231,7 +231,7 @@ kist uses a self-hosting build process:
 
 ### Project Structure
 
-```
+```text
 kist/
 ├── src/ts/
 │   ├── actions/      # Built-in action implementations
