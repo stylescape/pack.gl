@@ -1,1 +1,10 @@
+#!/bin/sh
+
+# Load nvm/node if available (for GitHub Desktop and other GUI apps)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Fallback: add common node locations to PATH
+export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin:$HOME/.nvm/versions/node/$(ls $HOME/.nvm/versions/node 2>/dev/null | tail -1)/bin"
+
 npx lint-staged
