@@ -374,7 +374,7 @@
     "workbench.commandPalette.history": 50,
     // ...
     "workbench.editor.enablePreview": false,
-    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.colorTheme": "Dark Modern",
     "workbench.iconTheme": "vscode-icons",
     // ...
     // ========================================================================
