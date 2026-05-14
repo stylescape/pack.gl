@@ -274,10 +274,10 @@ Contributions are welcome! See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for gu
 
 MIT License - see [LICENSE](LICENSE) for details.
 
-Copyright © 2024-2026 [Scape Agency](https://www.scape.agency)
+Copyright © 2024-2026 [Scape Press](https://www.scape.press)
 
 ---
 
 <p align="center">
-    <b>Made with ❤️ by <a href="https://www.scape.agency" target="_blank">Scape Agency</a></b>
+    <b>Made with ❤️ by <a href="https://www.scape.press" target="_blank">Scape Press</a></b>
 </p>
