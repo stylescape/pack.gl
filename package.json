@@ -1,7 +1,7 @@
 {
     "name": "kist",
     "description": "Lightweight Package Pipeline Processor with Plugin Architecture",
-    "version": "0.1.70",
+    "version": "0.1.71",
     "config": {
         "version_short": "0.1"
     },
@@ -141,7 +141,7 @@
         "eslint-plugin-node": "^11.1.0",
         "husky": "^9.1.7",
         "jest": "^30.4.2",
-        "lint-staged": "17.0.4",
+        "lint-staged": "16.4.0",
         "mocha": "11.3.0",
         "stylelint": "^17.11.1",
         "stylelint-config-standard-scss": "^17.0.0",
