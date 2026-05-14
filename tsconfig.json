@@ -120,7 +120,6 @@
 
     "include": [
         "src/ts/**/*.ts",
-        "tst/**/*.ts",
         "tmp/TemplateRenderAction copy.ts"
     ],
 
