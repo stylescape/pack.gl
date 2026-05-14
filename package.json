@@ -1,184 +1,184 @@
 {
-    "name": "kist",
-    "description": "Lightweight Package Pipeline Processor with Plugin Architecture",
-    "version": "0.1.71",
-    "config": {
-        "version_short": "0.1"
-    },
-    "keywords": [
-        "kist",
-        "package",
-        "packager",
-        "build",
-        "builder",
-        "compile",
-        "compiler",
-        "framework",
-        "web",
-        "plugin-architecture",
-        "pipeline",
-        "build-tool",
-        "automation"
-    ],
-    "homepage": "https://www.getkist.com/",
-    "author": "Lars van Vianen <lars@vianen.com> (https://vianen.com)",
-    "contributors": [
-        "Scape Press <info@scape.press>"
-    ],
-    "license": "MIT",
-    "engines": {
-        "node": ">=22.0.0",
-        "npm": ">=9.0.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/getkist/kist.git"
-    },
-    "bugs": {
-        "url": "https://github.com/getkist/kist/issues"
-    },
-    "funding": [
-        {
-            "type": "github",
-            "url": "https://github.com/sponsors/scape-foundation"
-        }
-    ],
-    "main": "dist/js/index.js",
-    "types": "dist/js/index.d.ts",
-    "type": "module",
-    "module": "dist/js/index.js",
-    "exports": {
-        ".": {
-            "import": {
-                "types": "./dist/js/index.d.ts",
-                "default": "./dist/js/index.js"
-            }
-        },
-        "./cli": {
-            "import": "./dist/js/cli.js"
-        }
-    },
-    "sideEffects": false,
-    "bin": {
-        "kist": "./dist/js/cli.js"
-    },
-    "scripts": {
-        "format": "prettier --write .",
-        "lint": "eslint 'src/**/*.ts' --max-warnings=50",
-        "lint:fix": "eslint 'src/**/*.ts' --fix --max-warnings=50",
-        "clean": "rm -rf dist build tmp",
-        "prebuild": "npm run clean",
-        "build": "npm run build:bootstrap && npm run build:self",
-        "build:bootstrap": "tsc",
-        "build:self": "node dist/js/cli.js --config kist.yml",
-        "build:check": "tsc --noEmit",
-        "dev": "npm run build && npm run test:cli",
-        "test": "node bin/run-tests.js",
-        "test:cli": "node dist/js/cli.js",
-        "test:coverage": "jest --coverage",
-        "test:watch": "jest --watch",
-        "docs": "typedoc",
-        "deps:check": "node bin/check-deps.js",
-        "deps:update": "npm update",
-        "validate:package": "node bin/validate-package.js",
-        "clean:deep": "node bin/deep-clean.js",
-        "version:bump": "node bin/bump-version.js",
-        "version:major": "node bin/bump-version.js major",
-        "version:minor": "node bin/bump-version.js minor",
-        "version:patch": "node bin/bump-version.js patch",
-        "prepare": "npm run build",
-        "prepublishOnly": "npm run lint && npm run build && npm test"
-    },
-    "dependencies": {
-        "@babel/core": "^7.29.0",
-        "@babel/preset-env": "^7.29.5",
-        "@babel/preset-typescript": "^7.28.5",
-        "@types/fs-extra": "^11.0.4",
-        "@types/micromatch": "^4.0.10",
-        "@types/nunjucks": "^3.2.6",
-        "@types/svg-sprite": "^0.0.39",
-        "autoprefixer": "^10.5.0",
-        "canvas": "^3.2.3",
-        "canvg": "^4.0.3",
-        "chokidar": "^5.0.0",
-        "cssnano": "^8.0.1",
-        "del": "^8.0.1",
-        "eslint-config-prettier": "^10.1.8",
-        "express": "^5.2.1",
-        "express-rate-limit": "^8.5.2",
-        "fantasticon": "^4.1.0",
-        "fs-extra": "^11.3.5",
-        "glob": "^13.0.6",
-        "js-yaml": "^4.1.1",
-        "jsdom": "^29.1.1",
-        "lodash": "^4.18.1",
-        "nunjucks": "^3.2.4",
-        "postcss": "^8.5.14",
-        "postcss-preset-env": "^11.3.0",
-        "prettier": "^3.8.3",
-        "sass": "^1.99.0",
-        "semver": "^7.8.0",
-        "svg-sprite": "^2.0.4",
-        "svgo": "^4.0.1",
-        "terser": "^5.47.1",
-        "ws": "^8.20.1"
-    },
-    "devDependencies": {
-        "@commitlint/cli": "21.0.1",
-        "@commitlint/config-conventional": "21.0.1",
-        "@eslint/js": "10.0.1",
-        "@types/eslint": "^9.6.1",
-        "@types/express": "^5.0.6",
-        "@types/jest": "^30.0.0",
-        "@types/js-yaml": "^4.0.9",
-        "@types/jsdom": "^28.0.3",
-        "@types/mocha": "^10.0.10",
-        "@types/node": "^25.8.0",
-        "@types/semver": "^7.7.1",
-        "@types/supertest": "^7.2.0",
-        "@types/ws": "^8.18.1",
-        "eslint": "10.3.0",
-        "eslint-plugin-node": "^11.1.0",
-        "husky": "^9.1.7",
-        "jest": "^30.4.2",
-        "lint-staged": "16.4.0",
-        "mocha": "11.3.0",
-        "stylelint": "^17.11.1",
-        "stylelint-config-standard-scss": "^17.0.0",
-        "supertest": "^7.2.2",
-        "ts-jest": "^29.4.9",
-        "ts-node": "^10.9.2",
-        "tslib": "^2.8.1",
-        "typedoc": "0.28.19",
-        "typedoc-plugin-markdown": "4.11.0",
-        "typescript": "^6.0.3",
-        "typescript-eslint": "^8.59.3"
-    },
-    "overrides": {
-        "chokidar": "^5.0.0",
-        "serialize-javascript": "^7.0.5"
-    },
-    "files": [
-        "dist/**",
-        "bin/js/**",
-        "README.md",
-        "LICENSE",
-        "CHANGELOG.md",
-        "PLUGIN_DEVELOPMENT.md",
-        "PLUGIN_MIGRATION.md"
-    ],
-    "jest": {
-        "transform": {
-            "^.+\\.tsx?$": "ts-jest"
-        }
-    },
-    "lint-staged": {
-        "*.{ts,tsx}": [
-            "eslint --fix --max-warnings=50",
-            "prettier --write"
-        ],
-        "*.{js,json,md,yml,yaml}": [
-            "prettier --write"
-        ]
+  "name": "kist",
+  "description": "Lightweight Package Pipeline Processor with Plugin Architecture",
+  "version": "0.1.72",
+  "config": {
+    "version_short": "0.1"
+  },
+  "keywords": [
+    "kist",
+    "package",
+    "packager",
+    "build",
+    "builder",
+    "compile",
+    "compiler",
+    "framework",
+    "web",
+    "plugin-architecture",
+    "pipeline",
+    "build-tool",
+    "automation"
+  ],
+  "homepage": "https://www.getkist.com/",
+  "author": "Lars van Vianen <lars@vianen.com> (https://vianen.com)",
+  "contributors": [
+    "Scape Press <info@scape.press>"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getkist/kist.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getkist/kist/issues"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/scape-foundation"
     }
+  ],
+  "main": "dist/js/index.js",
+  "types": "dist/js/index.d.ts",
+  "type": "module",
+  "module": "dist/js/index.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/js/index.d.ts",
+        "default": "./dist/js/index.js"
+      }
+    },
+    "./cli": {
+      "import": "./dist/js/cli.js"
+    }
+  },
+  "sideEffects": false,
+  "bin": {
+    "kist": "./dist/js/cli.js"
+  },
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint 'src/**/*.ts' --max-warnings=50",
+    "lint:fix": "eslint 'src/**/*.ts' --fix --max-warnings=50",
+    "clean": "rm -rf dist build tmp",
+    "prebuild": "npm run clean",
+    "build": "npm run build:bootstrap && npm run build:self",
+    "build:bootstrap": "tsc",
+    "build:self": "node dist/js/cli.js --config kist.yml",
+    "build:check": "tsc --noEmit",
+    "dev": "npm run build && npm run test:cli",
+    "test": "node bin/run-tests.js",
+    "test:cli": "node dist/js/cli.js",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "docs": "typedoc",
+    "deps:check": "node bin/check-deps.js",
+    "deps:update": "npm update",
+    "validate:package": "node bin/validate-package.js",
+    "clean:deep": "node bin/deep-clean.js",
+    "version:bump": "node bin/bump-version.js",
+    "version:major": "node bin/bump-version.js major",
+    "version:minor": "node bin/bump-version.js minor",
+    "version:patch": "node bin/bump-version.js patch",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint && npm run build && npm test"
+  },
+  "dependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.5",
+    "@babel/preset-typescript": "^7.28.5",
+    "@types/fs-extra": "^11.0.4",
+    "@types/micromatch": "^4.0.10",
+    "@types/nunjucks": "^3.2.6",
+    "@types/svg-sprite": "^0.0.39",
+    "autoprefixer": "^10.5.0",
+    "canvas": "^3.2.3",
+    "canvg": "^4.0.3",
+    "chokidar": "^5.0.0",
+    "cssnano": "^8.0.1",
+    "del": "^8.0.1",
+    "eslint-config-prettier": "^10.1.8",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "fantasticon": "^4.1.0",
+    "fs-extra": "^11.3.5",
+    "glob": "^13.0.6",
+    "js-yaml": "^4.1.1",
+    "jsdom": "^29.1.1",
+    "lodash": "^4.18.1",
+    "nunjucks": "^3.2.4",
+    "postcss": "^8.5.14",
+    "postcss-preset-env": "^11.3.0",
+    "prettier": "^3.8.3",
+    "sass": "^1.99.0",
+    "semver": "^7.8.0",
+    "svg-sprite": "^2.0.4",
+    "svgo": "^4.0.1",
+    "terser": "^5.47.1",
+    "ws": "^8.20.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "21.0.1",
+    "@commitlint/config-conventional": "21.0.1",
+    "@eslint/js": "10.0.1",
+    "@types/eslint": "^9.6.1",
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/js-yaml": "^4.0.9",
+    "@types/jsdom": "^28.0.3",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.8.0",
+    "@types/semver": "^7.7.1",
+    "@types/supertest": "^7.2.0",
+    "@types/ws": "^8.18.1",
+    "eslint": "10.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "husky": "^9.1.7",
+    "jest": "^30.4.2",
+    "lint-staged": "16.4.0",
+    "mocha": "11.3.0",
+    "stylelint": "^17.11.1",
+    "stylelint-config-standard-scss": "^17.0.0",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.9",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.8.1",
+    "typedoc": "0.28.19",
+    "typedoc-plugin-markdown": "4.11.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.3"
+  },
+  "overrides": {
+    "chokidar": "^5.0.0",
+    "serialize-javascript": "^7.0.5"
+  },
+  "files": [
+    "dist/**",
+    "bin/js/**",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "PLUGIN_DEVELOPMENT.md",
+    "PLUGIN_MIGRATION.md"
+  ],
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix --max-warnings=50",
+      "prettier --write"
+    ],
+    "*.{js,json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
 }

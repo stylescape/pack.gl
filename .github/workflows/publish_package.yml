@@ -32,6 +32,13 @@ jobs:
           node-version: '22.x'
 
       -
+        name: Upgrade npm
+        run: |
+          npm -v
+          npm install -g npm@11.5.2 --force
+          npm -v
+
+      -
         name: NPM Install
         run: |
           npm install --legacy-peer-deps
@@ -95,7 +102,7 @@ jobs:
         name: Upgrade npm to 11.5.1+
         run: |
           npm -v
-          npm i -g npm@^11.5.1
+          npm install -g npm@11.5.2 --force
           npm -v
 
       -
