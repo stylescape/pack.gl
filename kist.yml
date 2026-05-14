@@ -134,6 +134,10 @@ stages:
                         - keywords
                         - license
                         - homepage
+                        - repository
+                        - bugs
+                        - author
+                        - contributors
                     # customConfig:
                     #     private: true
                     #     scripts:
