@@ -73,7 +73,7 @@
         "build:self": "node dist/js/cli.js --config kist.yml",
         "build:check": "tsc --noEmit",
         "dev": "npm run build && npm run test:cli",
-        "test": "node --loader ts-node/esm bin/run-tests.ts",
+        "test": "node bin/run-tests.js",
         "test:cli": "node dist/js/cli.js",
         "test:coverage": "jest --coverage",
         "test:watch": "jest --watch",

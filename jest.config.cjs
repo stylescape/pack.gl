@@ -2,7 +2,7 @@ module.exports = {
     roots: ["<rootDir>/tst"],
     testEnvironment: "node",
     transform: {
-        "^.+\\.ts$": "ts-jest",
+        "^.+\\.ts$": ["ts-jest", { tsconfig: "tsconfig.test.json", isolatedModules: true }],
     },
     moduleFileExtensions: ["ts", "js"],
     testRegex: ".*\\.test\\.ts$", // Match files ending with .test.ts

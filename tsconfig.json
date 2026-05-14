@@ -44,7 +44,7 @@
             /* Specify multiple folders that act like `./node_modules/@types`. */
             "node_modules/@types"
         ],
-        // "types": [],                                         /* Specify type package names to be included without being referenced in a source file. */
+        "types": ["jest", "node"],
         // "allowUmdGlobalAccess": true,                        /* Allow accessing UMD globals from modules. */
         "resolveJsonModule": true /* Enable importing .json files */,
         // "noResolve": true,                                   /* Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project. */
@@ -118,7 +118,11 @@
         "experimentalSpecifierResolution": "node"
     },
 
-    "include": ["src/ts/**/*.ts", "tmp/TemplateRenderAction copy.ts"],
+    "include": [
+        "src/ts/**/*.ts",
+        "tst/**/*.ts",
+        "tmp/TemplateRenderAction copy.ts"
+    ],
 
     "exclude": [
         "**/*.spec.ts",

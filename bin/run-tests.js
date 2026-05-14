@@ -2,10 +2,9 @@
 // Import
 // ============================================================================
 
-import { execFile } from "child_process";
+import { spawn } from "child_process";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
-import { promisify } from "util";
 
 // ============================================================================
 // Constants
@@ -13,37 +12,31 @@ import { promisify } from "util";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const execFileAsync = promisify(execFile);
 
 // ============================================================================
 // Functions
 // ============================================================================
 
-async function runTests(): Promise<void> {
-    try {
-        console.log("Running tests...");
+function runTests() {
+    console.log("Running tests...");
 
-        // Resolve paths
-        const jestConfigPath: string = resolve(
-            __dirname,
-            "../jest.config.cjs",
-        );
+    // Resolve paths
+    const jestConfigPath = resolve(__dirname, "../jest.config.cjs");
 
-        // Run Jest using execFile with array form (safe from shell injection)
-        const { stdout, stderr } = await execFileAsync("npx", [
-            "jest",
-            "--config",
-            jestConfigPath,
-        ]);
+    // Run Jest with stdio inherited so output streams directly to console
+    const child = spawn("npx", ["jest", "--config", jestConfigPath], {
+        stdio: "inherit",
+        shell: false,
+    });
 
-        if (stderr) {
-            console.error("Test errors:", stderr);
-        }
+    child.on("exit", (code) => {
+        process.exit(code ?? 1);
+    });
 
-        console.log("Test output:", stdout);
-    } catch (error) {
+    child.on("error", (error) => {
         console.error("Error running tests:", error);
-    }
+        process.exit(1);
+    });
 }
 
 // ============================================================================
