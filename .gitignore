@@ -160,7 +160,7 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
+!bin/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
@@ -888,7 +888,6 @@ cython_debug/
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
 .Python
-[Bb]in
 [Ii]nclude
 [Ll]ib
 [Ll]ib64
