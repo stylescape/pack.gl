@@ -52,6 +52,14 @@ jobs:
         find dist -type f -size 0 -delete
         echo "Cleaned up empty files from dist directory"
 
+    - name: Stage release assets
+      run: |
+        mkdir -p release-assets
+        [ -f dist/package.json ] && cp dist/package.json release-assets/ || true
+        [ -f README.md ] && cp README.md release-assets/ || true
+        [ -f LICENSE ] && cp LICENSE release-assets/ || true
+        ls -la release-assets
+
     - name: Create GitHub Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -61,6 +69,4 @@ jobs:
           --title "Release ${{ steps.get_version.outputs.VERSION }}" \
           --notes-file release_notes.md \
           --draft=false \
-          dist/package.json \
-          dist/README.md \
-          dist/LICENSE
+          release-assets/*
