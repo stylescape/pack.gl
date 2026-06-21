@@ -23,7 +23,7 @@ jobs:
 
       -
         name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       -
         name: Setup Node
@@ -89,7 +89,7 @@ jobs:
 
       -
         name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       -
         name: Setup Node
@@ -163,7 +163,7 @@ jobs:
   #   steps:
 
   #     -
-  #       uses: actions/checkout@v6
+  #       uses: actions/checkout@v7
 
   #     -
   #       uses: actions/setup-node@v6
