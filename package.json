@@ -124,7 +124,7 @@
     "ws": "^8.20.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "21.0.2",
+    "@commitlint/cli": "21.2.1",
     "@commitlint/config-conventional": "21.0.2",
     "@eslint/js": "10.0.1",
     "@types/eslint": "^9.6.1",
