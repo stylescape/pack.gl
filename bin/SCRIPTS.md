@@ -12,13 +12,13 @@ Builds the project and runs the CLI in development mode.
 
 Builds the entire project (compilation + processing).
 
-### `npm run build:compile`
+### `npm run build:bootstrap`
 
-Compiles TypeScript to JavaScript.
+Compiles TypeScript to JavaScript (bootstrap).
 
-### `npm run build:process`
+### `npm run build:self`
 
-Runs the build processing step.
+Runs kist's self-hosting build/pipeline step.
 
 ### `npm run build:check`
 
