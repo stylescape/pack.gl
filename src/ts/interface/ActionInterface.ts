@@ -9,7 +9,7 @@ import type { ActionOptionsType } from "../types/ActionOptionsType.js";
 // ============================================================================
 
 /**
- * ActionInterface defines the contract for step action classes in pack.gl.
+ * ActionInterface defines the contract for step action classes in kist.
  * Implementing this interface allows actions to be dynamically integrated into
  * the pipeline, offering a flexible and extensible system for defining custom
  * behaviors within different stages.

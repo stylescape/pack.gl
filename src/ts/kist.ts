@@ -7,6 +7,7 @@ import { ConfigStore } from "./core/config/ConfigStore.js";
 import { ActionRegistry } from "./core/pipeline/ActionRegistry.js";
 import { PipelineManager } from "./core/pipeline/PipelineManager.js";
 import { PluginManager } from "./core/plugin/PluginManager.js";
+import { ConfigValidator } from "./core/validation/ConfigValidator.js";
 import { LiveServer } from "./live/LiveServer.js";
 import { LiveWatcher } from "./live/LiveWatcher.js";
 
@@ -53,6 +54,11 @@ export class Kist extends AbstractProcess {
             // Initialize the ActionRegistry with available actions
             await this.initializeActionRegistry();
 
+            // Validate the merged configuration now that all core and plugin
+            // actions are registered, so a malformed kist.yml fails fast with
+            // a clear message instead of deep inside the pipeline.
+            this.validateConfiguration();
+
             // Create and run the PipelineManager
             const liveReloadEnabled = ConfigStore.getInstance().get<boolean>(
                 "options.live.enabled",
@@ -74,17 +80,29 @@ export class Kist extends AbstractProcess {
     }
 
     /**
+     * Validates the merged configuration against the full validation suite
+     * (stages, steps, and registered actions).
+     *
+     * @throws Error if the configuration is invalid.
+     */
+    private validateConfiguration(): void {
+        this.logInfo("Validating configuration...");
+        const config = ConfigStore.getInstance().getConfig();
+        new ConfigValidator().validate(config);
+        this.logInfo("Configuration validated successfully.");
+    }
+
+    /**
      * Initializes the ActionRegistry with available actions.
      * Automatically registers core actions and discovers external plugins.
      */
     private async initializeActionRegistry(): Promise<void> {
         this.logInfo("Initializing plugin system...");
 
-        // Initialize and discover plugins first
+        // Initialize and discover plugins first (uses the PluginManager's
+        // default prefixes; pass `pluginPrefixes` here only to override them)
         const pluginManager = PluginManager.getInstance();
-        await pluginManager.discoverPlugins({
-            pluginPrefixes: ["@getkist/action-", "kist-plugin-"],
-        });
+        await pluginManager.discoverPlugins();
 
         // Log loaded plugins
         const plugins = pluginManager.getLoadedPlugins();

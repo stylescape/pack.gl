@@ -129,6 +129,8 @@ export class ConfigStore extends AbstractProcess {
      * Prints the current configuration to the console.
      */
     public print(): void {
+        // Intentional console output: printing the config IS the feature.
+        // eslint-disable-next-line no-console
         console.log(
             "Current Configuration:",
             JSON.stringify(this.config, null, 2),

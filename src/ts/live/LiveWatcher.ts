@@ -58,7 +58,8 @@ export class LiveWatcher extends AbstractProcess {
         this.pathsToWatch = liveReloadOptions.watchPaths ?? [
             "src/**/*",
             "config/**/*",
-            "pack.yaml",
+            "kist.yaml",
+            "kist.yml",
         ];
         this.ignoredPaths = liveReloadOptions.ignoredPaths ?? ["node_modules"];
 
@@ -74,7 +75,7 @@ export class LiveWatcher extends AbstractProcess {
      * Initializes and configures the chokidar watcher to monitor files and
      * directories.
      */
-    private setupWatchers() {
+    private setupWatchers(): void {
         if (!this.watcher) return;
 
         this.watcher
@@ -103,7 +104,7 @@ export class LiveWatcher extends AbstractProcess {
      * Starts the file watcher if it is not already running. If the watcher
      * was stopped previously, it re-initializes the watcher.
      */
-    public startWatching() {
+    public startWatching(): void {
         if (this.watcher) {
             this.logInfo("Watcher is already running.");
             return;
@@ -130,7 +131,7 @@ export class LiveWatcher extends AbstractProcess {
      * Stops the file watcher and releases its resources. This is useful when
      * you need to clean up or reinitialize the watcher.
      */
-    public async stopWatching() {
+    public async stopWatching(): Promise<void> {
         if (this.watcher) {
             await this.watcher.close();
             this.logInfo("File watching has been stopped.");
@@ -143,7 +144,7 @@ export class LiveWatcher extends AbstractProcess {
      * any) and then starting a new one. This can be useful in scenarios where
      * watcher configurations or paths have changed.
      */
-    public async restartWatcher() {
+    public async restartWatcher(): Promise<void> {
         this.logInfo("Restarting file watcher...");
         await this.stopWatching();
         this.startWatching();

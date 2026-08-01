@@ -1,4 +1,20 @@
 {
     "version": "0.2",
-    "words": ["getkist", "npmjs"]
+    "words": [
+        "getkist",
+        "npmjs",
+        "asgi",
+        "wsgi",
+        "gunicorn",
+        "healthz",
+        "procfile",
+        "pyproject",
+        "codegen",
+        "frontends",
+        "grotesk",
+        "specialisation",
+        "behaviour",
+        "climsim",
+        "proplan"
+    ]
 }

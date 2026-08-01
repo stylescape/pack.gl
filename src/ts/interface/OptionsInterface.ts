@@ -107,7 +107,7 @@ export interface OptionsInterface {
      * Path to the configuration file. This can be used to override default
      * or automatically located configuration files.
      *
-     * @example "./config/pack.yaml"
+     * @example "./config/kist.yaml"
      */
     configPath?: string;
 

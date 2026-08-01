@@ -54,4 +54,41 @@ export default [
             "no-debugger": "warn",
         },
     },
+
+    // CommonJS configuration files (e.g. jest.config.cjs)
+    {
+        files: ["**/*.cjs"],
+        languageOptions: {
+            sourceType: "commonjs",
+            globals: {
+                module: "writable",
+                require: "readonly",
+                process: "readonly",
+                __dirname: "readonly",
+            },
+        },
+    },
+
+    // Browser-side scripts served to live reload clients
+    {
+        files: ["src/ts/live/*.js"],
+        languageOptions: {
+            globals: {
+                WebSocket: "readonly",
+                console: "readonly",
+                window: "readonly",
+                document: "readonly",
+                location: "readonly",
+            },
+        },
+    },
+
+    // Tests intentionally use require() with jest.isolateModules to reload
+    // modules with fresh state.
+    {
+        files: ["tst/**/*.ts"],
+        rules: {
+            "@typescript-eslint/no-require-imports": "off",
+        },
+    },
 ];

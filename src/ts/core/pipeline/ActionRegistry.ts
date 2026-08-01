@@ -36,7 +36,7 @@ export class ActionRegistry extends AbstractProcess {
 
     /**
      * Constructs an ActionRegistry instance and automatically registers core
-     * actions. The constructor is private to enforce the singleton pattern.
+     * actions. Use `getInstance()` to obtain the shared singleton instance.
      */
     constructor() {
         // Initialize logging through AbstractProcess

@@ -31,8 +31,7 @@ export class VersionWriteAction extends Action {
      */
     async execute(options: ActionOptionsType): Promise<void> {
         const files = options.files as
-            | { path: string; key?: string }[]
-            | undefined;
+            { path: string; key?: string }[] | undefined;
         let version = options.version as string | undefined;
 
         if (!files) {
@@ -160,6 +159,7 @@ export class VersionWriteAction extends Action {
             throw new Error(
                 `Error replacing version in file "${filePath}":
                 ${(error as Error).message}`,
+                { cause: error },
             );
         }
     }

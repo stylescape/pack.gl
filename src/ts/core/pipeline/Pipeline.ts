@@ -3,6 +3,8 @@
 // ============================================================================
 
 import type { ConfigInterface } from "../../interface/ConfigInterface.js";
+import type { StageInterface } from "../../interface/StageInterface.js";
+import { StageError } from "../../errors/index.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 import { FileCache } from "../cache/FileCache.js";
 import { BuildCache } from "../cache/BuildCache.js";
@@ -60,6 +62,7 @@ export class Pipeline extends AbstractProcess {
      */
     constructor(private config: ConfigInterface) {
         super();
+        this.validateStageDependencies(config.stages);
         this.stages = config.stages.map((stage) => new Stage(stage));
         this.options = config.options;
         this.logInfo("Pipeline instance created.");
@@ -92,13 +95,8 @@ export class Pipeline extends AbstractProcess {
             this.logDebug("Pipeline execution started with debug logging.");
             this.progress?.start();
 
-            // Execute all stages with concurrency control
-            const stagePromises = this.stages.map((stage, index) =>
-                stage.execute(completedStages).then(() => {
-                    this.progress?.increment();
-                }),
-            );
-            await this.runWithConcurrencyControl(stagePromises);
+            // Execute all stages with dependency-aware concurrency control
+            await this.runWithConcurrencyControl(completedStages);
 
             this.progress?.finish();
 
@@ -212,38 +210,122 @@ export class Pipeline extends AbstractProcess {
     }
 
     /**
-     * Runs the stage promises with concurrency control based on global
-     * options. Limits the number of parallel running stages if
-     * maxConcurrentStages is set in global options.
-     * @param stagePromises - An array of promises representing stage
-     * executions.
+     * Validates that every `dependsOn` entry references an existing stage
+     * and that the dependency graph contains no cycles. Either defect would
+     * otherwise make the pipeline wait forever with no diagnostic.
+     *
+     * @param stages - The stage definitions from the configuration.
+     * @throws StageError if a dependency is unknown or circular.
+     */
+    private validateStageDependencies(stages: StageInterface[]): void {
+        const stagesByName = new Map<string, StageInterface>();
+        for (const stage of stages) {
+            stagesByName.set(stage.name, stage);
+        }
+
+        for (const stage of stages) {
+            for (const dependency of stage.dependsOn ?? []) {
+                if (!stagesByName.has(dependency)) {
+                    throw new StageError(
+                        stage.name,
+                        `depends on unknown stage "${dependency}". ` +
+                            `Ensure 'dependsOn' references existing stage names.`,
+                    );
+                }
+            }
+        }
+
+        const visited = new Set<string>();
+        const visiting = new Set<string>();
+        const visit = (name: string): void => {
+            if (visited.has(name)) return;
+            if (visiting.has(name)) {
+                throw new StageError(
+                    name,
+                    "circular 'dependsOn' dependency detected.",
+                );
+            }
+            visiting.add(name);
+            for (const dependency of stagesByName.get(name)?.dependsOn ?? []) {
+                visit(dependency);
+            }
+            visiting.delete(name);
+            visited.add(name);
+        };
+        for (const stage of stages) {
+            visit(stage.name);
+        }
+    }
+
+    /**
+     * Runs the stages with dependency-aware concurrency control. A stage is
+     * only started once all of its `dependsOn` stages have completed, and no
+     * more than `maxConcurrentStages` stages run at any moment.
+     *
+     * @param completedStages - Shared set tracking completed stage names.
      */
     private async runWithConcurrencyControl(
-        stagePromises: Promise<void>[],
+        completedStages: Set<string>,
     ): Promise<void> {
         // Support both old and new option locations
         const maxConcurrentStages =
             this.options?.performance?.maxConcurrentStages ||
             this.options?.maxConcurrentStages ||
-            stagePromises.length;
+            this.stages.length ||
+            1;
 
-        // Process stages with a concurrency limit
-        const executingStages = new Set<Promise<void>>();
+        // Pair each Stage with its definition so the scheduler can read
+        // `dependsOn` (Stage keeps it private).
+        const pending = this.stages.map((stage, index) => ({
+            stage,
+            definition: this.config.stages[index],
+        }));
+        const executing = new Set<Promise<void>>();
 
-        for (const stagePromise of stagePromises) {
-            executingStages.add(stagePromise);
+        try {
+            while (pending.length > 0 || executing.size > 0) {
+                // Start every stage whose dependencies are met, up to the
+                // concurrency limit.
+                let readyIndex: number;
+                while (
+                    executing.size < maxConcurrentStages &&
+                    (readyIndex = pending.findIndex(({ definition }) =>
+                        (definition.dependsOn ?? []).every((dependency) =>
+                            completedStages.has(dependency),
+                        ),
+                    )) !== -1
+                ) {
+                    const [{ stage }] = pending.splice(readyIndex, 1);
+                    const execution = stage
+                        .execute(completedStages)
+                        .then(() => {
+                            this.progress?.increment();
+                        });
+                    executing.add(execution);
+                    // Remove the promise from the tracking set on settle;
+                    // the rejection itself surfaces via the race below.
+                    void execution
+                        .finally(() => executing.delete(execution))
+                        .catch(() => undefined);
+                }
 
-            // Ensure stages are removed from the set once complete
-            stagePromise.finally(() => executingStages.delete(stagePromise));
+                if (executing.size === 0) {
+                    // Unreachable after dependency validation, but guard
+                    // against a scheduler stall instead of spinning forever.
+                    throw new StageError(
+                        pending[0].definition.name,
+                        "cannot be scheduled: unresolved dependencies.",
+                    );
+                }
 
-            // Enforce concurrency limit
-            if (executingStages.size >= (maxConcurrentStages as number)) {
-                // Wait until at least one stage completes
-                await Promise.race(executingStages);
+                // Wait until at least one running stage settles
+                await Promise.race(executing);
             }
+        } catch (error) {
+            // Let in-flight stages settle so their rejections are observed
+            // before propagating the failure.
+            await Promise.allSettled(executing);
+            throw error;
         }
-
-        // Wait for all remaining stages to complete
-        await Promise.all(executingStages);
     }
 }

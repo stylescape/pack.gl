@@ -19,6 +19,7 @@ export class StageValidator extends AbstractValidator<StageInterface> {
     // ========================================================================
 
     private stageNames: Set<string>;
+    private knownStageNames: Set<string>;
     private stepValidator: StepValidator;
 
     // Constructor
@@ -27,12 +28,25 @@ export class StageValidator extends AbstractValidator<StageInterface> {
     constructor() {
         super();
         this.stageNames = new Set();
+        this.knownStageNames = new Set();
         this.stepValidator = new StepValidator();
         this.logInfo("StageValidator initialized.");
     }
 
     // Methods
     // ========================================================================
+
+    /**
+     * Registers the full set of stage names up front so `dependsOn` can
+     * reference stages that are declared later in the configuration.
+     * Duplicate detection still relies on the incrementally built set of
+     * validated stage names.
+     *
+     * @param names - All stage names present in the configuration.
+     */
+    public setKnownStageNames(names: Iterable<string>): void {
+        this.knownStageNames = new Set(names);
+    }
 
     /**
      * Validates an entire stage object.
@@ -132,7 +146,10 @@ export class StageValidator extends AbstractValidator<StageInterface> {
         }
 
         dependencies?.forEach((dependency) => {
-            if (!this.stageNames.has(dependency)) {
+            if (
+                !this.stageNames.has(dependency) &&
+                !this.knownStageNames.has(dependency)
+            ) {
                 this.throwValidationError(
                     "dependsOn",
                     [dependency], // Wrap dependency in an array to match the expected type

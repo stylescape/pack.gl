@@ -85,7 +85,9 @@ export class DocumentationAction extends Action {
             );
             const message =
                 error instanceof Error ? error.message : String(error);
-            throw new Error(`Documentation generation failed: ${message}`);
+            throw new Error(`Documentation generation failed: ${message}`, {
+                cause: error,
+            });
         }
     }
 

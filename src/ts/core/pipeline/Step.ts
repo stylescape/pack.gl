@@ -4,6 +4,7 @@
 
 import type { ActionInterface } from "../../interface/ActionInterface.js";
 import type { StepInterface } from "../../interface/StepInterface.js";
+import { ActionError, KistError } from "../../errors/index.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 import { ActionRegistry } from "./ActionRegistry.js";
 
@@ -21,6 +22,7 @@ export class Step extends AbstractProcess {
     // ========================================================================
 
     private name: string;
+    private actionName: string;
     private action: ActionInterface;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private options?: Record<string, any>;
@@ -43,9 +45,8 @@ export class Step extends AbstractProcess {
 
         // Resolve the action class from the registry using the action name
         const actionRegistry = ActionRegistry.getInstance();
-        // console.log(step.action)
-        // const ActionClass = actionRegistry.getAction(step.action.name);
-        const ActionClass = actionRegistry.getAction(String(step.action));
+        this.actionName = String(step.action);
+        const ActionClass = actionRegistry.getAction(this.actionName);
         if (!ActionClass) {
             const msg = `
                 Unknown action "${step.action}" for step "${this.name}".
@@ -60,7 +61,7 @@ export class Step extends AbstractProcess {
         this.options = step.options;
 
         this.logInfo(
-            `Step "${this.name}" initialized with action "${step.action.constructor.name}".`,
+            `Step "${this.name}" initialized with action "${this.actionName}".`,
         );
     }
 
@@ -69,6 +70,10 @@ export class Step extends AbstractProcess {
 
     /**
      * Executes the step by invoking its action's execute method.
+     *
+     * @throws ActionError if option validation or action execution fails, so
+     * the failure propagates to the stage and pipeline instead of being
+     * silently swallowed.
      */
     async execute(): Promise<void> {
         this.logInfo(`Executing step: ${this.name}`);
@@ -91,6 +96,15 @@ export class Step extends AbstractProcess {
             this.logError(
                 `Error executing step "${this.name}": ${error}`,
                 error,
+            );
+            if (error instanceof KistError) {
+                throw error;
+            }
+            throw new ActionError(
+                this.actionName,
+                error instanceof Error ? error.message : String(error),
+                { stepName: this.name },
+                error instanceof Error ? error : undefined,
             );
         }
     }

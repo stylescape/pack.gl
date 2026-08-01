@@ -68,6 +68,7 @@ export class DirectoryCopyAction extends Action {
         } catch (error) {
             throw new Error(
                 `Failed to copy from ${resolvedSrcDir} to ${resolvedDestDir}: ${error}`,
+                { cause: error },
             );
         }
     }

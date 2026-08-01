@@ -107,18 +107,22 @@ kist includes these built-in actions:
 
 Extend kist with official action plugins:
 
-| Plugin                                                                      | Description                     |
-| --------------------------------------------------------------------------- | ------------------------------- |
-| [kist-action-sass](https://github.com/getkist/kist-action-sass)             | Compile SASS/SCSS to CSS        |
-| [kist-action-typescript](https://github.com/getkist/kist-action-typescript) | Advanced TypeScript compilation |
-| [kist-action-jinja](https://github.com/getkist/kist-action-jinja)           | Process Jinja2 templates        |
-| [kist-action-svg](https://github.com/getkist/kist-action-svg)               | Optimize and package SVGs       |
-| [kist-action-test](https://github.com/getkist/kist-action-test)             | Run tests with Jest/Vitest      |
+| Plugin                                                                          | Description                     |
+| ------------------------------------------------------------------------------- | ------------------------------- |
+| [@getkist/action-sass](https://github.com/getkist/kist-action-sass)             | Compile SASS/SCSS to CSS        |
+| [@getkist/action-typescript](https://github.com/getkist/kist-action-typescript) | Advanced TypeScript compilation |
+| [@getkist/action-nunjucks](https://github.com/getkist/kist-action-nunjucks)     | Render Nunjucks templates       |
+| [@getkist/action-svg](https://github.com/getkist/kist-action-svg)               | Optimize and package SVGs       |
+| [@getkist/action-postcss](https://github.com/getkist/kist-action-postcss)       | Process CSS with PostCSS        |
+| [@getkist/action-terser](https://github.com/getkist/kist-action-terser)         | Minify JavaScript               |
+| [@getkist/action-eslint](https://github.com/getkist/kist-action-eslint)         | Lint with ESLint                |
+| [@getkist/action-prettier](https://github.com/getkist/kist-action-prettier)     | Format with Prettier            |
+| [@getkist/action-jest](https://github.com/getkist/kist-action-jest)             | Run tests with Jest             |
 
-Install plugins via npm:
+Install plugins via npm (packages are published under the `@getkist` scope):
 
 ```bash
-npm install kist-action-sass --save-dev
+npm install @getkist/action-sass --save-dev
 ```
 
 ---
@@ -204,11 +208,9 @@ options:
 kist [options]
 
 Options:
-  --config, -c    Path to config file (default: kist.yml)
-  --live, -l      Enable live reload mode
-  --verbose, -v   Enable verbose logging
-  --help, -h      Show help
-  --version       Show version
+  --config <path>   Path to config file (default: kist.yaml or kist.yml)
+  --live            Enable live reload mode
+  --verbose         Enable verbose (debug) logging
 ```
 
 ---

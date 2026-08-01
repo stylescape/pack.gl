@@ -89,7 +89,7 @@ export class FileCopyAction extends Action {
     private async copySingleFile(
         srcFile: string,
         destDir: string,
-        options: { useCache?: boolean } = {},
+        options: { useCache?: boolean },
     ): Promise<void> {
         // Check cache if enabled
         if (options.useCache) {
@@ -127,7 +127,7 @@ export class FileCopyAction extends Action {
     private async copyMultipleFiles(
         srcFiles: string[],
         destDir: string,
-        options: { useCache?: boolean; parallel?: boolean } = {},
+        options: { useCache?: boolean; parallel?: boolean },
     ): Promise<void> {
         const startTime = performance.now();
         let filesToCopy = srcFiles;
@@ -180,7 +180,7 @@ export class FileCopyAction extends Action {
     private async copyFilesInParallel(
         srcFiles: string[],
         destDir: string,
-        maxConcurrent: number = 10,
+        maxConcurrent: number,
     ): Promise<void> {
         const executing = new Set<Promise<void>>();
 

@@ -70,7 +70,11 @@ export class ConfigError extends KistError {
  */
 export class ConfigNotFoundError extends ConfigError {
     constructor(configPath: string, cause?: Error) {
-        super(`Configuration file not found: ${configPath}`, { configPath }, cause);
+        super(
+            `Configuration file not found: ${configPath}`,
+            { configPath },
+            cause,
+        );
         this.name = "ConfigNotFoundError";
     }
 }
@@ -79,11 +83,7 @@ export class ConfigNotFoundError extends ConfigError {
  * Error thrown when config parsing fails
  */
 export class ConfigParseError extends ConfigError {
-    constructor(
-        configPath: string,
-        parseError: string,
-        cause?: Error,
-    ) {
+    constructor(configPath: string, parseError: string, cause?: Error) {
         super(
             `Failed to parse configuration: ${parseError}`,
             { configPath, parseError },
@@ -142,7 +142,11 @@ export class ActionError extends BuildError {
         context?: Record<string, unknown>,
         cause?: Error,
     ) {
-        super(`Action "${actionName}" failed: ${message}`, { actionName, ...context }, cause);
+        super(
+            `Action "${actionName}" failed: ${message}`,
+            { actionName, ...context },
+            cause,
+        );
         this.name = "ActionError";
     }
 }
@@ -170,11 +174,7 @@ export class StepError extends BuildError {
  * Error thrown when a stage fails
  */
 export class StageError extends BuildError {
-    constructor(
-        stageName: string,
-        message: string,
-        cause?: Error,
-    ) {
+    constructor(stageName: string, message: string, cause?: Error) {
         super(`Stage "${stageName}" failed: ${message}`, { stageName }, cause);
         this.name = "StageError";
     }
@@ -212,11 +212,7 @@ export class PluginNotFoundError extends PluginError {
  * Error thrown when plugin initialization fails
  */
 export class PluginInitError extends PluginError {
-    constructor(
-        pluginName: string,
-        message: string,
-        cause?: Error,
-    ) {
+    constructor(pluginName: string, message: string, cause?: Error) {
         super(
             `Failed to initialize plugin "${pluginName}": ${message}`,
             { pluginName },
@@ -314,7 +310,10 @@ export class CLIError extends KistError {
  */
 export class InvalidArgumentError extends CLIError {
     constructor(argument: string, reason: string) {
-        super(`Invalid argument "${argument}": ${reason}`, { argument, reason });
+        super(`Invalid argument "${argument}": ${reason}`, {
+            argument,
+            reason,
+        });
         this.name = "InvalidArgumentError";
     }
 }
@@ -337,11 +336,7 @@ export class MissingArgumentError extends CLIError {
  * Error thrown when an operation times out
  */
 export class TimeoutError extends KistError {
-    constructor(
-        operation: string,
-        timeoutMs: number,
-        cause?: Error,
-    ) {
+    constructor(operation: string, timeoutMs: number, cause?: Error) {
         super(
             `Operation "${operation}" timed out after ${timeoutMs}ms`,
             "TIMEOUT_ERROR",

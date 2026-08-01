@@ -68,12 +68,17 @@ export class PackageManagerAction extends Action {
             if (err.code === "ENOENT") {
                 throw new Error(
                     `File not found at ${fullPath}. Please ensure the path is correct.`,
+                    { cause: error },
                 );
             } else if (err.name === "SyntaxError") {
-                throw new Error(`Invalid JSON in ${fullPath}: ${err.message}`);
+                throw new Error(
+                    `Invalid JSON in ${fullPath}: ${err.message}`,
+                    { cause: error },
+                );
             } else {
                 throw new Error(
                     `Unexpected error while reading ${fullPath}: ${err.message ?? String(error)}`,
+                    { cause: error },
                 );
             }
         }

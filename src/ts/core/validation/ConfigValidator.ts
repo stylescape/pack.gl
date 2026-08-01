@@ -105,6 +105,12 @@ export class ConfigValidator extends AbstractValidator<ConfigInterface> {
      * @throws Error if validation fails.
      */
     private validateStages(stages: ConfigInterface["stages"]): void {
+        // Register all names first so `dependsOn` may reference stages that
+        // are declared later in the configuration.
+        this.stageValidator.setKnownStageNames(
+            stages.map((stage) => stage.name),
+        );
+
         for (const stage of stages) {
             // Validate each stage
             this.stageValidator.validate(stage);

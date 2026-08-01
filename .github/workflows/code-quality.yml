@@ -26,15 +26,12 @@ jobs:
 
     - name: Run ESLint
       run: npm run lint
-      continue-on-error: true
 
     - name: Check formatting
       run: npx prettier --check .
-      continue-on-error: true
 
     - name: Type check
       run: npx tsc --noEmit
-      continue-on-error: true
 
     - name: Check for unused dependencies
       run: npx depcheck

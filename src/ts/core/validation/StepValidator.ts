@@ -104,27 +104,26 @@ export class StepValidator extends AbstractValidator<StepInterface> {
     }
 
     /**
-     * Validates the action object of the step.
-     * Uses `ActionValidator` to validate the action's `name`.
+     * Validates the action of the step. Accepts either the action name as a
+     * string (the shape used in YAML configurations) or an object exposing a
+     * `name` property. Uses `ActionValidator` to validate the action's name.
      *
-     * @param action - The action object to validate.
+     * @param action - The action name or object to validate.
      * @throws Error if the action is invalid.
      */
     private validateActions(action: StepInterface["action"]): void {
-        if (
-            !action ||
-            typeof action.name !== "string" ||
-            action.name.trim() === ""
-        ) {
+        const actionName = typeof action === "string" ? action : action?.name;
+
+        if (typeof actionName !== "string" || actionName.trim() === "") {
             this.throwValidationError(
                 "action",
                 action,
-                "Each step must have a valid 'action' object with a non-empty 'name' property.",
+                "Each step must have a valid 'action' name (a non-empty string or an object with a 'name' property).",
             );
         }
 
         try {
-            this.actionValidator.validate({ action: action.name }); // Validate the action name
+            this.actionValidator.validate({ action: actionName as string }); // Validate the action name
         } catch (error) {
             this.throwValidationError(
                 "action",

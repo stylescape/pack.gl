@@ -8,6 +8,7 @@ import { ArgumentParser } from "./cli/ArgumentParser.js";
 import { ConfigLoader } from "./core/config/ConfigLoader.js";
 import { ConfigStore } from "./core/config/ConfigStore.js";
 import { Kist } from "./kist.js";
+import { Logger } from "./logger/Logger.js";
 
 // ============================================================================
 // Main Entry Point
@@ -17,14 +18,18 @@ import { Kist } from "./kist.js";
  * The entry point for the Kist CLI application. Sets up the runtime
  * environment, loads configuration, and invokes the Kist class.
  */
-(async () => {
+(async (): Promise<void> => {
     try {
-        // console.log("Raw arguments:", process.argv);
-
         // Initialize CLI argument parser
         const parser = new ArgumentParser();
         const cliOptions = parser.getAllFlags();
-        // console.log(cliOptions)
+
+        // `--live` arrives as a bare boolean; expand it to the object shape
+        // the config uses so it enables live reload instead of clobbering
+        // the `options.live` block from the config file.
+        if (cliOptions.live === true) {
+            (cliOptions as Record<string, unknown>).live = { enabled: true };
+        }
 
         // Initialize ConfigStore
         const configStore = ConfigStore.getInstance();
@@ -35,16 +40,25 @@ import { Kist } from "./kist.js";
         const fileConfig = await configLoader.loadConfig();
 
         // Merge Configs
-        // configStore.print()
         configStore.merge(fileConfig); // Merge file-based config
-        // configStore.print()
         configStore.merge({ options: cliOptions }); // Merge CLI options
-        // configStore.print()
+
+        // Apply the configured log level; `--verbose` forces debug logging.
+        const logLevel = configStore.get<
+            "debug" | "info" | "warn" | "error" | undefined
+        >("options.logLevel");
+        if (cliOptions.verbose === true) {
+            Logger.getInstance().setLogLevel("debug");
+        } else if (logLevel) {
+            Logger.getInstance().setLogLevel(logLevel);
+        }
 
         // Create a Kist instance and execute the workflow
         const kist = new Kist();
         await kist.run();
     } catch (error) {
+        // Last-resort handler: the Logger itself may be the failing piece.
+        // eslint-disable-next-line no-console
         console.error(`[CLI] An unexpected error occurred:`, error);
         process.exit(1);
     }

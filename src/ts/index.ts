@@ -2,26 +2,15 @@
 // Import
 // ============================================================================
 
-// Core Modules
-// export { Pipeline } from "./core/Pipeline.js";
-// export { ConfigLoader } from "./core/ConfigLoader.js";
-// export { PipelineManager } from "./core/PipelineManager.js";
-
-// Live Modules
-// export { LiveReloadServer } from "./live/LiveReloadServer.js";
-// export { FileWatcher } from "./live/FileWatcher.js";
-
-// Actions and Other Utilities
-// export { Action } from "./core/Action.js";
-
 // Main Function
 export { Kist } from "./kist.js";
 
 // Additional Types
 export * from "./types/index.js";
 
-// CLI Functions (if required programmatically)
-export * from "./cli.js";
+// Note: the CLI entry point (`./cli.js`) is intentionally NOT re-exported
+// here. Its module body starts the CLI, so importing the library must never
+// pull it in. Use the `kist` bin or the `kist/cli` subpath to run the CLI.
 
 // ============================================================================
 // Plugin System Exports

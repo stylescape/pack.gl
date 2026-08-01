@@ -3,7 +3,7 @@
 // ============================================================================
 
 import { existsSync, readdirSync, readFileSync, statSync } from "fs";
-import { join } from "path";
+import { basename, join } from "path";
 import type { ActionInterface } from "../../interface/ActionInterface.js";
 import type { ActionPlugin } from "../../interface/ActionPlugin.js";
 import type { PluginMetadata } from "../../interface/PluginMetadata.js";
@@ -20,6 +20,17 @@ import { AbstractProcess } from "../abstract/AbstractProcess.js";
 export class PluginManager extends AbstractProcess {
     // Parameters
     // ========================================================================
+
+    /**
+     * Default npm package prefixes used for plugin discovery. These match
+     * the published plugin packages (@getkist/action-*) and unscoped
+     * community plugins (kist-action-*, kist-plugin-*).
+     */
+    public static readonly DEFAULT_PLUGIN_PREFIXES = [
+        "@getkist/action-",
+        "kist-action-",
+        "kist-plugin-",
+    ];
 
     private static instance: PluginManager | null = null;
     private loadedPlugins: Map<string, PluginMetadata> = new Map();
@@ -62,10 +73,8 @@ export class PluginManager extends AbstractProcess {
     }): Promise<void> {
         this.logInfo("Starting plugin discovery...");
 
-        const prefixes = options?.pluginPrefixes || [
-            "@getkist/action-",
-            "kist-plugin-",
-        ];
+        const prefixes =
+            options?.pluginPrefixes || PluginManager.DEFAULT_PLUGIN_PREFIXES;
 
         // Discover npm plugins
         await this.discoverNpmPlugins(prefixes);
@@ -126,29 +135,33 @@ export class PluginManager extends AbstractProcess {
         scopePath: string,
         prefixes: string[],
     ): Promise<void> {
+        // Platform-safe scope directory name (e.g. "@getkist")
+        const scopeName = basename(scopePath);
+
         try {
             const packages = readdirSync(scopePath, { withFileTypes: true });
 
             for (const pkg of packages) {
-                for (const prefix of prefixes) {
-                    const scopePrefix = prefix.split("/")[1]; // Extract "plugin-" from "@getkist/plugin-"
-                    // Check if entry is a directory or a symlink pointing to a directory
-                    const pkgPath = join(scopePath, pkg.name);
-                    const isDir =
-                        pkg.isDirectory() ||
-                        (pkg.isSymbolicLink() &&
-                            statSync(pkgPath).isDirectory());
-                    if (
-                        isDir &&
-                        scopePrefix &&
-                        pkg.name.startsWith(scopePrefix)
-                    ) {
-                        const fullName = `${scopePath.split("/").pop()}/${pkg.name}`;
-                        await this.loadPlugin(
-                            join(scopePath, pkg.name),
-                            fullName,
-                        );
-                    }
+                // Match the FULL package name (e.g. "@getkist/action-sass")
+                // against the configured prefixes, so only the configured
+                // scopes are picked up rather than any "@scope/action-*".
+                const fullName = `${scopeName}/${pkg.name}`;
+                const matches = prefixes.some(
+                    (prefix) =>
+                        prefix.startsWith("@") && fullName.startsWith(prefix),
+                );
+                if (!matches) {
+                    continue;
+                }
+
+                // Check if entry is a directory or a symlink pointing to a
+                // directory
+                const pkgPath = join(scopePath, pkg.name);
+                const isDir =
+                    pkg.isDirectory() ||
+                    (pkg.isSymbolicLink() && statSync(pkgPath).isDirectory());
+                if (isDir) {
+                    await this.loadPlugin(pkgPath, fullName);
                 }
             }
         } catch (_error) {
@@ -211,8 +224,10 @@ export class PluginManager extends AbstractProcess {
                         "dist/index.js";
                     entryPoint = join(pluginPath, mainEntry);
                 } catch (jsonError) {
-                    this.logDebug(
-                        `Failed to parse package.json for ${pluginName}`,
+                    // Surface the malformed package.json instead of silently
+                    // falling back to the default entry point.
+                    this.logWarn(
+                        `Failed to parse package.json for ${pluginName}: ${(jsonError as Error).message}`,
                     );
                 }
             }

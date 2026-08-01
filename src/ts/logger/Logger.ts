@@ -34,9 +34,7 @@ export class Logger {
      * Private constructor to enforce singleton pattern.
      * @param logLevel - The log level for controlling log output.
      */
-    private constructor(
-        logLevel: "debug" | "info" | "warn" | "error" = "info",
-    ) {
+    private constructor(logLevel: "debug" | "info" | "warn" | "error") {
         this.logLevel = logLevel;
     }
 
@@ -89,6 +87,8 @@ export class Logger {
     ): void {
         if (this.shouldLog(level)) {
             const formattedMessage = `${fgStyle}${bgStyle}[${level.toUpperCase()}]${LoggerStyles.Reset} [${LoggerStyles.Cyan}${context}${LoggerStyles.Reset}] ${message}`;
+            // The Logger is the one sanctioned console consumer.
+            // eslint-disable-next-line no-console
             console[
                 level === "error" ? "error" : level === "warn" ? "warn" : "log"
             ](formattedMessage);

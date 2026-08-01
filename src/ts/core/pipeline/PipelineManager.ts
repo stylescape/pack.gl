@@ -4,7 +4,6 @@
 
 import type { ChildProcess } from "child_process";
 import { spawn } from "child_process";
-import path from "path";
 import type { LiveServer } from "../../live/LiveServer.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 import { ConfigStore } from "../config/ConfigStore.js";
@@ -94,9 +93,11 @@ export class PipelineManager extends AbstractProcess {
         }
 
         this.logInfo("Starting pipeline...");
-        const scriptPath = path.resolve(process.cwd(), "dist/js/cli.js");
 
-        this.pipelineProcess = spawn("node", [scriptPath], {
+        // Re-run the original CLI invocation (script + arguments) rather
+        // than a path hardcoded relative to the consumer's project, which
+        // only existed when kist built itself.
+        this.pipelineProcess = spawn(process.execPath, process.argv.slice(1), {
             stdio: "inherit",
         });
 

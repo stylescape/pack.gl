@@ -99,7 +99,8 @@ export class LiveServer extends AbstractProcess {
             liveReloadOptions.watchPaths || [
                 "src/**/*",
                 "config/**/*",
-                "pack.yaml",
+                "kist.yaml",
+                "kist.yml",
             ]
         ).map((p: string) => path.resolve(process.cwd(), p));
         this.ignoredPaths = (
@@ -119,6 +120,20 @@ export class LiveServer extends AbstractProcess {
             );
         });
 
+        // Surface listen failures (e.g. EADDRINUSE) instead of crashing
+        // with an unhandled 'error' event.
+        this.server.on("error", (error: NodeJS.ErrnoException) => {
+            if (error.code === "EADDRINUSE") {
+                this.logError(
+                    `Port ${this.port} is already in use. ` +
+                        `Set 'options.live.port' to a free port.`,
+                    error,
+                );
+            } else {
+                this.logError("Live Server failed to start.", error);
+            }
+        });
+
         // Initialize WebSocket server
         this.wss = new WebSocketServer({ server: this.server });
 
@@ -134,21 +149,6 @@ export class LiveServer extends AbstractProcess {
 
     // Methods
     // ========================================================================
-
-    /**
-     * Initializes the HTTP server and WebSocket server.
-     */
-    private initializeServer(): void {
-        // Start the HTTP server
-        this.server = this.app.listen(this.port, () => {
-            this.logInfo(
-                `Live Server running at http://localhost:${this.port}`,
-            );
-        });
-
-        // Initialize WebSocket server
-        this.wss = new WebSocketServer({ server: this.server });
-    }
 
     /** Logs initialization details for the LiveServer. */
     private logInitializationDetails(): void {
@@ -188,7 +188,7 @@ export class LiveServer extends AbstractProcess {
                 this.clients.delete(ws);
             });
             ws.on("error", (error) => {
-                console.error("WebSocket encountered an error:", error);
+                this.logError("WebSocket encountered an error:", error);
                 this.clients.delete(ws);
             });
         });
@@ -225,15 +225,17 @@ export class LiveServer extends AbstractProcess {
         next: NextFunction,
     ): void {
         if (req.url.endsWith(".html")) {
+            // Serve HTML from the configured static root (not a path
+            // relative to the compiled module, which does not exist).
             const sanitizedPath = path.join(
-                path.resolve(__dirname, "public"),
+                this.root,
                 // Prevent directory traversal
                 path.normalize(req.url).replace(/^(\.\.(\/|\\|$))+/g, ""),
             );
 
             res.sendFile(sanitizedPath, (err) => {
                 if (err) {
-                    console.error("Error sending HTML file:", err);
+                    this.logError("Error sending HTML file:", err);
                     next(err);
                 } else {
                     res.write(
@@ -241,7 +243,7 @@ export class LiveServer extends AbstractProcess {
                             const ws = new WebSocket("ws://localhost:${this.port}");
                             ws.onmessage = (event) => {
                                 if (event.data === "reload") {
-                                    this.logInfo("Reloading page...");
+                                    console.log("Reloading page...");
                                     window.location.reload();
                                 }
                             };

@@ -2,51 +2,57 @@ name: Deploy Docs
 
 on:
   push:
-    # branches:
-    #   - master
-    #   - main
     tags:
-      - 'docs'
+      - "docs"
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
-jobs:
-
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 # =============================================================================
 # Deploy
 # =============================================================================
 
+jobs:
   deploy:
-
     name: Deploy Docs
 
     runs-on: ubuntu-latest
 
-    steps:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
-      -
-        name: Checkout
+    steps:
+      - name: Checkout
         uses: actions/checkout@v6
 
-      -
-        name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
         with:
-          python-version: 3.x
+          node-version: "22.x"
+          cache: "npm"
 
-      -
-        name: PIP Install mkdocs-material
-        run: |
-          pip install mkdocs-material
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps --ignore-scripts
 
-      -
-        name: PIP Install mkdocstrings
-        run: |
-          pip install mkdocstrings[python]>=0.18
+      - name: Generate API docs
+        run: npm run docs
 
-      -
-        name: MKDocs Deploy
-        run: |
-          mkdocs gh-deploy --force
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/api
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

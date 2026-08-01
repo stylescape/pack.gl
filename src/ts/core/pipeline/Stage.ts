@@ -84,7 +84,7 @@ export class Stage extends AbstractProcess {
         );
 
         // Execute with optional timeout
-        const executeSteps = async () => {
+        const executeSteps = async (): Promise<void> => {
             if (this.parallel) {
                 await this.executeStepsInParallel();
             } else {
@@ -203,14 +203,15 @@ export class Stage extends AbstractProcess {
     private async resolveDependencies(
         completedStages: Set<string>,
     ): Promise<void> {
-        if (!this.dependsOn) return;
+        // Only reached from `execute`, which already guards on `dependsOn`.
+        const dependsOn = this.dependsOn as string[];
 
         this.logInfo(
             `Stage "${this.name}" is waiting for
-            dependencies:${this.dependsOn.join(", ")}`,
+            dependencies:${dependsOn.join(", ")}`,
         );
         await Promise.all(
-            this.dependsOn.map((dep) =>
+            dependsOn.map((dep) =>
                 this.waitForStageCompletion(dep, completedStages),
             ),
         );

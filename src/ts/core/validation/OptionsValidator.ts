@@ -48,13 +48,14 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
         key: K,
         value: OptionsInterface[K],
     ): void {
+        // `throwValidationError` always throws, so no early return is needed
+        // after either guard.
         if (value === undefined) {
             this.throwValidationError(
                 key,
                 value,
                 `Option "${String(key)}" cannot be undefined.`,
             );
-            return;
         }
 
         const allowedValues = OptionsValidator.allowedValues[key];
@@ -64,7 +65,6 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
                 value,
                 `Invalid value "${value}" for option "${String(key)}". Allowed values are: ${allowedValues.join(", ")}.`,
             );
-            return;
         }
 
         this.validateByType(key, value);

@@ -3,9 +3,16 @@
 // ============================================================================
 
 import fs from "fs";
-import yaml from "js-yaml";
+// js-yaml 5 is ESM with named exports only; it no longer has a default export.
+import { load as loadYaml } from "js-yaml";
 import path from "path";
 import { ArgumentParser } from "../../cli/ArgumentParser.js";
+import {
+    ConfigError,
+    ConfigNotFoundError,
+    ConfigParseError,
+    ConfigValidationError,
+} from "../../errors/index.js";
 import type { ConfigInterface } from "../../interface/ConfigInterface.js";
 import type { StageInterface } from "../../interface/StageInterface.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
@@ -78,13 +85,14 @@ export class ConfigLoader extends AbstractProcess {
                 this.configPath = resolvedPath;
                 this.logDebug(`Configuration file found: ${resolvedPath}`);
                 return;
-            } catch (_error) {
+            } catch (error) {
                 this.logDebug(`File not accessible: ${resolvedPath}`);
 
                 // ❗ If user explicitly provided --config and it fails, stop immediately
                 if (cliPath) {
-                    throw new Error(
-                        `Configuration file not found or not accessible: ${resolvedPath}`,
+                    throw new ConfigNotFoundError(
+                        resolvedPath,
+                        error as Error,
                     );
                 }
             }
@@ -124,8 +132,10 @@ export class ConfigLoader extends AbstractProcess {
             return config;
         } catch (error) {
             this.logError("Failed to load configuration.", error);
-            throw new Error(
+            throw new ConfigError(
                 `Failed to load configuration: ${(error as Error).message}`,
+                { configPath: this.configPath },
+                error as Error,
             );
         }
     }
@@ -143,15 +153,25 @@ export class ConfigLoader extends AbstractProcess {
 
         // Prevent circular inheritance
         if (this.loadedPaths.has(resolvedPath)) {
-            throw new Error(
+            throw new ConfigError(
                 `Circular config inheritance detected: ${resolvedPath}`,
+                { configPath: resolvedPath },
             );
         }
         this.loadedPaths.add(resolvedPath);
 
         this.logDebug(`Loading configuration from: ${resolvedPath}`);
         const fileContents = await fs.promises.readFile(resolvedPath, "utf8");
-        const config = yaml.load(fileContents) as ConfigInterface;
+        let config: ConfigInterface;
+        try {
+            config = loadYaml(fileContents) as ConfigInterface;
+        } catch (error) {
+            throw new ConfigParseError(
+                resolvedPath,
+                (error as Error).message,
+                error as Error,
+            );
+        }
 
         // Handle inheritance
         if (config.extends) {
@@ -202,8 +222,10 @@ export class ConfigLoader extends AbstractProcess {
             },
             // Deep merge options
             options: this.deepMerge(parent.options || {}, child.options || {}),
-            // Merge stages by name
-            stages: this.mergeStages(parent.stages || [], child.stages || []),
+            // Merge stages by name. `parent` is always a config this method
+            // produced (or the `{ stages: [] }` seed), so its stages are
+            // guaranteed to be an array; `child` comes straight from YAML.
+            stages: this.mergeStages(parent.stages, child.stages || []),
         };
 
         // Clean up empty metadata
@@ -299,8 +321,9 @@ export class ConfigLoader extends AbstractProcess {
      */
     private validateConfig(config: ConfigInterface): void {
         if (!Array.isArray(config.stages)) {
-            throw new Error(
-                "Invalid configuration: 'stages' must be an array.",
+            throw new ConfigValidationError(
+                ["Invalid configuration: 'stages' must be an array."],
+                this.configPath ?? undefined,
             );
         }
         this.logDebug("Configuration structure validated successfully.");
