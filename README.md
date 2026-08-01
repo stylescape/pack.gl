@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/getkist/brand/master/src/logo/kist.png" width="20%" alt="kist logo"></p>
+    <img src="https://raw.githubusercontent.com/getkist/brand/main/src/logo/kist.png" width="20%" alt="kist logo"></p>
 <h1 align="center" style='border-bottom: none;'>kist</h1>
 <h3 align="center">Lightweight Package Pipeline Processor</h3>
 
