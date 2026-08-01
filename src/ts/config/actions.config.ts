@@ -38,6 +38,11 @@ export const CORE_ACTIONS = [
     "VersionWriteAction",
 ] as const;
 
+/**
+ * Actions that used to ship in the main `kist` package but now live in
+ * separate `@getkist/action-*` plugin packages. Consult
+ * {@link MIGRATED_PACKAGES} for the package each name maps to.
+ */
 export const MIGRATED_ACTIONS = [
     // @getkist/action-sass
     "StyleProcessingAction",

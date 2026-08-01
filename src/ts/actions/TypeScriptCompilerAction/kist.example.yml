@@ -4,7 +4,7 @@ stages:
       - name: Compile TS to JS
         action: TypeScriptCompilerAction
         options:
-          tsConfigPath: "./tsconfig.json"
+          tsconfigPath: "./tsconfig.json"
           filePaths:
             - "src/index.ts"
             - "src/utils.ts"

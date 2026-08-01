@@ -2,6 +2,18 @@
 // Import
 // ============================================================================
 
+/**
+ * Public API of the `kist` package.
+ *
+ * This is the entry point library consumers get from `import ... from "kist"`
+ * (as opposed to the CLI, which is reached via the `kist` bin or the
+ * `kist/cli` subpath — see the note below on why it is not re-exported here).
+ * It exposes the pieces a plugin author or programmatic embedder needs: the
+ * {@link Kist} orchestrator, the plugin/action interfaces, the action
+ * registry and base {@link Action} class, the core-vs-migrated action
+ * configuration, and every error class the pipeline can throw.
+ */
+
 // Main Function
 export { Kist } from "./kist.js";
 

@@ -370,6 +370,11 @@ export class ResourceLimitError extends KistError {
 // Error Codes
 // ============================================================================
 
+/**
+ * Machine-readable codes for every error class in this module, exposed as a
+ * single lookup table so callers can compare `error.code` against a known
+ * constant instead of a string literal.
+ */
 export const ErrorCodes = {
     // Config errors
     CONFIG_ERROR: "CONFIG_ERROR",

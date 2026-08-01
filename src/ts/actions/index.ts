@@ -2,6 +2,15 @@
 // Core Action Exports
 // ============================================================================
 
+/**
+ * Barrel export for the actions bundled with the main `kist` package (see
+ * {@link CORE_ACTIONS} in `../config/actions.config.ts` for the authoritative
+ * list, and {@link coreActions} below for the name-to-class map the
+ * `ActionRegistry` pre-registers on startup). Actions that moved to separate
+ * `@getkist/action-*` plugin packages are listed in
+ * {@link MIGRATED_ACTIONS} instead and are not exported from here.
+ */
+
 export { coreActions } from "./CoreActions.js";
 
 export { DirectoryCleanAction } from "./DirectoryCleanAction/index.js";
