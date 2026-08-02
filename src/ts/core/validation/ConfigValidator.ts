@@ -32,7 +32,13 @@ export class ConfigValidator extends AbstractValidator<ConfigInterface> {
     // ========================================================================
 
     /**
-     * Validates the entire configuration object.
+     * Validates the merged configuration object.
+     *
+     * Structural validation against the JSON Schema happens earlier, in
+     * {@link ConfigLoader}, against the file as written. What remains here are
+     * the semantic checks a schema cannot express — most importantly whether
+     * each step's action is actually registered.
+     *
      * @param config - The configuration object to validate.
      * @throws Error if validation fails.
      */

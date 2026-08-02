@@ -80,6 +80,15 @@ stages:
 npx kist
 # or with a specific config
 npx kist --config kist.production.yml
+# see what it would do without doing it
+npx kist --dry-run
+```
+
+Or let kist write the file for you:
+
+```bash
+npx kist init            # a minimal starter
+npx kist init -t package # a pipeline for publishing an npm package
 ```
 
 ---
@@ -202,16 +211,96 @@ options:
 
 ---
 
-## CLI Options
+## CLI
 
 ```bash
-kist [options]
+kist [options] [command]
+
+Commands:
+  run              Run the pipeline (default; you can omit it)
+  init [dir]       Create a starter kist.yml
+  validate         Check the config and that every action it names exists
+  schema           Print the JSON Schema for kist.yml
+  clear-cache      Delete cached step results
 
 Options:
-  --config <path>   Path to config file (default: kist.yaml or kist.yml)
-  --live            Enable live reload mode
-  --verbose         Enable verbose (debug) logging
+  -c, --config <path>      Config file (default: kist.yaml or kist.yml)
+  -l, --log-level <level>  debug | info | warn | error
+  -v, --verbose            Shorthand for --log-level debug
+      --live               Serve the output and rebuild on file changes
+      --no-cache           Ignore cached results and run every step
+      --dry-run            Print the execution plan instead of running it
+      --dry <format>       Print the plan as text or json
+      --graph [format]     Print the stage dependency graph (dot or mermaid)
+  -V, --version            Print the kist version
+  -h, --help               Show help for any command
 ```
+
+Inspect a pipeline before running it:
+
+```bash
+kist --dry-run          # what would run, in what order
+kist --dry json         # the same plan as JSON, for CI and tooling
+kist --graph mermaid    # the stage graph, ready to paste into Markdown
+```
+
+`--dry-run` fails if the configuration names an action that is not
+registered, so a missing plugin surfaces before the build starts rather
+than midway through it.
+
+---
+
+## Editor Support
+
+kist publishes a JSON Schema for `kist.yml`. With the YAML extension
+installed, editors give you completion, hover documentation, and inline
+validation with no further setup — `kist init` writes the reference for you:
+
+```yaml
+# yaml-language-server: $schema=https://www.getkist.com/schema.json
+```
+
+The same schema validates the file at load time, so what your editor accepts
+and what kist accepts cannot drift apart. `kist schema` prints it, which is
+also the quickest way to hand it to a tool or an AI assistant.
+
+---
+
+## Caching
+
+A step that declares `inputs` is skipped when every file matching them is
+unchanged since the last run. Its recorded outputs are restored and its log
+output is replayed, so a cached run reads the same as a real one:
+
+```yaml
+options:
+    cache:
+        enabled: true
+
+stages:
+    - name: build
+      steps:
+          - name: compile
+            action: TypeScriptCompilerAction
+            inputs:
+                - "src/**/*.ts"
+                - "tsconfig.json"
+            outputs:
+                - "dist/**"
+            env:
+                - NODE_ENV
+            options:
+                tsConfigPath: "./tsconfig.json"
+                outputDir: "./dist"
+```
+
+The cache key covers the action, its options, the contents of every input
+file, the values of any environment variables listed in `env`, and the Node
+major version. A step that declares no `inputs` always runs: kist will not
+guess what a step reads.
+
+Set `cacheEnabled: false` on a stage to opt it out, pass `--no-cache` to
+ignore the cache for one run, or run `kist clear-cache` to discard it.
 
 ---
 

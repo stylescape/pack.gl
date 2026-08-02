@@ -76,8 +76,8 @@ describe("ConfigStore", () => {
         it("should resolve a deeply nested key", () => {
             const store = freshStore();
             expect(
-                store.get<number>("options.pipeline.retryStrategy.retries"),
-            ).toBe(3);
+                store.get<number>("options.pipeline.retryStrategy.delay"),
+            ).toBe(1000);
         });
 
         it("should return undefined for a missing key", () => {

@@ -8,6 +8,9 @@ import { StageError } from "../../errors/index.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 import { FileCache } from "../cache/FileCache.js";
 import { BuildCache } from "../cache/BuildCache.js";
+import { StepCache } from "../cache/StepCache.js";
+import { resolvePipelineOptions } from "../config/resolveOptions.js";
+import type { ResolvedPipelineOptions } from "../config/resolveOptions.js";
 import { ProgressReporter } from "../progress/ProgressReporter.js";
 import { Stage } from "./Stage.js";
 
@@ -50,6 +53,16 @@ export class Pipeline extends AbstractProcess {
      */
     private progress?: ProgressReporter;
 
+    /**
+     * Step-level content-hash cache, present only when caching is enabled.
+     */
+    private stepCache?: StepCache;
+
+    /**
+     * Execution settings after reconciling the configuration's option blocks.
+     */
+    private resolved: ResolvedPipelineOptions;
+
     // Constructor
     // ========================================================================
 
@@ -63,8 +76,28 @@ export class Pipeline extends AbstractProcess {
     constructor(private config: ConfigInterface) {
         super();
         this.validateStageDependencies(config.stages);
-        this.stages = config.stages.map((stage) => new Stage(stage));
         this.options = config.options;
+        this.resolved = resolvePipelineOptions(config.options);
+
+        // The cache instance is created up front so every step shares it, but
+        // it only reads from disk once `initialize` runs in `run()`.
+        if (config.options?.cache?.enabled) {
+            this.stepCache = StepCache.getInstance({
+                cacheDir: config.options.cache.cacheDir,
+                ttl: config.options.cache.ttl,
+            });
+        }
+
+        this.stages = config.stages.map(
+            (stage) =>
+                new Stage(stage, {
+                    defaultTimeout: this.resolved.stepTimeout,
+                    retries: this.resolved.retries,
+                    retryDelay: this.resolved.retryDelay,
+                    maxConcurrentSteps: this.resolved.maxConcurrentSteps,
+                    cache: this.stepCache ?? null,
+                }),
+        );
         this.logInfo("Pipeline instance created.");
     }
 
@@ -116,7 +149,7 @@ export class Pipeline extends AbstractProcess {
             await this.saveCaches();
 
             // Halt pipeline if configured to do so on failure
-            if (this.options?.haltOnFailure !== false) {
+            if (this.resolved.haltOnFailure) {
                 this.logError("Halting pipeline due to failure.");
                 process.exit(1);
             } else {
@@ -149,6 +182,10 @@ export class Pipeline extends AbstractProcess {
         });
         await this.buildCache.initialize();
 
+        await this.stepCache?.initialize();
+        // Counters describe this run, not the process's whole history.
+        this.stepCache?.resetStats();
+
         this.logDebug("Build cache initialized.");
     }
 
@@ -173,7 +210,11 @@ export class Pipeline extends AbstractProcess {
      * Saves caches to disk.
      */
     private async saveCaches(): Promise<void> {
-        await Promise.all([this.fileCache?.save(), this.buildCache?.save()]);
+        await Promise.all([
+            this.fileCache?.save(),
+            this.buildCache?.save(),
+            this.stepCache?.save(),
+        ]);
     }
 
     /**
@@ -191,6 +232,19 @@ export class Pipeline extends AbstractProcess {
             this.logDebug(
                 `Build cache: ${stats.size} entries, ${stats.hitRate} hit rate`,
             );
+        }
+        if (this.stepCache) {
+            const stats = this.stepCache.getStats();
+            const considered = stats.hits + stats.misses;
+            if (considered > 0) {
+                // Worth an info-level line: it is the difference between a
+                // build that did work and one that decided it did not need to.
+                this.logInfo(
+                    stats.hits === considered
+                        ? `All ${considered} cacheable step(s) were up to date.`
+                        : `Step cache: ${stats.hits}/${considered} step(s) up to date (${stats.hitRate}).`,
+                );
+            }
         }
     }
 
@@ -258,6 +312,42 @@ export class Pipeline extends AbstractProcess {
     }
 
     /**
+     * Finds the index of the next stage to start: among those whose
+     * dependencies are all satisfied, the one with the highest `priority`.
+     * Ties keep configuration order, so a pipeline that sets no priorities
+     * behaves exactly as before.
+     *
+     * @param pending - Stages not yet started, with their definitions.
+     * @param completedStages - Names of stages that have finished.
+     * @returns The index into `pending`, or -1 when nothing is ready.
+     */
+    private findNextReady(
+        pending: { stage: Stage; definition: StageInterface }[],
+        completedStages: Set<string>,
+    ): number {
+        const weight = { high: 0, normal: 1, low: 2 } as const;
+
+        let best = -1;
+        for (let index = 0; index < pending.length; index++) {
+            const { definition } = pending[index];
+            const ready = (definition.dependsOn ?? []).every((dependency) =>
+                completedStages.has(dependency),
+            );
+            if (!ready) continue;
+
+            if (
+                best === -1 ||
+                weight[pending[index].stage.getPriority()] <
+                    weight[pending[best].stage.getPriority()]
+            ) {
+                best = index;
+            }
+        }
+
+        return best;
+    }
+
+    /**
      * Runs the stages with dependency-aware concurrency control. A stage is
      * only started once all of its `dependsOn` stages have completed, and no
      * more than `maxConcurrentStages` stages run at any moment.
@@ -267,12 +357,10 @@ export class Pipeline extends AbstractProcess {
     private async runWithConcurrencyControl(
         completedStages: Set<string>,
     ): Promise<void> {
-        // Support both old and new option locations
+        // `0` means "no limit"; fall back to the stage count so the loop below
+        // can always start at least one stage.
         const maxConcurrentStages =
-            this.options?.performance?.maxConcurrentStages ||
-            this.options?.maxConcurrentStages ||
-            this.stages.length ||
-            1;
+            this.resolved.maxConcurrentStages || this.stages.length || 1;
 
         // Pair each Stage with its definition so the scheduler can read
         // `dependsOn` (Stage keeps it private).
@@ -285,14 +373,15 @@ export class Pipeline extends AbstractProcess {
         try {
             while (pending.length > 0 || executing.size > 0) {
                 // Start every stage whose dependencies are met, up to the
-                // concurrency limit.
+                // concurrency limit. Among the ready stages the
+                // highest-priority one goes first, which only matters when the
+                // limit forces a choice.
                 let readyIndex: number;
                 while (
                     executing.size < maxConcurrentStages &&
-                    (readyIndex = pending.findIndex(({ definition }) =>
-                        (definition.dependsOn ?? []).every((dependency) =>
-                            completedStages.has(dependency),
-                        ),
+                    (readyIndex = this.findNextReady(
+                        pending,
+                        completedStages,
                     )) !== -1
                 ) {
                     const [{ stage }] = pending.splice(readyIndex, 1);

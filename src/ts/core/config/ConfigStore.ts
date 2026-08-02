@@ -24,7 +24,11 @@ export class ConfigStore extends AbstractProcess {
     // Constructor (Private to enforce Singleton Pattern)
     private constructor() {
         super();
-        this.config = defaultConfig;
+        // Deep-copied rather than referenced: `merge` and `set` write into
+        // this object, and assigning the shared `defaultConfig` literal would
+        // let one run's configuration leak into the next — which happens for
+        // real on every live-reload restart, and between tests.
+        this.config = structuredClone(defaultConfig);
         this.logDebug("ConfigStore initialized with default configuration.");
     }
 
@@ -37,6 +41,15 @@ export class ConfigStore extends AbstractProcess {
             ConfigStore.instance = new ConfigStore();
         }
         return ConfigStore.instance;
+    }
+
+    /**
+     * Discards the singleton so the next call to {@link getInstance} starts
+     * from the defaults again. Used by tests and by callers that run more
+     * than one pipeline in a single process.
+     */
+    public static resetInstance(): void {
+        ConfigStore.instance = null;
     }
 
     /**

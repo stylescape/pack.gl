@@ -255,4 +255,143 @@ describe("Stage", () => {
             );
         });
     });
+
+    // ------------------------------------------------------------------------
+    // Metadata
+    // ------------------------------------------------------------------------
+
+    describe("metadata", () => {
+        it("should expose its name and steps", () => {
+            const built = new Stage(stage());
+            expect(built.getName()).toBe("build");
+            expect(built.getSteps()).toHaveLength(2);
+        });
+
+        it("should report whether it is enabled", () => {
+            expect(new Stage(stage()).isEnabled()).toBe(true);
+            expect(new Stage(stage({ enabled: false })).isEnabled()).toBe(
+                false,
+            );
+        });
+
+        it("should default to normal priority", () => {
+            expect(new Stage(stage()).getPriority()).toBe("normal");
+        });
+
+        it("should report the configured priority", () => {
+            expect(new Stage(stage({ priority: "high" })).getPriority()).toBe(
+                "high",
+            );
+        });
+
+        it("should treat caching as inherited unless disabled", () => {
+            expect(new Stage(stage()).isCacheEnabled()).toBe(true);
+            expect(
+                new Stage(stage({ cacheEnabled: false })).isCacheEnabled(),
+            ).toBe(false);
+        });
+
+        it("should log a description when one is given", () => {
+            new Stage(stage({ description: "compiles things" }));
+            expect(spyOutput(spies.log())).toContain("compiles things");
+        });
+
+        it("should log tags when they are given", () => {
+            new Stage(stage({ tags: { team: "build" } }));
+            expect(spyOutput(spies.log())).toContain("tags: team=build");
+        });
+
+        it("should not log an empty tag map", () => {
+            new Stage(stage({ tags: {} }));
+            expect(spyOutput(spies.log())).not.toContain("tags:");
+        });
+    });
+
+    // ------------------------------------------------------------------------
+    // Hooks
+    // ------------------------------------------------------------------------
+
+    describe("hooks", () => {
+        it("should run before and after around the steps", async () => {
+            const order: string[] = [];
+
+            await new Stage(
+                stage({
+                    hooks: {
+                        before: () => {
+                            order.push("before");
+                        },
+                        after: () => {
+                            order.push("after");
+                        },
+                    },
+                }),
+            ).execute(new Set());
+
+            expect(order).toEqual(["before", "after"]);
+            expect(trace).toContain("end:b");
+        });
+
+        it("should await an asynchronous hook", async () => {
+            let done = false;
+
+            await new Stage(
+                stage({
+                    hooks: {
+                        after: async () => {
+                            await new Promise((r) => setTimeout(r, 5));
+                            done = true;
+                        },
+                    },
+                }),
+            ).execute(new Set());
+
+            expect(done).toBe(true);
+        });
+
+        it("should fail the stage when a hook throws", async () => {
+            await expect(
+                new Stage(
+                    stage({
+                        hooks: {
+                            before: () => {
+                                throw new Error("hook down");
+                            },
+                        },
+                    }),
+                ).execute(new Set()),
+            ).rejects.toThrow("hook down");
+
+            // The steps must not have run.
+            expect(trace).toEqual([]);
+        });
+    });
+
+    // ------------------------------------------------------------------------
+    // Step concurrency inherited from the pipeline
+    // ------------------------------------------------------------------------
+
+    describe("step concurrency", () => {
+        it("should use the pipeline default when the stage sets none", async () => {
+            delays.set("a", 20);
+            delays.set("b", 20);
+
+            await new Stage(stage({ parallel: true }), {
+                maxConcurrentSteps: 1,
+            }).execute(new Set());
+
+            expect(peakConcurrent).toBe(1);
+        });
+
+        it("should let the stage's own limit win", async () => {
+            delays.set("a", 20);
+            delays.set("b", 20);
+
+            await new Stage(stage({ parallel: true, maxConcurrentSteps: 2 }), {
+                maxConcurrentSteps: 1,
+            }).execute(new Set());
+
+            expect(peakConcurrent).toBe(2);
+        });
+    });
 });

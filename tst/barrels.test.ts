@@ -150,8 +150,17 @@ describe("barrel modules", () => {
         ]);
     });
 
-    it("should expose the CLI argument parser", () => {
-        expect(readAllExports(cliBarrel)).toEqual(["ArgumentParser"]);
+    it("should expose the CLI program and planner", () => {
+        expect(readAllExports(cliBarrel).sort()).toEqual([
+            "INIT_TEMPLATES",
+            "buildPlan",
+            "createProgram",
+            "formatGraph",
+            "formatPlan",
+            "renderTemplate",
+            "runCli",
+            "writeInitialConfig",
+        ]);
     });
 });
 

@@ -275,6 +275,77 @@ describe("Pipeline", () => {
             expect(output).toContain("File cache: 0 entries, N/A hit rate");
             expect(output).toContain("Build cache: 0 entries, N/A hit rate");
         });
+
+        it("should report that every cacheable step was up to date", async () => {
+            const cacheOptions = {
+                cache: {
+                    enabled: true,
+                    cacheDir: join(root, "cache"),
+                },
+            };
+            const cached: ConfigInterface = {
+                options: cacheOptions,
+                stages: [
+                    {
+                        name: "build",
+                        steps: [
+                            {
+                                ...step("build"),
+                                inputs: ["package.json"],
+                            },
+                        ],
+                    },
+                ],
+            };
+
+            // First run populates the cache, second run should skip.
+            await new Pipeline(cached).run();
+            spies.log().mockClear();
+            await new Pipeline(cached).run();
+
+            expect(spyOutput(spies.log())).toContain(
+                "All 1 cacheable step(s) were up to date.",
+            );
+        });
+
+        it("should report a partial hit rate when only some steps are cached", async () => {
+            const cacheOptions = {
+                cache: {
+                    enabled: true,
+                    cacheDir: join(root, "cache"),
+                },
+            };
+
+            await new Pipeline({
+                options: cacheOptions,
+                stages: [
+                    {
+                        name: "build",
+                        steps: [{ ...step("one"), inputs: ["package.json"] }],
+                    },
+                ],
+            }).run();
+
+            spies.log().mockClear();
+
+            // The second pipeline adds a step the cache has never seen.
+            await new Pipeline({
+                options: cacheOptions,
+                stages: [
+                    {
+                        name: "build",
+                        steps: [
+                            { ...step("one"), inputs: ["package.json"] },
+                            { ...step("two"), inputs: ["package.json"] },
+                        ],
+                    },
+                ],
+            }).run();
+
+            expect(spyOutput(spies.log())).toContain(
+                "Step cache: 1/2 step(s) up to date",
+            );
+        });
     });
 
     // ------------------------------------------------------------------------

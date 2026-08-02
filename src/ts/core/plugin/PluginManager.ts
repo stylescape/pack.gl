@@ -3,7 +3,8 @@
 // ============================================================================
 
 import { existsSync, readdirSync, readFileSync, statSync } from "fs";
-import { basename, join } from "path";
+import type { Dirent } from "fs";
+import { basename, dirname, join, resolve } from "path";
 import type { ActionInterface } from "../../interface/ActionInterface.js";
 import type { ActionPlugin } from "../../interface/ActionPlugin.js";
 import type { PluginMetadata } from "../../interface/PluginMetadata.js";
@@ -90,41 +91,108 @@ export class PluginManager extends AbstractProcess {
     }
 
     /**
-     * Discovers plugins installed via npm with specified prefixes
+     * Every `node_modules` directory that applies to the current project,
+     * nearest first.
+     *
+     * Node resolves a dependency by walking up the directory tree, and package
+     * managers rely on that: npm and yarn hoist workspace dependencies to the
+     * repository root, and pnpm links them into a nested store. Looking only
+     * in `cwd/node_modules` finds plugins in a plain single-package install
+     * and misses them in every workspace layout.
+     *
+     * @param cwd - Directory to start from.
+     * @returns Absolute paths of existing `node_modules` directories.
+     */
+    private nodeModulesPaths(cwd: string): string[] {
+        const paths: string[] = [];
+        let current = resolve(cwd);
+
+        for (;;) {
+            const candidate = join(current, "node_modules");
+            if (existsSync(candidate)) {
+                paths.push(candidate);
+            }
+            const parent = dirname(current);
+            if (parent === current) break;
+            current = parent;
+        }
+
+        return paths;
+    }
+
+    /**
+     * Whether a directory entry is a directory, following symlinks.
+     *
+     * Package managers link rather than copy: pnpm links every dependency
+     * into the store, and `npm link` does the same for local development. A
+     * plain `isDirectory()` check reports false for those and silently skips
+     * the plugin.
+     *
+     * @param path - Absolute path to the entry.
+     * @param entry - The directory entry to test.
+     * @returns True when the entry resolves to a directory.
+     */
+    private isDirectoryEntry(path: string, entry: Dirent): boolean {
+        if (entry.isDirectory()) return true;
+        if (!entry.isSymbolicLink()) return false;
+        try {
+            return statSync(path).isDirectory();
+        } catch {
+            // Broken link.
+            return false;
+        }
+    }
+
+    /**
+     * Discovers plugins installed via npm with specified prefixes, searching
+     * every applicable `node_modules` directory from the current one upwards.
+     * The nearest copy of a package wins, matching Node's own resolution.
      */
     private async discoverNpmPlugins(prefixes: string[]): Promise<void> {
-        const nodeModulesPath = join(process.cwd(), "node_modules");
+        const roots = this.nodeModulesPaths(process.cwd());
 
-        try {
-            const directories = readdirSync(nodeModulesPath, {
-                withFileTypes: true,
-            });
+        if (roots.length === 0) {
+            this.logDebug(
+                "No node_modules directory found; skipping plugin discovery.",
+            );
+            return;
+        }
 
-            for (const dir of directories) {
-                // Check for scoped packages (@getkist/plugin-*)
-                if (dir.isDirectory() && dir.name.startsWith("@")) {
-                    await this.discoverScopedPlugins(
-                        join(nodeModulesPath, dir.name),
-                        prefixes,
+        for (const nodeModulesPath of roots) {
+            try {
+                const directories = readdirSync(nodeModulesPath, {
+                    withFileTypes: true,
+                });
+
+                for (const dir of directories) {
+                    const entryPath = join(nodeModulesPath, dir.name);
+                    if (!this.isDirectoryEntry(entryPath, dir)) {
+                        continue;
+                    }
+
+                    // Check for scoped packages (@getkist/action-*)
+                    if (dir.name.startsWith("@")) {
+                        await this.discoverScopedPlugins(entryPath, prefixes);
+                        continue;
+                    }
+
+                    // Check for non-scoped packages (kist-action-*)
+                    const matches = prefixes.some(
+                        (prefix) =>
+                            !prefix.startsWith("@") &&
+                            dir.name.startsWith(prefix),
                     );
-                }
-
-                // Check for non-scoped packages (kist-plugin-*)
-                for (const prefix of prefixes) {
-                    if (
-                        dir.isDirectory() &&
-                        !prefix.startsWith("@") &&
-                        dir.name.startsWith(prefix)
-                    ) {
-                        await this.loadPlugin(
-                            join(nodeModulesPath, dir.name),
-                            dir.name,
-                        );
+                    if (matches && !this.loadedPlugins.has(dir.name)) {
+                        await this.loadPlugin(entryPath, dir.name);
                     }
                 }
+            } catch (error) {
+                // One unreadable root should not stop the search: a parent
+                // directory may be outside the project and not our business.
+                this.logDebug(
+                    `Could not read ${nodeModulesPath}: ${(error as Error).message}`,
+                );
             }
-        } catch (error) {
-            this.logError("Failed to discover npm plugins.", error);
         }
     }
 

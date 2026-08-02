@@ -71,6 +71,36 @@ export interface StepInterface {
     tags?: Record<string, string>;
 
     /**
+     * Files this step reads, as paths or glob patterns relative to the project
+     * root. Declaring inputs opts the step into content-hash caching: when the
+     * contents of every input are unchanged since a previous run, the step is
+     * skipped, its recorded outputs are restored, and its logs are replayed.
+     *
+     * A step that declares no inputs always executes.
+     *
+     * @example ["src/**\/*.ts", "tsconfig.json"]
+     */
+    inputs?: string[];
+
+    /**
+     * Files this step produces, as paths or glob patterns relative to the
+     * project root. Outputs are archived on a cache miss and restored on a
+     * cache hit. Only meaningful alongside `inputs`.
+     *
+     * @example ["dist/js/**"]
+     */
+    outputs?: string[];
+
+    /**
+     * Names of environment variables whose values affect this step's result.
+     * Their values are folded into the cache key, so changing one re-runs the
+     * step rather than serving a stale result.
+     *
+     * @example ["NODE_ENV"]
+     */
+    env?: string[];
+
+    /**
      * Optional hooks to execute custom logic before or after the step.
      * Hooks can be used for additional setup, teardown, or condition checks.
      * - `before`: Function executed before the step runs.

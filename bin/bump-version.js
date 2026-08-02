@@ -47,6 +47,22 @@ function updateVersionFile(version) {
     console.log(`✓ Updated VERSION file to ${version}`);
 }
 
+function updateVersionModule(version) {
+    // `src/ts/version.ts` is what `kist --version` prints; it must move in
+    // lockstep with package.json or the CLI reports a stale number.
+    const modulePath = join(rootDir, "src/ts/version.ts");
+    const source = readFileSync(modulePath, "utf-8");
+    writeFileSync(
+        modulePath,
+        source.replace(
+            /export const VERSION = "[^"]*";/,
+            `export const VERSION = "${version}";`,
+        ),
+        "utf-8",
+    );
+    console.log(`✓ Updated src/ts/version.ts to ${version}`);
+}
+
 function updatePackageJson(version) {
     const packageFile = join(rootDir, "package.json");
     const pkg = JSON.parse(readFileSync(packageFile, "utf-8"));
@@ -92,6 +108,7 @@ function main() {
     );
 
     updateVersionFile(newVersion);
+    updateVersionModule(newVersion);
     updatePackageJson(newVersion);
     updateChangelog(newVersion);
 

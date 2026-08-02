@@ -6,7 +6,6 @@ import fs from "fs";
 // js-yaml 5 is ESM with named exports only; it no longer has a default export.
 import { load as loadYaml } from "js-yaml";
 import path from "path";
-import { ArgumentParser } from "../../cli/ArgumentParser.js";
 import {
     ConfigError,
     ConfigNotFoundError,
@@ -16,6 +15,7 @@ import {
 import type { ConfigInterface } from "../../interface/ConfigInterface.js";
 import type { StageInterface } from "../../interface/StageInterface.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
+import { SchemaValidator } from "../validation/SchemaValidator.js";
 
 // ============================================================================
 // Class
@@ -58,19 +58,17 @@ export class ConfigLoader extends AbstractProcess {
 
     /**
      * Initializes the loader by locating the configuration file.
-     * Uses `--config` CLI flag if provided, otherwise defaults.
+     *
+     * @param configPath - Explicit path to use, as supplied by `--config`.
+     * When omitted, the flag is read from argv and, failing that, the default
+     * filenames are searched.
      */
-    public async initialize(): Promise<void> {
-        const parser = new ArgumentParser();
-        const cliFlags = parser.getAllFlags();
-        const cliPath =
-            typeof cliFlags.config === "string" ? cliFlags.config : undefined;
-
-        const searchPaths = cliPath ? [cliPath] : this.defaultFilenames;
+    public async initialize(configPath?: string): Promise<void> {
+        const searchPaths = configPath ? [configPath] : this.defaultFilenames;
 
         this.logDebug(`Current working directory: ${process.cwd()}`);
         this.logDebug(
-            `Searching for config file${cliPath ? ` from --config=${cliPath}` : ""}...`,
+            `Searching for config file${configPath ? ` from --config=${configPath}` : ""}...`,
         );
 
         for (const fileName of searchPaths) {
@@ -89,7 +87,7 @@ export class ConfigLoader extends AbstractProcess {
                 this.logDebug(`File not accessible: ${resolvedPath}`);
 
                 // ❗ If user explicitly provided --config and it fails, stop immediately
-                if (cliPath) {
+                if (configPath) {
                     throw new ConfigNotFoundError(
                         resolvedPath,
                         error as Error,
@@ -101,6 +99,14 @@ export class ConfigLoader extends AbstractProcess {
         this.logWarn(
             "No configuration file found. Proceeding with default settings.",
         );
+    }
+
+    /**
+     * The path the configuration was loaded from, or null when none was
+     * found and defaults are in use.
+     */
+    public getConfigPath(): string | null {
+        return this.configPath;
     }
 
     /**
@@ -125,7 +131,7 @@ export class ConfigLoader extends AbstractProcess {
             const config = await this.loadConfigWithInheritance(
                 this.configPath,
             );
-            this.validateConfig(config);
+            this.validateConfig(config, this.configPath);
             this.logDebug(
                 `Successfully loaded configuration from: ${this.configPath}`,
             );
@@ -317,15 +323,25 @@ export class ConfigLoader extends AbstractProcess {
      * Validates the structure of the configuration.
      *
      * @param config - The configuration object to validate.
-     * @throws Error if validation fails.
+     * @param configPath - The file it was read from, for error reporting.
+     * @throws ConfigValidationError if validation fails.
      */
-    private validateConfig(config: ConfigInterface): void {
+    private validateConfig(config: ConfigInterface, configPath: string): void {
         if (!Array.isArray(config.stages)) {
             throw new ConfigValidationError(
                 ["Invalid configuration: 'stages' must be an array."],
-                this.configPath ?? undefined,
+                configPath,
             );
         }
+
+        // Validate the file against the published JSON Schema — the same one
+        // editors use — so a typo is reported here, with its location, rather
+        // than as a downstream failure. Only file-sourced configuration is
+        // checked: programmatic configs may legitimately carry functions
+        // (`hooks`, `validateConfig`) and action objects, which YAML cannot
+        // express and the schema therefore rejects.
+        new SchemaValidator().validate(config, configPath);
+
         this.logDebug("Configuration structure validated successfully.");
     }
 }

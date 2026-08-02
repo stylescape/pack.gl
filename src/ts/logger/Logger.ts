@@ -27,6 +27,14 @@ export class Logger {
      */
     private logLevel: "debug" | "info" | "warn" | "error";
 
+    /**
+     * Stack of active capture buffers. Every emitted line is appended to each
+     * open buffer so a caller can record what a section of work printed and
+     * replay it later (used by the step cache to make a skipped step look
+     * identical to one that actually ran). Nested captures are supported.
+     */
+    private captureBuffers: string[][] = [];
+
     // Constructor
     // ========================================================================
 
@@ -87,11 +95,47 @@ export class Logger {
     ): void {
         if (this.shouldLog(level)) {
             const formattedMessage = `${fgStyle}${bgStyle}[${level.toUpperCase()}]${LoggerStyles.Reset} [${LoggerStyles.Cyan}${context}${LoggerStyles.Reset}] ${message}`;
+            for (const buffer of this.captureBuffers) {
+                buffer.push(formattedMessage);
+            }
             // The Logger is the one sanctioned console consumer.
             // eslint-disable-next-line no-console
             console[
                 level === "error" ? "error" : level === "warn" ? "warn" : "log"
             ](formattedMessage);
+        }
+    }
+
+    // Capture and Replay
+    // ========================================================================
+
+    /**
+     * Starts recording emitted log lines into a new buffer.
+     * Must be paired with {@link endCapture}.
+     */
+    public beginCapture(): void {
+        this.captureBuffers.push([]);
+    }
+
+    /**
+     * Stops the most recently started capture and returns what it recorded.
+     *
+     * @returns The lines emitted while the capture was open, oldest first.
+     */
+    public endCapture(): string[] {
+        return this.captureBuffers.pop() ?? [];
+    }
+
+    /**
+     * Writes previously captured lines back to the console verbatim, so a
+     * cached step reads the same as an executed one.
+     *
+     * @param lines - Lines returned by an earlier {@link endCapture}.
+     */
+    public replay(lines: string[]): void {
+        for (const line of lines) {
+            // eslint-disable-next-line no-console
+            console.log(line);
         }
     }
 

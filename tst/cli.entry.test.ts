@@ -3,57 +3,35 @@
 // ============================================================================
 
 // `cli.ts` is a top-level async IIFE, so it runs the moment the module is
-// required. Every collaborator is mocked and the module is required inside
-// `jest.isolateModules` so each test gets a fresh execution.
-//
-// The Logger is mocked rather than spied on: because the CLI is required in an
-// isolated registry, a spy on the singleton imported here would not be the
-// instance the CLI actually touches.
-const mockSetLogLevel = jest.fn();
+// required. The program it delegates to is mocked and the module is required
+// inside `jest.isolateModules` so each test gets a fresh execution.
+const mockRunCli = jest.fn();
 
-jest.mock("../src/ts/logger/Logger", () => ({
-    Logger: { getInstance: () => ({ setLogLevel: mockSetLogLevel }) },
+jest.mock("../src/ts/cli/Program", () => ({
+    runCli: (...args: unknown[]) => mockRunCli(...args),
 }));
 
-const mockGetAllFlags = jest.fn();
-const mockInitialize = jest.fn();
-const mockLoadConfig = jest.fn();
-const mockMerge = jest.fn();
-const mockGet = jest.fn();
-const mockRun = jest.fn();
-
-jest.mock("../src/ts/cli/ArgumentParser", () => ({
-    ArgumentParser: class {
-        getAllFlags = () => mockGetAllFlags();
-    },
-}));
-
-jest.mock("../src/ts/core/config/ConfigLoader", () => ({
-    ConfigLoader: class {
-        initialize = () => mockInitialize();
-        loadConfig = () => mockLoadConfig();
-    },
-}));
-
-jest.mock("../src/ts/core/config/ConfigStore", () => ({
-    ConfigStore: {
-        getInstance: () => ({ merge: mockMerge, get: mockGet }),
-    },
-}));
-
-jest.mock("../src/ts/kist", () => ({
-    Kist: class {
-        run = () => mockRun();
-    },
-}));
-
-/** Requires `cli.ts` afresh and waits for its IIFE to settle. */
-async function runCli(): Promise<void> {
-    jest.isolateModules(() => {
-        require("../src/ts/cli");
-    });
+/**
+ * Requires `cli.ts` afresh and waits for its IIFE to settle. The registry is
+ * reset in `beforeEach` rather than here so that error classes required by a
+ * test come from the same registry as the entry point — `instanceof` compares
+ * class identity, and two registries hold two distinct classes.
+ */
+async function runEntry(): Promise<void> {
+    require("../src/ts/cli");
     await new Promise((resolve) => setImmediate(resolve));
     await new Promise((resolve) => setImmediate(resolve));
+}
+
+/** The error classes as seen by the freshly-required entry point. */
+function errorClasses(): {
+    CommanderError: typeof import("commander").CommanderError;
+    KistError: typeof import("../src/ts/errors/index").KistError;
+} {
+    return {
+        CommanderError: require("commander").CommanderError,
+        KistError: require("../src/ts/errors/index").KistError,
+    };
 }
 
 describe("cli entry point", () => {
@@ -61,14 +39,8 @@ describe("cli entry point", () => {
     let exitSpy: jest.SpyInstance;
 
     beforeEach(() => {
-        mockGetAllFlags.mockReset().mockReturnValue({ mode: "development" });
-        mockInitialize.mockReset().mockResolvedValue(undefined);
-        mockLoadConfig.mockReset().mockResolvedValue({ stages: [] });
-        mockMerge.mockReset();
-        mockGet.mockReset().mockReturnValue(undefined);
-        mockSetLogLevel.mockReset();
-        mockRun.mockReset().mockResolvedValue(undefined);
-
+        jest.resetModules();
+        mockRunCli.mockReset().mockResolvedValue(undefined);
         errorSpy = jest
             .spyOn(console, "error")
             .mockImplementation(() => undefined);
@@ -81,138 +53,48 @@ describe("cli entry point", () => {
         jest.restoreAllMocks();
     });
 
-    it("should load the configuration and run the workflow", async () => {
-        await runCli();
+    it("should hand process.argv to the program", async () => {
+        await runEntry();
 
-        expect(mockInitialize).toHaveBeenCalledTimes(1);
-        expect(mockLoadConfig).toHaveBeenCalledTimes(1);
-        expect(mockRun).toHaveBeenCalledTimes(1);
+        expect(mockRunCli).toHaveBeenCalledTimes(1);
+        expect(mockRunCli).toHaveBeenCalledWith(process.argv);
         expect(exitSpy).not.toHaveBeenCalled();
     });
 
-    it("should leave the log level alone by default", async () => {
-        await runCli();
-        expect(mockSetLogLevel).not.toHaveBeenCalled();
-    });
-
-    it("should expand a bare --live flag into the live options block", async () => {
-        mockGetAllFlags.mockReturnValue({ live: true });
-
-        await runCli();
-
-        expect(mockMerge).toHaveBeenNthCalledWith(2, {
-            options: { live: { enabled: true } },
-        });
-    });
-
-    it("should force debug logging for --verbose", async () => {
-        mockGetAllFlags.mockReturnValue({ verbose: true });
-
-        await runCli();
-
-        expect(mockSetLogLevel).toHaveBeenCalledWith("debug");
-    });
-
-    it("should apply the configured log level", async () => {
-        mockGet.mockReturnValue("warn");
-
-        await runCli();
-
-        expect(mockGet).toHaveBeenCalledWith("options.logLevel");
-        expect(mockSetLogLevel).toHaveBeenCalledWith("warn");
-    });
-
-    it("should merge the file configuration before the CLI options", async () => {
-        await runCli();
-
-        expect(mockMerge).toHaveBeenNthCalledWith(1, { stages: [] });
-        expect(mockMerge).toHaveBeenNthCalledWith(2, {
-            options: { mode: "development" },
-        });
-    });
-
-    it("should report and exit when configuration loading fails", async () => {
-        mockLoadConfig.mockRejectedValue(new Error("bad config"));
-
-        await runCli();
-
-        expect(errorSpy).toHaveBeenCalledWith(
-            "[CLI] An unexpected error occurred:",
-            expect.any(Error),
+    it("should exit with commander's own code for --help and --version", async () => {
+        // Commander signals a successful `--help` by throwing with code 0
+        // once `exitOverride` is in play; the entry point must not turn that
+        // into a failure.
+        const { CommanderError } = errorClasses();
+        mockRunCli.mockRejectedValue(
+            new CommanderError(0, "commander.helpDisplayed", "(outputHelp)"),
         );
-        expect(exitSpy).toHaveBeenCalledWith(1);
-        expect(mockRun).not.toHaveBeenCalled();
+
+        await runEntry();
+
+        expect(exitSpy).toHaveBeenCalledWith(0);
+        expect(errorSpy).not.toHaveBeenCalled();
     });
 
-    it("should report and exit when the workflow fails", async () => {
-        mockRun.mockRejectedValue(new Error("workflow down"));
+    it("should print a KistError without a stack trace", async () => {
+        const { KistError } = errorClasses();
+        mockRunCli.mockRejectedValue(new KistError("bad config", "CONFIG"));
 
-        await runCli();
+        await runEntry();
 
-        expect(errorSpy).toHaveBeenCalledWith(
-            "[CLI] An unexpected error occurred:",
-            expect.any(Error),
-        );
+        expect(errorSpy).toHaveBeenCalledWith("kist: bad config");
+        expect(errorSpy).toHaveBeenCalledTimes(1);
         expect(exitSpy).toHaveBeenCalledWith(1);
     });
-});
 
-// ----------------------------------------------------------------------------
-// Log level selection
-// ----------------------------------------------------------------------------
+    it("should print the whole error for anything unexpected", async () => {
+        const failure = new Error("something else");
+        mockRunCli.mockRejectedValue(failure);
 
-describe("cli log level", () => {
-    let exitSpy: jest.SpyInstance;
+        await runEntry();
 
-    beforeEach(() => {
-        mockGetAllFlags.mockReset().mockReturnValue({});
-        mockInitialize.mockReset().mockResolvedValue(undefined);
-        mockLoadConfig.mockReset().mockResolvedValue({ stages: [] });
-        mockMerge.mockReset();
-        mockGet.mockReset().mockReturnValue(undefined);
-        mockSetLogLevel.mockReset();
-        mockRun.mockReset().mockResolvedValue(undefined);
-
-        jest.spyOn(console, "error").mockImplementation(() => undefined);
-        exitSpy = jest
-            .spyOn(process, "exit")
-            .mockImplementation((() => undefined) as never);
-        mockSetLogLevel.mockReset();
-    });
-
-    afterEach(() => {
-        jest.restoreAllMocks();
-    });
-
-    it("should force debug logging when --verbose is passed", async () => {
-        mockGetAllFlags.mockReturnValue({ verbose: true });
-        mockGet.mockReturnValue("warn");
-
-        await runCli();
-
-        expect(mockSetLogLevel).toHaveBeenCalledWith("debug");
-        expect(exitSpy).not.toHaveBeenCalled();
-    });
-
-    it("should apply the configured log level when --verbose is absent", async () => {
-        mockGet.mockReturnValue("warn");
-
-        await runCli();
-
-        expect(mockSetLogLevel).toHaveBeenCalledWith("warn");
-    });
-
-    it("should leave the log level alone when neither is set", async () => {
-        await runCli();
-        expect(mockSetLogLevel).not.toHaveBeenCalled();
-    });
-
-    it("should ignore a non-true verbose flag", async () => {
-        mockGetAllFlags.mockReturnValue({ verbose: "yes" });
-        mockGet.mockReturnValue("error");
-
-        await runCli();
-
-        expect(mockSetLogLevel).toHaveBeenCalledWith("error");
+        expect(errorSpy).toHaveBeenCalledWith("kist: unexpected error:");
+        expect(errorSpy).toHaveBeenCalledWith(failure);
+        expect(exitSpy).toHaveBeenCalledWith(1);
     });
 });

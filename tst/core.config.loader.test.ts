@@ -69,10 +69,9 @@ describe("ConfigLoader", () => {
 
         it("should honour an explicit --config path", async () => {
             writeConfig("custom/other.yml", "stages: []\n");
-            setArgv("--config", "custom/other.yml");
 
             const loader = new ConfigLoader();
-            await loader.initialize();
+            await loader.initialize("custom/other.yml");
             expect(spyOutput(spies.log())).toContain(
                 "from --config=custom/other.yml",
             );
@@ -80,11 +79,23 @@ describe("ConfigLoader", () => {
         });
 
         it("should throw when an explicit --config path is missing", async () => {
-            setArgv("--config", "nope.yml");
             const loader = new ConfigLoader();
-            await expect(loader.initialize()).rejects.toThrow(
+            await expect(loader.initialize("nope.yml")).rejects.toThrow(
                 /Configuration file not found/,
             );
+        });
+
+        it("should not read --config from argv", async () => {
+            // kist parses argv only in its CLI layer. A host program that
+            // embeds kist and has its own --config flag must not have that
+            // flag mistaken for kist's configuration path.
+            writeConfig("kist.yaml", "stages: []\n");
+            setArgv("--config", "not-kists-flag.yml");
+
+            const loader = new ConfigLoader();
+            await loader.initialize();
+
+            expect(loader.getConfigPath()).toContain("kist.yaml");
         });
 
         it("should ignore a boolean --config flag", async () => {

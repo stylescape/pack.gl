@@ -110,8 +110,13 @@ export const defaultConfig: ConfigInterface = {
         pipeline: {
             /**
              * Default timeout in milliseconds for each step in the pipeline.
+             * `0` disables the default; a step may still set its own
+             * `timeout`. Left off by default because a legitimate compile or
+             * bundle step can exceed any figure chosen here, and a build that
+             * fails on a clock rather than on its own result is worse than one
+             * that takes a while.
              */
-            stepTimeout: 30000,
+            stepTimeout: 0,
 
             /**
              * Whether to halt the pipeline if a step fails.
@@ -125,13 +130,15 @@ export const defaultConfig: ConfigInterface = {
             maxConcurrentStages: 0,
 
             /**
-             * Retry strategy for steps that fail.
+             * Retry strategy for steps that fail. Retries are off by default:
+             * silently re-running a failed build step hides real failures and
+             * multiplies the time taken to report them.
              */
             retryStrategy: {
                 /**
                  * Number of retry attempts before marking a step as failed.
                  */
-                retries: 3,
+                retries: 0,
 
                 /**
                  * Delay in milliseconds between retry attempts.

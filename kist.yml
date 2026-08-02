@@ -1,3 +1,6 @@
+# Points at the in-repo copy rather than https://www.getkist.com/schema.json so
+# editor validation works on a checkout before the schema is published.
+# yaml-language-server: $schema=./schema/kist.schema.json
 
 ---
 
@@ -106,6 +109,13 @@ stages:
             -
                 name: CopySrcTS
                 action: DirectoryCopyAction
+                # Declaring inputs opts this step into content-hash caching:
+                # when nothing under src/ts has changed it is skipped and the
+                # previous output is restored.
+                inputs:
+                    - "src/ts/**/*.ts"
+                outputs:
+                    - "dist/ts/**"
                 options:
                     srcDir: "./src/ts"
                     destDir: "./dist/ts"

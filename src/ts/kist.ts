@@ -51,13 +51,7 @@ export class Kist extends AbstractProcess {
         this.logInfo("Starting Kist workflow...");
 
         try {
-            // Initialize the ActionRegistry with available actions
-            await this.initializeActionRegistry();
-
-            // Validate the merged configuration now that all core and plugin
-            // actions are registered, so a malformed kist.yml fails fast with
-            // a clear message instead of deep inside the pipeline.
-            this.validateConfiguration();
+            await this.prepare();
 
             // Create and run the PipelineManager
             const liveReloadEnabled = ConfigStore.getInstance().get<boolean>(
@@ -67,16 +61,39 @@ export class Kist extends AbstractProcess {
                 ? new LiveServer()
                 : null;
 
-            const pipelineManager = new PipelineManager(liveReloadServer!);
+            const pipelineManager = new PipelineManager(
+                liveReloadServer ?? undefined,
+            );
             await pipelineManager.runPipeline();
 
-            // Setup live reload if enabled
-            if (liveReloadEnabled) {
-                this.setupLiveReload(pipelineManager, liveReloadServer!);
+            // Setup live reload if enabled. The server is non-null here
+            // precisely because `liveReloadEnabled` is what created it.
+            if (liveReloadServer) {
+                this.setupLiveReload(pipelineManager, liveReloadServer);
             }
         } catch (error) {
             this.handleError(error);
         }
+    }
+
+    /**
+     * Prepares the workflow without running it: discovers plugins, registers
+     * actions, and validates the merged configuration.
+     *
+     * Separated from {@link run} so the CLI's inspection commands
+     * (`--dry-run`, `--graph`, `validate`) can report on a fully resolved
+     * configuration without executing a single step.
+     *
+     * @throws Error if the configuration is invalid.
+     */
+    public async prepare(): Promise<void> {
+        // Initialize the ActionRegistry with available actions
+        await this.initializeActionRegistry();
+
+        // Validate the merged configuration now that all core and plugin
+        // actions are registered, so a malformed kist.yml fails fast with
+        // a clear message instead of deep inside the pipeline.
+        this.validateConfiguration();
     }
 
     /**

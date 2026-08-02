@@ -199,11 +199,13 @@ describe("PluginManager", () => {
     // ------------------------------------------------------------------------
 
     describe("discoverPlugins", () => {
-        it("should log an error when node_modules cannot be read", async () => {
-            // `root` intentionally has no node_modules directory.
+        it("should not report an error when no node_modules exists", async () => {
+            // `root` intentionally has no node_modules directory. A project
+            // without dependencies installed is an ordinary situation, not a
+            // failure, so nothing should be logged at error level.
             const manager = PluginManager.getInstance();
             await manager.discoverPlugins();
-            expect(spyOutput(spies.error())).toContain(
+            expect(spyOutput(spies.error())).not.toContain(
                 "Failed to discover npm plugins",
             );
             expect(manager.getLoadedPlugins()).toEqual([]);
@@ -258,6 +260,76 @@ describe("PluginManager", () => {
             const manager = PluginManager.getInstance();
             await manager.discoverPlugins();
             expect(manager.getLoadedPlugins()).toEqual([]);
+        });
+
+        it("should follow a symlinked plugin directory", async () => {
+            // pnpm links every dependency into its store, and `npm link` does
+            // the same for local development, so a plugin is frequently a
+            // symlink rather than a real directory.
+            const real = join(root, "actual-plugin");
+            mkdirSync(real, { recursive: true });
+            writeFileSync(
+                join(real, "package.json"),
+                JSON.stringify({ main: "index.js" }),
+            );
+            writePlugin(real, "index.js", VALID_PLUGIN_BODY);
+
+            const nodeModules = join(root, "node_modules");
+            mkdirSync(nodeModules, { recursive: true });
+            symlinkSync(real, join(nodeModules, "kist-plugin-linked"));
+
+            const manager = PluginManager.getInstance();
+            await manager.discoverPlugins();
+
+            expect(manager.isPluginLoaded("kist-plugin-linked")).toBe(true);
+        });
+
+        it("should ignore a broken symlink", async () => {
+            const nodeModules = join(root, "node_modules");
+            mkdirSync(nodeModules, { recursive: true });
+            symlinkSync(
+                join(root, "does-not-exist"),
+                join(nodeModules, "kist-plugin-dangling"),
+            );
+
+            const manager = PluginManager.getInstance();
+            await manager.discoverPlugins();
+
+            expect(manager.getLoadedPlugins()).toEqual([]);
+        });
+
+        it("should find a plugin hoisted to a parent directory", async () => {
+            // npm and yarn hoist workspace dependencies to the repository
+            // root, so the plugin is not in the package's own node_modules.
+            const parentModules = join(root, "node_modules");
+            const pkg = join(parentModules, "kist-plugin-hoisted");
+            mkdirSync(pkg, { recursive: true });
+            writeFileSync(
+                join(pkg, "package.json"),
+                JSON.stringify({ main: "index.js" }),
+            );
+            writePlugin(pkg, "index.js", VALID_PLUGIN_BODY);
+
+            const workspace = join(root, "packages", "app");
+            mkdirSync(workspace, { recursive: true });
+            cwdSpy.mockReturnValue(workspace);
+
+            const manager = PluginManager.getInstance();
+            await manager.discoverPlugins();
+
+            expect(manager.isPluginLoaded("kist-plugin-hoisted")).toBe(true);
+        });
+
+        it("should keep searching when one node_modules cannot be read", async () => {
+            const nodeModules = join(root, "node_modules");
+            mkdirSync(nodeModules, { recursive: true });
+            mockReaddirFailPath = nodeModules;
+
+            const manager = PluginManager.getInstance();
+            await expect(manager.discoverPlugins()).resolves.toBeUndefined();
+
+            expect(spyOutput(spies.error())).not.toContain("EACCES");
+            mockReaddirFailPath = null;
         });
 
         it("should honour custom plugin prefixes", async () => {

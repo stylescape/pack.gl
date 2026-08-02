@@ -5,6 +5,7 @@
 import type { StageInterface } from "../../interface/StageInterface.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 import { Step } from "./Step.js";
+import type { StepRuntimeOptions } from "./Step.js";
 
 // ============================================================================
 // Class
@@ -29,6 +30,10 @@ export class Stage extends AbstractProcess {
     private cacheEnabled: boolean;
     private enabled: boolean;
     private timeout?: number;
+    private priority: "low" | "normal" | "high";
+    private description?: string;
+    private tags?: Record<string, string>;
+    private hooks?: StageInterface["hooks"];
 
     // Constructor
     // ========================================================================
@@ -37,21 +42,82 @@ export class Stage extends AbstractProcess {
      * Constructs a Stage instance with the given stage definition.
      * @param stage - The stage definition containing name, steps, and
      * dependencies.
+     * @param runtime - Pipeline-wide execution settings passed to each step.
      */
-    constructor(stage: StageInterface) {
+    constructor(stage: StageInterface, runtime: StepRuntimeOptions = {}) {
         super(); // Initialize logging
         this.name = stage.name;
-        this.steps = stage.steps.map((step) => new Step(step));
+        // `cacheEnabled: false` opts a stage out of caching even when the
+        // pipeline has it on; leaving it unset inherits the global setting.
+        const stepRuntime: StepRuntimeOptions =
+            stage.cacheEnabled === false
+                ? { ...runtime, cache: null }
+                : runtime;
+        this.steps = stage.steps.map((step) => new Step(step, stepRuntime));
         this.dependsOn = stage.dependsOn;
         this.parallel = stage.parallel ?? false;
-        this.maxConcurrentSteps = stage.maxConcurrentSteps;
-        this.cacheEnabled = stage.cacheEnabled ?? false;
+        this.maxConcurrentSteps =
+            stage.maxConcurrentSteps ?? runtime.maxConcurrentSteps;
+        this.cacheEnabled = stage.cacheEnabled ?? true;
         this.enabled = stage.enabled ?? true;
         this.timeout = stage.timeout;
+        this.priority = stage.priority ?? "normal";
+        this.description = stage.description;
+        this.tags = stage.tags;
+        this.hooks = stage.hooks;
 
         this.logInfo(
             `Stage "${this.name}" initialized with ${this.steps.length} steps${this.parallel ? " (parallel)" : ""}.`,
         );
+        if (this.description) {
+            this.logDebug(`  ${this.description}`);
+        }
+        if (this.tags && Object.keys(this.tags).length > 0) {
+            this.logDebug(
+                `  tags: ${Object.entries(this.tags)
+                    .map(([key, value]) => `${key}=${value}`)
+                    .join(", ")}`,
+            );
+        }
+    }
+
+    // Accessors
+    // ========================================================================
+
+    /**
+     * The stage's name.
+     */
+    public getName(): string {
+        return this.name;
+    }
+
+    /**
+     * The stage's scheduling priority. Used by the pipeline to break ties when
+     * more stages are ready to run than the concurrency limit allows.
+     */
+    public getPriority(): "low" | "normal" | "high" {
+        return this.priority;
+    }
+
+    /**
+     * Whether this stage's steps will be executed.
+     */
+    public isEnabled(): boolean {
+        return this.enabled;
+    }
+
+    /**
+     * The steps belonging to this stage.
+     */
+    public getSteps(): Step[] {
+        return this.steps;
+    }
+
+    /**
+     * Whether the stage is configured to skip work whose inputs are unchanged.
+     */
+    public isCacheEnabled(): boolean {
+        return this.cacheEnabled;
     }
 
     // Methods
@@ -83,13 +149,16 @@ export class Stage extends AbstractProcess {
             `Executing stage: ${this.name}${this.parallel ? " (parallel mode)" : ""}`,
         );
 
-        // Execute with optional timeout
+        // Execute with optional timeout. Hooks run inside the timeout so a
+        // hanging hook cannot stall the pipeline past the stage budget.
         const executeSteps = async (): Promise<void> => {
+            await this.runHook("before");
             if (this.parallel) {
                 await this.executeStepsInParallel();
             } else {
                 await this.executeStepsSequentially();
             }
+            await this.runHook("after");
         };
 
         try {
@@ -114,6 +183,19 @@ export class Stage extends AbstractProcess {
             // global settings
             throw error;
         }
+    }
+
+    /**
+     * Runs one of the stage's lifecycle hooks, if defined.
+     *
+     * @param phase - Which hook to run.
+     */
+    private async runHook(phase: "before" | "after"): Promise<void> {
+        const hook = this.hooks?.[phase];
+        if (!hook) return;
+
+        this.logDebug(`Running "${phase}" hook for stage "${this.name}".`);
+        await hook();
     }
 
     /**
