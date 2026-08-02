@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.77] - 2026-08-02
+
+### Added
+
+- Module-level overview JSDoc comments across the src/ts barrel/index files, documenting subsystem relationships (Pipeline -> Stage -> Step -> Action, the validator chain run on every `Kist.validateConfiguration`) and the two previously-undocumented top-level exports (`MIGRATED_ACTIONS`, `ErrorCodes`)
+
+### Changed
+
+- Bumped `actions/setup-node` from 6 to 7, `actions/deploy-pages` from 4 to 5, `actions/checkout` from 6 to 7, and `actions/stale` from 10 to 11 in CI workflows
+- Bumped `@babel/preset-env` from 7.29.7 to 8.0.2
+
+### Fixed
+
+- Rewrote `.devcontainer/README.md`, `devcontainer.json`, and `docker-compose.yml`, which were leftover "Stylescape" boilerplate (Python/Jinja2/Svelte tooling, Node 18 base image) unrelated to this project
+- Fixed `bin/SCRIPTS.md` documenting nonexistent `build:compile`/`build:process` scripts (actual scripts are `build:bootstrap`/`build:self`)
+- Fixed a broken logo link in README.md (the `brand` repo has no `master` branch, only `main`/`dev`)
+- Fixed a stale `TypeScriptCompilerAction` example option name (`tsConfigPath` -> `tsconfigPath`)
+
 ## [0.1.76] - 2026-08-01
 
 ### Added
