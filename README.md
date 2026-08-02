@@ -87,7 +87,8 @@ npx kist --dry-run
 Or let kist write the file for you:
 
 ```bash
-npx kist init            # a minimal starter
+npm create kist          # scaffold a starter chosen to fit the project
+npx kist init            # the same, from an already-installed kist
 npx kist init -t package # a pipeline for publishing an npm package
 ```
 
