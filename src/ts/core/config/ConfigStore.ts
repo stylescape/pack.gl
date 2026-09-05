@@ -15,13 +15,22 @@ import { defaultConfig } from "./defaultConfig.js";
  * It prioritizes CLI arguments over configuration file values.
  */
 export class ConfigStore extends AbstractProcess {
-    // Singleton instance
+    /**
+     * The process-wide instance, created lazily by {@link getInstance}.
+     */
     private static instance: ConfigStore | null = null;
 
-    // The current configuration stored in the ConfigStore.
+    /**
+     * The configuration as it currently stands: defaults, overlaid with
+     * whatever `merge` and `set` have applied since construction.
+     */
     private config: ConfigInterface;
 
-    // Constructor (Private to enforce Singleton Pattern)
+    /**
+     * Seeds the store with a private copy of the default configuration.
+     *
+     * Private to enforce the singleton pattern; use {@link getInstance}.
+     */
     private constructor() {
         super();
         // Deep-copied rather than referenced: `merge` and `set` write into
@@ -64,6 +73,12 @@ export class ConfigStore extends AbstractProcess {
         let current: any = this.config;
 
         for (const k of keys) {
+            // A missing path yields undefined rather than throwing, so a
+            // partially present branch (`options.live` set to null, say)
+            // reads the same as an absent one.
+            if (current === null || typeof current !== "object") {
+                return undefined;
+            }
             if (current[k] === undefined) {
                 return undefined;
             }
@@ -151,11 +166,19 @@ export class ConfigStore extends AbstractProcess {
     }
 
     /**
-     * Deeply merges two objects, preventing prototype pollution.
+     * Recursively merges `source` into `target`, mutating and returning
+     * `target`.
      *
-     * @param target - The target object.
-     * @param source - The source object.
-     * @returns The merged object.
+     * Plain objects are merged key by key; arrays and primitives replace the
+     * target value outright rather than being combined. Keys that could reach
+     * `Object.prototype` (`__proto__`, `constructor`, `prototype`) are
+     * skipped with a warning, so untrusted configuration cannot pollute the
+     * prototype chain.
+     *
+     * @param target - The object written into. Mutated in place.
+     * @param source - The object whose values take precedence.
+     * @returns The mutated `target`, or `source` when `target` is not an
+     * object.
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private deepMerge(target: any, source: any): any {

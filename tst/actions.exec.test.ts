@@ -55,13 +55,27 @@ describe("child-process actions", () => {
         it("should run the script with node and log its output", async () => {
             await action().execute({ scriptPath: "./scripts/build.js" });
 
-            expect(mockExecFile).toHaveBeenCalledWith("node", [
-                resolve("./scripts/build.js"),
-            ]);
+            // The script runs on the same runtime as the pipeline, not on
+            // whatever "node" PATH happens to resolve to.
+            expect(mockExecFile).toHaveBeenCalledWith(
+                process.execPath,
+                [resolve("./scripts/build.js")],
+                expect.any(Object),
+            );
             expect(spyOutput(spies.log())).toContain("done");
             expect(spyOutput(spies.log())).toContain(
                 "Script executed successfully.",
             );
+        });
+
+        it("should allow more output than the default buffer", async () => {
+            // The 1MB default made any talkative script fail with ENOBUFS.
+            await action().execute({ scriptPath: "./run.js" });
+
+            const options = mockExecFile.mock.calls[0][2] as {
+                maxBuffer: number;
+            };
+            expect(options.maxBuffer).toBeGreaterThan(1024 * 1024);
         });
 
         it("should forward extra arguments", async () => {
@@ -70,11 +84,11 @@ describe("child-process actions", () => {
                 args: ["--flag", "value"],
             });
 
-            expect(mockExecFile).toHaveBeenCalledWith("node", [
-                resolve("./run.js"),
-                "--flag",
-                "value",
-            ]);
+            expect(mockExecFile).toHaveBeenCalledWith(
+                process.execPath,
+                [resolve("./run.js"), "--flag", "value"],
+                expect.any(Object),
+            );
         });
 
         it("should default the arguments to an empty list", async () => {
@@ -84,20 +98,24 @@ describe("child-process actions", () => {
             ]);
         });
 
-        it("should fail when the script writes to stderr", async () => {
+        it("should not fail a successful script that wrote to stderr", async () => {
+            // Warnings, progress and Node's own deprecation notices all go to
+            // stderr. Treating any of it as failure meant a script that
+            // exited 0 still failed the build.
             mockExecFile.mockResolvedValue({
                 stdout: "",
-                stderr: "boom",
+                stderr: "ExperimentalWarning: something",
             });
 
             await expect(
                 action().execute({ scriptPath: "./run.js" }),
-            ).rejects.toThrow("boom");
+            ).resolves.toBeUndefined();
 
-            const errors = spyOutput(spies.error());
-            expect(errors).toContain("Script execution failed: boom");
-            expect(errors).toContain(
-                "Error occurred while executing the script",
+            expect(spyOutput(spies.warn())).toContain(
+                "ExperimentalWarning: something",
+            );
+            expect(spyOutput(spies.log())).toContain(
+                "Script executed successfully.",
             );
         });
 
@@ -129,11 +147,11 @@ describe("child-process actions", () => {
         it("should use jsdoc, ./src and ./docs by default", async () => {
             await action().execute({});
 
-            expect(mockExecFile).toHaveBeenCalledWith("jsdoc", [
-                resolve("./src"),
-                "-d",
-                resolve("./docs"),
-            ]);
+            expect(mockExecFile).toHaveBeenCalledWith(
+                "jsdoc",
+                [resolve("./src"), "-d", resolve("./docs")],
+                expect.any(Object),
+            );
             expect(spyOutput(spies.log())).toContain(
                 "Generating documentation with jsdoc",
             );
@@ -146,11 +164,11 @@ describe("child-process actions", () => {
                 outputPath: "./api",
             });
 
-            expect(mockExecFile).toHaveBeenCalledWith("typedoc", [
-                resolve("./lib"),
-                "-d",
-                resolve("./api"),
-            ]);
+            expect(mockExecFile).toHaveBeenCalledWith(
+                "typedoc",
+                [resolve("./lib"), "-d", resolve("./api")],
+                expect.any(Object),
+            );
         });
 
         it("should prefer a config file over the source path", async () => {
@@ -160,12 +178,11 @@ describe("child-process actions", () => {
                 outputPath: "./api",
             });
 
-            expect(mockExecFile).toHaveBeenCalledWith("typedoc", [
-                "-c",
-                resolve("./typedoc.json"),
-                "-d",
-                resolve("./api"),
-            ]);
+            expect(mockExecFile).toHaveBeenCalledWith(
+                "typedoc",
+                ["-c", resolve("./typedoc.json"), "-d", resolve("./api")],
+                expect.any(Object),
+            );
             expect(spyOutput(spies.log())).toContain("Config Path:");
         });
 
@@ -175,17 +192,22 @@ describe("child-process actions", () => {
             ).rejects.toThrow(/'generatorCommand' must be specified/);
         });
 
-        it("should fail when the generator writes to stderr", async () => {
+        it("should not fail a successful run that wrote to stderr", async () => {
+            // Every documentation generator reports warnings on stderr — an
+            // undocumented export, a broken link. Treating those as fatal
+            // failed the step for a run that had actually succeeded.
             mockExecFile.mockResolvedValue({
                 stdout: "",
-                stderr: "bad input",
+                stderr: "warning: undocumented export",
             });
 
-            await expect(action().execute({})).rejects.toThrow(
-                "Documentation generation failed: bad input",
+            await expect(action().execute({})).resolves.toBeUndefined();
+
+            expect(spyOutput(spies.warn())).toContain(
+                "warning: undocumented export",
             );
-            expect(spyOutput(spies.error())).toContain(
-                "Documentation generation failed: bad input",
+            expect(spyOutput(spies.log())).toContain(
+                "Documentation successfully generated at:",
             );
         });
 

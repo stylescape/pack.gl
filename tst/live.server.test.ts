@@ -4,7 +4,14 @@
 
 import { EventEmitter } from "events";
 import type { NextFunction, Request, Response } from "express";
-import { resolve } from "path";
+import {
+    promises as fsPromises,
+    mkdtempSync,
+    rmSync,
+    writeFileSync,
+} from "fs";
+import { tmpdir } from "os";
+import { join, resolve } from "path";
 import { silenceConsole, spyOutput } from "./helpers/silence";
 
 // ----------------------------------------------------------------------------
@@ -146,12 +153,10 @@ describe("LiveServer", () => {
 
             expect(internals(server).port).toBe(4321);
             expect(internals(server).root).toBe(resolve(process.cwd(), "web"));
-            expect(internals(server).watchPaths).toEqual([
-                resolve(process.cwd(), "lib/**/*"),
-            ]);
-            expect(internals(server).ignoredPaths).toEqual([
-                resolve(process.cwd(), "tmp"),
-            ]);
+            // Reported as configured: resolving a glob to an absolute path
+            // produced a value that matches nothing.
+            expect(internals(server).watchPaths).toEqual(["lib/**/*"]);
+            expect(internals(server).ignoredPaths).toEqual(["tmp"]);
         });
 
         it("should fall back to defaults for an empty live block", () => {
@@ -161,14 +166,13 @@ describe("LiveServer", () => {
             expect(internals(server).root).toBe(
                 resolve(process.cwd(), "public"),
             );
-            expect(internals(server).watchPaths).toEqual(
-                ["src/**/*", "config/**/*", "kist.yaml", "kist.yml"].map((p) =>
-                    resolve(process.cwd(), p),
-                ),
-            );
-            expect(internals(server).ignoredPaths).toEqual([
-                resolve(process.cwd(), "node_modules"),
+            expect(internals(server).watchPaths).toEqual([
+                "src/**/*",
+                "config/**/*",
+                "kist.yaml",
+                "kist.yml",
             ]);
+            expect(internals(server).ignoredPaths).toEqual(["node_modules"]);
         });
 
         it("should fall back to defaults when live options are absent", () => {
@@ -204,6 +208,44 @@ describe("LiveServer", () => {
             expect(mockUse).toHaveBeenCalledWith(`static:${root}`);
             // Rate limiter plus static plus the injector.
             expect(mockUse).toHaveBeenCalledTimes(3);
+        });
+
+        it("should register the injector before the static handler", () => {
+            // Order is the whole point: registered after `express.static`,
+            // the injector never ran for a file that existed, so no page
+            // ever received the reload script.
+            const server = build({ root: "web" });
+            const root = internals(server).root;
+
+            const staticIndex = mockUse.mock.calls.findIndex(
+                (call) => call[0] === `static:${root}`,
+            );
+            const injectorIndex = mockUse.mock.calls.findIndex(
+                (call) => typeof call[0] === "function",
+            );
+
+            expect(injectorIndex).toBeGreaterThanOrEqual(0);
+            expect(injectorIndex).toBeLessThan(staticIndex);
+        });
+
+        it("should log a WebSocket server error instead of crashing", () => {
+            // The socket server re-emits the HTTP server's errors, so without
+            // its own handler an EADDRINUSE became an unhandled 'error' event
+            // and took the process down despite the handler on the server.
+            const server = build({ port: 4321 });
+
+            expect(() =>
+                internals(server).wss.emit(
+                    "error",
+                    Object.assign(new Error("bind failed"), {
+                        code: "EADDRINUSE",
+                    }),
+                ),
+            ).not.toThrow();
+
+            expect(spyOutput(spies.error())).toContain(
+                "Live Server WebSocket error",
+            );
         });
     });
 
@@ -316,71 +358,127 @@ describe("LiveServer", () => {
     // ------------------------------------------------------------------------
 
     describe("injectLiveReloadScript", () => {
-        /** Invokes the middleware with controllable request and response. */
-        function invoke(
-            url: string,
-            sendFileBehaviour: "ok" | "error",
-        ): {
-            next: jest.Mock;
-            write: jest.Mock;
-            end: jest.Mock;
-            sendFile: jest.Mock;
-        } {
-            const server = build({ port: 4321 });
-            const next = jest.fn();
-            const write = jest.fn();
-            const end = jest.fn();
-            const sendFile = jest.fn(
-                (_path: string, callback: (err?: Error) => void) => {
-                    callback(
-                        sendFileBehaviour === "error"
-                            ? new Error("ENOENT")
-                            : undefined,
-                    );
-                },
+        let webRoot: string;
+
+        beforeEach(() => {
+            webRoot = mkdtempSync(join(tmpdir(), "kist-live-root-"));
+            writeFileSync(
+                join(webRoot, "index.html"),
+                "<html><body>hello</body></html>",
             );
+        });
+
+        afterEach(() => {
+            rmSync(webRoot, { recursive: true, force: true });
+        });
+
+        /** Invokes the middleware and resolves once it has settled. */
+        async function invoke(url: string): Promise<{
+            next: jest.Mock;
+            send: jest.Mock;
+            status: jest.Mock;
+        }> {
+            const server = build({ port: 4321, root: webRoot });
+            const next = jest.fn();
+            const send = jest.fn();
+            const status = jest.fn(() => ({ end: jest.fn() }));
+            const response = {
+                type: jest.fn(() => ({ send })),
+                status,
+            } as unknown as Response;
 
             internals(server).injectLiveReloadScript(
-                { url } as Request,
-                { sendFile, write, end } as unknown as Response,
+                { path: url } as Request,
+                response,
                 next as unknown as NextFunction,
             );
 
-            return { next, write, end, sendFile };
+            // The middleware settles on a promise chain that includes a real
+            // file read, so wait for it to reach one of its outcomes.
+            const settled = (): boolean =>
+                next.mock.calls.length > 0 ||
+                send.mock.calls.length > 0 ||
+                status.mock.calls.length > 0;
+            for (let tick = 0; tick < 100 && !settled(); tick++) {
+                await new Promise((resolveTick) => setImmediate(resolveTick));
+            }
+
+            return { next, send, status };
         }
 
-        it("should pass non-HTML requests straight through", () => {
-            const { next, sendFile } = invoke("/app.js", "ok");
+        it("should pass non-HTML requests straight through", async () => {
+            const { next, send } = await invoke("/app.js");
             expect(next).toHaveBeenCalledWith();
-            expect(sendFile).not.toHaveBeenCalled();
+            expect(send).not.toHaveBeenCalled();
         });
 
-        it("should append the reload script to an HTML response", () => {
-            const { write, end, next } = invoke("/index.html", "ok");
+        it("should serve the page with the reload script appended", async () => {
+            const { send, next } = await invoke("/index.html");
 
-            expect(write).toHaveBeenCalledWith(
-                expect.stringContaining(
-                    'new WebSocket("ws://localhost:4321")',
-                ),
-            );
-            expect(end).toHaveBeenCalled();
+            const body = send.mock.calls[0][0] as string;
+            expect(body).toContain("<body>hello</body>");
+            expect(body).toContain("new WebSocket(");
             expect(next).not.toHaveBeenCalled();
         });
 
-        it("should forward an error from sendFile", () => {
-            const { next, write } = invoke("/missing.html", "error");
+        it("should derive the socket URL from the page location", async () => {
+            // A hardcoded localhost URL breaks as soon as the page is opened
+            // from another machine or over TLS.
+            const { send } = await invoke("/index.html");
+            const body = send.mock.calls[0][0] as string;
 
-            expect(next).toHaveBeenCalledWith(expect.any(Error));
-            expect(write).not.toHaveBeenCalled();
-            expect(spyOutput(spies.error())).toContain(
-                "Error sending HTML file",
-            );
+            expect(body).toContain("location.host");
+            expect(body).not.toContain("localhost");
         });
 
-        it("should strip traversal segments from the requested path", () => {
-            const { sendFile } = invoke("/../../etc/passwd.html", "ok");
-            const requested = sendFile.mock.calls[0][0] as string;
-            expect(requested).not.toContain("..");
+        it("should serve index.html for a directory request", async () => {
+            const { send } = await invoke("/");
+            expect(send.mock.calls[0][0]).toContain("<body>hello</body>");
+        });
+
+        it("should defer a missing page to the next handler", async () => {
+            const { next, send } = await invoke("/missing.html");
+
+            expect(next).toHaveBeenCalledWith();
+            expect(send).not.toHaveBeenCalled();
+        });
+
+        it("should refuse a path that escapes the served root", async () => {
+            const { status, send } = await invoke("/../../etc/passwd.html");
+
+            expect(status).toHaveBeenCalledWith(403);
+            expect(send).not.toHaveBeenCalled();
+        });
+
+        it("should refuse a percent-encoded traversal", async () => {
+            const { status, send } = await invoke(
+                "/%2e%2e/%2e%2e/secret.html",
+            );
+
+            expect(status).toHaveBeenCalledWith(403);
+            expect(send).not.toHaveBeenCalled();
+        });
+
+        it("should pass on a malformed percent-encoding", async () => {
+            const { next, send } = await invoke("/%E0%A4%A.html");
+
+            expect(next).toHaveBeenCalledWith();
+            expect(send).not.toHaveBeenCalled();
+        });
+
+        it("should forward an unexpected read failure", async () => {
+            const failure = Object.assign(new Error("EACCES"), {
+                code: "EACCES",
+            });
+            jest.spyOn(fsPromises, "readFile").mockRejectedValueOnce(failure);
+
+            const { next, send } = await invoke("/index.html");
+
+            expect(next).toHaveBeenCalledWith(failure);
+            expect(send).not.toHaveBeenCalled();
+            expect(spyOutput(spies.error())).toContain(
+                "Error reading HTML file",
+            );
         });
     });
 

@@ -123,6 +123,16 @@ export class StepCache extends AbstractProcess {
     /** Whether the index has been read from disk. */
     private initialized = false;
 
+    /**
+     * The in-flight load, so concurrent steps share one attempt.
+     *
+     * The flag alone was set before the read completed, so a step that asked
+     * while the load was still running was told the cache was ready and read
+     * an empty index — a spurious miss, and a rebuild of work that was
+     * already cached.
+     */
+    private initializing: Promise<void> | null = null;
+
     /** Hit/miss counters for the end-of-run summary. */
     private stats = { hits: 0, misses: 0 };
 
@@ -172,24 +182,39 @@ export class StepCache extends AbstractProcess {
      */
     public async initialize(): Promise<void> {
         if (this.initialized) return;
-        this.initialized = true;
+        if (this.initializing) return this.initializing;
 
-        try {
-            const raw = await fs.promises.readFile(this.indexPath, "utf-8");
-            const parsed = JSON.parse(raw) as Record<string, StepCacheEntry>;
-            const now = Date.now();
-            for (const [hash, entry] of Object.entries(parsed)) {
-                // Drop expired entries at load time rather than carrying them
-                // forward and re-checking on every lookup.
-                if (now - entry.cachedAt <= this.ttl) {
-                    this.entries.set(hash, entry);
+        this.initializing = (async (): Promise<void> => {
+            try {
+                const raw = await fs.promises.readFile(
+                    this.indexPath,
+                    "utf-8",
+                );
+                const parsed = JSON.parse(raw) as Record<
+                    string,
+                    StepCacheEntry
+                >;
+                const now = Date.now();
+                for (const [hash, entry] of Object.entries(parsed)) {
+                    // Drop expired entries at load time rather than carrying
+                    // them forward and re-checking on every lookup.
+                    if (now - entry.cachedAt <= this.ttl) {
+                        this.entries.set(hash, entry);
+                    }
                 }
+                this.logDebug(
+                    `StepCache loaded ${this.entries.size} entries.`,
+                );
+            } catch {
+                // No index yet, or it is unreadable: carry on with whatever
+                // is already in memory rather than discarding it.
+            } finally {
+                this.initialized = true;
+                this.initializing = null;
             }
-            this.logDebug(`StepCache loaded ${this.entries.size} entries.`);
-        } catch {
-            // No index yet, or it is unreadable: start empty.
-            this.entries = new Map();
-        }
+        })();
+
+        return this.initializing;
     }
 
     /**

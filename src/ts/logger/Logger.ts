@@ -2,6 +2,7 @@
 // Import
 // ============================================================================
 
+import { AsyncLocalStorage } from "async_hooks";
 import { LoggerStyles } from "./LoggerStyles.js";
 
 // ============================================================================
@@ -28,12 +29,28 @@ export class Logger {
     private logLevel: "debug" | "info" | "warn" | "error";
 
     /**
-     * Stack of active capture buffers. Every emitted line is appended to each
-     * open buffer so a caller can record what a section of work printed and
-     * replay it later (used by the step cache to make a skipped step look
-     * identical to one that actually ran). Nested captures are supported.
+     * Stack of capture buffers opened with {@link beginCapture}. Every emitted
+     * line is appended to each open buffer so a caller can record what a
+     * section of work printed and replay it later (used by the step cache to
+     * make a skipped step look identical to one that actually ran). Nested
+     * captures are supported.
+     *
+     * This stack is process-wide and so is only meaningful for synchronous,
+     * strictly nested captures. Concurrent work must use {@link capture}.
      */
     private captureBuffers: string[][] = [];
+
+    /**
+     * Buffers belonging to the current asynchronous execution context.
+     *
+     * Steps in a parallel stage each record their own output, and their
+     * `await` points interleave. A single shared stack cannot express that:
+     * whoever finishes first pops whichever buffer happens to be on top, so
+     * captures end up holding another step's lines. Tracking the open buffers
+     * per async context instead means a line is recorded by exactly the
+     * captures that are open on the path that emitted it.
+     */
+    private readonly scopedBuffers = new AsyncLocalStorage<string[][]>();
 
     // Constructor
     // ========================================================================
@@ -98,6 +115,9 @@ export class Logger {
             for (const buffer of this.captureBuffers) {
                 buffer.push(formattedMessage);
             }
+            for (const buffer of this.scopedBuffers.getStore() ?? []) {
+                buffer.push(formattedMessage);
+            }
             // The Logger is the one sanctioned console consumer.
             // eslint-disable-next-line no-console
             console[
@@ -124,6 +144,27 @@ export class Logger {
      */
     public endCapture(): string[] {
         return this.captureBuffers.pop() ?? [];
+    }
+
+    /**
+     * Runs `work` with a capture open for the duration, recording into `lines`
+     * every message emitted on that call's own async execution path.
+     *
+     * Unlike {@link beginCapture}/{@link endCapture}, concurrent calls do not
+     * interfere: two steps running in parallel each collect only their own
+     * output. `lines` is filled whether `work` resolves or rejects, so a
+     * caller can record what a failing step printed.
+     *
+     * @param lines - Array to append captured lines to.
+     * @param work - The work to run with the capture open.
+     * @returns Whatever `work` resolves to.
+     */
+    public async capture<T>(
+        lines: string[],
+        work: () => Promise<T>,
+    ): Promise<T> {
+        const open = [...(this.scopedBuffers.getStore() ?? []), lines];
+        return this.scopedBuffers.run(open, work);
     }
 
     /**

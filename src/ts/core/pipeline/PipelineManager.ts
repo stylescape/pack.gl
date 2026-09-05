@@ -22,6 +22,17 @@ export class PipelineManager extends AbstractProcess {
     // ========================================================================
 
     /**
+     * Environment variable set on rebuild child processes.
+     *
+     * A rebuild re-runs the original CLI invocation, which in live mode still
+     * carries `--live` — and live mode may equally be switched on by the
+     * configuration file, where no argument can remove it. Without a marker
+     * the child starts its own server and watcher, fails to bind the port the
+     * parent already holds, and spawns a rebuild child of its own.
+     */
+    public static readonly REBUILD_ENV = "KIST_REBUILD_CHILD";
+
+    /**
      * The current instance of the pipeline process.
      */
     private pipelineProcess: ChildProcess | null = null;
@@ -43,6 +54,21 @@ export class PipelineManager extends AbstractProcess {
     constructor(private liveServer?: LiveServer) {
         super();
         this.logInfo("PipelineManager initialized.");
+    }
+
+    // Static Methods
+    // ========================================================================
+
+    /**
+     * Whether this process is a rebuild spawned by a live-mode parent.
+     *
+     * Such a process runs the pipeline once and exits; it must not start a
+     * live server or a watcher of its own.
+     *
+     * @returns True when running as a rebuild child.
+     */
+    public static isRebuildChild(): boolean {
+        return process.env[PipelineManager.REBUILD_ENV] === "1";
     }
 
     // Methods
@@ -96,14 +122,37 @@ export class PipelineManager extends AbstractProcess {
 
         // Re-run the original CLI invocation (script + arguments) rather
         // than a path hardcoded relative to the consumer's project, which
-        // only existed when kist built itself.
-        this.pipelineProcess = spawn(process.execPath, process.argv.slice(1), {
-            stdio: "inherit",
-        });
+        // only existed when kist built itself. `--live` is dropped and the
+        // rebuild marker set so the child performs a single build instead of
+        // becoming a second live server.
+        this.pipelineProcess = spawn(
+            process.execPath,
+            PipelineManager.rebuildArgs(process.argv.slice(1)),
+            {
+                stdio: "inherit",
+                env: {
+                    ...process.env,
+                    [PipelineManager.REBUILD_ENV]: "1",
+                },
+            },
+        );
 
         this.attachProcessListeners();
 
         this.isRestarting = false;
+    }
+
+    /**
+     * Strips live-mode flags from a CLI invocation so the rebuild child runs
+     * the pipeline once and exits.
+     *
+     * @param args - The original arguments, without the node executable.
+     * @returns The arguments to give the rebuild child.
+     */
+    private static rebuildArgs(args: string[]): string[] {
+        return args.filter(
+            (argument) => argument !== "--live" && argument !== "--live=true",
+        );
     }
 
     /**

@@ -25,13 +25,51 @@ import { buildPlan, formatGraph, formatPlan } from "./Planner.js";
  * The global options every command shares.
  */
 interface GlobalOptions {
+    /**
+     * Explicit path to the configuration file (`-c, --config`). Unset falls
+     * back to `kist.yaml` or `kist.yml` in the working directory.
+     */
     config?: string;
+
+    /**
+     * Lowest severity the Logger prints (`-l, --log-level`).
+     */
     logLevel?: "debug" | "info" | "warn" | "error";
+
+    /**
+     * Shorthand for `--log-level debug` (`-v, --verbose`).
+     */
     verbose?: boolean;
+
+    /**
+     * Serve the build output and rebuild on file changes (`--live`).
+     */
     live?: boolean;
+
+    /**
+     * Whether cached step results may be reused. Commander sets this to false
+     * for `--no-cache`, which forces every step to run.
+     */
     cache?: boolean;
+
+    /**
+     * Print the execution plan instead of running it (`--dry [format]`).
+     * A string selects the format (`"text"` or `"json"`); bare `true` means
+     * the default text rendering.
+     */
     dry?: string | boolean;
+
+    /**
+     * Print the execution plan instead of running it (`--dry-run`), always in
+     * text form. Equivalent to `dry: "text"`.
+     */
     dryRun?: boolean;
+
+    /**
+     * Print the stage dependency graph instead of running the pipeline
+     * (`--graph [format]`). A string selects `"dot"` or `"mermaid"`; bare
+     * `true` means the default format.
+     */
     graph?: string | boolean;
 }
 
@@ -201,9 +239,22 @@ export async function validateCommand(options: GlobalOptions): Promise<void> {
 
 /**
  * Removes cached step results.
+ *
+ * The configuration is loaded first so the cache directory it names is the one
+ * cleared. Without it the command always cleared the default `.kist-cache`,
+ * quietly doing nothing for any project that had configured somewhere else.
+ *
+ * @param options - Parsed global CLI options.
  */
-export async function clearCacheCommand(): Promise<void> {
-    await StepCache.getInstance().clear();
+export async function clearCacheCommand(
+    options: GlobalOptions = {},
+): Promise<void> {
+    const { config } = await loadConfiguration(options);
+
+    await StepCache.getInstance({
+        cacheDir: config.options?.cache?.cacheDir,
+        ttl: config.options?.cache?.ttl,
+    }).clear();
     emit("Step cache cleared.");
 }
 
@@ -301,7 +352,12 @@ export function createProgram(): Command {
     program
         .command("clear-cache")
         .description("Delete cached step results.")
-        .action(clearCacheCommand);
+        .action(async (options, command: Command) => {
+            await clearCacheCommand({
+                ...command.parent?.opts(),
+                ...options,
+            });
+        });
 
     return program;
 }

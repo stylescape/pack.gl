@@ -87,6 +87,21 @@ describe("BuildCache", () => {
             expect(cache.getStats().size).toBe(0);
         });
 
+        it("should share one load between concurrent callers", async () => {
+            // Every cache operation awaits initialize, and they run in
+            // parallel; without sharing, each re-read the index and replaced
+            // the in-memory map on top of the others.
+            const cache = BuildCache.getInstance({ cacheDir });
+
+            await Promise.all([
+                cache.initialize(),
+                cache.initialize(),
+                cache.initialize(),
+            ]);
+
+            expect(existsSync(cacheDir)).toBe(true);
+        });
+
         it("should be idempotent", async () => {
             const cache = BuildCache.getInstance({ cacheDir });
             await cache.initialize();
@@ -246,6 +261,26 @@ describe("BuildCache", () => {
             expect(cache.getStats().size).toBe(0);
         });
 
+        it("should keep same-named outputs from different directories apart", async () => {
+            // Archiving by base name alone made `out/a/index.js` and
+            // `out/b/index.js` share one artifact, so restoring wrote
+            // whichever was copied last back to both places.
+            const input = makeFile("a.ts", "source");
+            const first = makeFile("out/a/index.js", "CONTENT-A");
+            const second = makeFile("out/b/index.js", "CONTENT-B");
+            const cache = BuildCache.getInstance({ cacheDir });
+
+            await cache.store("bundle", [input], [first, second]);
+            rmSync(first);
+            rmSync(second);
+
+            const result = await cache.lookup("bundle", [input]);
+
+            expect(result.restored).toBe(true);
+            expect(readFileSync(first, "utf-8")).toBe("CONTENT-A");
+            expect(readFileSync(second, "utf-8")).toBe("CONTENT-B");
+        });
+
         it("should warn instead of throwing when artifacts cannot be stored", async () => {
             const input = makeFile("a.ts", "source");
             const cache = BuildCache.getInstance({ cacheDir });
@@ -314,6 +349,22 @@ describe("BuildCache", () => {
 
             await cache.store("tsc", [input], [output]);
             expect(cache.getStats().evicted).toBe(0);
+        });
+    });
+
+    describe("input handling", () => {
+        it("should not reorder the caller's list of inputs", async () => {
+            // `Array.prototype.sort` sorts in place, so hashing used to
+            // rearrange the caller's array — which matters to any action
+            // whose output depends on the order of its inputs.
+            const later = makeFile("z.ts", "z");
+            const earlier = makeFile("a.ts", "a");
+            const inputs = [later, earlier];
+            const cache = BuildCache.getInstance({ cacheDir });
+
+            await cache.store("concat", inputs, []);
+
+            expect(inputs).toEqual([later, earlier]);
         });
     });
 

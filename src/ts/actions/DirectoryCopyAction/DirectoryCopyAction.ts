@@ -63,6 +63,25 @@ export class DirectoryCopyAction extends Action {
         const resolvedSrcDir: string = path.resolve(srcDir);
         const resolvedDestDir: string = path.resolve(destDir);
 
+        if (resolvedDestDir === resolvedSrcDir) {
+            throw new Error(
+                `Cannot copy "${resolvedSrcDir}" onto itself: ` +
+                    "srcDir and destDir resolve to the same directory.",
+            );
+        }
+
+        // Copying a directory into its own subtree recurses forever: the walk
+        // keeps finding the destination it just wrote. Left unguarded it built
+        // dist/dist/dist/... until the filesystem refused the path length,
+        // having meanwhile filled the disk.
+        if (resolvedDestDir.startsWith(resolvedSrcDir + path.sep)) {
+            throw new Error(
+                `Cannot copy "${resolvedSrcDir}" into its own subdirectory ` +
+                    `"${resolvedDestDir}": the copy would contain itself. ` +
+                    "Choose a destination outside the source directory.",
+            );
+        }
+
         try {
             await this.recursiveCopy(resolvedSrcDir, resolvedDestDir);
         } catch (error) {

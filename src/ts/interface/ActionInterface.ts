@@ -31,8 +31,8 @@ export interface ActionInterface {
      * @param options - A structured set of options specific to the action's
      * configuration. Implementations are responsible for validating and
      * applying these options. Example configurations might include:
-     * - For 'build': { minify: boolean, sourceMap: boolean, target: string }
-     * - For 'lint': { fix: boolean, formatter: string }
+     * - For 'build': `{ minify: boolean, sourceMap: boolean, target: string }`
+     * - For 'lint': `{ fix: boolean, formatter: string }`
      * @returns A Promise that resolves when the action completes successfully,
      * or rejects with an error if the action fails.
      */

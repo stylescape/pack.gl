@@ -3,6 +3,7 @@
 // ============================================================================
 
 import fs, {
+    existsSync,
     mkdirSync,
     mkdtempSync,
     readFileSync,
@@ -284,6 +285,95 @@ describe("package and build actions", () => {
             expect(readFileSync(target, "utf-8")).toBe("release: 2.0.0\n");
         });
 
+        it("should replace a version followed by a trailing comment", async () => {
+            // The replacement was anchored to the end of the line, so
+            // anything after the version left it silently untouched.
+            const target = makeFile("meta.yml", "version: 1.0.0 # pinned\n");
+
+            await action().execute({
+                files: [{ path: target }],
+                version: "2.0.0",
+            });
+
+            expect(readFileSync(target, "utf-8")).toBe(
+                "version: 2.0.0 # pinned\n",
+            );
+        });
+
+        it("should replace the version in a CRLF file", async () => {
+            // The carriage return sat between the version and the end of the
+            // line, which defeated the end-anchored replacement.
+            const target = makeFile("meta.yml", "version: 1.0.0\r\n");
+
+            await action().execute({
+                files: [{ path: target }],
+                version: "2.0.0",
+            });
+
+            expect(readFileSync(target, "utf-8")).toBe("version: 2.0.0\r\n");
+        });
+
+        it("should replace the version the key identifies, not the last one", async () => {
+            const target = makeFile("meta.yml", "version: 1.0.0 and 3.0.0\n");
+
+            await action().execute({
+                files: [{ path: target }],
+                version: "2.0.0",
+            });
+
+            expect(readFileSync(target, "utf-8")).toBe(
+                "version: 2.0.0 and 3.0.0\n",
+            );
+        });
+
+        it("should treat a key containing regex syntax literally", async () => {
+            // The key was interpolated into a pattern unescaped, so "v(x)"
+            // became a capture group and matched nothing.
+            const target = makeFile("meta.txt", "v(x) 1.0.0\n");
+
+            await action().execute({
+                files: [{ path: target, key: "v(x)" }],
+                version: "2.0.0",
+            });
+
+            expect(readFileSync(target, "utf-8")).toBe("v(x) 2.0.0\n");
+        });
+
+        it("should warn when the key matches nothing", async () => {
+            const target = makeFile("meta.yml", "name: demo\n");
+
+            await action().execute({
+                files: [{ path: target }],
+                version: "2.0.0",
+            });
+
+            expect(spyOutput(spies.warn())).toContain(
+                'No version matching key "version:"',
+            );
+        });
+
+        it("should accept a prerelease version from package.json", async () => {
+            // Requiring a bare major.minor.patch rejected ordinary versions
+            // like 1.2.3-beta.1, leaving the project unable to write at all.
+            const target = makeFile("meta.yml", "version: 1.0.0\n");
+            writeFileSync(
+                join(root, "package.json"),
+                JSON.stringify({ version: "2.0.0-beta.1" }),
+                "utf-8",
+            );
+
+            process.chdir(root);
+            try {
+                await action().execute({ files: [{ path: target }] });
+            } finally {
+                process.chdir(REAL_CWD);
+            }
+
+            expect(readFileSync(target, "utf-8")).toBe(
+                "version: 2.0.0-beta.1\n",
+            );
+        });
+
         it("should preserve a file that does not end with a newline", async () => {
             const target = makeFile("meta.txt", "version: 1.0.0");
 
@@ -428,6 +518,11 @@ describe("package and build actions", () => {
             expect(spyOutput(spies.log())).toContain(
                 "TypeScript compilation completed successfully",
             );
+            // `outputDir` used to be applied to a copy of the options after
+            // the ones the program was built with had already been assembled,
+            // so output silently went to the tsconfig's `outDir` instead.
+            expect(existsSync(join(root, "custom-out", "only.js"))).toBe(true);
+            expect(existsSync(join(root, "out", "only.js"))).toBe(false);
         });
 
         it("should default the tsconfig path to the working directory", async () => {

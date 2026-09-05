@@ -61,6 +61,81 @@ describe("InitCommand", () => {
             expect(renderTemplate("minimal")).toContain("A minimal kist");
         });
 
+        it("should name the option the compiler action actually reads", () => {
+            // The templates wrote `tsConfigPath`; the action destructures
+            // `tsconfigPath`. Every scaffolded project therefore had its
+            // TypeScript config path silently ignored.
+            const rendered = renderTemplate("package");
+
+            expect(rendered).toContain("tsconfigPath:");
+            expect(rendered).not.toContain("tsConfigPath:");
+        });
+
+        it("should omit copy steps for files the project does not have", () => {
+            // Emitting them unconditionally made the first run of a freshly
+            // initialised project fail on a file it had never created.
+            const rendered = renderTemplate("package", {
+                hasReadme: false,
+                hasLicense: false,
+            });
+
+            expect(rendered).not.toContain("README.md");
+            expect(rendered).not.toContain("LICENSE");
+        });
+
+        it.each([...INIT_TEMPLATES])(
+            "should still be schema-valid when %s has nothing to copy",
+            (template) => {
+                // A stage with no steps is rejected by kist's own validator,
+                // so dropping the copy steps has to drop the empty stage too.
+                const parsed = loadYaml(
+                    renderTemplate(template, {
+                        hasReadme: false,
+                        hasLicense: false,
+                    }),
+                );
+
+                expect(() =>
+                    new SchemaValidator().validate(parsed),
+                ).not.toThrow();
+            },
+        );
+
+        it("should keep the package stage when only one file is present", () => {
+            // The mixed case: the stage is still rendered, minus the step for
+            // the file that is not there.
+            const readmeOnly = renderTemplate("package", {
+                hasReadme: true,
+                hasLicense: false,
+            });
+            expect(readmeOnly).toContain("copy-readme");
+            expect(readmeOnly).not.toContain("copy-license");
+
+            const licenseOnly = renderTemplate("package", {
+                hasReadme: false,
+                hasLicense: true,
+            });
+            expect(licenseOnly).toContain("copy-license");
+            expect(licenseOnly).not.toContain("copy-readme");
+
+            // Both remain valid configurations.
+            for (const rendered of [readmeOnly, licenseOnly]) {
+                expect(() =>
+                    new SchemaValidator().validate(loadYaml(rendered)),
+                ).not.toThrow();
+            }
+        });
+
+        it("should keep the license step when the project has one", () => {
+            const rendered = renderTemplate("package", {
+                hasReadme: true,
+                hasLicense: true,
+            });
+
+            expect(rendered).toContain("copy-license");
+            expect(rendered).toContain("copy-readme");
+        });
+
         it("should enable caching in the package template", () => {
             const rendered = renderTemplate("package");
 

@@ -252,6 +252,64 @@ describe("PluginManager", () => {
             expect(manager.isPluginLoaded("kist-plugin-demo")).toBe(true);
         });
 
+        it("should resolve a nested conditional exports entry", async () => {
+            // The modern ESM shape — the one kist itself publishes — nests a
+            // second level under "import". Reading it as a string handed an
+            // object to path.join, which threw and left the plugin looking
+            // simply unloadable.
+            const pkg = join(root, "node_modules", "kist-plugin-exports");
+            mkdirSync(pkg, { recursive: true });
+            writeFileSync(
+                join(pkg, "package.json"),
+                JSON.stringify({
+                    exports: {
+                        ".": {
+                            import: {
+                                types: "./lib/entry.d.ts",
+                                default: "./lib/entry.js",
+                            },
+                        },
+                    },
+                }),
+            );
+            writePlugin(pkg, "lib/entry.js", VALID_PLUGIN_BODY);
+
+            const manager = PluginManager.getInstance();
+            await manager.discoverPlugins();
+
+            expect(manager.isPluginLoaded("kist-plugin-exports")).toBe(true);
+        });
+
+        it("should fall back to the default entry when exports names nothing", async () => {
+            const pkg = join(root, "node_modules", "kist-plugin-empty");
+            mkdirSync(pkg, { recursive: true });
+            writeFileSync(
+                join(pkg, "package.json"),
+                JSON.stringify({ exports: { ".": { types: "./x.d.ts" } } }),
+            );
+            writePlugin(pkg, "dist/index.js", VALID_PLUGIN_BODY);
+
+            const manager = PluginManager.getInstance();
+            await manager.discoverPlugins();
+
+            expect(manager.isPluginLoaded("kist-plugin-empty")).toBe(true);
+        });
+
+        it("should resolve a plain string exports entry", async () => {
+            const pkg = join(root, "node_modules", "kist-plugin-plain");
+            mkdirSync(pkg, { recursive: true });
+            writeFileSync(
+                join(pkg, "package.json"),
+                JSON.stringify({ exports: { ".": "./lib/entry.js" } }),
+            );
+            writePlugin(pkg, "lib/entry.js", VALID_PLUGIN_BODY);
+
+            const manager = PluginManager.getInstance();
+            await manager.discoverPlugins();
+
+            expect(manager.isPluginLoaded("kist-plugin-plain")).toBe(true);
+        });
+
         it("should ignore plain files and non-matching directories", async () => {
             const nodeModules = join(root, "node_modules");
             mkdirSync(join(nodeModules, "lodash"), { recursive: true });
@@ -318,6 +376,39 @@ describe("PluginManager", () => {
             await manager.discoverPlugins();
 
             expect(manager.isPluginLoaded("kist-plugin-hoisted")).toBe(true);
+        });
+
+        it("should let the nearest copy of a scoped plugin win", async () => {
+            // Matching Node's own resolution. The non-scoped branch already
+            // skipped a plugin it had loaded, but the scoped branch did not:
+            // in a workspace the furthest copy was loaded last and replaced
+            // the one Node would actually have resolved.
+            const plugin = (dir: string, version: string): void => {
+                const pkg = join(dir, "node_modules", "@getkist", "action-x");
+                mkdirSync(pkg, { recursive: true });
+                writeFileSync(
+                    join(pkg, "package.json"),
+                    JSON.stringify({ main: "index.js" }),
+                );
+                writePlugin(
+                    pkg,
+                    "index.js",
+                    VALID_PLUGIN_BODY.replace("2.1.0", version),
+                );
+            };
+
+            const workspace = join(root, "packages", "app");
+            mkdirSync(workspace, { recursive: true });
+            plugin(root, "1.0.0-far");
+            plugin(workspace, "2.0.0-near");
+            cwdSpy.mockReturnValue(workspace);
+
+            const manager = PluginManager.getInstance();
+            await manager.discoverPlugins();
+
+            expect(
+                manager.getPluginMetadata("@getkist/action-x")?.version,
+            ).toBe("2.0.0-near");
         });
 
         it("should keep searching when one node_modules cannot be read", async () => {

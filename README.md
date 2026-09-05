@@ -10,6 +10,8 @@
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fwww.getkist.com&up_message=Up&up_color=5e4d34&down_message=Down&down_color=5e4d34&style=flat-square&logo=Firefox&logoColor=FFFFFF&label=Website&labelColor=5e4d34&color=5e4d34)](https://www.getkist.com)
 [![NPM Version](https://img.shields.io/npm/v/kist?style=flat-square&logo=npm&logoColor=FFFFFF&label=NPM&labelColor=5e4d34&color=5e4d34)](https://www.npmjs.com/package/kist)
 [![GitHub License](https://img.shields.io/github/license/getkist/kist?style=flat-square&logo=readthedocs&logoColor=FFFFFF&label=&labelColor=%235e4d34&color=%235e4d34)](https://github.com/getkist/kist/blob/main/LICENSE)
+[![Tests](https://img.shields.io/github/actions/workflow/status/getkist/kist/test.yml?style=flat-square&logo=githubactions&logoColor=FFFFFF&label=Tests&labelColor=5e4d34&color=5e4d34)](https://github.com/getkist/kist/actions/workflows/test.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/getkist/kist?style=flat-square&logo=codecov&logoColor=FFFFFF&label=Coverage&labelColor=5e4d34&color=5e4d34)](https://codecov.io/gh/getkist/kist)
 
 </div>
 

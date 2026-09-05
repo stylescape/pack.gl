@@ -182,13 +182,9 @@ describe("Pipeline stage dependencies", () => {
             internals.config.stages[0].dependsOn = ["never"];
             internals.config.stages[1].dependsOn = ["never"];
 
-            const exit = jest
-                .spyOn(process, "exit")
-                .mockImplementation((() => undefined) as never);
-
-            await pipeline.run();
-
-            expect(exit).toHaveBeenCalledWith(1);
+            await expect(pipeline.run()).rejects.toThrow(
+                /cannot be scheduled: unresolved dependencies/,
+            );
         });
     });
 });

@@ -28,11 +28,18 @@ export class ActionValidator extends AbstractValidator<
     // Parameters
     // ========================================================================
 
+    /**
+     * The registry consulted to decide whether an action name is known.
+     */
     private actionRegistry: ActionRegistry;
 
     // Constructor
     // ========================================================================
 
+    /**
+     * Initializes the validator against the shared {@link ActionRegistry}, so
+     * actions registered by plugins are visible to validation.
+     */
     constructor() {
         super();
         this.actionRegistry = ActionRegistry.getInstance();

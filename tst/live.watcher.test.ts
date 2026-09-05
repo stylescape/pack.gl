@@ -3,6 +3,7 @@
 // ============================================================================
 
 import { EventEmitter } from "events";
+import { resolve } from "path";
 import { silenceConsole, spyOutput } from "./helpers/silence";
 
 // chokidar is replaced so the watcher never touches the filesystem; the
@@ -64,8 +65,10 @@ describe("LiveWatcher", () => {
 
             expect(internals(watcher).pathsToWatch).toEqual(["lib/**/*"]);
             expect(internals(watcher).ignoredPaths).toEqual(["tmp"]);
-            expect(mockWatch).toHaveBeenCalledWith(["lib/**/*"], {
-                ignored: ["tmp"],
+            // chokidar has no glob support, so it is handed the directory the
+            // pattern is rooted in; the pattern itself filters the events.
+            expect(mockWatch).toHaveBeenCalledWith(["lib"], {
+                ignored: expect.any(Function),
                 persistent: true,
                 ignoreInitial: true,
                 awaitWriteFinish: {
@@ -73,6 +76,30 @@ describe("LiveWatcher", () => {
                     stabilityThreshold: 100,
                 },
             });
+        });
+
+        it("should reduce each watch pattern to a real directory", () => {
+            build({
+                watchPaths: [
+                    "src/**/*.ts",
+                    "config/**/*",
+                    "kist.yml",
+                    "**/*.md",
+                ],
+            });
+
+            // A pattern with no static prefix is rooted at the project.
+            expect(mockWatch.mock.calls[0][0]).toEqual([
+                "src",
+                "config",
+                "kist.yml",
+                ".",
+            ]);
+        });
+
+        it("should collapse patterns that share a directory", () => {
+            build({ watchPaths: ["src/**/*.ts", "src/**/*.css"] });
+            expect(mockWatch.mock.calls[0][0]).toEqual(["src"]);
         });
 
         it("should fall back to defaults for an empty live block", () => {
@@ -124,6 +151,27 @@ describe("LiveWatcher", () => {
             );
         });
 
+        it("should ignore a change that no watch pattern covers", () => {
+            build({ watchPaths: ["src/**/*.ts"] });
+            fsWatcher.emit("change", "src/styles.css");
+
+            expect(onChange).not.toHaveBeenCalled();
+        });
+
+        it("should report a change matching a glob pattern", () => {
+            build({ watchPaths: ["src/**/*.ts"] });
+            fsWatcher.emit("change", "src/deep/nested/index.ts");
+
+            expect(onChange).toHaveBeenCalledWith("src/deep/nested/index.ts");
+        });
+
+        it("should report a change under a plain directory", () => {
+            build({ watchPaths: ["assets"] });
+            fsWatcher.emit("change", "assets/img/logo.svg");
+
+            expect(onChange).toHaveBeenCalledWith("assets/img/logo.svg");
+        });
+
         it("should log an error thrown by the change callback", () => {
             onChange.mockImplementation(() => {
                 throw new Error("handler blew up");
@@ -144,6 +192,44 @@ describe("LiveWatcher", () => {
             expect(spyOutput(spies.error())).toContain(
                 "Watcher encountered an error:",
             );
+        });
+    });
+
+    // ------------------------------------------------------------------------
+    // Ignore rules
+    // ------------------------------------------------------------------------
+
+    describe("ignored paths", () => {
+        /** The predicate handed to chokidar for the given ignore list. */
+        function ignorer(ignoredPaths: string[]): (path: string) => boolean {
+            build({ ignoredPaths });
+            return mockWatch.mock.calls[0][1].ignored as (
+                path: string,
+            ) => boolean;
+        }
+
+        it("should exclude a named directory at any depth", () => {
+            // chokidar matches a bare string as an exact path, so a nested
+            // install would otherwise be watched.
+            const ignored = ignorer(["node_modules"]);
+
+            expect(ignored(resolve("node_modules"))).toBe(true);
+            expect(
+                ignored(resolve("packages/app/node_modules/pkg/i.js")),
+            ).toBe(true);
+            expect(ignored(resolve("src/index.ts"))).toBe(false);
+        });
+
+        it("should apply glob ignore patterns", () => {
+            const ignored = ignorer(["**/*.log"]);
+
+            expect(ignored(resolve("logs/build.log"))).toBe(true);
+            expect(ignored(resolve("logs/build.txt"))).toBe(false);
+        });
+
+        it("should not filter paths outside the project root", () => {
+            const ignored = ignorer(["node_modules"]);
+            expect(ignored("/somewhere/else/entirely.ts")).toBe(false);
         });
     });
 

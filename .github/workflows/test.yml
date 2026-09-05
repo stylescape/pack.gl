@@ -35,3 +35,14 @@ jobs:
           name: coverage
           path: coverage/lcov-report
           retention-days: 14
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v6
+        if: hashFiles('coverage/lcov.info') != ''
+        with:
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: kist-core
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

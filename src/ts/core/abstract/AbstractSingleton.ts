@@ -7,9 +7,22 @@
  * It ensures that only one instance of the derived class can exist.
  */
 export abstract class AbstractSingleton<T extends AbstractSingleton<T>> {
+    /**
+     * One instance per concrete subclass, keyed by class name. Shared across
+     * the whole hierarchy so each subclass gets its own slot rather than
+     * competing for a single one.
+     */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private static _instances = new Map<string, AbstractSingleton<any>>();
 
+    /**
+     * Records this instance as the singleton for its concrete class.
+     *
+     * Protected so only subclasses can construct; use the subclass's
+     * `getInstance` instead.
+     *
+     * @throws Error if an instance of the same class already exists.
+     */
     protected constructor() {
         const className = this.constructor.name;
         if (AbstractSingleton._instances.has(className)) {

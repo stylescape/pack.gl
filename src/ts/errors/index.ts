@@ -97,6 +97,11 @@ export class ConfigParseError extends ConfigError {
  * Error thrown when config validation fails
  */
 export class ConfigValidationError extends ConfigError {
+    /**
+     * Every validation failure found, not just the first. Kept as a separate
+     * field so callers can present them individually rather than re-parsing
+     * the joined message.
+     */
     public readonly validationErrors: string[];
 
     constructor(
@@ -377,37 +382,74 @@ export class ResourceLimitError extends KistError {
  */
 export const ErrorCodes = {
     // Config errors
+    // ========================================================================
+
+    /** Base code for any configuration problem. */
     CONFIG_ERROR: "CONFIG_ERROR",
+    /** No `kist.yml` or `kist.yaml` was found. */
     CONFIG_NOT_FOUND: "CONFIG_NOT_FOUND",
+    /** The configuration file exists but is not valid YAML. */
     CONFIG_PARSE_ERROR: "CONFIG_PARSE_ERROR",
+    /** The configuration parsed but failed schema or semantic validation. */
     CONFIG_VALIDATION_ERROR: "CONFIG_VALIDATION_ERROR",
 
     // Build errors
+    // ========================================================================
+
+    /** Base code for any failure while running the pipeline. */
     BUILD_ERROR: "BUILD_ERROR",
+    /** An action threw while executing. */
     ACTION_ERROR: "ACTION_ERROR",
+    /** A step failed, after retries and its timeout were exhausted. */
     STEP_ERROR: "STEP_ERROR",
+    /** A stage failed, or one of its dependencies could not be satisfied. */
     STAGE_ERROR: "STAGE_ERROR",
 
     // Plugin errors
+    // ========================================================================
+
+    /** Base code for any plugin problem. */
     PLUGIN_ERROR: "PLUGIN_ERROR",
+    /** A requested plugin package could not be resolved. */
     PLUGIN_NOT_FOUND: "PLUGIN_NOT_FOUND",
+    /** A plugin resolved but threw while registering its actions. */
     PLUGIN_INIT_ERROR: "PLUGIN_INIT_ERROR",
 
     // File system errors
+    // ========================================================================
+
+    /** Base code for any file system failure. */
     FS_ERROR: "FS_ERROR",
+    /** An expected file was missing. */
     FILE_NOT_FOUND: "FILE_NOT_FOUND",
+    /** An expected directory was missing. */
     DIR_NOT_FOUND: "DIR_NOT_FOUND",
+    /** The process lacked permission to read or write a path. */
     PERMISSION_ERROR: "PERMISSION_ERROR",
+    /** A configured path resolved outside the project root. */
     PATH_TRAVERSAL: "PATH_TRAVERSAL",
 
     // CLI errors
+    // ========================================================================
+
+    /** Base code for any command-line usage problem. */
     CLI_ERROR: "CLI_ERROR",
+    /** An argument was supplied but its value was not accepted. */
     INVALID_ARGUMENT: "INVALID_ARGUMENT",
+    /** A required argument was not supplied. */
     MISSING_ARGUMENT: "MISSING_ARGUMENT",
 
     // Resource errors
+    // ========================================================================
+
+    /** A step or stage exceeded its configured timeout. */
     TIMEOUT_ERROR: "TIMEOUT_ERROR",
+    /** A resource ceiling, such as maximum concurrency, was exceeded. */
     RESOURCE_LIMIT_ERROR: "RESOURCE_LIMIT_ERROR",
 } as const;
 
+/**
+ * Union of every value in {@link ErrorCodes}, for typing the `code` carried
+ * by errors in this module.
+ */
 export type ErrorCode = (typeof ErrorCodes)[keyof typeof ErrorCodes];

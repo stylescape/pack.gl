@@ -50,6 +50,10 @@ export class DirectoryCleanAction extends Action {
             this.logInfo(`Directory cleaned successfully: ${dirPath}`);
         } catch (error) {
             this.logError(`Error cleaning directory "${dirPath}":`, error);
+            // A clean that did not clean has to fail the step. Logging and
+            // returning let the pipeline carry on believing the directory was
+            // empty, so later steps ran against leftover files.
+            throw error;
         }
     }
 
@@ -67,12 +71,19 @@ export class DirectoryCleanAction extends Action {
     private async cleanDirectoryContents(
         dirPath: string,
         keepPatterns?: string[],
+        root: string = dirPath,
     ): Promise<void> {
         const files = await fs.promises.readdir(dirPath);
 
         for (const file of files) {
             const curPath = path.join(dirPath, file);
-            const relativePath = path.relative(dirPath, curPath);
+            // Matched against the path relative to the directory being
+            // cleaned, not to the current recursion level, so a pattern like
+            // "cache/index.json" means what it says.
+            const relativePath = path
+                .relative(root, curPath)
+                .split(path.sep)
+                .join("/");
 
             // Skip files/directories matching keep patterns
             if (
@@ -86,9 +97,21 @@ export class DirectoryCleanAction extends Action {
             try {
                 const stat = await fs.promises.lstat(curPath);
                 if (stat.isDirectory()) {
-                    // Recursively clean subdirectory
-                    await fs.promises.rm(curPath, { recursive: true });
-                    this.logInfo(`Deleted directory: ${relativePath}`);
+                    if (this.mayHoldKeepers(relativePath, keepPatterns)) {
+                        // Something under here is meant to survive, so clean
+                        // it entry by entry instead of removing the whole
+                        // tree — which used to delete kept files along with
+                        // the directory containing them.
+                        await this.cleanDirectoryContents(
+                            curPath,
+                            keepPatterns,
+                            root,
+                        );
+                        await this.removeIfEmpty(curPath, relativePath);
+                    } else {
+                        await fs.promises.rm(curPath, { recursive: true });
+                        this.logInfo(`Deleted directory: ${relativePath}`);
+                    }
                 } else {
                     // Delete file
                     await fs.promises.unlink(curPath);
@@ -96,8 +119,73 @@ export class DirectoryCleanAction extends Action {
                 }
             } catch (error) {
                 this.logError(`Error deleting: ${relativePath}`, error);
+                throw error;
             }
         }
+    }
+
+    /**
+     * Whether any keep pattern could match something inside a directory.
+     *
+     * Only directories that might contain a kept entry are walked; the rest
+     * are removed wholesale, which is both faster and what the caller means
+     * by "clean".
+     *
+     * @param relativePath - The directory, relative to the cleaning root.
+     * @param keepPatterns - The configured keep patterns, if any.
+     * @returns True when the directory has to be walked rather than removed.
+     */
+    private mayHoldKeepers(
+        relativePath: string,
+        keepPatterns?: string[],
+    ): boolean {
+        if (!keepPatterns?.length) return false;
+
+        const directory = relativePath.split("/");
+
+        return keepPatterns.some((pattern) => {
+            const segments = pattern.split("/");
+
+            // A globstar matches any number of segments, so everything from
+            // that point down is potentially kept.
+            const globstar = segments.indexOf("**");
+            if (globstar !== -1 && globstar <= directory.length) {
+                return (
+                    globstar === 0 ||
+                    micromatch.isMatch(
+                        directory.slice(0, globstar).join("/"),
+                        segments.slice(0, globstar).join("/"),
+                    )
+                );
+            }
+
+            // Otherwise the pattern has to reach deeper than this directory
+            // to name anything inside it, and its leading segments have to
+            // match the directory itself.
+            if (segments.length <= directory.length) return false;
+            return micromatch.isMatch(
+                relativePath,
+                segments.slice(0, directory.length).join("/"),
+            );
+        });
+    }
+
+    /**
+     * Removes a directory if cleaning left it empty, so keeping one nested
+     * file does not also keep every empty directory above it.
+     *
+     * @param dirPath - Absolute path of the directory.
+     * @param relativePath - Its path relative to the cleaning root, for logs.
+     */
+    private async removeIfEmpty(
+        dirPath: string,
+        relativePath: string,
+    ): Promise<void> {
+        const remaining = await fs.promises.readdir(dirPath);
+        if (remaining.length > 0) return;
+
+        await fs.promises.rmdir(dirPath);
+        this.logInfo(`Deleted directory: ${relativePath}`);
     }
 
     /**

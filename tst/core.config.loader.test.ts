@@ -423,6 +423,38 @@ describe("ConfigLoader", () => {
             );
         });
 
+        it("should allow two parents to share a grandparent", async () => {
+            // A diamond is an ordinary way to factor configuration, not a
+            // cycle. Tracking every file ever visited, rather than the chain
+            // currently being resolved, rejected it as circular.
+            writeConfig(
+                "base.yml",
+                "stages: []\noptions:\n    logLevel: warn\n",
+            );
+            writeConfig("left.yml", 'extends: "./base.yml"\nstages: []\n');
+            writeConfig("right.yml", 'extends: "./base.yml"\nstages: []\n');
+            writeConfig(
+                "kist.yaml",
+                'extends: ["./left.yml", "./right.yml"]\nstages: []\n',
+            );
+
+            const loader = new ConfigLoader();
+            await loader.initialize();
+
+            const config = await loader.loadConfig();
+            expect(config.options?.logLevel).toBe("warn");
+        });
+
+        it("should reject a config file that is not a mapping", async () => {
+            writeConfig("kist.yaml", "just a string\n");
+
+            const loader = new ConfigLoader();
+            await loader.initialize();
+            await expect(loader.loadConfig()).rejects.toThrow(
+                /expected a mapping of configuration keys/,
+            );
+        });
+
         it("should reset inheritance tracking between loads", async () => {
             writeConfig("base.yml", "stages: []\n");
             writeConfig("kist.yaml", 'extends: "./base.yml"\nstages: []\n');

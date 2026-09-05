@@ -1,6 +1,6 @@
 {
     "$schema": "https://typedoc.org/schema.json",
-    "displayName": "kist",
+    "name": "kist",
     "out": "docs/api",
     "readme": "README.md",
     "entryPoints": ["src/ts/index.ts"],

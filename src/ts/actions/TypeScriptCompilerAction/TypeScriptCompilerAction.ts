@@ -49,15 +49,16 @@ export class TypeScriptCompilerAction extends Action {
                 path.dirname(resolvedTsconfigPath),
             ).options;
 
-            const finalCompilerOptions = {
+            // `outputDir` is applied while assembling the options the program
+            // is actually built with. Setting it on `mergedCompilerOptions`
+            // after the spread had already copied the values left the option
+            // with no effect at all, so output silently went to the
+            // `outDir` from tsconfig.json instead.
+            const finalCompilerOptions: ts.CompilerOptions = {
                 ...parsedConfig.options,
                 ...mergedCompilerOptions,
+                ...(outputDir ? { outDir: outputDir } : {}),
             };
-
-            // Set output directory if specified
-            if (outputDir) {
-                mergedCompilerOptions.outDir = outputDir;
-            }
 
             // **Create a TypeScript Program**
             const program = ts.createProgram(

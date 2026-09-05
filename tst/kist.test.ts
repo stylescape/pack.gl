@@ -20,9 +20,11 @@ const mockRestartWithDelay = jest.fn();
 const mockStopPipeline = jest.fn();
 const mockLiveServerShutdown = jest.fn();
 const mockWatcherCallback = jest.fn();
+const mockIsRebuildChild = jest.fn(() => false);
 
 jest.mock("../src/ts/core/pipeline/PipelineManager", () => ({
     PipelineManager: class {
+        static isRebuildChild = (): boolean => mockIsRebuildChild();
         constructor(public liveServer: unknown) {}
         runPipeline = () => mockRunPipeline();
         restartPipeline = () => mockRestartPipeline();
@@ -67,6 +69,7 @@ describe("Kist", () => {
         mockStopPipeline.mockReset();
         mockLiveServerShutdown.mockReset().mockResolvedValue(undefined);
         mockWatcherCallback.mockReset();
+        mockIsRebuildChild.mockReset().mockReturnValue(false);
 
         exitSpy = jest
             .spyOn(process, "exit")
@@ -167,10 +170,38 @@ describe("Kist", () => {
 
             expect(mockRunPipeline).toHaveBeenCalledTimes(1);
             expect(mockWatcherCallback).toHaveBeenCalledTimes(1);
-            expect(mockRestartPipeline).toHaveBeenCalledTimes(1);
+            // The pipeline has already run in this process; kicking off a
+            // rebuild here as well built everything a second time.
+            expect(mockRestartPipeline).not.toHaveBeenCalled();
             expect(spyOutput(spies.log())).toContain(
                 "Enabling live reload functionality...",
             );
+        });
+
+        it("should not start live reload in a rebuild child process", async () => {
+            // A rebuild child inherits `--live` (and any config that enables
+            // it). Starting a server there would fight the parent for the
+            // port and spawn a rebuild child of its own.
+            setLiveReload(true);
+            mockIsRebuildChild.mockReturnValue(true);
+
+            await new Kist().run();
+
+            expect(mockRunPipeline).toHaveBeenCalledTimes(1);
+            expect(mockWatcherCallback).not.toHaveBeenCalled();
+        });
+
+        it("should keep serving when the build fails in live mode", async () => {
+            setLiveReload(true);
+            mockRunPipeline.mockRejectedValue(new Error("compile error"));
+
+            await expect(new Kist().run()).resolves.toBeUndefined();
+
+            expect(spyOutput(spies.error())).toContain(
+                "Initial build failed. Waiting for changes.",
+            );
+            // The watcher is still installed, so the next save can fix it.
+            expect(mockWatcherCallback).toHaveBeenCalledTimes(1);
         });
 
         it("should restart the pipeline when a watched file changes", async () => {
@@ -188,42 +219,41 @@ describe("Kist", () => {
             );
         });
 
-        it("should log and exit when the configuration is invalid", async () => {
+        it("should reject when the configuration is invalid", async () => {
             ConfigStore.getInstance().set("stages", [
                 { name: "bad", steps: [] },
             ]);
 
-            await new Kist().run();
-
-            expect(spyOutput(spies.error())).toContain(
-                "must contain at least one step",
+            await expect(new Kist().run()).rejects.toThrow(
+                /must contain at least one step/,
             );
-            expect(exitSpy).toHaveBeenCalledWith(1);
+
             expect(mockRunPipeline).not.toHaveBeenCalled();
 
             ConfigStore.getInstance().set("stages", []);
         });
 
-        it("should log and exit when the pipeline fails", async () => {
+        it("should reject when the pipeline fails", async () => {
+            // The failure reaches the CLI, which turns it into a non-zero
+            // exit status; swallowing it here reported a broken build as a
+            // successful one.
             mockRunPipeline.mockRejectedValue(new Error("pipeline down"));
 
-            await new Kist().run();
-
-            expect(spyOutput(spies.error())).toContain(
-                "An error occurred: pipeline down",
-            );
-            expect(exitSpy).toHaveBeenCalledWith(1);
+            await expect(new Kist().run()).rejects.toThrow("pipeline down");
         });
 
-        it("should stringify a non-Error failure", async () => {
+        it("should not exit the process itself on failure", async () => {
+            mockRunPipeline.mockRejectedValue(new Error("pipeline down"));
+
+            await expect(new Kist().run()).rejects.toThrow();
+
+            expect(exitSpy).not.toHaveBeenCalled();
+        });
+
+        it("should propagate a non-Error failure", async () => {
             mockRunPipeline.mockRejectedValue("just a string");
 
-            await new Kist().run();
-
-            expect(spyOutput(spies.error())).toContain(
-                "An error occurred: just a string",
-            );
-            expect(exitSpy).toHaveBeenCalledWith(1);
+            await expect(new Kist().run()).rejects.toBe("just a string");
         });
     });
 

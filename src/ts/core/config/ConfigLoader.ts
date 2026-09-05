@@ -41,9 +41,15 @@ export class ConfigLoader extends AbstractProcess {
     private readonly defaultFilenames = ["kist.yaml", "kist.yml"];
 
     /**
-     * Set of loaded config paths to prevent circular inheritance.
+     * The chain of files currently being resolved, used to detect circular
+     * inheritance.
+     *
+     * This is the ancestor chain, not every file seen: a path is removed once
+     * its own inheritance has been resolved. Keeping every visited path made
+     * a diamond — two parents that share a grandparent, which is a perfectly
+     * ordinary way to factor configuration — look like a cycle.
      */
-    private loadedPaths: Set<string> = new Set();
+    private resolving: Set<string> = new Set();
 
     // Constructor
     // ========================================================================
@@ -124,8 +130,8 @@ export class ConfigLoader extends AbstractProcess {
             return { stages: [] };
         }
 
-        // Reset loaded paths for fresh load
-        this.loadedPaths.clear();
+        // Reset the ancestor chain for a fresh load
+        this.resolving.clear();
 
         try {
             const config = await this.loadConfigWithInheritance(
@@ -157,20 +163,38 @@ export class ConfigLoader extends AbstractProcess {
     ): Promise<ConfigInterface> {
         const resolvedPath = path.resolve(configPath);
 
-        // Prevent circular inheritance
-        if (this.loadedPaths.has(resolvedPath)) {
+        // Prevent circular inheritance: a file may be reached more than once
+        // through different branches, but never while it is still resolving
+        // its own parents.
+        if (this.resolving.has(resolvedPath)) {
             throw new ConfigError(
                 `Circular config inheritance detected: ${resolvedPath}`,
                 { configPath: resolvedPath },
             );
         }
-        this.loadedPaths.add(resolvedPath);
+        this.resolving.add(resolvedPath);
 
+        try {
+            return await this.readAndResolve(resolvedPath);
+        } finally {
+            this.resolving.delete(resolvedPath);
+        }
+    }
+
+    /**
+     * Reads one configuration file and merges in whatever it extends.
+     *
+     * @param resolvedPath - Absolute path of the file to read.
+     * @returns The configuration, with inheritance applied.
+     */
+    private async readAndResolve(
+        resolvedPath: string,
+    ): Promise<ConfigInterface> {
         this.logDebug(`Loading configuration from: ${resolvedPath}`);
         const fileContents = await fs.promises.readFile(resolvedPath, "utf8");
-        let config: ConfigInterface;
+        let parsed: unknown;
         try {
-            config = loadYaml(fileContents) as ConfigInterface;
+            parsed = loadYaml(fileContents);
         } catch (error) {
             throw new ConfigParseError(
                 resolvedPath,
@@ -178,6 +202,18 @@ export class ConfigLoader extends AbstractProcess {
                 error as Error,
             );
         }
+
+        // A file that parses to a scalar or to nothing at all is not a
+        // configuration; saying so beats a TypeError from reading `extends`
+        // off null further down.
+        if (parsed === null || typeof parsed !== "object") {
+            throw new ConfigParseError(
+                resolvedPath,
+                "expected a mapping of configuration keys at the top level.",
+            );
+        }
+
+        const config = parsed as ConfigInterface;
 
         // Handle inheritance
         if (config.extends) {

@@ -20,6 +20,9 @@ export class StepValidator extends AbstractValidator<StepInterface> {
     // Parameters
     // ========================================================================
 
+    /**
+     * Validator that checks each step's action against the registry.
+     */
     private actionValidator: ActionValidator;
 
     // Constructor

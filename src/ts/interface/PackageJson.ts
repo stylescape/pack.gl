@@ -15,37 +15,57 @@
  * fields as needed.
  */
 export interface PackageJson {
-    // The name of the package.
+    /**
+     * The name of the package.
+     */
     name: string;
 
-    // The version of the package.
+    /**
+     * The version of the package.
+     */
     version: string;
 
-    // A brief description of the package.
+    /**
+     * A brief description of the package.
+     */
     description?: string;
 
-    // The entry point for the package.
+    /**
+     * The entry point for the package.
+     */
     main?: string;
 
-    // Scripts that can be executed with npm/yarn.
+    /**
+     * Scripts that can be executed with npm/yarn.
+     */
     scripts?: Record<string, string>;
 
-    // Production dependencies of the package.
+    /**
+     * Production dependencies of the package.
+     */
     dependencies?: Record<string, string>;
 
-    // Development dependencies of the package.
+    /**
+     * Development dependencies of the package.
+     */
     devDependencies?: Record<string, string>;
 
-    // Repository information for the package.
+    /**
+     * Repository information for the package.
+     */
     repository?: {
         type: string;
         url: string;
     };
 
-    // Keywords associated with the package.
+    /**
+     * Keywords associated with the package.
+     */
     keywords?: string[];
 
-    // The author of the package.
+    /**
+     * The author of the package.
+     */
     author?:
         | string
         | {
@@ -54,37 +74,55 @@ export interface PackageJson {
               url?: string;
           };
 
-    // The license under which the package is provided.
+    /**
+     * The license under which the package is provided.
+     */
     license?: string;
 
-    // Links to the package bug tracker.
+    /**
+     * Links to the package bug tracker.
+     */
     bugs?: {
         url?: string;
         email?: string;
     };
 
-    // The URL to the homepage of the package.
+    /**
+     * The URL to the homepage of the package.
+     */
     homepage?: string;
 
-    // Indicates if the package should be published.
+    /**
+     * Indicates if the package should be published.
+     */
     private?: boolean;
 
-    // Peer dependencies of the package.
+    /**
+     * Peer dependencies of the package.
+     */
     peerDependencies?: Record<string, string>;
 
-    // Engine requirements for the package.
+    /**
+     * Engine requirements for the package.
+     */
     engines?: {
         node?: string;
         npm?: string;
     };
 
-    // Executable files included with the package.
+    /**
+     * Executable files included with the package.
+     */
     bin?: Record<string, string>;
 
-    // Path to the TypeScript declaration files.
+    /**
+     * Path to the TypeScript declaration files.
+     */
     types?: string;
 
-    // Other contributors to the package.
+    /**
+     * Other contributors to the package.
+     */
     contributors?: Array<
         | string
         | {
@@ -94,7 +132,9 @@ export interface PackageJson {
           }
     >;
 
-    // Funding information for the package.
+    /**
+     * Funding information for the package.
+     */
     funding?:
         | string
         | {
@@ -102,70 +142,112 @@ export interface PackageJson {
               url: string;
           };
 
-    // An array of file patterns included in the package.
+    /**
+     * An array of file patterns included in the package.
+     */
     files?: string[];
 
-    // Target browsers/environments for tools like Babel.
+    /**
+     * Target browsers/environments for tools like Babel.
+     */
     browserslist?: string[] | Record<string, string[]>;
 
-    // Configuration for publishing the package.
+    /**
+     * Configuration for publishing the package.
+     */
     publishConfig?: Record<string, unknown>;
 
-    // Configuration parameters used in scripts.
+    /**
+     * Configuration parameters used in scripts.
+     */
     config?: Record<string, unknown>;
 
-    // Alternative to "types", path to TypeScript declaration files.
+    /**
+     * Alternative to "types", path to TypeScript declaration files.
+     */
     typings?: string;
 
-    // Define export map for submodules and conditions.
+    /**
+     * Define export map for submodules and conditions.
+     */
     exports?: Record<string, unknown>;
 
-    // Specify an ES module entry point.
+    /**
+     * Specify an ES module entry point.
+     */
     module?: string;
 
-    // Indicate which modules in the package have side effects.
+    /**
+     * Indicate which modules in the package have side effects.
+     */
     sideEffects?: boolean | string[];
 
-    // Optional dependencies.
+    /**
+     * Optional dependencies.
+     */
     optionalDependencies?: Record<string, string>;
 
-    // Dependencies to be bundled with the package.
+    /**
+     * Dependencies to be bundled with the package.
+     */
     bundledDependencies?: string[];
 
-    // Metadata for peer dependencies.
+    /**
+     * Metadata for peer dependencies.
+     */
     peerDependenciesMeta?: Record<string, { optional?: boolean }>;
 
-    // Dependency resolution hints for yarn.
+    /**
+     * Dependency resolution hints for yarn.
+     */
     resolutions?: Record<string, string>;
 
-    // Workspace configuration for managing multiple packages.
+    /**
+     * Workspace configuration for managing multiple packages.
+     */
     workspaces?:
         | string[]
         | {
               packages: string[];
           };
 
-    // ESLint configuration embedded in package.json.
+    /**
+     * ESLint configuration embedded in package.json.
+     */
     eslintConfig?: Record<string, unknown>;
 
-    // Babel configuration embedded in package.json.
+    /**
+     * Babel configuration embedded in package.json.
+     */
     babel?: Record<string, unknown>;
 
-    // Prettier configuration embedded in package.json.
+    /**
+     * Prettier configuration embedded in package.json.
+     */
     prettier?: Record<string, unknown>;
 
-    // Husky configuration for Git hooks.
+    /**
+     * Husky configuration for Git hooks.
+     */
     husky?: Record<string, unknown>;
 
-    // Jest configuration for unit tests.
+    /**
+     * Jest configuration for unit tests.
+     */
     jest?: Record<string, unknown>;
 
-    // Enforce engine requirements strictly.
+    /**
+     * Enforce engine requirements strictly.
+     */
     enginesStrict?: boolean;
 
-    // Specify OS compatibility.
+    /**
+     * Specify OS compatibility.
+     */
     os?: string[];
 
-    // Specify CPU architecture compatibility.
+    /**
+     * Specify CPU architecture compatibility.
+     */
     cpu?: string[];
 }

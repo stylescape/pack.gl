@@ -18,13 +18,30 @@ export class StageValidator extends AbstractValidator<StageInterface> {
     // Parameters
     // ========================================================================
 
+    /**
+     * Names of stages validated so far, built up incrementally so a repeated
+     * name can be reported as a duplicate.
+     */
     private stageNames: Set<string>;
+
+    /**
+     * Every stage name in the configuration, registered up front so a
+     * `dependsOn` entry may point at a stage declared further down the file.
+     */
     private knownStageNames: Set<string>;
+
+    /**
+     * Validator applied to each step within a stage.
+     */
     private stepValidator: StepValidator;
 
     // Constructor
     // ========================================================================
 
+    /**
+     * Initializes the validator with empty name sets and the nested step
+     * validator it delegates to.
+     */
     constructor() {
         super();
         this.stageNames = new Set();

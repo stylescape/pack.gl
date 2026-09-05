@@ -25,6 +25,10 @@
  * - TemplateRenderAction -> @getkist/action-nunjucks
  */
 
+/**
+ * Actions that ship inside the main `kist` package and are registered
+ * automatically, without any plugin needing to be installed.
+ */
 export const CORE_ACTIONS = [
     "DirectoryCleanAction",
     "DirectoryCopyAction",
@@ -63,17 +67,32 @@ export const MIGRATED_ACTIONS = [
     "TemplateRenderAction",
 ] as const;
 
+/**
+ * Union of the built-in action names listed in {@link CORE_ACTIONS}.
+ */
 export type CoreActionName = (typeof CORE_ACTIONS)[number];
+
+/**
+ * Union of the action names listed in {@link MIGRATED_ACTIONS}, which now
+ * live in plugin packages.
+ */
 export type MigratedActionName = (typeof MIGRATED_ACTIONS)[number];
 
 /**
- * Plugin package mappings - use these packages for the migrated actions
+ * Where each migrated action moved to. Used to turn "unknown action" into an
+ * actionable message: the reader gets the package name, the command that
+ * installs it, and somewhere to read more.
+ *
+ * @see describeUnknownAction
  */
 export const MIGRATED_PACKAGES: Record<
     MigratedActionName,
     {
+        /** The npm package that now provides the action. */
         package: string;
+        /** Copy-pasteable command that installs it as a dev dependency. */
         npm: string;
+        /** Repository URL, for documentation and issues. */
         github: string;
     }
 > = {

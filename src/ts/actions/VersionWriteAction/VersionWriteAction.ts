@@ -8,6 +8,42 @@ import { Action } from "../../core/pipeline/Action.js";
 import type { ActionOptionsType } from "../../types/index.js";
 
 // ============================================================================
+// Constants
+// ============================================================================
+
+/**
+ * Matches a semantic version, including the optional prerelease and build
+ * metadata parts. Restricting this to `major.minor.patch` rejected perfectly
+ * ordinary versions such as `1.2.3-beta.1`, so a project on a prerelease
+ * could not write its version at all.
+ */
+const SEMVER_SOURCE =
+    "\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?";
+
+/**
+ * Anchored form of {@link SEMVER_SOURCE}, for validating a whole string.
+ */
+const SEMVER = new RegExp(`^${SEMVER_SOURCE}$`);
+
+// ============================================================================
+// Functions
+// ============================================================================
+
+/**
+ * Escapes a string for literal use inside a regular expression.
+ *
+ * The key is written by the user and goes straight into a pattern; without
+ * escaping, a key containing regex syntax either failed to match its own
+ * lines or threw while compiling.
+ *
+ * @param value - The literal text to match.
+ * @returns The text with every regex metacharacter escaped.
+ */
+function escapeRegExp(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// ============================================================================
 // Classes
 // ============================================================================
 
@@ -54,10 +90,13 @@ export class VersionWriteAction extends Action {
             // Replace the version in each file
             await Promise.all(
                 files.map(({ path: filePath, key }) =>
+                    // `??` rather than `||`: an explicit empty key means the
+                    // version stands alone on the line, as in a bare VERSION
+                    // file, and must not fall back to the default prefix.
                     this.replaceVersionInFile(
                         filePath,
                         version!,
-                        key || "version:",
+                        key ?? "version:",
                     ),
                 ),
             );
@@ -92,7 +131,7 @@ export class VersionWriteAction extends Action {
             const packageJson = JSON.parse(packageJsonContent);
             const version = packageJson.version;
 
-            if (version && /^\d+\.\d+\.\d+$/.test(version)) {
+            if (version && SEMVER.test(version)) {
                 this.logInfo(
                     `Version "${version}" retrieved from package.json.`,
                 );
@@ -138,13 +177,24 @@ export class VersionWriteAction extends Action {
                 lines.pop();
             }
 
-            const updatedLines = lines.map((line) => {
-                const regex = new RegExp(`^\\s*${key}\\s*\\d+\\.\\d+\\.\\d+`);
-                if (regex.test(line)) {
-                    return line.replace(/\d+\.\d+\.\d+$/, version);
-                }
-                return line;
-            });
+            // One regex does both the test and the replacement, capturing the
+            // key and any whitespace so only the version that follows it is
+            // rewritten. Matching and replacing separately meant the old
+            // version stayed put whenever anything trailed it on the line —
+            // a comment, or the carriage return of a CRLF file — and that a
+            // second version later on the line was rewritten instead of the
+            // one the key had actually identified.
+            const pattern = new RegExp(
+                `^(\\s*${escapeRegExp(key)}\\s*)${SEMVER_SOURCE}`,
+            );
+
+            let replacements = 0;
+            const updatedLines = lines.map((line) =>
+                line.replace(pattern, (_match, prefix: string) => {
+                    replacements++;
+                    return `${prefix}${version}`;
+                }),
+            );
 
             // Preserve original newline ending behavior
             const finalContent = endsWithNewline
@@ -152,6 +202,16 @@ export class VersionWriteAction extends Action {
                 : updatedLines.join("\n");
 
             await fs.writeFile(filePath, finalContent, "utf8");
+
+            if (replacements === 0) {
+                // Silence here meant a release could ship with a stale
+                // version in a file nobody thought to check.
+                this.logWarn(
+                    `No version matching key "${key}" found in file "${filePath}"; nothing replaced.`,
+                );
+                return;
+            }
+
             this.logInfo(
                 `Version replaced in file "${filePath}" for key "${key}".`,
             );

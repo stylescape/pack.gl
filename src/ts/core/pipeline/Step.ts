@@ -63,19 +63,80 @@ export class Step extends AbstractProcess {
     // Parameters
     // ========================================================================
 
+    /**
+     * Unique name of the step, used in logs, progress output, and cache keys.
+     */
     private name: string;
+
+    /**
+     * Registered name of the action this step runs, e.g. `"FileCopyAction"`.
+     * Kept alongside the instance so errors can name the action even when
+     * resolution fails.
+     */
     private actionName: string;
+
+    /**
+     * The action instance resolved from the registry at construction time.
+     */
     private action: ActionInterface;
+
+    /**
+     * Action-specific options from the configuration, passed through to
+     * {@link ActionInterface.execute} unmodified.
+     */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private options?: Record<string, any>;
+
+    /**
+     * Whether the step runs. A disabled step is skipped without failing the
+     * stage.
+     */
     private enabled: boolean;
+
+    /**
+     * Wall-clock budget for this step, in milliseconds. Exceeding it aborts
+     * the step.
+     */
     private timeout?: number;
+
+    /**
+     * Free-form summary of what the step does, surfaced in plan output.
+     */
     private description?: string;
+
+    /**
+     * Arbitrary key/value labels carried with the step for filtering and
+     * reporting.
+     */
     private tags?: Record<string, string>;
+
+    /**
+     * Optional `before`/`after` callbacks invoked around the action.
+     */
     private hooks?: StepInterface["hooks"];
+
+    /**
+     * Paths or globs the step reads. Declaring them opts the step into
+     * content-hash caching; a step with no inputs always executes.
+     */
     private inputs?: string[];
+
+    /**
+     * Paths or globs the step writes. Archived on a cache miss and restored
+     * on a cache hit. Only meaningful alongside `inputs`.
+     */
     private outputs?: string[];
+
+    /**
+     * Names of environment variables folded into the cache key, so that
+     * changing one forces a re-run.
+     */
     private env?: string[];
+
+    /**
+     * Pipeline-wide execution settings (retries, concurrency, cache handle)
+     * inherited from the owning stage.
+     */
     private runtime: StepRuntimeOptions;
 
     // Constructor
@@ -205,14 +266,17 @@ export class Step extends AbstractProcess {
         }
 
         // Capture the step's output so a later cache hit can reproduce it.
-        this.logger.beginCapture();
-        let captured: string[];
+        // The capture is scoped to this call's async context, so steps running
+        // in parallel each record their own lines rather than each other's.
+        const captured: string[] = [];
 
         try {
-            await this.runHook("before");
-            await this.runWithRetries();
-            await this.runHook("after");
-            this.logInfo(`Step "${this.name}" completed successfully.`);
+            await this.logger.capture(captured, async () => {
+                await this.runHook("before");
+                await this.runWithRetries();
+                await this.runHook("after");
+                this.logInfo(`Step "${this.name}" completed successfully.`);
+            });
         } catch (error) {
             this.logError(
                 `Error executing step "${this.name}": ${error}`,
@@ -227,8 +291,6 @@ export class Step extends AbstractProcess {
                 { stepName: this.name },
                 error instanceof Error ? error : undefined,
             );
-        } finally {
-            captured = this.logger.endCapture();
         }
 
         if (cache && hash) {

@@ -15,10 +15,14 @@ jest.mock("../src/ts/kist", () => ({
     },
 }));
 
-import { mkdtempSync, rmSync, writeFileSync, existsSync } from "fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
-import { createProgram, runCli } from "../src/ts/cli/Program";
+import {
+    clearCacheCommand,
+    createProgram,
+    runCli,
+} from "../src/ts/cli/Program";
 import { StepCache } from "../src/ts/core/cache/StepCache";
 import { ConfigStore } from "../src/ts/core/config/ConfigStore";
 import { Action } from "../src/ts/core/pipeline/Action";
@@ -453,6 +457,34 @@ stages:
         it("should clear the step cache and say so", async () => {
             await cli("clear-cache");
             expect(stdout()).toContain("Step cache cleared.");
+        });
+
+        it("should work when called directly with no options", async () => {
+            await expect(clearCacheCommand()).resolves.toBeUndefined();
+            expect(stdout()).toContain("Step cache cleared.");
+        });
+
+        it("should clear the cache directory the configuration names", async () => {
+            // The command used to take the singleton with no options, so it
+            // always cleared the default `.kist-cache` and quietly did
+            // nothing for a project that had configured somewhere else.
+            const cacheDir = join(root, "custom-cache");
+            mkdirSync(join(cacheDir, "steps"), { recursive: true });
+            writeFileSync(
+                join(cacheDir, "step-cache.json"),
+                JSON.stringify({
+                    abc: { logs: [], outputs: [], cachedAt: 1 },
+                }),
+                "utf-8",
+            );
+            writeConfig(
+                `options:\n    cache:\n        enabled: true\n        cacheDir: "${cacheDir}"\nstages: []\n`,
+            );
+
+            StepCache.resetInstance();
+            await cli("clear-cache");
+
+            expect(existsSync(join(cacheDir, "step-cache.json"))).toBe(false);
         });
     });
 });

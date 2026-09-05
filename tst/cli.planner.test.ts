@@ -150,6 +150,22 @@ describe("Planner", () => {
             expect(plan.stages[0].steps[0].actionResolved).toBe(true);
         });
 
+        it("should name a step with no action at all", () => {
+            // Carrying `undefined` through the plan rendered as an empty name
+            // in the list of unknown actions, which told the reader nothing.
+            const plan = buildPlan({
+                stages: [
+                    {
+                        name: "s",
+                        steps: [{ name: "a" } as never],
+                    },
+                ],
+            });
+
+            expect(plan.stages[0].steps[0].action).toBe("(missing)");
+            expect(plan.unresolvedActions).toEqual(["(missing)"]);
+        });
+
         it("should mark a step cacheable only when caching is on and inputs are declared", () => {
             const withCache = buildPlan({
                 options: { cache: { enabled: true } },

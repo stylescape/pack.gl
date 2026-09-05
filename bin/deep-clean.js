@@ -24,6 +24,10 @@ const dirsToClean = [
     "tmp",
     "coverage",
     ".cache",
+    // kist's own build cache. Its absence from this list meant the one cache
+    // a "deep clean" of *this* project exists to clear was the one it left
+    // behind, so a stale step-cache entry survived the clean.
+    ".kist-cache",
     "node_modules/.cache",
     ".eslintcache",
     ".tsbuildinfo",

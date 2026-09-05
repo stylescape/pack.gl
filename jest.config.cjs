@@ -19,6 +19,9 @@ module.exports = {
     },
     testRegex: ".*\\.test\\.ts$", // Match files ending with .test.ts
     verbose: true,
+    coverageDirectory: "coverage",
+    // `lcov` is the format Codecov ingests; the rest are for reading locally.
+    coverageReporters: ["text", "lcov", "json", "html", "text-summary"],
     collectCoverageFrom: [
         "src/ts/**/*.ts",
         "!src/ts/**/*.d.ts",

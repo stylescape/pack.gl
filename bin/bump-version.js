@@ -28,16 +28,27 @@ function getCurrentVersion() {
 }
 
 function bumpVersion(current, type) {
-    const parts = current.split(".").map(Number);
+    // Without this check a VERSION file holding anything but a bare
+    // major.minor.patch — a prerelease, say, or a stray character — produced
+    // a version containing "NaN" and wrote it to every file below.
+    const match = /^(\d+)\.(\d+)\.(\d+)(?:[-+].*)?$/.exec(current);
+    if (!match) {
+        console.error(
+            `Error: VERSION does not hold a semantic version: "${current}".`,
+        );
+        process.exit(1);
+    }
+
+    const [major, minor, patch] = match.slice(1, 4).map(Number);
 
     switch (type) {
         case "major":
-            return `${parts[0] + 1}.0.0`;
+            return `${major + 1}.0.0`;
         case "minor":
-            return `${parts[0]}.${parts[1] + 1}.0`;
+            return `${major}.${minor + 1}.0`;
         case "patch":
         default:
-            return `${parts[0]}.${parts[1]}.${parts[2] + 1}`;
+            return `${major}.${minor}.${patch + 1}`;
     }
 }
 
@@ -52,12 +63,21 @@ function updateVersionModule(version) {
     // lockstep with package.json or the CLI reports a stale number.
     const modulePath = join(rootDir, "src/ts/version.ts");
     const source = readFileSync(modulePath, "utf-8");
+    const pattern = /export const VERSION = "[^"]*";/;
+
+    // A `replace` that matches nothing returns the string unchanged, so
+    // without this the script reported success while leaving `kist --version`
+    // pointing at the previous release.
+    if (!pattern.test(source)) {
+        console.error(
+            "Error: could not find the VERSION export in src/ts/version.ts.",
+        );
+        process.exit(1);
+    }
+
     writeFileSync(
         modulePath,
-        source.replace(
-            /export const VERSION = "[^"]*";/,
-            `export const VERSION = "${version}";`,
-        ),
+        source.replace(pattern, `export const VERSION = "${version}";`),
         "utf-8",
     );
     console.log(`✓ Updated src/ts/version.ts to ${version}`);
@@ -82,6 +102,16 @@ function updateChangelog(version) {
 
     const today = new Date().toISOString().split("T")[0];
     const newEntry = `\n## [${version}] - ${today}\n\n### Added\n- \n\n### Changed\n- \n\n### Fixed\n- \n`;
+
+    // Same silent-no-op hazard as the version module: no "## [Unreleased]"
+    // heading means no section is inserted, and the release goes out with no
+    // changelog entry while the script claims to have written one.
+    if (!changelog.includes("## [Unreleased]")) {
+        console.error(
+            "Error: CHANGELOG.md has no '## [Unreleased]' heading to insert under.",
+        );
+        process.exit(1);
+    }
 
     const updated = changelog.replace(
         "## [Unreleased]",

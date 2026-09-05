@@ -102,6 +102,12 @@ export class BuildCache extends AbstractProcess {
     /** Flag indicating initialization status */
     private initialized: boolean = false;
 
+    /**
+     * The in-flight load, so concurrent `lookup`/`store` calls share one
+     * attempt rather than each re-reading and replacing the index.
+     */
+    private initializing: Promise<void> | null = null;
+
     /** Reference to FileCache for input hashing */
     private fileCache: FileCache;
 
@@ -160,20 +166,27 @@ export class BuildCache extends AbstractProcess {
      */
     public async initialize(): Promise<void> {
         if (this.initialized) return;
+        if (this.initializing) return this.initializing;
 
-        try {
-            await fs.promises.mkdir(this.cacheDir, { recursive: true });
-            await this.loadIndex();
-            await this.fileCache.initialize();
-            this.initialized = true;
-            this.logDebug(
-                `BuildCache initialized with ${this.cacheIndex.size} entries.`,
-            );
-        } catch (error) {
-            this.logWarn(`Failed to initialize build cache: ${error}`);
-            this.cacheIndex.clear();
-            this.initialized = true;
-        }
+        this.initializing = (async (): Promise<void> => {
+            try {
+                await fs.promises.mkdir(this.cacheDir, { recursive: true });
+                await this.loadIndex();
+                await this.fileCache.initialize();
+                this.initialized = true;
+                this.logDebug(
+                    `BuildCache initialized with ${this.cacheIndex.size} entries.`,
+                );
+            } catch (error) {
+                this.logWarn(`Failed to initialize build cache: ${error}`);
+                this.cacheIndex.clear();
+                this.initialized = true;
+            } finally {
+                this.initializing = null;
+            }
+        })();
+
+        return this.initializing;
     }
 
     /**
@@ -384,7 +397,10 @@ export class BuildCache extends AbstractProcess {
     private async computeInputHash(inputFiles: string[]): Promise<string> {
         const hashes: string[] = [];
 
-        for (const file of inputFiles.sort()) {
+        // Sorted on a copy: `Array.prototype.sort` reorders in place, so
+        // hashing used to silently rearrange the caller's list of inputs —
+        // which matters to any action whose output depends on input order.
+        for (const file of [...inputFiles].sort()) {
             try {
                 const content = await fs.promises.readFile(file);
                 hashes.push(
@@ -440,7 +456,7 @@ export class BuildCache extends AbstractProcess {
             for (const file of outputFiles) {
                 const artifactPath = path.join(
                     artifactDir,
-                    path.basename(file),
+                    BuildCache.artifactName(file),
                 );
                 await fs.promises.copyFile(file, artifactPath);
             }
@@ -464,7 +480,7 @@ export class BuildCache extends AbstractProcess {
             for (const outputFile of entry.outputFiles) {
                 const artifactPath = path.join(
                     artifactDir,
-                    path.basename(outputFile),
+                    BuildCache.artifactName(outputFile),
                 );
                 const outputDir = path.dirname(outputFile);
 
@@ -475,6 +491,31 @@ export class BuildCache extends AbstractProcess {
         } catch {
             return false;
         }
+    }
+
+    /**
+     * The path an output file is archived under, within its entry's directory.
+     *
+     * Derived from the file's full path rather than its base name. Two outputs
+     * that share a name in different directories — `dist/a/index.js` and
+     * `dist/b/index.js`, a completely ordinary pair — used to archive to the
+     * same place, so one overwrote the other and a later restore wrote that
+     * single file's contents back to both locations.
+     *
+     * @param outputFile - The output file's path as recorded in the entry.
+     * @returns A relative path unique to that output.
+     */
+    private static artifactName(outputFile: string): string {
+        const absolute = path.resolve(outputFile);
+        // A digest of the full path distinguishes same-named outputs without
+        // recreating a deep directory tree inside the cache; the base name is
+        // kept alongside it so the archive stays readable.
+        const digest = crypto
+            .createHash("sha256")
+            .update(absolute)
+            .digest("hex")
+            .slice(0, 16);
+        return `${digest}-${path.basename(absolute)}`;
     }
 
     /**

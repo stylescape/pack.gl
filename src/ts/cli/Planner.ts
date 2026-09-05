@@ -49,11 +49,22 @@ export interface StepPlan {
  * A stage as it would be executed.
  */
 export interface StagePlan {
+    /** The stage's name. */
     name: string;
+
+    /** False when the stage is disabled and would be skipped. */
     enabled: boolean;
+
+    /** Whether its steps would run concurrently. */
     parallel: boolean;
+
+    /** The scheduling priority that would apply. */
     priority: "low" | "normal" | "high";
+
+    /** Names of stages that must complete first. */
     dependsOn: string[];
+
+    /** The stage's steps, in the order they would run. */
     steps: StepPlan[];
 }
 
@@ -114,10 +125,13 @@ export function buildPlan(
             priority: stage.priority ?? "normal",
             dependsOn: stage.dependsOn ?? [],
             steps: (stage.steps ?? []).map((step: StepInterface): StepPlan => {
+                // A step with no action at all is reported as unresolved
+                // rather than carrying `undefined` through the plan, where it
+                // rendered as an empty name in the list of unknown actions.
                 const action =
-                    typeof step.action === "string"
+                    (typeof step.action === "string"
                         ? step.action
-                        : step.action?.name;
+                        : step.action?.name) ?? "(missing)";
                 const actionResolved = registered.has(action);
                 if (!actionResolved) {
                     unresolved.add(action);

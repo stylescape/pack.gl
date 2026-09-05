@@ -67,14 +67,23 @@ export class DocumentationAction extends Action {
             const { stdout, stderr } = await execFileAsync(
                 generatorCommand,
                 args,
+                // Documentation generators are verbose; the 1MB default made
+                // a large project fail with ENOBUFS.
+                { maxBuffer: 64 * 1024 * 1024 },
             );
 
+            // Output on stderr is not failure. Every documentation generator
+            // reports warnings there — an undocumented export, a broken
+            // link — and treating those as fatal failed the step for a run
+            // that had actually succeeded. The exit status is the signal,
+            // and a non-zero one has already rejected by this point.
             if (stderr) {
-                this.logError(`Documentation generation failed: ${stderr}`);
-                throw new Error(stderr);
+                this.logWarn(stderr.trimEnd());
             }
 
-            this.logInfo(stdout);
+            if (stdout) {
+                this.logInfo(stdout.trimEnd());
+            }
             this.logInfo(
                 `Documentation successfully generated at: ${resolvedOutputPath}`,
             );

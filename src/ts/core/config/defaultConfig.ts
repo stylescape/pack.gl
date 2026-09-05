@@ -94,14 +94,18 @@ export const defaultConfig: ConfigInterface = {
             root: "public",
 
             /**
-             * Paths to watch for changes.
+             * Paths to watch for changes. `kist.yml` is included alongside
+             * `kist.yaml`: both are accepted configuration filenames, and
+             * leaving one out meant edits to it never triggered a rebuild.
              */
-            watchPaths: ["src/**/*", "config/**/*", "kist.yaml"],
+            watchPaths: ["src/**/*", "config/**/*", "kist.yaml", "kist.yml"],
 
             /**
-             * Paths or patterns to ignore while watching.
+             * Paths or patterns to ignore while watching. Matched as a plain
+             * directory name at any depth, so nested installs are excluded
+             * too.
              */
-            ignoredPaths: ["node_modules/*"],
+            ignoredPaths: ["node_modules"],
         },
 
         /**

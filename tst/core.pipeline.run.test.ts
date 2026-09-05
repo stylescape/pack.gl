@@ -443,78 +443,140 @@ describe("Pipeline", () => {
         });
 
         it("should fail the build when an action throws at execution time", async () => {
-            const exit = jest
-                .spyOn(process, "exit")
-                .mockImplementation((() => undefined) as never);
+            await expect(
+                new Pipeline({
+                    stages: [
+                        {
+                            name: "broken",
+                            steps: [step("boom", "FailingAction")],
+                        },
+                    ],
+                }).run(),
+            ).rejects.toThrow(/FailingAction/);
 
-            await new Pipeline({
-                stages: [
-                    {
-                        name: "broken",
-                        steps: [step("boom", "FailingAction")],
-                    },
-                ],
-            }).run();
-
-            expect(exit).toHaveBeenCalledWith(1);
-            const output = spyOutput(spies.error());
-            expect(output).toContain('Action "FailingAction" failed');
-            expect(output).toContain("Halting pipeline due to failure");
-        });
-
-        it("should exit the process when haltOnFailure is left at its default", async () => {
-            const exit = jest
-                .spyOn(process, "exit")
-                .mockImplementation((() => undefined) as never);
-
-            await new Pipeline({ stages: [failingStage()] }).run();
-
-            expect(exit).toHaveBeenCalledWith(1);
             expect(spyOutput(spies.error())).toContain(
-                "Halting pipeline due to failure",
+                'Action "FailingAction" failed',
             );
         });
 
-        it("should exit the process when haltOnFailure is true", async () => {
-            const exit = jest
-                .spyOn(process, "exit")
-                .mockImplementation((() => undefined) as never);
+        it("should reject when haltOnFailure is left at its default", async () => {
+            await expect(
+                new Pipeline({ stages: [failingStage()] }).run(),
+            ).rejects.toThrow();
 
-            await new Pipeline({
-                stages: [failingStage()],
-                options: { haltOnFailure: true },
-            }).run();
-
-            expect(exit).toHaveBeenCalledWith(1);
+            expect(spyOutput(spies.error())).toContain(
+                "Pipeline execution failed",
+            );
         });
 
-        it("should continue when haltOnFailure is false", async () => {
+        it("should reject when haltOnFailure is true", async () => {
+            await expect(
+                new Pipeline({
+                    stages: [failingStage()],
+                    options: { haltOnFailure: true },
+                }).run(),
+            ).rejects.toThrow();
+        });
+
+        it("should not exit the process on failure", async () => {
+            // The pipeline reports failure to its caller rather than ending
+            // the process itself: live mode has to survive a failed build.
             const exit = jest
                 .spyOn(process, "exit")
                 .mockImplementation((() => undefined) as never);
 
-            await new Pipeline({
-                stages: [failingStage()],
-                options: { haltOnFailure: false },
-            }).run();
+            await expect(
+                new Pipeline({ stages: [failingStage()] }).run(),
+            ).rejects.toThrow();
 
             expect(exit).not.toHaveBeenCalled();
+        });
+
+        it("should still fail overall when haltOnFailure is false", async () => {
+            // "Do not halt" means the other stages still get to run, not that
+            // the failure is forgotten: reporting success for a failed build
+            // gave CI a green run over broken output.
+            await expect(
+                new Pipeline({
+                    stages: [failingStage()],
+                    options: { haltOnFailure: false },
+                }).run(),
+            ).rejects.toThrow(/1 stage\(s\) failed: "failing"/);
+        });
+
+        it("should run independent stages when haltOnFailure is false", async () => {
+            const pipeline = new Pipeline({
+                stages: [
+                    failingStage(),
+                    {
+                        name: "independent",
+                        steps: [step("ok", "RecordingAction")],
+                    },
+                ],
+                options: { haltOnFailure: false },
+            });
+
+            await expect(pipeline.run()).rejects.toThrow(/failing/);
+
+            // The stage that does not depend on the failure still ran.
+            expect(spyOutput(spies.log())).toContain(
+                'Stage "independent" completed successfully',
+            );
+        });
+
+        it("should skip stages that depend on a failed one", async () => {
+            const pipeline = new Pipeline({
+                stages: [
+                    failingStage(),
+                    {
+                        name: "dependent",
+                        dependsOn: ["failing"],
+                        steps: [step("ok", "RecordingAction")],
+                    },
+                ],
+                options: { haltOnFailure: false },
+            });
+
+            await expect(pipeline.run()).rejects.toThrow(/failing/);
+
             expect(spyOutput(spies.warn())).toContain(
-                "Continuing pipeline execution despite errors",
+                'Stage "dependent" skipped: it depends on a stage that failed',
+            );
+        });
+
+        it("should report a stage that failed with a non-Error value", async () => {
+            const pipeline = new Pipeline({
+                stages: [
+                    {
+                        name: "hooked",
+                        steps: [step("ok", "RecordingAction")],
+                        hooks: {
+                            before: async () => {
+                                throw "not an Error";
+                            },
+                        },
+                    },
+                ],
+                options: { haltOnFailure: false },
+            });
+
+            await expect(pipeline.run()).rejects.toThrow(
+                /1 stage\(s\) failed: "hooked"/,
             );
         });
 
         it("should cancel progress and still save caches on failure", async () => {
-            jest.spyOn(process, "exit").mockImplementation(
-                (() => undefined) as never,
-            );
-
-            await new Pipeline({
-                stages: [failingStage()],
-                options: {
-                    cache: { enabled: true, cacheDir: join(root, "cache") },
-                },
-            }).run();
+            await expect(
+                new Pipeline({
+                    stages: [failingStage()],
+                    options: {
+                        cache: {
+                            enabled: true,
+                            cacheDir: join(root, "cache"),
+                        },
+                    },
+                }).run(),
+            ).rejects.toThrow();
 
             expect(spyOutput(spies.warn())).toContain("Cancelled at");
         });
@@ -660,8 +722,57 @@ describe("PipelineManager", () => {
             expect(mockSpawn).toHaveBeenCalledWith(
                 process.execPath,
                 process.argv.slice(1),
-                { stdio: "inherit" },
+                expect.objectContaining({ stdio: "inherit" }),
             );
+        });
+
+        it("should mark the child as a rebuild so it does not go live", () => {
+            // Without the marker the child starts its own server and watcher,
+            // fights the parent for the port, and spawns a rebuild child of
+            // its own.
+            managerWithServer().restartPipeline();
+
+            const options = mockSpawn.mock.calls[0][2] as {
+                env: Record<string, string>;
+            };
+            expect(options.env[PipelineManager.REBUILD_ENV]).toBe("1");
+            expect(PipelineManager.isRebuildChild()).toBe(false);
+        });
+
+        it("should drop --live from the rebuild invocation", () => {
+            const original = process.argv;
+            process.argv = [
+                process.execPath,
+                "/bin/kist",
+                "--live",
+                "--config",
+                "kist.yml",
+            ];
+
+            try {
+                managerWithServer().restartPipeline();
+
+                expect(mockSpawn.mock.calls[0][1]).toEqual([
+                    "/bin/kist",
+                    "--config",
+                    "kist.yml",
+                ]);
+            } finally {
+                process.argv = original;
+            }
+        });
+
+        it("should report a rebuild child from the environment", () => {
+            const previous = process.env[PipelineManager.REBUILD_ENV];
+            process.env[PipelineManager.REBUILD_ENV] = "1";
+
+            expect(PipelineManager.isRebuildChild()).toBe(true);
+
+            if (previous === undefined) {
+                delete process.env[PipelineManager.REBUILD_ENV];
+            } else {
+                process.env[PipelineManager.REBUILD_ENV] = previous;
+            }
         });
 
         it("should stop an existing process before starting a new one", () => {

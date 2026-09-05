@@ -42,17 +42,28 @@ export class RunScriptAction extends Action {
         this.logInfo(`Executing external script: ${resolvedScriptPath}...`);
 
         try {
-            const { stdout, stderr } = await execFileAsync("node", [
-                resolvedScriptPath,
-                ...args,
-            ]);
+            // `process.execPath` rather than "node": the script must run on
+            // the same runtime as the pipeline, which a bare "node" from PATH
+            // is not guaranteed to be — and need not exist at all when kist
+            // runs under a version manager or a bundled runtime.
+            const { stdout, stderr } = await execFileAsync(
+                process.execPath,
+                [resolvedScriptPath, ...args],
+                // Scripts that print a lot would otherwise fail with ENOBUFS
+                // once they crossed the 1MB default.
+                { maxBuffer: 64 * 1024 * 1024 },
+            );
 
+            // Output on stderr is not failure: warnings, progress and Node's
+            // own deprecation notices all go there. The exit status says
+            // whether the script succeeded, and a non-zero one has already
+            // rejected by this point.
             if (stderr) {
-                this.logError(`Script execution failed: ${stderr}`);
-                throw new Error(stderr);
+                this.logWarn(stderr.trimEnd());
             }
-
-            this.logInfo(stdout);
+            if (stdout) {
+                this.logInfo(stdout.trimEnd());
+            }
             this.logInfo("Script executed successfully.");
         } catch (error) {
             this.logError("Error occurred while executing the script.", error);

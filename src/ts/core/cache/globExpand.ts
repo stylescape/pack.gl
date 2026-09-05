@@ -27,22 +27,37 @@ const MAGIC = /[*?[\]{}!]/;
 // ============================================================================
 
 /**
- * Returns the longest leading path segment of a pattern that contains no glob
- * magic, so the walk can start there instead of at the project root.
+ * Whether a pattern contains glob magic, and so has to be matched rather than
+ * resolved as a plain path.
+ *
+ * @param pattern - A path or glob pattern.
+ * @returns True when the pattern is a glob.
+ */
+export function isGlob(pattern: string): boolean {
+    return MAGIC.test(pattern);
+}
+
+/**
+ * Returns the leading directory of a pattern that contains no glob magic, so
+ * a walk can start there instead of at the project root.
+ *
+ * Every segment before the first one containing magic is a literal directory
+ * name — the magic segment is where the pattern stops naming an exact path —
+ * so the whole run is kept. Dropping its last segment would have been correct
+ * only for a magic-free pattern, where the last segment can be the file name,
+ * and those never reach here.
  *
  * @param pattern - A glob pattern with forward slashes.
  * @returns The static directory prefix (possibly an empty string).
  */
-function staticPrefix(pattern: string): string {
+export function globBase(pattern: string): string {
     const segments = pattern.split("/");
     const staticSegments: string[] = [];
     for (const segment of segments) {
         if (MAGIC.test(segment)) break;
         staticSegments.push(segment);
     }
-    // The final static segment may be the file name itself; dropping it is
-    // safe because the walk matches on the full relative path anyway.
-    return staticSegments.slice(0, -1).join("/");
+    return staticSegments.join("/");
 }
 
 /**
@@ -115,7 +130,7 @@ export function expandPatterns(
             continue;
         }
 
-        const root = path.resolve(cwd, staticPrefix(normalized));
+        const root = path.resolve(cwd, globBase(normalized));
         const candidates: string[] = [];
         walk(root, candidates);
 

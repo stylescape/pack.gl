@@ -72,17 +72,65 @@ export class ProgressReporter extends AbstractProcess {
     // Parameters
     // ========================================================================
 
+    /**
+     * Total number of items expected for the run. Used as the denominator for
+     * percentage, rate, and ETA.
+     */
     private total: number;
+
+    /**
+     * Items finished so far, never allowed to exceed `total`.
+     */
     private completed: number = 0;
+
+    /**
+     * Human-readable name of the operation, shown alongside progress output.
+     */
     private label: string;
+
+    /**
+     * Whether rendered output includes the completion percentage.
+     */
     private showPercentage: boolean;
+
+    /**
+     * Whether rendered output includes the estimated time remaining.
+     */
     private showEta: boolean;
+
+    /**
+     * Minimum milliseconds between rendered updates, throttling output for
+     * fast-completing work.
+     */
     private updateInterval: number;
+
+    /**
+     * Optional renderer replacing the built-in line format. Receives the
+     * current {@link ProgressState} and returns the string to emit.
+     */
     private formatFn?: (progress: ProgressState) => string;
 
+    /**
+     * Timestamp (ms) when `start()` was called; the origin for elapsed time.
+     */
     private startTime: number = 0;
+
+    /**
+     * Timestamp (ms) of the last rendered update, compared against
+     * `updateInterval` to decide whether to emit again.
+     */
     private lastUpdateTime: number = 0;
+
+    /**
+     * Last percentage actually emitted, used to suppress duplicate lines when
+     * progress has not visibly moved. -1 before the first report.
+     */
     private lastReportedPercentage: number = -1;
+
+    /**
+     * Whether the reporter is between `start()` and `finish()`. Updates
+     * outside that window are ignored.
+     */
     private isRunning: boolean = false;
 
     // Constructor
@@ -275,8 +323,10 @@ export class ProgressReporter extends AbstractProcess {
 
 /**
  * Creates a simple progress reporter for file operations.
+ *
  * @param fileCount - Total number of files
  * @param label - Operation label
+ * @returns A reporter showing percentage and ETA at the default interval.
  */
 export function createFileProgress(
     fileCount: number,
@@ -292,8 +342,13 @@ export function createFileProgress(
 
 /**
  * Creates a progress reporter for build operations.
+ *
+ * Uses a shorter update interval than {@link createFileProgress}, since build
+ * steps complete less frequently but take longer each.
+ *
  * @param stepCount - Total number of steps
  * @param label - Build label
+ * @returns A reporter showing percentage and ETA, updating every 250ms.
  */
 export function createBuildProgress(
     stepCount: number,

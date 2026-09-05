@@ -80,6 +80,19 @@ describe("ConfigStore", () => {
             ).toBe(1000);
         });
 
+        it("should return undefined when traversing through a null branch", () => {
+            // A key present but set to null used to throw a TypeError on the
+            // next segment rather than reading as absent.
+            const store = freshStore();
+            store.set("options.live", null);
+            expect(store.get("options.live.port")).toBeUndefined();
+        });
+
+        it("should return undefined when traversing through a primitive", () => {
+            const store = freshStore();
+            expect(store.get("options.logLevel.length")).toBeUndefined();
+        });
+
         it("should return undefined for a missing key", () => {
             const store = freshStore();
             expect(store.get("nope")).toBeUndefined();

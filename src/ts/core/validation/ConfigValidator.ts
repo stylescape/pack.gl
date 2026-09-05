@@ -17,11 +17,18 @@ export class ConfigValidator extends AbstractValidator<ConfigInterface> {
     // Parameters
     // ========================================================================
 
+    /**
+     * Validator applied to each stage in the configuration.
+     */
     private stageValidator: StageValidator;
 
     // Constructor
     // ========================================================================
 
+    /**
+     * Initializes the validator along with the nested stage validator it
+     * delegates to.
+     */
     constructor() {
         super();
         this.stageValidator = new StageValidator();

@@ -5,6 +5,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "fs";
 import type { Dirent } from "fs";
 import { basename, dirname, join, resolve } from "path";
+import { pathToFileURL } from "url";
 import type { ActionInterface } from "../../interface/ActionInterface.js";
 import type { ActionPlugin } from "../../interface/ActionPlugin.js";
 import type { PluginMetadata } from "../../interface/PluginMetadata.js";
@@ -33,13 +34,29 @@ export class PluginManager extends AbstractProcess {
         "kist-plugin-",
     ];
 
+    /**
+     * The process-wide instance, created lazily by {@link getInstance}.
+     */
     private static instance: PluginManager | null = null;
+
+    /**
+     * Metadata for every plugin loaded so far, keyed by package name. Also
+     * serves as the guard that keeps a plugin from being loaded twice.
+     */
     private loadedPlugins: Map<string, PluginMetadata> = new Map();
+
+    /**
+     * Action constructors contributed by loaded plugins, keyed by action
+     * name, ready to be handed to the action registry.
+     */
     private pluginActions: Map<string, new () => ActionInterface> = new Map();
 
     // Constructor
     // ========================================================================
 
+    /**
+     * Private to enforce the singleton pattern; use {@link getInstance}.
+     */
     private constructor() {
         super();
         this.logInfo("PluginManager initialized.");
@@ -48,6 +65,11 @@ export class PluginManager extends AbstractProcess {
     // Singleton Methods
     // ========================================================================
 
+    /**
+     * Retrieves the shared PluginManager, creating it on first use.
+     *
+     * @returns The process-wide PluginManager instance.
+     */
     public static getInstance(): PluginManager {
         if (!PluginManager.instance) {
             PluginManager.instance = new PluginManager();
@@ -55,6 +77,13 @@ export class PluginManager extends AbstractProcess {
         return PluginManager.instance;
     }
 
+    /**
+     * Discards the shared instance so the next {@link getInstance} builds a
+     * fresh one, dropping all discovered plugins and their actions.
+     *
+     * Intended for tests and for live-reload restarts, where carrying plugin
+     * state across runs would be wrong.
+     */
     public static resetInstance(): void {
         PluginManager.instance = null;
     }
@@ -224,11 +253,17 @@ export class PluginManager extends AbstractProcess {
 
                 // Check if entry is a directory or a symlink pointing to a
                 // directory
+                // The nearest copy wins, matching Node's own resolution. This
+                // check was missing here, so in a workspace — where the same
+                // plugin is visible from several `node_modules` up the tree —
+                // the *furthest* copy was loaded last and overwrote the one
+                // Node would actually have resolved.
+                if (this.loadedPlugins.has(fullName)) {
+                    continue;
+                }
+
                 const pkgPath = join(scopePath, pkg.name);
-                const isDir =
-                    pkg.isDirectory() ||
-                    (pkg.isSymbolicLink() && statSync(pkgPath).isDirectory());
-                if (isDir) {
+                if (this.isDirectoryEntry(pkgPath, pkg)) {
                     await this.loadPlugin(pkgPath, fullName);
                 }
             }
@@ -264,6 +299,35 @@ export class PluginManager extends AbstractProcess {
     // ========================================================================
 
     /**
+     * Resolves the `"."` entry of a package's `exports` field to a file path.
+     *
+     * Conditional exports nest: `{ ".": { "import": { "types": …, "default":
+     * "./dist/index.js" } } }` is the shape modern ESM packages use, and kist
+     * itself is published that way. Reading `exports["."].import` as if it
+     * were always a string handed a whole object to `path.join`, which threw
+     * and left the plugin looking simply unloadable.
+     *
+     * @param entry - The value of `exports["."]`, whatever shape it takes.
+     * @returns The resolved relative path, or undefined if there is none.
+     */
+    private static resolveExport(entry: unknown): string | undefined {
+        if (typeof entry === "string") return entry;
+        if (!entry || typeof entry !== "object") return undefined;
+
+        const conditions = entry as Record<string, unknown>;
+        // In the order Node would consult them for an `import`, skipping
+        // "types", which names a declaration file rather than code.
+        for (const condition of ["import", "module", "require", "default"]) {
+            const resolved = PluginManager.resolveExport(
+                conditions[condition],
+            );
+            if (resolved) return resolved;
+        }
+
+        return undefined;
+    }
+
+    /**
      * Loads a single plugin from the specified path
      */
     private async loadPlugin(
@@ -282,13 +346,12 @@ export class PluginManager extends AbstractProcess {
                     const packageJson = JSON.parse(
                         readFileSync(packageJsonPath, "utf-8"),
                     );
-                    // Check for module, main, or exports entry points
                     const mainEntry =
                         packageJson.module ||
                         packageJson.main ||
-                        packageJson.exports?.["."]?.import ||
-                        packageJson.exports?.["."]?.require ||
-                        packageJson.exports?.["."] ||
+                        PluginManager.resolveExport(
+                            packageJson.exports?.["."],
+                        ) ||
                         "dist/index.js";
                     entryPoint = join(pluginPath, mainEntry);
                 } catch (jsonError) {
@@ -300,7 +363,10 @@ export class PluginManager extends AbstractProcess {
                 }
             }
 
-            const pluginModule = await import(entryPoint);
+            // Imported as a file URL. A bare absolute path works on POSIX but
+            // is rejected on Windows, where "C:\..." looks like a URL with an
+            // unsupported scheme.
+            const pluginModule = await import(pathToFileURL(entryPoint).href);
             const plugin: ActionPlugin = pluginModule.default || pluginModule;
 
             if (!plugin || typeof plugin.registerActions !== "function") {

@@ -4,7 +4,10 @@
 
 import type { FSWatcher } from "chokidar";
 import chokidar from "chokidar";
+import micromatch from "micromatch";
+import path from "path";
 import { AbstractProcess } from "../core/abstract/AbstractProcess.js";
+import { globBase, isGlob } from "../core/cache/globExpand.js";
 import { ConfigStore } from "../core/config/ConfigStore.js";
 import type { LiveOptionsInterface } from "../interface/index.js";
 import type { OptionsInterface } from "../interface/OptionsInterface.js";
@@ -27,8 +30,20 @@ export class LiveWatcher extends AbstractProcess {
      */
     private watcher: FSWatcher | null = null;
 
+    /**
+     * Paths or globs handed to chokidar as the watch roots.
+     */
     private pathsToWatch: string[];
+
+    /**
+     * Paths or patterns excluded from watching, keeping build output and
+     * dependencies from triggering rebuilds of themselves.
+     */
     private ignoredPaths: string[];
+
+    /**
+     * Called with the changed file's path on every add, change, or unlink.
+     */
     private onChange: (filePath: string) => void;
 
     // Constructor
@@ -72,6 +87,84 @@ export class LiveWatcher extends AbstractProcess {
     // ========================================================================
 
     /**
+     * The paths actually handed to chokidar.
+     *
+     * chokidar dropped glob support in v4, so a pattern like `src/**` names a
+     * literal path that does not exist and is silently watched as nothing —
+     * which left the default configuration watching no files at all. Each
+     * pattern is reduced to the deepest directory it can only ever match
+     * inside, and {@link matchesWatchPatterns} narrows the resulting events
+     * back down to the pattern.
+     *
+     * @returns De-duplicated paths for chokidar to watch.
+     */
+    private watchRoots(): string[] {
+        const roots = this.pathsToWatch.map((pattern) => {
+            const normalized = pattern.split(path.sep).join("/");
+            if (!isGlob(normalized)) return normalized;
+            // A pattern whose very first segment is magic (`**/*.ts`) has no
+            // static prefix at all and is rooted at the project directory.
+            return globBase(normalized) || ".";
+        });
+
+        return Array.from(new Set(roots));
+    }
+
+    /**
+     * Whether a changed path is one the configuration asked to watch.
+     *
+     * @param filePath - Path reported by chokidar, relative to the cwd.
+     * @returns True when the path matches a configured pattern.
+     */
+    private matchesWatchPatterns(filePath: string): boolean {
+        const candidate = filePath.split(path.sep).join("/");
+
+        return this.pathsToWatch.some((pattern) => {
+            const normalized = pattern.split(path.sep).join("/");
+            if (isGlob(normalized)) {
+                return micromatch.isMatch(candidate, normalized);
+            }
+            // A plain path matches itself, and a plain directory matches
+            // everything beneath it.
+            return (
+                candidate === normalized ||
+                candidate.startsWith(`${normalized.replace(/\/$/, "")}/`)
+            );
+        });
+    }
+
+    /**
+     * Whether a path is excluded from watching.
+     *
+     * Bound rather than a plain method so it can be handed to chokidar, which
+     * calls it for every entry it considers. Ignore entries are matched as
+     * globs, as full paths, and as a plain name at any depth, so the common
+     * `node_modules` entry excludes nested copies too.
+     *
+     * @param targetPath - Path chokidar is considering.
+     * @returns True when the path should not be watched.
+     */
+    private readonly isIgnored = (targetPath: string): boolean => {
+        const candidate = path
+            .relative(process.cwd(), targetPath)
+            .split(path.sep)
+            .join("/");
+
+        // Anything outside the project root is not ours to filter.
+        if (candidate.startsWith("..")) return false;
+
+        const segments = candidate.split("/");
+
+        return this.ignoredPaths.some((ignored) => {
+            const normalized = ignored.split(path.sep).join("/");
+            if (isGlob(normalized)) {
+                return micromatch.isMatch(candidate, normalized);
+            }
+            return segments.includes(normalized) || candidate === normalized;
+        });
+    };
+
+    /**
      * Initializes and configures the chokidar watcher to monitor files and
      * directories.
      */
@@ -85,6 +178,16 @@ export class LiveWatcher extends AbstractProcess {
                 );
             })
             .on("change", (filePath) => {
+                // chokidar is given directories, so it reports every file
+                // beneath them; the configured patterns decide which of those
+                // changes actually count.
+                if (!this.matchesWatchPatterns(filePath)) {
+                    this.logDebug(
+                        `Ignoring change outside the watched patterns: ${filePath}`,
+                    );
+                    return;
+                }
+
                 this.logInfo(`File changed: ${filePath}`);
                 try {
                     this.onChange(filePath);
@@ -111,8 +214,8 @@ export class LiveWatcher extends AbstractProcess {
         }
 
         this.logInfo("Starting file watcher...");
-        this.watcher = chokidar.watch(this.pathsToWatch, {
-            ignored: this.ignoredPaths,
+        this.watcher = chokidar.watch(this.watchRoots(), {
+            ignored: this.isIgnored,
             persistent: true,
             // Prevents initial "add" events on startup
             ignoreInitial: true,

@@ -38,12 +38,54 @@ const SCHEMA_HEADER = [
 // ============================================================================
 
 /**
+ * What the project being scaffolded already contains, so the rendered
+ * pipeline only refers to files that exist.
+ */
+export interface TemplateContext {
+    /** Whether the project has a README.md. */
+    hasReadme?: boolean;
+
+    /** Whether the project has a LICENSE. */
+    hasLicense?: boolean;
+}
+
+/**
+ * The step that copies README.md, or nothing when there is no README.
+ *
+ * @param hasReadme - Whether the project has a README.md.
+ * @returns A YAML fragment.
+ */
+function readmeStep(hasReadme: boolean): string {
+    if (!hasReadme) return "";
+    return `
+          - name: copy-readme
+            action: FileCopyAction
+            options:
+                srcFile: "./README.md"
+                destDir: "./dist"
+`;
+}
+
+/**
  * Renders the contents of a starter configuration file.
  *
+ * Steps that copy README.md or LICENSE appear only when those files are
+ * actually present. Emitting them unconditionally meant the first `kist` run
+ * of a freshly initialised project failed on a file it had never created —
+ * the opposite of what a starter is for.
+ *
  * @param template - Which starter to render.
+ * @param context - What the project contains. Both flags default to true, so
+ * a caller that renders a template without inspecting a directory still gets
+ * the complete starter.
  * @returns The YAML document, including the schema modeline.
  */
-export function renderTemplate(template: InitTemplate): string {
+export function renderTemplate(
+    template: InitTemplate,
+    context: TemplateContext = {},
+): string {
+    const { hasReadme = true, hasLicense = true } = context;
+
     if (template === "package") {
         return `${SCHEMA_HEADER}
 
@@ -75,26 +117,10 @@ stages:
             outputs:
                 - "dist/**"
             options:
-                tsConfigPath: "./tsconfig.json"
+                tsconfigPath: "./tsconfig.json"
                 outputDir: "./dist"
 
-    - name: package
-      description: Copy the files that ship with the package.
-      dependsOn:
-          - build
-      steps:
-          - name: copy-readme
-            action: FileCopyAction
-            options:
-                srcFile: "./README.md"
-                destDir: "./dist"
-
-          - name: copy-license
-            action: FileCopyAction
-            options:
-                srcFile: "./LICENSE"
-                destDir: "./dist"
-`;
+${packageStage(hasReadme, hasLicense)}`;
     }
 
     return `${SCHEMA_HEADER}
@@ -110,13 +136,40 @@ stages:
             action: DirectoryCleanAction
             options:
                 dirPath: "./dist"
+${readmeStep(hasReadme)}`;
+}
 
-          - name: copy-readme
+/**
+ * The package starter's second stage, which copies the files that ship
+ * alongside the code.
+ *
+ * Omitted entirely when there is nothing to copy: kist's own validator
+ * rejects a stage with no steps, so an empty one would have turned a missing
+ * README into an invalid configuration rather than a working one.
+ *
+ * @param hasReadme - Whether the project has a README.md.
+ * @param hasLicense - Whether the project has a LICENSE.
+ * @returns A YAML fragment, possibly empty.
+ */
+function packageStage(hasReadme: boolean, hasLicense: boolean): string {
+    if (!hasReadme && !hasLicense) return "";
+
+    const license = hasLicense
+        ? `
+          - name: copy-license
             action: FileCopyAction
             options:
-                srcFile: "./README.md"
+                srcFile: "./LICENSE"
                 destDir: "./dist"
-`;
+`
+        : "";
+
+    return `
+    - name: package
+      description: Copy the files that ship with the package.
+      dependsOn:
+          - build
+      steps:${readmeStep(hasReadme)}${license}`;
 }
 
 /**
@@ -130,9 +183,13 @@ stages:
  * @throws CLIError if the file exists and `force` was not set.
  */
 export function writeInitialConfig(options: {
+    /** Directory to write into. Defaults to the working directory. */
     directory?: string;
+    /** Which starter to generate. Defaults to `"minimal"`. */
     template?: InitTemplate;
+    /** Overwrite an existing file instead of refusing. */
     force?: boolean;
+    /** Name of the file to write. Defaults to `"kist.yml"`. */
     filename?: string;
 }): string {
     const directory = path.resolve(options.directory ?? process.cwd());
@@ -149,7 +206,10 @@ export function writeInitialConfig(options: {
     fs.mkdirSync(directory, { recursive: true });
     fs.writeFileSync(
         target,
-        renderTemplate(options.template ?? "minimal"),
+        renderTemplate(options.template ?? "minimal", {
+            hasReadme: fs.existsSync(path.join(directory, "README.md")),
+            hasLicense: fs.existsSync(path.join(directory, "LICENSE")),
+        }),
         "utf-8",
     );
 

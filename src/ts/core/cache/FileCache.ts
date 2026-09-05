@@ -4,6 +4,7 @@
 
 import crypto from "crypto";
 import fs from "fs";
+import micromatch from "micromatch";
 import path from "path";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 
@@ -84,6 +85,16 @@ export class FileCache extends AbstractProcess {
     /** Flag indicating if cache has been loaded from disk */
     private initialized: boolean = false;
 
+    /**
+     * The in-flight load, so concurrent callers share one attempt.
+     *
+     * `initialize` is awaited by every cache operation and those run in
+     * parallel. Without this, each caller re-read the index and replaced the
+     * in-memory map, which is both wasted I/O and a window in which an entry
+     * written by one caller is discarded by another's load.
+     */
+    private initializing: Promise<void> | null = null;
+
     /** Statistics for cache performance */
     private stats = {
         hits: 0,
@@ -139,21 +150,28 @@ export class FileCache extends AbstractProcess {
      */
     public async initialize(): Promise<void> {
         if (this.initialized) return;
+        if (this.initializing) return this.initializing;
 
-        try {
-            await this.ensureCacheDirectory();
-            await this.loadCacheFromDisk();
-            this.initialized = true;
-            this.logDebug(
-                `FileCache initialized with ${this.cache.size} entries.`,
-            );
-        } catch (error) {
-            this.logWarn(
-                `Failed to initialize file cache, starting fresh: ${error}`,
-            );
-            this.cache.clear();
-            this.initialized = true;
-        }
+        this.initializing = (async (): Promise<void> => {
+            try {
+                await this.ensureCacheDirectory();
+                await this.loadCacheFromDisk();
+                this.initialized = true;
+                this.logDebug(
+                    `FileCache initialized with ${this.cache.size} entries.`,
+                );
+            } catch (error) {
+                this.logWarn(
+                    `Failed to initialize file cache, starting fresh: ${error}`,
+                );
+                this.cache.clear();
+                this.initialized = true;
+            } finally {
+                this.initializing = null;
+            }
+        })();
+
+        return this.initializing;
     }
 
     /**
@@ -280,12 +298,28 @@ export class FileCache extends AbstractProcess {
     /**
      * Invalidates all files matching a glob pattern.
      *
-     * @param pattern - Glob pattern or substring to match
+     * Matched with the same glob engine the rest of kist uses. Rewriting the
+     * pattern into a regular expression by hand treated every other regex
+     * metacharacter as syntax — so `.` matched any character, and an
+     * unbalanced bracket threw while compiling instead of matching nothing.
+     *
+     * Entries are keyed by absolute path, so the pattern is tried against the
+     * whole path and against the file name alone — the latter so that a
+     * pattern like `*.ts`, which cannot cross a directory separator, still
+     * means what a caller expects.
+     *
+     * @param pattern - Glob pattern, or a plain substring of the path
      */
     public invalidatePattern(pattern: string): void {
-        const regex = new RegExp(pattern.replace(/\*/g, ".*"));
-        for (const key of this.cache.keys()) {
-            if (regex.test(key)) {
+        const normalized = pattern.split(path.sep).join("/");
+
+        for (const key of [...this.cache.keys()]) {
+            const candidate = key.split(path.sep).join("/");
+            if (
+                micromatch.isMatch(candidate, normalized) ||
+                micromatch.isMatch(path.basename(candidate), normalized) ||
+                candidate.includes(normalized)
+            ) {
                 this.cache.delete(key);
             }
         }
@@ -399,12 +433,21 @@ export class FileCache extends AbstractProcess {
      * Uses Least Recently Cached (LRC) eviction policy.
      */
     private async evictOldEntries(): Promise<void> {
-        const entriesToEvict = Math.floor(this.maxEntries * 0.1); // Evict 10%
         const entries = Array.from(this.cache.entries()).sort(
             ([, a], [, b]) => a.cachedAt - b.cachedAt,
         );
 
-        for (let i = 0; i < entriesToEvict && i < entries.length; i++) {
+        // Evict at least a tenth of the limit, but always enough to get back
+        // under it. A fixed 10% left a cache that had grown well past
+        // `maxEntries` — restored from a larger index, say — permanently over
+        // the limit, evicting on every single write and never catching up.
+        const overflow = this.cache.size - this.maxEntries;
+        const entriesToEvict = Math.min(
+            entries.length,
+            Math.max(Math.floor(this.maxEntries * 0.1), overflow),
+        );
+
+        for (let i = 0; i < entriesToEvict; i++) {
             this.cache.delete(entries[i][0]);
             this.stats.evictions++;
         }

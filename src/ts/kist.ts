@@ -50,29 +50,38 @@ export class Kist extends AbstractProcess {
     public async run(): Promise<void> {
         this.logInfo("Starting Kist workflow...");
 
+        await this.prepare();
+
+        // Create and run the PipelineManager. Live mode is suppressed in a
+        // rebuild child process: that child exists only to run the pipeline
+        // once, and starting a second server and watcher there would bind an
+        // already-taken port and spawn a rebuild child of its own.
+        const liveReloadEnabled =
+            ConfigStore.getInstance().get<boolean>("options.live.enabled") &&
+            !PipelineManager.isRebuildChild();
+        const liveReloadServer = liveReloadEnabled ? new LiveServer() : null;
+
+        const pipelineManager = new PipelineManager(
+            liveReloadServer ?? undefined,
+        );
+
         try {
-            await this.prepare();
-
-            // Create and run the PipelineManager
-            const liveReloadEnabled = ConfigStore.getInstance().get<boolean>(
-                "options.live.enabled",
-            );
-            const liveReloadServer = liveReloadEnabled
-                ? new LiveServer()
-                : null;
-
-            const pipelineManager = new PipelineManager(
-                liveReloadServer ?? undefined,
-            );
             await pipelineManager.runPipeline();
-
-            // Setup live reload if enabled. The server is non-null here
-            // precisely because `liveReloadEnabled` is what created it.
-            if (liveReloadServer) {
-                this.setupLiveReload(pipelineManager, liveReloadServer);
-            }
         } catch (error) {
-            this.handleError(error);
+            // Outside live mode a failed build is the result, and the CLI
+            // turns it into a non-zero exit status. In live mode it is just
+            // the current state of the code: report it and keep serving, so
+            // the next save gets a chance to fix it.
+            if (!liveReloadServer) {
+                throw error;
+            }
+            this.logError("Initial build failed. Waiting for changes.", error);
+        }
+
+        // Setup live reload if enabled. The server is non-null here
+        // precisely because `liveReloadEnabled` is what created it.
+        if (liveReloadServer) {
+            this.setupLiveReload(pipelineManager, liveReloadServer);
         }
     }
 
@@ -160,7 +169,8 @@ export class Kist extends AbstractProcess {
             pipelineManager.restartPipelineWithDelay(500);
         });
 
-        pipelineManager.restartPipeline();
+        // The pipeline has already run once, in this process, just above.
+        // Kicking off a rebuild here as well only built everything twice.
         this.registerShutdownHandlers(pipelineManager, liveReloadServer);
     }
 
@@ -203,17 +213,5 @@ export class Kist extends AbstractProcess {
         } finally {
             process.exit(0);
         }
-    }
-
-    /**
-     * Handles errors occurring during the execution of the Kist workflow.
-     *
-     * @param error - The error object to log and handle.
-     */
-    private handleError(error: unknown): void {
-        const errorMessage =
-            error instanceof Error ? error.message : String(error);
-        this.logError(`An error occurred: ${errorMessage}`, error);
-        process.exit(1);
     }
 }

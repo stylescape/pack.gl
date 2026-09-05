@@ -65,6 +65,23 @@ describe("StepCache", () => {
             const cache = StepCache.getInstance();
             await expect(cache.initialize()).resolves.toBeUndefined();
         });
+
+        it("should share one load between concurrent callers", async () => {
+            // The flag alone was set before the read finished, so a step that
+            // asked while the load was in flight was told the cache was ready
+            // and read an empty index — a spurious miss that rebuilt work
+            // already cached.
+            StepCache.resetInstance();
+            const cache = StepCache.getInstance({ cwd: root });
+
+            await Promise.all([
+                cache.initialize(),
+                cache.initialize(),
+                cache.initialize(),
+            ]);
+
+            expect(cache.getStats().size).toBe(0);
+        });
     });
 
     // ------------------------------------------------------------------------
@@ -575,5 +592,66 @@ describe("Logger capture", () => {
 
         expect(spyOutput(spies.log())).toContain("line one");
         expect(spyOutput(spies.log())).toContain("line two");
+    });
+
+    describe("scoped capture", () => {
+        it("should keep concurrent captures apart", async () => {
+            // A single shared stack could not express interleaved work: the
+            // first capture to finish popped whichever buffer was on top, so
+            // parallel steps recorded each other's output.
+            const logger = Logger.getInstance();
+            const sleep = (ms: number): Promise<void> =>
+                new Promise((resolve) => setTimeout(resolve, ms));
+
+            const run = async (name: string, delay: number) => {
+                const lines: string[] = [];
+                await logger.capture(lines, async () => {
+                    logger.logInfo(name, `from ${name}`);
+                    await sleep(delay);
+                });
+                return lines;
+            };
+
+            const [first, second] = await Promise.all([
+                run("A", 5),
+                run("B", 25),
+            ]);
+
+            expect(first).toHaveLength(1);
+            expect(first[0]).toContain("from A");
+            expect(second).toHaveLength(1);
+            expect(second[0]).toContain("from B");
+        });
+
+        it("should collect lines even when the work fails", async () => {
+            const logger = Logger.getInstance();
+            const lines: string[] = [];
+
+            await expect(
+                logger.capture(lines, async () => {
+                    logger.logInfo("ctx", "before the failure");
+                    throw new Error("boom");
+                }),
+            ).rejects.toThrow("boom");
+
+            expect(lines).toHaveLength(1);
+            expect(lines[0]).toContain("before the failure");
+        });
+
+        it("should nest within an enclosing scoped capture", async () => {
+            const logger = Logger.getInstance();
+            const outer: string[] = [];
+            const inner: string[] = [];
+
+            await logger.capture(outer, async () => {
+                logger.logInfo("ctx", "outer");
+                await logger.capture(inner, async () => {
+                    logger.logInfo("ctx", "inner");
+                });
+            });
+
+            expect(inner).toHaveLength(1);
+            expect(outer).toHaveLength(2);
+        });
     });
 });

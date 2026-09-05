@@ -34,6 +34,13 @@ class TracingAction extends Action {
     }
 }
 
+/** Fails immediately, so a sibling step is still running when it does. */
+class ExplodingAction extends Action {
+    async execute(): Promise<void> {
+        throw new Error("step exploded");
+    }
+}
+
 /** Throws out of `Stage.execute` rather than being swallowed by `Step`. */
 class NeverResolvingAction extends Action {
     async execute(): Promise<void> {
@@ -66,6 +73,7 @@ describe("Stage", () => {
         const registry = ActionRegistry.getInstance();
         registry.registerAction(TracingAction);
         registry.registerAction(NeverResolvingAction);
+        registry.registerAction(ExplodingAction);
     });
 
     afterEach(() => {
@@ -228,10 +236,27 @@ describe("Stage", () => {
 
     describe("timeouts", () => {
         it("should complete normally when it finishes inside the timeout", async () => {
-            // Kept short on purpose: `executeWithTimeout` never clears its
-            // timer, so a large value here would outlive the test run.
             await new Stage(stage({ timeout: 100 })).execute(new Set());
             expect(trace).toContain("end:b");
+        });
+
+        it("should clear its timer once the stage finishes", async () => {
+            // An uncleared timer keeps the event loop alive, so a stage that
+            // finished in milliseconds held the whole process open until its
+            // timeout would have fired.
+            const clearSpy = jest.spyOn(global, "clearTimeout");
+
+            try {
+                await new Stage(stage({ timeout: 600_000 })).execute(
+                    new Set(),
+                );
+
+                // Nothing else in this stage sets a timer, so the call can
+                // only be the timeout being cleaned up.
+                expect(clearSpy).toHaveBeenCalled();
+            } finally {
+                clearSpy.mockRestore();
+            }
         });
 
         it("should reject and log when the timeout elapses", async () => {
@@ -392,6 +417,48 @@ describe("Stage", () => {
             }).execute(new Set());
 
             expect(peakConcurrent).toBe(2);
+        });
+
+        it("should propagate a failure without leaving rejections unhandled", async () => {
+            // `Promise.race` abandons the losing promises, so a failure used
+            // to leave the still-running steps' rejections unobserved and
+            // Node reported them as unhandled.
+            const unhandled: unknown[] = [];
+            const onUnhandled = (reason: unknown): void => {
+                unhandled.push(reason);
+            };
+            process.on("unhandledRejection", onUnhandled);
+
+            delays.set("slow", 10);
+
+            const failing: StageInterface = {
+                name: "build",
+                parallel: true,
+                maxConcurrentSteps: 1,
+                steps: [
+                    {
+                        name: "boom",
+                        action: "ExplodingAction" as unknown as StepInterface["action"],
+                    },
+                    {
+                        name: "slow",
+                        action: "TracingAction" as unknown as StepInterface["action"],
+                        options: { id: "slow" } as never,
+                    },
+                ],
+            };
+
+            try {
+                await expect(
+                    new Stage(failing).execute(new Set()),
+                ).rejects.toThrow(/ExplodingAction/);
+
+                // Give any stray rejection a turn to surface.
+                await new Promise((resolve) => setTimeout(resolve, 30));
+                expect(unhandled).toEqual([]);
+            } finally {
+                process.off("unhandledRejection", onUnhandled);
+            }
         });
     });
 });

@@ -4,7 +4,7 @@
 
 import type { ConfigInterface } from "../../interface/ConfigInterface.js";
 import type { StageInterface } from "../../interface/StageInterface.js";
-import { StageError } from "../../errors/index.js";
+import { BuildError, StageError } from "../../errors/index.js";
 import { AbstractProcess } from "../abstract/AbstractProcess.js";
 import { FileCache } from "../cache/FileCache.js";
 import { BuildCache } from "../cache/BuildCache.js";
@@ -147,14 +147,15 @@ export class Pipeline extends AbstractProcess {
 
             // Save caches even on failure
             await this.saveCaches();
+            this.reportCacheStats();
 
-            // Halt pipeline if configured to do so on failure
-            if (this.resolved.haltOnFailure) {
-                this.logError("Halting pipeline due to failure.");
-                process.exit(1);
-            } else {
-                this.logWarn("Continuing pipeline execution despite errors.");
-            }
+            // A failed run is reported to the caller, which decides how to
+            // surface it: the CLI turns it into a non-zero exit status, while
+            // live mode logs it and keeps serving. Swallowing it here made a
+            // broken build indistinguishable from a successful one, so
+            // `haltOnFailure: false` produced a green exit code for a build
+            // that had failed.
+            throw error;
         }
     }
 
@@ -370,6 +371,11 @@ export class Pipeline extends AbstractProcess {
         }));
         const executing = new Set<Promise<void>>();
 
+        // Only used when `haltOnFailure` is false, where a stage failure is
+        // recorded and the run continues with the stages that do not depend
+        // on it. The collected failures are reported at the end.
+        const failures: { stage: string; error: unknown }[] = [];
+
         try {
             while (pending.length > 0 || executing.size > 0) {
                 // Start every stage whose dependencies are met, up to the
@@ -385,11 +391,25 @@ export class Pipeline extends AbstractProcess {
                     )) !== -1
                 ) {
                     const [{ stage }] = pending.splice(readyIndex, 1);
-                    const execution = stage
-                        .execute(completedStages)
-                        .then(() => {
-                            this.progress?.increment();
-                        });
+                    const run = stage.execute(completedStages).then(() => {
+                        this.progress?.increment();
+                    });
+
+                    // With `haltOnFailure` off, a stage failure is absorbed
+                    // here so the scheduler keeps going; the run still fails
+                    // at the end, from the collected list.
+                    const execution = this.resolved.haltOnFailure
+                        ? run
+                        : run.catch((error: unknown) => {
+                              failures.push({
+                                  stage: stage.getName(),
+                                  error,
+                              });
+                              this.logWarn(
+                                  `Stage "${stage.getName()}" failed; continuing with the stages that do not depend on it.`,
+                              );
+                          });
+
                     executing.add(execution);
                     // Remove the promise from the tracking set on settle;
                     // the rejection itself surfaces via the race below.
@@ -399,6 +419,18 @@ export class Pipeline extends AbstractProcess {
                 }
 
                 if (executing.size === 0) {
+                    if (failures.length > 0) {
+                        // Everything still pending sits behind a stage that
+                        // failed, so none of it can ever become ready.
+                        for (const { definition } of pending) {
+                            this.logWarn(
+                                `Stage "${definition.name}" skipped: it depends on a stage that failed.`,
+                            );
+                        }
+                        pending.length = 0;
+                        break;
+                    }
+
                     // Unreachable after dependency validation, but guard
                     // against a scheduler stall instead of spinning forever.
                     throw new StageError(
@@ -415,6 +447,17 @@ export class Pipeline extends AbstractProcess {
             // before propagating the failure.
             await Promise.allSettled(executing);
             throw error;
+        }
+
+        if (failures.length > 0) {
+            throw new BuildError(
+                `${failures.length} stage(s) failed: ` +
+                    failures.map(({ stage }) => `"${stage}"`).join(", "),
+                { stages: failures.map(({ stage }) => stage) },
+                failures[0].error instanceof Error
+                    ? failures[0].error
+                    : undefined,
+            );
         }
     }
 }

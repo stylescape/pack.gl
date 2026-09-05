@@ -5,6 +5,7 @@
 import type { NextFunction, Request, Response } from "express";
 import express from "express";
 import rateLimit from "express-rate-limit";
+import { promises as fs } from "fs";
 import type { Server } from "http";
 import path from "path";
 import { WebSocket, WebSocketServer } from "ws";
@@ -95,17 +96,17 @@ export class LiveServer extends AbstractProcess {
             process.cwd(),
             liveReloadOptions.root || "public",
         );
-        this.watchPaths = (
-            liveReloadOptions.watchPaths || [
-                "src/**/*",
-                "config/**/*",
-                "kist.yaml",
-                "kist.yml",
-            ]
-        ).map((p: string) => path.resolve(process.cwd(), p));
-        this.ignoredPaths = (
-            liveReloadOptions.ignoredPaths || ["node_modules"]
-        ).map((p: string) => path.resolve(process.cwd(), p));
+        // Reported for diagnostics only; LiveWatcher owns the watching. Kept
+        // as written rather than resolved, because `path.resolve` on a glob
+        // produces an absolute path that matches nothing and only made the
+        // startup banner misleading.
+        this.watchPaths = liveReloadOptions.watchPaths || [
+            "src/**/*",
+            "config/**/*",
+            "kist.yaml",
+            "kist.yml",
+        ];
+        this.ignoredPaths = liveReloadOptions.ignoredPaths || ["node_modules"];
 
         // Log initialization details
         this.logInitializationDetails();
@@ -134,8 +135,14 @@ export class LiveServer extends AbstractProcess {
             }
         });
 
-        // Initialize WebSocket server
+        // Initialize WebSocket server. It re-emits the HTTP server's errors,
+        // so it needs its own handler: without one an EADDRINUSE became an
+        // unhandled 'error' event and killed the process despite the handler
+        // installed above.
         this.wss = new WebSocketServer({ server: this.server });
+        this.wss.on("error", (error) => {
+            this.logError("Live Server WebSocket error.", error);
+        });
 
         // Set up rate limiting
         this.setupRateLimiter();
@@ -206,9 +213,11 @@ export class LiveServer extends AbstractProcess {
         // );
         this.logInfo(`Resolved public directory: ${this.root}`);
         this.logInfo(`Serving static files from: ${this.root}`);
-        this.app.use(express.static(this.root));
-        // Middleware to inject the live reload script into HTML files
+        // The injector runs *before* the static handler. Registered after it,
+        // every HTML file was served verbatim by `express.static` and the
+        // injector never ran, so no page ever received the reload script.
         this.app.use(this.injectLiveReloadScript.bind(this));
+        this.app.use(express.static(this.root));
     }
 
     /**
@@ -224,37 +233,77 @@ export class LiveServer extends AbstractProcess {
         res: Response,
         next: NextFunction,
     ): void {
-        if (req.url.endsWith(".html")) {
-            // Serve HTML from the configured static root (not a path
-            // relative to the compiled module, which does not exist).
-            const sanitizedPath = path.join(
-                this.root,
-                // Prevent directory traversal
-                path.normalize(req.url).replace(/^(\.\.(\/|\\|$))+/g, ""),
-            );
+        // `req.path` excludes the query string, so "/index.html?v=2" is still
+        // recognised as HTML. A bare directory request resolves to its
+        // index.html, the page a browser actually loads.
+        const requested = req.path.endsWith("/")
+            ? `${req.path}index.html`
+            : req.path;
 
-            res.sendFile(sanitizedPath, (err) => {
-                if (err) {
-                    this.logError("Error sending HTML file:", err);
-                    next(err);
-                } else {
-                    res.write(
-                        `<script>
-                            const ws = new WebSocket("ws://localhost:${this.port}");
-                            ws.onmessage = (event) => {
-                                if (event.data === "reload") {
-                                    console.log("Reloading page...");
-                                    window.location.reload();
-                                }
-                            };
-                        </script>`,
-                    );
-                    res.end();
-                }
-            });
-        } else {
+        if (!requested.endsWith(".html")) {
             next();
+            return;
         }
+
+        // Resolve inside the static root and confirm the result stayed there,
+        // so an encoded or nested traversal cannot escape the served
+        // directory.
+        let decoded: string;
+        try {
+            decoded = decodeURIComponent(requested);
+        } catch {
+            next();
+            return;
+        }
+
+        const target = path.resolve(path.join(this.root, decoded));
+        if (target !== this.root && !target.startsWith(this.root + path.sep)) {
+            this.logWarn(`Refusing to serve path outside the root: ${target}`);
+            res.status(403).end();
+            return;
+        }
+
+        // Read the file and send it with the script appended. The previous
+        // version called `res.write` from `res.sendFile`'s completion
+        // callback, by which point the response had already been ended, so
+        // the script was never appended.
+        fs.readFile(target, "utf-8")
+            .then((html) => {
+                res.type("html").send(html + this.reloadScript());
+            })
+            .catch((error: NodeJS.ErrnoException) => {
+                if (error.code === "ENOENT" || error.code === "EISDIR") {
+                    // Not ours to serve; let the static handler or the 404
+                    // path deal with it.
+                    next();
+                    return;
+                }
+                this.logError("Error reading HTML file:", error);
+                next(error);
+            });
+    }
+
+    /**
+     * The client-side script that reconnects and reloads on rebuild.
+     *
+     * The WebSocket URL is derived from the page's own location rather than
+     * hardcoded to localhost, so the page also works when opened from another
+     * machine or behind TLS.
+     *
+     * @returns A script tag to append to served HTML.
+     */
+    private reloadScript(): string {
+        return `<script>
+            (() => {
+                const scheme = location.protocol === "https:" ? "wss" : "ws";
+                const ws = new WebSocket(scheme + "://" + location.host);
+                ws.onmessage = (event) => {
+                    if (event.data === "reload") {
+                        window.location.reload();
+                    }
+                };
+            })();
+        </script>`;
     }
 
     /**

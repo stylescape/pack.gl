@@ -58,7 +58,28 @@ export class FileRenameAction extends Action {
             const resolvedSrcPath = path.resolve(srcPath);
             const resolvedTargetPath = path.resolve(targetPath);
 
-            await fsPromises.rename(resolvedSrcPath, resolvedTargetPath);
+            // Renaming into a directory that does not exist yet fails with
+            // ENOENT, which reads as "the source is missing" and is not what
+            // a step moving a build output into place means.
+            await fsPromises.mkdir(path.dirname(resolvedTargetPath), {
+                recursive: true,
+            });
+
+            try {
+                await fsPromises.rename(resolvedSrcPath, resolvedTargetPath);
+            } catch (renameError) {
+                if ((renameError as NodeJS.ErrnoException).code !== "EXDEV") {
+                    throw renameError;
+                }
+                // Source and destination are on different filesystems, where
+                // rename cannot work; copy and unlink instead.
+                this.logDebug(
+                    "Target is on another filesystem; copying instead.",
+                );
+                await fsPromises.copyFile(resolvedSrcPath, resolvedTargetPath);
+                await fsPromises.unlink(resolvedSrcPath);
+            }
+
             this.logDebug(
                 `File renamed: ${resolvedSrcPath} → ${resolvedTargetPath}`,
             );

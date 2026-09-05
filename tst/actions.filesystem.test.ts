@@ -192,6 +192,31 @@ describe("filesystem actions", () => {
             );
         });
 
+        it("should create the target directory if it does not exist", async () => {
+            // Renaming into a directory that is not there yet failed with
+            // ENOENT, which reads as though the source were missing.
+            const src = makeFile("old.txt", "data");
+            const target = join(root, "nested", "deeper", "new.txt");
+
+            await action().execute({ srcPath: src, targetPath: target });
+
+            expect(fs.readFileSync(target, "utf-8")).toBe("data");
+            expect(fs.existsSync(src)).toBe(false);
+        });
+
+        it("should fall back to copying across filesystems", async () => {
+            const src = makeFile("old.txt", "data");
+            const target = join(root, "new.txt");
+            jest.spyOn(fs.promises, "rename").mockRejectedValueOnce(
+                Object.assign(new Error("EXDEV"), { code: "EXDEV" }),
+            );
+
+            await action().execute({ srcPath: src, targetPath: target });
+
+            expect(fs.readFileSync(target, "utf-8")).toBe("data");
+            expect(fs.existsSync(src)).toBe(false);
+        });
+
         it("should rename a file", async () => {
             const src = makeFile("old.txt", "data");
             const target = join(root, "new.txt");
@@ -285,32 +310,188 @@ describe("filesystem actions", () => {
             expect(fs.readdirSync(target)).toEqual([]);
         });
 
-        it("should log an error when the directory cannot be listed", async () => {
+        it("should fail when the directory cannot be listed", async () => {
             const notADirectory = makeFile("plain.txt");
-            await action().execute({ dirPath: notADirectory });
+
+            await expect(
+                action().execute({ dirPath: notADirectory }),
+            ).rejects.toThrow();
+
             expect(spyOutput(spies.error())).toContain(
                 "Error cleaning directory",
             );
         });
 
-        it("should log an error when a single entry cannot be deleted", async () => {
+        it("should fail when a single entry cannot be deleted", async () => {
+            // A clean that left files behind used to report success, so the
+            // rest of the pipeline ran against a directory it believed empty.
             const target = makeDir("target");
             makeFile("target/a.txt");
             jest.spyOn(fs.promises, "unlink").mockRejectedValue(
                 Object.assign(new Error("EACCES"), { code: "EACCES" }),
             );
 
-            await action().execute({ dirPath: target });
+            await expect(
+                action().execute({ dirPath: target }),
+            ).rejects.toThrow("EACCES");
 
             expect(spyOutput(spies.error())).toContain(
                 "Error deleting: a.txt",
             );
+        });
+
+        it("should keep a nested file and delete everything around it", async () => {
+            // `keep` patterns were matched against top-level names only, so a
+            // nested pattern never matched and its directory was removed
+            // wholesale — taking the file that was meant to survive with it.
+            const target = makeDir("target");
+            makeDir("target/sub");
+            makeFile("target/sub/keep.txt");
+            makeFile("target/sub/drop.txt");
+            makeFile("target/top.txt");
+
+            await action().execute({
+                dirPath: target,
+                keep: ["sub/keep.txt"],
+            });
+
+            expect(fs.existsSync(join(target, "sub/keep.txt"))).toBe(true);
+            expect(fs.existsSync(join(target, "sub/drop.txt"))).toBe(false);
+            expect(fs.existsSync(join(target, "top.txt"))).toBe(false);
+        });
+
+        it("should keep everything under a globstar pattern", async () => {
+            const target = makeDir("target");
+            makeDir("target/assets/img");
+            makeFile("target/assets/img/logo.svg");
+            makeFile("target/other.txt");
+
+            // A sibling directory the globstar pattern does not name is
+            // removed outright rather than walked.
+            makeDir("target/vendor/deep");
+            makeFile("target/vendor/deep/lib.js");
+
+            await action().execute({
+                dirPath: target,
+                keep: ["assets/**"],
+            });
+
+            expect(fs.existsSync(join(target, "assets/img/logo.svg"))).toBe(
+                true,
+            );
+            expect(fs.existsSync(join(target, "other.txt"))).toBe(false);
+            expect(fs.existsSync(join(target, "vendor"))).toBe(false);
+        });
+
+        it("should keep everything under a leading globstar", async () => {
+            const target = makeDir("target");
+            makeDir("target/a/b");
+            makeFile("target/a/b/keep.md");
+            makeFile("target/a/drop.txt");
+
+            await action().execute({ dirPath: target, keep: ["**/*.md"] });
+
+            expect(fs.existsSync(join(target, "a/b/keep.md"))).toBe(true);
+            expect(fs.existsSync(join(target, "a/drop.txt"))).toBe(false);
+        });
+
+        it("should remove a walked directory whose keeper was not there", async () => {
+            // The pattern reaches into "sub", so it is walked rather than
+            // removed outright — but nothing in it matched, so the directory
+            // must not be left behind empty.
+            const target = makeDir("target");
+            makeDir("target/sub");
+            makeFile("target/sub/a.txt");
+
+            await action().execute({
+                dirPath: target,
+                keep: ["sub/absent.txt"],
+            });
+
+            expect(fs.existsSync(join(target, "sub"))).toBe(false);
+        });
+
+        it("should remove a directory left empty after its contents went", async () => {
+            // Walking a directory to preserve a sibling must not leave the
+            // now-empty directory behind.
+            const target = makeDir("target");
+            makeDir("target/keepme");
+            makeFile("target/keepme/wanted.txt");
+            makeDir("target/keepme/gone");
+            makeFile("target/keepme/gone/unwanted.txt");
+
+            await action().execute({
+                dirPath: target,
+                keep: ["keepme/wanted.txt"],
+            });
+
+            expect(fs.existsSync(join(target, "keepme/wanted.txt"))).toBe(
+                true,
+            );
+            expect(fs.existsSync(join(target, "keepme/gone"))).toBe(false);
+        });
+
+        it("should still remove a directory no keep pattern reaches into", async () => {
+            const target = makeDir("target");
+            makeDir("target/sub");
+            makeFile("target/sub/a.txt");
+            makeFile("target/keep.txt");
+
+            await action().execute({
+                dirPath: target,
+                keep: ["keep.txt"],
+            });
+
+            expect(fs.existsSync(join(target, "keep.txt"))).toBe(true);
+            expect(fs.existsSync(join(target, "sub"))).toBe(false);
         });
     });
 
     // ========================================================================
     // FileCopyAction
     // ========================================================================
+
+    describe("DirectoryCopyAction self-containment", () => {
+        it("should refuse to copy a directory into its own subdirectory", async () => {
+            // Unguarded, the walk kept finding the destination it had just
+            // written and built dist/dist/dist/... until the filesystem
+            // refused the path length, filling the disk on the way.
+            const src = makeDir("selfcopy");
+            makeFile("selfcopy/a.txt");
+
+            await expect(
+                new DirectoryCopyAction().execute({
+                    srcDir: src,
+                    destDir: join(src, "dist"),
+                }),
+            ).rejects.toThrow(/into its own subdirectory/);
+        });
+
+        it("should refuse to copy a directory onto itself", async () => {
+            const src = makeDir("samedir");
+
+            await expect(
+                new DirectoryCopyAction().execute({
+                    srcDir: src,
+                    destDir: src,
+                }),
+            ).rejects.toThrow(/onto itself/);
+        });
+
+        it("should still allow a sibling destination", async () => {
+            const src = makeDir("sibling-src");
+            makeFile("sibling-src/a.txt", "hi");
+
+            await new DirectoryCopyAction().execute({
+                srcDir: src,
+                destDir: join(root, "sibling-dest"),
+            });
+
+            expect(
+                fs.readFileSync(join(root, "sibling-dest", "a.txt"), "utf-8"),
+            ).toBe("hi");
+        });
+    });
 
     describe("FileCopyAction", () => {
         const action = (): FileCopyAction => new FileCopyAction();
@@ -423,6 +604,37 @@ describe("filesystem actions", () => {
                 });
 
                 expect(fs.readdirSync(join(root, "dest"))).toHaveLength(12);
+            });
+
+            it("should fail a parallel copy without leaving rejections unhandled", async () => {
+                // `Promise.race` abandons the losing promises, so a failure
+                // beyond the concurrency limit used to leave the copies still
+                // in flight unobserved and Node reported them as unhandled.
+                const unhandled: unknown[] = [];
+                const onUnhandled = (reason: unknown): void => {
+                    unhandled.push(reason);
+                };
+                process.on("unhandledRejection", onUnhandled);
+
+                const files = Array.from({ length: 12 }, (_, i) =>
+                    makeFile(`p${i}.txt`, `body ${i}`),
+                );
+                files.push(join(root, "absent.txt"));
+
+                try {
+                    await expect(
+                        action().execute({
+                            srcFiles: files,
+                            destDir: join(root, "dest-fail"),
+                            parallel: true,
+                        }),
+                    ).rejects.toThrow();
+
+                    await new Promise((resolve) => setTimeout(resolve, 30));
+                    expect(unhandled).toEqual([]);
+                } finally {
+                    process.off("unhandledRejection", onUnhandled);
+                }
             });
 
             it("should do nothing when srcFiles is empty and there is no srcFile", async () => {

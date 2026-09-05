@@ -35,11 +35,19 @@ export class FileCopyAction extends Action {
     // Parameters
     // ========================================================================
 
+    /**
+     * Shared cache of file fingerprints, consulted to skip copying a file
+     * whose contents are unchanged since the last run.
+     */
     private fileCache: FileCache;
 
     // Constructor
     // ========================================================================
 
+    /**
+     * Binds the action to the process-wide {@link FileCache}, so repeated
+     * copies within and across runs can be short-circuited.
+     */
     constructor() {
         super();
         this.fileCache = FileCache.getInstance();
@@ -184,19 +192,29 @@ export class FileCopyAction extends Action {
     ): Promise<void> {
         const executing = new Set<Promise<void>>();
 
-        for (const srcFile of srcFiles) {
-            const copyPromise = this.copyFileToDirectory(
-                srcFile,
-                destDir,
-            ).finally(() => executing.delete(copyPromise));
-            executing.add(copyPromise);
+        try {
+            for (const srcFile of srcFiles) {
+                const copyPromise = this.copyFileToDirectory(srcFile, destDir);
+                executing.add(copyPromise);
+                // Bookkeeping hangs off a derived promise, whose `catch` stops
+                // this branch from counting as an unhandled rejection.
+                void copyPromise
+                    .finally(() => executing.delete(copyPromise))
+                    .catch(() => undefined);
 
-            if (executing.size >= maxConcurrent) {
-                await Promise.race(executing);
+                if (executing.size >= maxConcurrent) {
+                    await Promise.race(executing);
+                }
             }
-        }
 
-        await Promise.all(executing);
+            await Promise.all(executing);
+        } catch (error) {
+            // Let the copies already in flight settle before propagating, so
+            // their rejections are observed here rather than surfacing later
+            // as unhandled rejection warnings.
+            await Promise.allSettled(executing);
+            throw error;
+        }
     }
 
     /**

@@ -22,17 +22,74 @@ export class Stage extends AbstractProcess {
     // Parameters
     // ========================================================================
 
+    /**
+     * Unique name of the stage, used in logs, dependency references, and
+     * progress reporting.
+     */
     private name: string;
+
+    /**
+     * The stage's steps, in configuration order. Executed sequentially unless
+     * `parallel` is set.
+     */
     private steps: Step[];
+
+    /**
+     * Names of stages that must finish before this one starts. Resolved by
+     * the owning {@link Pipeline}, not by the stage itself.
+     */
     private dependsOn?: string[];
+
+    /**
+     * Whether the steps run concurrently rather than one after another.
+     * Defaults to false.
+     */
     private parallel: boolean;
+
+    /**
+     * Upper bound on concurrently running steps when `parallel` is set.
+     * Undefined means all steps start at once.
+     */
     private maxConcurrentSteps?: number;
+
+    /**
+     * Whether this stage participates in step caching. False opts the stage
+     * out even when the pipeline enables caching globally.
+     */
     private cacheEnabled: boolean;
+
+    /**
+     * Whether the stage runs at all. A disabled stage is skipped but still
+     * counts as satisfied for stages that depend on it.
+     */
     private enabled: boolean;
+
+    /**
+     * Wall-clock budget for the whole stage, in milliseconds. Exceeding it
+     * aborts the stage.
+     */
     private timeout?: number;
+
+    /**
+     * Scheduling hint used to order stages that are eligible to run at the
+     * same time. Defaults to `"normal"`.
+     */
     private priority: "low" | "normal" | "high";
+
+    /**
+     * Free-form summary of what the stage does, surfaced in plan output.
+     */
     private description?: string;
+
+    /**
+     * Arbitrary key/value labels carried with the stage for filtering and
+     * reporting.
+     */
     private tags?: Record<string, string>;
+
+    /**
+     * Optional `before`/`after` callbacks invoked around the stage's steps.
+     */
     private hooks?: StageInterface["hooks"];
 
     // Constructor
@@ -237,18 +294,30 @@ export class Stage extends AbstractProcess {
     ): Promise<void> {
         const executing = new Set<Promise<void>>();
 
-        for (const step of steps) {
-            const execution = step
-                .execute()
-                .finally(() => executing.delete(execution));
-            executing.add(execution);
+        try {
+            for (const step of steps) {
+                const execution = step.execute();
+                executing.add(execution);
+                // Removal is attached to a derived promise so that `executing`
+                // only ever holds the originals; the `catch` keeps this
+                // bookkeeping branch from counting as an unhandled rejection.
+                void execution
+                    .finally(() => executing.delete(execution))
+                    .catch(() => undefined);
 
-            if (executing.size >= maxConcurrent) {
-                await Promise.race(executing);
+                if (executing.size >= maxConcurrent) {
+                    await Promise.race(executing);
+                }
             }
-        }
 
-        await Promise.all(executing);
+            await Promise.all(executing);
+        } catch (error) {
+            // A step failed. Let the steps already running settle before
+            // propagating, so their rejections are observed here rather than
+            // surfacing later as unhandled rejection warnings.
+            await Promise.allSettled(executing);
+            throw error;
+        }
     }
 
     /**
@@ -260,20 +329,27 @@ export class Stage extends AbstractProcess {
         promise: Promise<T>,
         timeout: number,
     ): Promise<T> {
-        return Promise.race([
-            promise,
-            new Promise<T>((_, reject) =>
-                setTimeout(
-                    () =>
-                        reject(
-                            new Error(
-                                `Stage "${this.name}" timed out after ${timeout}ms`,
-                            ),
+        let timer: NodeJS.Timeout | undefined;
+        const expiry = new Promise<never>((_, reject) => {
+            timer = setTimeout(
+                () =>
+                    reject(
+                        new Error(
+                            `Stage "${this.name}" timed out after ${timeout}ms`,
                         ),
-                    timeout,
-                ),
-            ),
-        ]);
+                    ),
+                timeout,
+            );
+        });
+
+        try {
+            return await Promise.race([promise, expiry]);
+        } finally {
+            // Always cleared: an uncleared timer keeps the event loop alive,
+            // so a stage that finishes in milliseconds would otherwise hold
+            // the process open until its whole timeout had elapsed.
+            clearTimeout(timer);
+        }
     }
 
     /**

@@ -148,13 +148,18 @@ stages:
                         - bugs
                         - author
                         - contributors
-                    # customConfig:
-                    #     private: true
-                    #     scripts:
-                    #     start: "node index.js"
-                    #     build: "npm run build"
-                    #     devDependencies:
-                    #     typescript: "^5.0.0"
+                    customConfig:
+                        # dist/package.json shadows the repository root for
+                        # everything beneath dist/, so without this Node reads
+                        # the ESM output in dist/js as CommonJS: it fails to
+                        # parse, is retried as ESM, and every consumer gets a
+                        # MODULE_TYPELESS_PACKAGE_JSON warning.
+                        type: "module"
+                        # Paths in this manifest are relative to dist/, so the
+                        # root's "./dist/js/cli.js" would resolve to
+                        # dist/dist/js/cli.js and the binary would not exist.
+                        bin:
+                            kist: "./js/cli.js"
 
             # Replace Version
             # -----------------------------------------------------------------
@@ -165,5 +170,8 @@ stages:
                     files:
                     -   path: "./CITATION.cff"
                         key: "version: "
+                    # VERSION holds a bare version and no prefix, so the key
+                    # is empty. It was "v", which matched nothing — the step
+                    # simply never updated this file.
                     -   path: "./VERSION"
-                        key: "v"
+                        key: ""
