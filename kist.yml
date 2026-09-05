@@ -175,3 +175,10 @@ stages:
                     # simply never updated this file.
                     -   path: "./VERSION"
                         key: ""
+                    # codemeta.json was not synced by anything and drifted a
+                    # release behind. The key includes the opening quote so it
+                    # matches only the package version, not the
+                    # `"version": ">=20.0.0"` runtime requirement further down
+                    # (which is not a bare semver, so it cannot match anyway).
+                    -   path: "./codemeta.json"
+                        key: '"version": "'

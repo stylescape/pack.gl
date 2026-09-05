@@ -3,7 +3,7 @@
     "@type": "SoftwareSourceCode",
     "name": "kist",
     "description": "Lightweight Package Pipeline Processor with Plugin Architecture",
-    "version": "0.1.78",
+    "version": "0.1.79",
     "dateCreated": "2024-01-01",
     "dateModified": "2026-05-14",
     "license": "https://spdx.org/licenses/MIT",
