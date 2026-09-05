@@ -536,11 +536,46 @@ describe("validation", () => {
             });
         });
 
-        describe("object options", () => {
-            it("should accept an object for haltOnFailure", () => {
+        describe("boolean options", () => {
+            it("should accept a boolean for haltOnFailure", () => {
+                // `haltOnFailure` is a boolean everywhere else — the
+                // interface, the schema, and the code that reads it. The
+                // validator grouped it with `tags` and demanded an object, so
+                // it rejected the only values the option actually takes.
+                expect(() => validate({ haltOnFailure: true })).not.toThrow();
+                expect(() => validate({ haltOnFailure: false })).not.toThrow();
+            });
+
+            it("should reject a non-boolean haltOnFailure", () => {
+                expect(() => validate({ haltOnFailure: "yes" })).toThrow(
+                    /Must be a boolean/,
+                );
                 expect(() =>
                     validate({ haltOnFailure: { onError: true } }),
+                ).toThrow(/Must be a boolean/);
+            });
+        });
+
+        describe("object options", () => {
+            it("should accept the nested option blocks", () => {
+                // These fell through to the string branch and were rejected as
+                // "Must be a non-empty string", which no valid configuration
+                // could ever satisfy.
+                expect(() =>
+                    validate({ cache: { enabled: true } }),
                 ).not.toThrow();
+                expect(() =>
+                    validate({ performance: { maxConcurrentStages: 2 } }),
+                ).not.toThrow();
+                expect(() =>
+                    validate({ pipeline: { stepTimeout: 0 } }),
+                ).not.toThrow();
+            });
+
+            it("should reject a primitive for a nested option block", () => {
+                expect(() => validate({ cache: "on" })).toThrow(
+                    /Must be a valid object/,
+                );
             });
 
             it("should accept an object for tags", () => {
@@ -604,6 +639,26 @@ describe("validation", () => {
                         },
                     }),
                 ).not.toThrow();
+            });
+
+            it("should reject a port outside the valid range", () => {
+                // `port: 0` used to slip through: the guard tested the port
+                // for truthiness before comparing it, so zero was skipped
+                // entirely despite the message promising 1-65535.
+                expect(() => validate({ live: { port: 0 } })).toThrow(
+                    /between 1 and 65535/,
+                );
+                expect(() => validate({ live: { port: 70000 } })).toThrow(
+                    /between 1 and 65535/,
+                );
+            });
+
+            it("should reject a non-numeric port", () => {
+                // A string compared false against both bounds and was
+                // accepted, then handed to `listen` as a port.
+                expect(() => validate({ live: { port: "3000" } })).toThrow(
+                    /between 1 and 65535/,
+                );
             });
 
             it("should accept an empty live block", () => {

@@ -96,8 +96,28 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
                 }
                 break;
 
+            // `haltOnFailure` is a boolean. It used to be grouped with `tags`
+            // and required to be an object, so the validator rejected the
+            // only values the option actually takes.
             case "haltOnFailure":
+                if (typeof value !== "boolean") {
+                    this.throwValidationError(
+                        key,
+                        value,
+                        "Must be a boolean.",
+                    );
+                }
+                break;
+
+            // The nested option blocks. Each has its own shape, checked by the
+            // JSON Schema; here it is enough that they are objects. They used
+            // to fall through to the string branch below and be rejected as
+            // "Must be a non-empty string", which no valid configuration could
+            // ever satisfy.
             case "tags":
+            case "cache":
+            case "performance":
+            case "pipeline":
                 if (this.isValidObject(value)) {
                     this.validateObject(key, value);
                 } else {
@@ -133,7 +153,16 @@ export class OptionsValidator extends AbstractValidator<OptionsInterface> {
      * @param value - The live reload configuration to validate.
      */
     private validateLiveOptions(value: OptionsInterface["live"]): void {
-        if (value?.port && (value.port < 1 || value.port > 65535)) {
+        // Checked against undefined rather than for truthiness, and for the
+        // type as well as the range: `port: 0` slipped through as falsy, and a
+        // string port compared false against both bounds and was accepted.
+        if (
+            value?.port !== undefined &&
+            (typeof value.port !== "number" ||
+                !Number.isInteger(value.port) ||
+                value.port < 1 ||
+                value.port > 65535)
+        ) {
             this.throwValidationError(
                 "live.port",
                 value.port,
