@@ -11,4 +11,4 @@
  * file alongside `package.json`, `VERSION`, and the changelog, and
  * `tst/version.test.ts` fails if they drift apart.
  */
-export const VERSION = "0.1.79";
+export const VERSION = "0.1.80";

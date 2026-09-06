@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.80] - 2026-09-06
+
+### Changed
+
+- Updated dependencies to their latest compatible versions (`typescript` stays on the `^6.0.3` line and `commander` on `^14.0.3`, since newer majors of each broke the toolchain or the test suite)
+- Bumped `actions/upload-pages-artifact` and `actions/configure-pages` in the docs deploy workflow
+- Extended the cspell dictionary to match the vocabulary actually used in the sources
+
 ## [0.1.79] - 2026-09-05
 
 Covers the 0.1.78 bump as well, which was never released or tagged.
